@@ -12,7 +12,8 @@ services:
     build: .
     command: bash -l -c "npm install && npm start"
     ports:
-      - ${HOST_PORT:-3000}:3000
+      - 5000:5000
+      - 5100:5100
     depends_on:
       - db
     volumes:

@@ -1,0 +1,2 @@
+client: npm run dev -w client -- --port $PORT --host 0.0.0.0
+server: npm run dev -w server

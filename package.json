@@ -6,7 +6,10 @@
     "server"
   ],
   "scripts": {
-    "start": "npm run dev -w server",
+    "start": "nf start -j Procfile.dev",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "foreman": "^3.0.1"
   }
 }
