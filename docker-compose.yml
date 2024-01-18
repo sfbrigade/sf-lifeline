@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15.5
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  server:
+    build: .
+    command: bash -l -c "npm install && npm start"
+    ports:
+      - ${HOST_PORT:-3000}:3000
+    depends_on:
+      - db
+    volumes:
+      - .:/opt/node/app
+      - /opt/node/app/node_modules
+      - /opt/node/app/server/node_modules
+  mail:
+    image: dockage/mailcatcher:0.9.0
+    ports:
+      - 1025:1025
+      - 1080:1080

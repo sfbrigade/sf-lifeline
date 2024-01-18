@@ -1,0 +1,11 @@
+{
+  "name": "sf-lifeline",
+  "version": "1.0.0",
+  "workspaces": [
+    "server"
+  ],
+  "scripts": {
+    "start": "npm run dev -w server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
