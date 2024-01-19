@@ -10,7 +10,7 @@ SF Life Line (https://www.sanfranciscolifeline.com/) creates and distributes fre
 
 3. In a command-line shell, navigate to the repo directory. Inside the root directory of this project, run `docker compose up`. It may take a few minutes to download and/or build the necessary images to run the codebase.
 
-4. To run commands installed related to the codebase, you should first "log in" to the running server to execute them in the container so that you have access to installed dependencies.  To do so, leave the server running in one shell, open another in the same repo directory, then run `docker compose exec server bash -l`. You can then execute commands like `npm install`, etc.
+4. To run commands related to the codebase, you should first "log in" to the running server to execute them in the container so that you have access to installed dependencies.  To do so, leave the server running in one shell, open another in the same repo directory, then run `docker compose exec server bash -l`. You can then execute commands like `npm install`, etc.
 
    Noe that the project configuration *does not share* dependencies like `node_modules` between the container and your host OS operating system to prevent mismatches (i.e. dependencies with native binaries that won't be the same inside the Linux-based container vs your Windows/Mac host).
 
