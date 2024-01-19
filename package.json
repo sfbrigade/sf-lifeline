@@ -1,0 +1,15 @@
+{
+  "name": "sf-lifeline",
+  "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "start": "nf start -j Procfile.dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "foreman": "^3.0.1"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "type": "module",
+  "name": "sf-lifeline-server",
+  "description": "This project was bootstrapped with Fastify-CLI.",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test test/**/*.test.js",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js",
+    "pretest": "standard",
+    "lint": "standard --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.0.0",
+    "fastify-plugin": "^4.0.0",
+    "@fastify/autoload": "^5.0.0",
+    "@fastify/sensible": "^5.0.0",
+    "fastify-cli": "^6.0.1"
+  },
+  "devDependencies": {
+    "c8": "^7.13.0",
+    "standard": "^17.0.0"
+  }
+}
