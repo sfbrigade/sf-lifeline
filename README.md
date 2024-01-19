@@ -12,7 +12,7 @@ SF Life Line (https://www.sanfranciscolifeline.com/) creates and distributes fre
 
 4. To run commands related to the codebase, you should first "log in" to the running server to execute them in the container so that you have access to installed dependencies.  To do so, leave the server running in one shell, open another in the same repo directory, then run `docker compose exec server bash -l`. You can then execute commands like `npm install`, etc.
 
-   Noe that the project configuration *does not share* dependencies like `node_modules` between the container and your host OS operating system to prevent mismatches (i.e. dependencies with native binaries that won't be the same inside the Linux-based container vs your Windows/Mac host).
+   Note that the configuration *does not share* dependencies like `node_modules` between your host OS file system and the container to prevent mismatches (i.e. dependencies with native binaries that won't be the same inside the Linux-based container vs a Windows/Mac host).
 
 5. If you're using VSCode as an editor, you can improve auto-completion and syntax highlighting by using the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to connect to the running container so it has access to installed dependencies. Once you attach to the running container, you can open the "remote folder" `/opt/node/app` which is where the code is located inside the container.
 
