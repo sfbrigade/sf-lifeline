@@ -10,25 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mantine/carousel": "^7.4.2",
-    "@mantine/charts": "^7.4.2",
-    "@mantine/code-highlight": "^7.4.2",
     "@mantine/core": "^7.4.2",
-    "@mantine/dates": "^7.4.2",
-    "@mantine/dropzone": "^7.4.2",
-    "@mantine/form": "^7.4.2",
     "@mantine/hooks": "^7.4.2",
-    "@mantine/modals": "^7.4.2",
-    "@mantine/notifications": "^7.4.2",
-    "@mantine/nprogress": "^7.4.2",
-    "@mantine/spotlight": "^7.4.2",
-    "@mantine/tiptap": "^7.4.2",
-    "@tabler/icons-react": "^2.46.0",
-    "@tiptap/extension-link": "^2.1.16",
-    "@tiptap/react": "^2.1.16",
-    "@tiptap/starter-kit": "^2.1.16",
-    "dayjs": "^1.11.10",
-    "embla-carousel-react": "^7.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.10.4"
@@ -41,9 +24,6 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "postcss": "^8.4.33",
-    "postcss-preset-mantine": "^1.12.3",
-    "postcss-simple-vars": "^7.0.1",
     "vite": "^5.0.8"
   }
 }
