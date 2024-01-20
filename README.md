@@ -18,6 +18,10 @@ SF Life Line (https://www.sanfranciscolifeline.com/) creates and distributes fre
 
 6. To stop the application, press CONTROL-C inside the shell where it is running.
 
+## Troubleshooting
+
+* On macOS, if you're unable to start the server listening on port 5000, go to System Preferences, search for Airplay Receiver, and turn it off to release the port.
+
 ## Copyright
 
 SF Life Line  
