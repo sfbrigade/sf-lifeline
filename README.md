@@ -16,7 +16,11 @@ SF Life Line (https://www.sanfranciscolifeline.com/) creates and distributes fre
 
 5. If you're using VSCode as an editor, you can improve auto-completion and syntax highlighting by using the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to connect to the running container so it has access to installed dependencies. Once you attach to the running container, you can open the "remote folder" `/opt/node/app` which is where the code is located inside the container.
 
-6. To stop the application, press CONTROL-C inside the shell where it is running.
+6. To stop the application, you can press CONTROL-C inside the shell where you ran `docker compose up`.
+
+   If you've "logged in" to the server container using `docker compose exec server bash -l`, press CONTROL-D or type `exit` or `logout` to exit the container back to your host OS shell. 
+   
+   If the application does not terminate gracefully after CONTROL-C (use `docker ps` to see running processes), run `docker compose stop` to terminate any running processes.
 
 ## Troubleshooting
 
