@@ -57,5 +57,5 @@ profile*
 *clinic*
 *flamegraph*
 
-#environment variables
+#enviroment variables
 .env
