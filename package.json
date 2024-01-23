@@ -7,9 +7,12 @@
   ],
   "scripts": {
     "start": "nf start -j Procfile.dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write --ignore-unknown .",
+    "format:check": "prettier --check --ignore-unknown ."
   },
   "dependencies": {
-    "foreman": "^3.0.1"
+    "foreman": "^3.0.1",
+    "prettier": "^3.2.4"
   }
 }
