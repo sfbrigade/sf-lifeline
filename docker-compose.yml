@@ -3,11 +3,15 @@ services:
   db:
     image: postgres:15.5
     environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - 5432:5432
+      - ${DB_PORT}:5432
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql
   mail:
     image: dockage/mailcatcher:0.9.0
     ports:
@@ -16,9 +20,12 @@ services:
   server:
     build: .
     command: bash -l -c "npm install && npm start"
+    environment:
+      - FASTIFY_PORT=5100
+      - FASTIFY_ADDRESS=0.0.0.0
     ports:
-      - 5000:5000
-      - 5100:5100
+      - 5000:5000 #fastify
+      - 5100:5100 #vite
     depends_on:
       - db
       - mail
