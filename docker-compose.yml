@@ -17,6 +17,8 @@ services:
   server:
     build: .
     command: bash -l -c "npm install && npm start"
+    environment:
+      - DATABASE_URL=postgresql://postgres@db/app
     ports:
       - 5000:5000 #vite
       - 5100:5100 #fastify

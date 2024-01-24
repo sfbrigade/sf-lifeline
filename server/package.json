@@ -11,8 +11,8 @@
     "test": "node --test test/**/*.test.js",
     "start": "fastify start -l info app.js",
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
-    "migrate": "docker-compose exec server sh -c 'cd server && npx prisma migrate $1' sh",
-    "db": "docker-compose exec server sh -c 'cd server && npx prisma db $1' sh",
+    "migrate": "docker-compose exec server sh -c 'cd server && npx prisma migrate $@' sh",
+    "db": "docker-compose exec server sh -c 'cd server && npx prisma db $@' sh",
     "pretest": "standard",
     "lint": "standard --fix"
   },
