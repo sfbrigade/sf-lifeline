@@ -19,11 +19,5 @@ RUN mkdir -p $APP_HOME
 ADD . $APP_HOME
 WORKDIR $APP_HOME
 
-# Copy prisma folder from ./server/prisma to /opt/node/app/prisma
-COPY ./server/prisma /opt/node/app/prisma
-
 # Install dependencies for the main app
 RUN npm install
-
-# Generate Prisma client
-RUN npx prisma generate

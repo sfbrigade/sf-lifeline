@@ -16,10 +16,12 @@
 //   }
 // }
 
+// User template for the routes
 export default async function (fastify, opts) {
   fastify.post(
   '/',
   {
+    // schema template for fastify-swagger
     schema: {
       body: {
         type: 'object',

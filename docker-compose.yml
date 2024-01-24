@@ -8,7 +8,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./data/postgres:/var/lib/postgresql
+      - ./data/postgres:/var/lib/postgresql/data
   mail:
     image: dockage/mailcatcher:0.9.0
     ports:
@@ -17,12 +17,9 @@ services:
   server:
     build: .
     command: bash -l -c "npm install && npm start"
-    environment:
-      - FASTIFY_PORT=5100
-      - FASTIFY_ADDRESS=0.0.0.0
     ports:
-      - 5000:5000 #fastify
-      - 5100:5100 #vite
+      - 5000:5000 #vite
+      - 5100:5100 #fastify
       - 5555:5555 #prismaORM
     depends_on:
       - db
