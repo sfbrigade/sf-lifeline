@@ -18,5 +18,4 @@ model User {
   password    String?
   role        String  @default("user")
   hasPassword Boolean @default(false)
-
 }
