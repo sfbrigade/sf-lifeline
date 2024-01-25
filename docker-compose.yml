@@ -23,6 +23,7 @@ services:
       - 5000:5000 #vite
       - 5100:5100 #fastify
       - 5555:5555 #prismaORM
+      - 6006:6006 #storybook
     depends_on:
       - db
       - mail
