@@ -19,4 +19,5 @@ RUN mkdir -p $APP_HOME
 ADD . $APP_HOME
 WORKDIR $APP_HOME
 
+# Install dependencies for the main app
 RUN npm install

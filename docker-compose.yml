@@ -4,6 +4,7 @@ services:
     image: postgres:15.5
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - 5432:5432
     volumes:
@@ -16,9 +17,12 @@ services:
   server:
     build: .
     command: bash -l -c "npm install && npm start"
+    environment:
+      - DATABASE_URL=postgresql://postgres@db/app
     ports:
-      - 5000:5000
-      - 5100:5100
+      - 5000:5000 #vite
+      - 5100:5100 #fastify
+      - 5555:5555 #prismaORM
     depends_on:
       - db
       - mail
