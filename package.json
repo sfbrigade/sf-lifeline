@@ -9,7 +9,8 @@
     "start": "nf start -j Procfile.dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write --ignore-unknown .",
-    "format:check": "prettier --check --ignore-unknown ."
+    "format:check": "prettier --check --ignore-unknown .",
+    "lint": "npm run lint --workspaces"
   },
   "dependencies": {
     "foreman": "^3.0.1",
