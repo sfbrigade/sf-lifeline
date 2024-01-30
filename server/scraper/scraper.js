@@ -16,7 +16,7 @@ export default async function scrapeLicenses(license = nickKooLicense) {
       return cookieKeyValue
     })
 
-  fetch("https://emsverification.emsa.ca.gov/Verification/Search.aspx", {
+  const verificationResults = await fetch("https://emsverification.emsa.ca.gov/Verification/Search.aspx", {
     method: "POST",
     body: formData,
     headers: {
@@ -29,12 +29,16 @@ export default async function scrapeLicenses(license = nickKooLicense) {
     .then((html) => {
       const regex = /<a[^>]*?>(.*?)<\/a><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span>/;
       const match = html.match(regex);
-      if (match.length) {
+
+      if (match) {
         const [, name, licenseType, status, licenseNumber] = match
-        const verificationResults = { name, licenseType, status, licenseNumber }
-        console.log(verificationResults)
+        const emsInfo = { name, licenseType, status, licenseNumber }
+        console.log(emsInfo)
+        return emsInfo
       } else {
-        console.log("No match")
+        return { error: "No match." }
       }
     })
+
+  return verificationResults
 };
