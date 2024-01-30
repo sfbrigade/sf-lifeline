@@ -27,6 +27,14 @@ export default async function scrapeLicenses(license = nickKooLicense) {
       return res.text()
     })
     .then((html) => {
-      console.log("scrape res", html);
+      const regex = /<a[^>]*?>(.*?)<\/a><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span>/;
+      const match = html.match(regex);
+      if (match.length) {
+        const [, name, licenseType, status, licenseNumber] = match
+        const verificationResults = { name, licenseType, status, licenseNumber }
+        console.log(verificationResults)
+      } else {
+        console.log("No match")
+      }
     })
 };
