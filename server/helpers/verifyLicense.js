@@ -49,9 +49,9 @@ export default async function verifyLicense(license) {
 
       if (match) {
         const [, name, licenseType, status, licenseNumber] = match
-        const emsInfo = { name, licenseType, status, licenseNumber }
+        const emsPersonnelInfo = { name, licenseType, status, licenseNumber }
 
-        return emsInfo
+        return emsPersonnelInfo
       } else {
         throw new Error("No match.")
       }
