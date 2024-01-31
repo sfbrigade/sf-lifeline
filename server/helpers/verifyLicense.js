@@ -1,3 +1,5 @@
+"use strict"
+
 const EMS_VERIFICATION_CONSTANTS = {
   WEBSITE: "https://emsverification.emsa.ca.gov/Verification/Search.aspx",
   VIEWSTATE: "/wEPDwUJNzM2NTgwNzkyD2QWAgIBD2QWAmYPZBYCAgEPZBYCAgEPZBYCAgEPZBYGAgMPZBYCAgEPZBYCZg8QZGQWAWZkAgQPZBYCAgEPZBYCZg8QZGQWAWZkAgoPZBYCAgEPZBYCZg8QZGQWAWZkZOPA819c1SnM+HDfV9ANb280uL/25SvJ4MzWuRfO72pi",
@@ -15,11 +17,11 @@ const EMS_VERIFICATION_CONSTANTS = {
  */
 export default async function verifyLicense(license) {
   const formData = new FormData()
-  formData.append("t_web_lookup__license_no", license)
-  formData.append("__VIEWSTATE", EMS_VERIFICATION_CONSTANTS.VIEWSTATE)
-  formData.append("__VIEWSTATEGENERATOR", EMS_VERIFICATION_CONSTANTS.VIEWSTATEGENERATOR)
-  formData.append("__EVENTVALIDATION", EMS_VERIFICATION_CONSTANTS.EVENTVALIDATION)
-  formData.append("sch_button", EMS_VERIFICATION_CONSTANTS.BUTTON)
+  formData.append("t_web_lookup__license_no", license);
+  formData.append("__VIEWSTATE", EMS_VERIFICATION_CONSTANTS.VIEWSTATE);
+  formData.append("__VIEWSTATEGENERATOR", EMS_VERIFICATION_CONSTANTS.VIEWSTATEGENERATOR);
+  formData.append("__EVENTVALIDATION", EMS_VERIFICATION_CONSTANTS.EVENTVALIDATION);
+  formData.append("sch_button", EMS_VERIFICATION_CONSTANTS.BUTTON);
 
   let sessionCookie = undefined;
 
@@ -29,8 +31,8 @@ export default async function verifyLicense(license) {
     });
     sessionCookie = response.headers.get("set-cookie").split(";")[0]
   } catch (e) {
-    console.error(e)
-    throw new Error("Unable to get session cookie, try again later.")
+    console.error(e);
+    throw new Error("Unable to get session cookie, try again later.");
   }
 
   if (sessionCookie) {
@@ -41,23 +43,23 @@ export default async function verifyLicense(license) {
         headers: {
           cookie: sessionCookie // Need a valid session cookie to search EMS website
         }
-      })
-      const html = await response.text() // Need to await converting the fetch response into HTML
+      });
+      const html = await response.text(); // Need to await converting the fetch response into HTML
 
       const regex = /<a[^>]*?>(.*?)<\/a><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span>/;
       const match = html.match(regex); // Use the regex pattern to extract the first table row from the HTML
 
       if (match) {
-        const [, name, licenseType, status, licenseNumber] = match
-        const emsPersonnelInfo = { name, licenseType, status, licenseNumber }
+        const [, name, licenseType, status, licenseNumber] = match;
+        const emsPersonnelInfo = { name, licenseType, status, licenseNumber };
 
-        return emsPersonnelInfo
+        return emsPersonnelInfo;
       } else {
-        throw new Error("No match.")
+        throw new Error("No match.");
       }
     } catch (e) {
-      console.error(e)
-      throw new Error("Unable to access verification results, try again later.")
+      console.error(e);
+      throw new Error("Unable to access verification results, try again later.");
     }
   }
 };

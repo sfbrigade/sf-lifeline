@@ -1,8 +1,7 @@
-'use strict'
+"use strict"
 
 import verifyLicense from "../../../../helpers/verifyLicense.js";
 
-// User template for the routes
 export default async function (fastify, opts) {
   fastify.get(
     '/',
