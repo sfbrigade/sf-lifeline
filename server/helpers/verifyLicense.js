@@ -29,7 +29,7 @@ export default async function verifyLicense(license) {
     const response = await fetch(EMS_VERIFICATION_CONSTANTS.WEBSITE, {
       method: "GET"
     });
-    sessionCookie = response.headers.get("set-cookie").split(";")[0]
+    sessionCookie = response.headers.get("set-cookie").split(";")[0];
   } catch (e) {
     console.error(e);
     throw new Error("Unable to get session cookie, try again later.");
