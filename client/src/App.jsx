@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Index from "./pages";
-import Login from "./pages/login";
-import NavBar from "./components/NavBar";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Index from './pages';
+import Login from './pages/login';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
