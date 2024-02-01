@@ -11,19 +11,16 @@ const channel = addons.getChannel();
 // SchemaWrapper for dark mode of storybook UI
 const ColorSchemeWrapper = ({ children }) => {
   const { setColorScheme } = useMantineColorScheme();
-  const handleColorScheme = (value) =>
-    setColorScheme(value ? 'dark' : 'light');
-    useEffect(() => {
-      channel.on(DARK_MODE_EVENT_NAME, handleColorScheme);
-      return () => channel.off(DARK_MODE_EVENT_NAME, handleColorScheme);
-    }, [channel]);
+  const handleColorScheme = (value) => setColorScheme(value ? 'dark' : 'light');
+  useEffect(() => {
+    channel.on(DARK_MODE_EVENT_NAME, handleColorScheme);
+    return () => channel.off(DARK_MODE_EVENT_NAME, handleColorScheme);
+  }, [channel]);
   return <>{children}</>;
 };
 
 export const decorators = [
-  (renderStory) => (
-    <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>
-  ),
+  (renderStory) => <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>,
   (renderStory) => (
     <MantineProvider theme={theme}>{renderStory()}</MantineProvider>
   ),
