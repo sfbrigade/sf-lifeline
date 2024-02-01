@@ -1,7 +1,5 @@
 "use strict"
 
-import { parse } from 'node-html-parser';
-
 const EMS_VERIFICATION_WEBSITE = "https://emsverification.emsa.ca.gov/Verification/Search.aspx";
 
 /**
@@ -23,17 +21,20 @@ export default async function verifyLicense(license) {
     });
     sessionCookie = response.headers.get("set-cookie").split(";")[0];
 
-    const html = await response.text()
-    const root = parse(html)
+    const html = await response.text() // Need to await converting the fetch response into HTML
 
-    const viewStateRawValue = root.querySelector("#__VIEWSTATE").rawAttrs.split(" ")[3]
-    const viewStateValue = viewStateRawValue.slice(7, viewStateRawValue.length - 1)
+    const viewstateRegex = /<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="([^"]+)" \/>/;
+    const eventValidationRegex = /<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="([^"]+)" \/>/;
 
-    const eventValidationRawValue = root.querySelector("#__EVENTVALIDATION").rawAttrs.split(" ")[3]
-    const eventValidationValue = eventValidationRawValue.slice(7, viewStateRawValue.length - 1)
+    const viewstateMatch = html.match(viewstateRegex);
+    const eventValidationMatch = html.match(eventValidationRegex);
+
+    const viewStateValue = viewstateMatch[1]
+    const eventValidationValue = eventValidationMatch[1]
 
     formData.append("__VIEWSTATE", viewStateValue);
     formData.append("__EVENTVALIDATION", eventValidationValue);
+
     formData.append("sch_button", "Search");
 
   } catch (e) {
@@ -50,7 +51,7 @@ export default async function verifyLicense(license) {
           cookie: sessionCookie // Need a valid session cookie to search EMS website
         }
       });
-      const html = await response.text(); // Need to await converting the fetch response into HTML
+      const html = await response.text();
 
       const regex = /<a[^>]*?>(.*?)<\/a><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span><\/td><td><span>(.*?)<\/span>/;
       const match = html.match(regex); // Use the regex pattern to extract the first table row from the HTML
