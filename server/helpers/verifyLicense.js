@@ -29,8 +29,8 @@ export default async function verifyLicense(license) {
     const viewstateMatch = html.match(viewstateRegex);
     const eventValidationMatch = html.match(eventValidationRegex);
 
-    const viewStateValue = viewstateMatch[1]
-    const eventValidationValue = eventValidationMatch[1]
+    const viewStateValue = viewstateMatch[1];
+    const eventValidationValue = eventValidationMatch[1];
 
     formData.append("__VIEWSTATE", viewStateValue);
     formData.append("__EVENTVALIDATION", eventValidationValue);
