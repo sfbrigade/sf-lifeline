@@ -1,6 +1,13 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+# the on command will tell it when to run
 on: [push]
+# potential config 
+  # push:
+  #   branches: [main,dev]
+  # pull_request:
+  #   branches: [main, dev]
+# this is the code that will run on the container that github creates
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
