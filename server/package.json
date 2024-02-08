@@ -14,7 +14,7 @@
     "migrate": "docker-compose exec server sh -c 'cd server && npx prisma migrate $@' sh",
     "db": "docker-compose exec server sh -c 'cd server && npx prisma db $@' sh",
     "pretest": "standard",
-    "lint": "standard --fix"
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +30,6 @@
   },
   "devDependencies": {
     "c8": "^7.13.0",
-    "standard": "^17.0.0"
+    "eslint-config-prettier": "^9.1.0"
   }
 }
