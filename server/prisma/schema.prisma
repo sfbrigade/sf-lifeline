@@ -10,6 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  STAFF
+  VOLUNTEER
+  FIRST_RESPONDER
+}
+
 model User {
   id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName              String
@@ -33,14 +40,6 @@ model User {
   updatedPatients        Patient[] @relation("UserUpdatedBy")
   updatedAt              DateTime  @updatedAt
   createdAt              DateTime  @default(now())
-}
-
-// The Role enum is used to restrict access to certain operations in your application.
-enum Role {
-  ADMIN
-  STAFF
-  VOLUNTEER
-  FIRST_RESPONDER
 }
 
 model Invite {
@@ -87,29 +86,36 @@ model Patient {
 }
 
 enum Gender {
-  NON_BINARY
-  MALE
   FEMALE
+  MALE
+  TRANS_MALE
+  TRANS_FEMALE
+  OTHER
+  UNKNOWN
 }
 
 enum Language {
-  CHINESE
+  CANTONESE
+  ENGLISH
+  MANDARIN
   RUSSIAN
   SPANISH
+  TAGALOG
 }
 
 enum CodeStatus {
-  FULL
+  COMFORT
   DNR
   DNI
   DNR_DNI
+  FULL
 }
 
 model Contact {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  first_name   String?
-  middle_name  String?
-  last_name    String?
+  firstName    String?
+  middleName   String?
+  lastName     String?
   phone        String?
   email        String?
   address      String?
@@ -128,9 +134,7 @@ model Allergy {
 }
 
 enum AllergyType {
-  FOOD
   DRUG
-  ENVIRONMENT
   OTHER
 }
 
