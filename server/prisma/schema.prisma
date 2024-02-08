@@ -11,28 +11,28 @@ datasource db {
 }
 
 model User {
-  id                        Int     @id @default(autoincrement())
-  first_name                String
-  middle_name               String
-  last_name                 String
-  email                     String  @unique
-  email_verification_token  String
-  email_verified_at         DateTime
-  role                      Role    @default(USER)
-  hashed_password           String
-  licesnse_number           String
-  license_data              Json
-  updated_at                DateTime @updatedAt
-  created_at                DateTime @default(now())
-  approved_at               DateTime
-  approved_by               User?    @relation("UserApprovedBy", fields: [approved_by_id], references: [id])
-  approved_by_id            Int
-  approved_users            User[]  @relation("UserApprovedBy")
-  invited_users             Invite[] @relation("UserInvitedBy")
-  accepted_invites          Invite[] @relation("UserAcceptedBy")
-  revoked_invites           Invite[] @relation("UserRevokedBy")
-  created_patients          Patient[] @relation("UserCreatedBy")
-  updated_patients          Patient[] @relation("UserUpdatedBy")
+  id                     Int       @id @default(autoincrement())
+  firstName              String
+  middleName             String
+  lastName               String
+  email                  String    @unique
+  emailVerificationToken String
+  emailVerifiedAt        DateTime
+  role                   Role      @default(USER)
+  hashedPassword         String
+  licesnseNumber         String
+  licenseData            Json
+  updatedAt              DateTime  @updatedAt
+  createdAt              DateTime  @default(now())
+  approvedAt             DateTime
+  approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
+  approvedById           Int
+  approvedUsers          User[]    @relation("UserApprovedBy")
+  invitedUsers           Invite[]  @relation("UserInvitedBy")
+  acceptedInvites        Invite[]  @relation("UserAcceptedBy")
+  revokedInvites         Invite[]  @relation("UserRevokedBy")
+  createdPatients        Patient[] @relation("UserCreatedBy")
+  updatedPatients        Patient[] @relation("UserUpdatedBy")
 }
 
 // The Role enum is used to restrict access to certain operations in your application.
@@ -42,45 +42,46 @@ enum Role {
 }
 
 model Invite {
-  id                        Int       @id @default(autoincrement())
-  first_name                String
-  last_name                 String
-  email                     String    @unique
-  updated_at                DateTime  @updatedAt @map("updated_at")
-  created_at                DateTime  @default(now()) @map("created_at")
-  expires_at                DateTime
-  invited_by                User      @relation("UserInvitedBy", fields: [invited_by_id], references: [id])
-  invited_by_id             Int
-  accepted_by               User?     @relation("UserAcceptedBy", fields: [accepted_by_id], references: [id])
-  accepted_by_id            Int
-  accepted_at               DateTime
-  revoked_at                DateTime
-  revoked_by                User?     @relation("UserRevokedBy", fields: [revoked_by_id], references: [id])
-  revoked_by_id             Int
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  middleName   String
+  lastName     String
+  email        String   @unique
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  invitedBy    User     @relation("UserInvitedBy", fields: [invitedById], references: [id])
+  invitedById  Int
+  acceptedBy   User?    @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
+  acceptedById Int
+  acceptedAt   DateTime
+  revokedAt    DateTime
+  revokedBy    User?    @relation("UserRevokedBy", fields: [revokedById], references: [id])
+  revokedById  Int
 }
 
 model Patient {
-  id                        Int       @id @default(autoincrement())
-  first_name                String
-  middle_name               String
-  last_name                 String
-  date_of_birth             DateTime
-  gender                    Gender
-  updated_at                DateTime  @updatedAt @map("updated_at")
-  created_at                DateTime  @default(now()) @map("created_at")
-  created_by                User      @relation("UserCreatedBy", fields: [created_by_id], references: [id])
-  created_by_id             Int
-  updated_by                User?     @relation("UserUpdatedBy", fields: [updated_by_id], references: [id])
-  updated_by_id             Int
-  language                  Language
-  code_status               CodeStatus
-  code_status_attached      Boolean
-  hospital                  Hospital  @relation(fields: [hospital_id], references: [id])
-  hospital_id               Int
-  emergency_contact         Contact   @relation( fields: [emergency_contact_id], references: [id])
-  emergency_contact_id      Int       @unique
-  physician                 Physician @relation(fields: [physician_id], references: [id])
-  physician_id              Int
+  id                 Int        @id @default(autoincrement())
+  firstName          String
+  middleName         String
+  lastName           String
+  dateOfBirth        DateTime
+  gender             Gender
+  updatedAt          DateTime   @updatedAt @map("updated_at")
+  createdAt          DateTime   @default(now()) @map("created_at")
+  createdBy          User       @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById        Int
+  updatedBy          User?      @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        Int
+  language           Language
+  codeStatus         CodeStatus
+  codeStatusAttached Boolean
+  hospital           Hospital   @relation(fields: [hospitalId], references: [id])
+  hospitalId         Int
+  emergencyContact   Contact    @relation(fields: [emergencyContactId], references: [id])
+  emergencyContactId Int        @unique
+  physician          Physician  @relation(fields: [physicianId], references: [id])
+  physicianId        Int
 }
 
 enum Gender {
@@ -103,23 +104,23 @@ enum CodeStatus {
 }
 
 model Contact {
-  id                        Int       @id @default(autoincrement())
-  first_name                String
-  middle_name               String
-  last_name                 String
-  phone                     String
-  email                     String
-  address                   String
-  relationship              String
-  patient                   Patient?
+  id           Int      @id @default(autoincrement())
+  first_name   String
+  middle_name  String
+  last_name    String
+  phone        String
+  email        String
+  address      String
+  relationship String
+  patient      Patient?
 }
 
 model Allergy {
-  id       Int      @id @default(autoincrement())
-  name     String
-  type     AllergyType
-  system   CodingSystem
-  code     String
+  id     Int          @id @default(autoincrement())
+  name   String
+  type   AllergyType
+  system CodingSystem
+  code   String
 }
 
 enum AllergyType {
@@ -130,18 +131,18 @@ enum AllergyType {
 }
 
 model Medication {
-  id       Int      @id @default(autoincrement())
-  name     String
-  alt_name String
-  system   CodingSystem
-  code     String
+  id      Int          @id @default(autoincrement())
+  name    String
+  altName String
+  system  CodingSystem
+  code    String
 }
 
 model Condition {
-  id       Int      @id @default(autoincrement())
-  name     String
-  system   CodingSystem
-  code     String
+  id     Int          @id @default(autoincrement())
+  name   String
+  system CodingSystem
+  code   String
 }
 
 enum CodingSystem {
@@ -151,22 +152,22 @@ enum CodingSystem {
 }
 
 model Physician {
-  id                        Int       @id @default(autoincrement())
-  first_name                String
-  middle_name               String
-  last_name                 String
-  phone                     String
-  email                     String
-  hospitals                 Hospital[]
-  patients                  Patient[]
+  id         Int        @id @default(autoincrement())
+  firstName  String
+  middleName String
+  lastName   String
+  phone      String
+  email      String
+  hospitals  Hospital[]
+  patients   Patient[]
 }
 
 model Hospital {
-  id                        Int       @id @default(autoincrement())
-  name                      String
-  address                   String
-  phone                     String
-  email                     String
-  physicians                Physician[]
-  patients                  Patient[]
+  id         Int         @id @default(autoincrement())
+  name       String
+  address    String
+  phone      String
+  email      String
+  physicians Physician[]
+  patients   Patient[]
 }
