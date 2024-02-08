@@ -11,77 +11,79 @@ datasource db {
 }
 
 model User {
-  id                     Int       @id @default(autoincrement())
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName              String
-  middleName             String
+  middleName             String?
   lastName               String
   email                  String    @unique
-  emailVerificationToken String
-  emailVerifiedAt        DateTime
-  role                   Role      @default(USER)
+  emailVerificationToken String?
+  emailVerifiedAt        DateTime?
+  role                   Role
   hashedPassword         String
-  licesnseNumber         String
-  licenseData            Json
-  updatedAt              DateTime  @updatedAt
-  createdAt              DateTime  @default(now())
-  approvedAt             DateTime
+  licenseNumber          String
+  licenseData            Json?
+  approvedAt             DateTime?
   approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
-  approvedById           Int
+  approvedById           String?   @db.Uuid
   approvedUsers          User[]    @relation("UserApprovedBy")
   invitedUsers           Invite[]  @relation("UserInvitedBy")
   acceptedInvites        Invite[]  @relation("UserAcceptedBy")
   revokedInvites         Invite[]  @relation("UserRevokedBy")
   createdPatients        Patient[] @relation("UserCreatedBy")
   updatedPatients        Patient[] @relation("UserUpdatedBy")
+  updatedAt              DateTime  @updatedAt
+  createdAt              DateTime  @default(now())
 }
 
 // The Role enum is used to restrict access to certain operations in your application.
 enum Role {
-  USER
   ADMIN
+  STAFF
+  VOLUNTEER
+  FIRST_RESPONDER
 }
 
 model Invite {
-  id           Int      @id @default(autoincrement())
-  firstName    String
-  middleName   String
-  lastName     String
-  email        String   @unique
-  updatedAt    DateTime @updatedAt
-  createdAt    DateTime @default(now())
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  email        String
   expiresAt    DateTime
-  invitedBy    User     @relation("UserInvitedBy", fields: [invitedById], references: [id])
-  invitedById  Int
-  acceptedBy   User?    @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
-  acceptedById Int
-  acceptedAt   DateTime
-  revokedAt    DateTime
-  revokedBy    User?    @relation("UserRevokedBy", fields: [revokedById], references: [id])
-  revokedById  Int
+  invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
+  invitedById  String    @db.Uuid
+  acceptedBy   User?     @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
+  acceptedById String?   @db.Uuid
+  acceptedAt   DateTime?
+  revokedAt    DateTime?
+  revokedBy    User?     @relation("UserRevokedBy", fields: [revokedById], references: [id])
+  revokedById  String?   @db.Uuid
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
 }
 
 model Patient {
-  id                 Int        @id @default(autoincrement())
-  firstName          String
-  middleName         String
-  lastName           String
-  dateOfBirth        DateTime
-  gender             Gender
-  updatedAt          DateTime   @updatedAt @map("updated_at")
-  createdAt          DateTime   @default(now()) @map("created_at")
-  createdBy          User       @relation("UserCreatedBy", fields: [createdById], references: [id])
-  createdById        Int
-  updatedBy          User?      @relation("UserUpdatedBy", fields: [updatedById], references: [id])
-  updatedById        Int
-  language           Language
-  codeStatus         CodeStatus
-  codeStatusAttached Boolean
-  hospital           Hospital   @relation(fields: [hospitalId], references: [id])
-  hospitalId         Int
-  emergencyContact   Contact    @relation(fields: [emergencyContactId], references: [id])
-  emergencyContactId Int        @unique
-  physician          Physician  @relation(fields: [physicianId], references: [id])
-  physicianId        Int
+  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName          String?
+  middleName         String?
+  lastName           String?
+  dateOfBirth        DateTime?
+  gender             Gender?
+  language           Language?
+  codeStatus         CodeStatus?
+  codeStatusAttached Boolean?
+  hospital           Hospital?   @relation(fields: [hospitalId], references: [id])
+  hospitalId         String?     @db.Uuid
+  emergencyContact   Contact?    @relation(fields: [emergencyContactId], references: [id])
+  emergencyContactId String?     @unique @db.Uuid
+  physician          Physician?  @relation(fields: [physicianId], references: [id])
+  physicianId        String?     @db.Uuid
+  createdBy          User        @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById        String      @db.Uuid
+  updatedBy          User        @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String      @db.Uuid
+  updatedAt          DateTime    @updatedAt
+  createdAt          DateTime    @default(now())
 }
 
 enum Gender {
@@ -104,19 +106,21 @@ enum CodeStatus {
 }
 
 model Contact {
-  id           Int      @id @default(autoincrement())
-  first_name   String
-  middle_name  String
-  last_name    String
-  phone        String
-  email        String
-  address      String
-  relationship String
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name   String?
+  middle_name  String?
+  last_name    String?
+  phone        String?
+  email        String?
+  address      String?
+  relationship String?
   patient      Patient?
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
 }
 
 model Allergy {
-  id     Int          @id @default(autoincrement())
+  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name   String
   type   AllergyType
   system CodingSystem
@@ -131,15 +135,15 @@ enum AllergyType {
 }
 
 model Medication {
-  id      Int          @id @default(autoincrement())
+  id      String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name    String
-  altName String
+  altNames String
   system  CodingSystem
   code    String
 }
 
 model Condition {
-  id     Int          @id @default(autoincrement())
+  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name   String
   system CodingSystem
   code   String
@@ -152,22 +156,22 @@ enum CodingSystem {
 }
 
 model Physician {
-  id         Int        @id @default(autoincrement())
-  firstName  String
-  middleName String
-  lastName   String
-  phone      String
-  email      String
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName  String?
+  middleName String?
+  lastName   String?
+  phone      String?
+  email      String?
   hospitals  Hospital[]
   patients   Patient[]
 }
 
 model Hospital {
-  id         Int         @id @default(autoincrement())
-  name       String
-  address    String
-  phone      String
-  email      String
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String?
+  address    String?
+  phone      String?
+  email      String?
   physicians Physician[]
   patients   Patient[]
 }
