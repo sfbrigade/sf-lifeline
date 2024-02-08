@@ -135,11 +135,11 @@ enum AllergyType {
 }
 
 model Medication {
-  id      String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name    String
+  id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
   altNames String
-  system  CodingSystem
-  code    String
+  system   CodingSystem
+  code     String
 }
 
 model Condition {
