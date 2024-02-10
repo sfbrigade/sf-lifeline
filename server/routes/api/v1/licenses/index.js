@@ -1,8 +1,8 @@
-"use strict"
+'use strict';
 
 import verifyLicense from "../../../../helpers/verifyLicense.js";
 
-export default async function (fastify, opts) {
+export default async function (fastify) {
   fastify.get(
     '/',
     {
@@ -12,9 +12,9 @@ export default async function (fastify, opts) {
         }
       }
     },
-    async function (request, reply) {
-      const { license } = request.query
-      const results = await verifyLicense(license)
+    async function (request) {
+      const { license } = request.query;
+      const results = await verifyLicense(license);
       return results;
     });
 }
