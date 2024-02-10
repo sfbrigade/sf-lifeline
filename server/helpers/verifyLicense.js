@@ -7,9 +7,9 @@ import fetchLicenseVerificationResults from './fetchLicenseVerificationResults.j
 const EMS_VERIFICATION_WEBSITE = 'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
 
 /**
- * Search for an EMS personnel on California's EMS Verification website
+ * Search for an EMS personnel on California's EMS personnel registry website
  *
- * @param {string} license - an EMS personnel's license
+ * @param {string} license an EMS personnel's license
  * @returns {object} EMS personnel information which includes name, licenseType, status, and licenseNumber
  * @throws An error if the EMS verification website has issues or if there is no match for the licesnse
  */

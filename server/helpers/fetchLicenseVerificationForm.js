@@ -1,3 +1,13 @@
+/**
+ * Generates the necessary sessionCookie and formData object required to make a
+ * POST request to California's EMS personnel registry website
+ * 
+ * @param {string} website California's EMS personnel registry website
+ * @param {string} license an EMS personnel's license
+ * @returns a Promise, once resolved, containing a sessionCookie string and formData object 
+ *  necessary to make a POST request on the registry website
+ */
+
 export default async function fetchLicenseVerificationForm(website, license) {
   const formData = new FormData();
   formData.append('t_web_lookup__license_no', license);
