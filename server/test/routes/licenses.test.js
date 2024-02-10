@@ -14,7 +14,7 @@ test('License API returns valid results', async (t) => {
   assert.equal(licenseNumber, 'P39332');
 })
 
-test('License API returns error for invalid results', async (t) => {
+test('License API returns error for no matching results', async (t) => {
   const app = await build(t);
 
   const res = await app.inject({
