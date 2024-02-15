@@ -10,12 +10,172 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  STAFF
+  VOLUNTEER
+  FIRST_RESPONDER
+}
+
 model User {
-  id          Int     @id @default(autoincrement())
-  email       String  @unique
-  name        String?
-  auth0Id     String? @unique
-  password    String?
-  role        String  @default("user")
-  hasPassword Boolean @default(false)
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName              String
+  middleName             String?
+  lastName               String
+  email                  String    @unique
+  emailVerificationToken String?
+  emailVerifiedAt        DateTime?
+  role                   Role
+  hashedPassword         String
+  licenseNumber          String
+  licenseData            Json?
+  approvedAt             DateTime?
+  approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
+  approvedById           String?   @db.Uuid
+  approvedUsers          User[]    @relation("UserApprovedBy")
+  invitedUsers           Invite[]  @relation("UserInvitedBy")
+  acceptedInvites        Invite[]  @relation("UserAcceptedBy")
+  revokedInvites         Invite[]  @relation("UserRevokedBy")
+  createdPatients        Patient[] @relation("UserCreatedBy")
+  updatedPatients        Patient[] @relation("UserUpdatedBy")
+  updatedAt              DateTime  @updatedAt
+  createdAt              DateTime  @default(now())
+}
+
+model Invite {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  email        String
+  expiresAt    DateTime
+  invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
+  invitedById  String    @db.Uuid
+  acceptedBy   User?     @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
+  acceptedById String?   @db.Uuid
+  acceptedAt   DateTime?
+  revokedAt    DateTime?
+  revokedBy    User?     @relation("UserRevokedBy", fields: [revokedById], references: [id])
+  revokedById  String?   @db.Uuid
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+}
+
+model Patient {
+  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName          String?
+  middleName         String?
+  lastName           String?
+  dateOfBirth        DateTime?
+  gender             Gender?
+  language           Language?
+  codeStatus         CodeStatus?
+  codeStatusAttached Boolean?
+  hospital           Hospital?   @relation(fields: [hospitalId], references: [id])
+  hospitalId         String?     @db.Uuid
+  emergencyContact   Contact?    @relation(fields: [emergencyContactId], references: [id])
+  emergencyContactId String?     @unique @db.Uuid
+  physician          Physician?  @relation(fields: [physicianId], references: [id])
+  physicianId        String?     @db.Uuid
+  createdBy          User        @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById        String      @db.Uuid
+  updatedBy          User        @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String      @db.Uuid
+  updatedAt          DateTime    @updatedAt
+  createdAt          DateTime    @default(now())
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  TRANS_MALE
+  TRANS_FEMALE
+  OTHER
+  UNKNOWN
+}
+
+enum Language {
+  CANTONESE
+  ENGLISH
+  MANDARIN
+  RUSSIAN
+  SPANISH
+  TAGALOG
+}
+
+enum CodeStatus {
+  COMFORT
+  DNR
+  DNI
+  DNR_DNI
+  FULL
+}
+
+model Contact {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  phone        String?
+  email        String?
+  address      String?
+  relationship String?
+  patient      Patient?
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+}
+
+model Allergy {
+  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  type   AllergyType
+  system CodingSystem
+  code   String
+}
+
+enum AllergyType {
+  DRUG
+  OTHER
+}
+
+model Medication {
+  id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  altNames String
+  system   CodingSystem
+  code     String
+}
+
+model Condition {
+  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  system CodingSystem
+  code   String
+}
+
+enum CodingSystem {
+  SNOMED
+  RXNORM
+  ICD10
+}
+
+model Physician {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName  String?
+  middleName String?
+  lastName   String?
+  phone      String?
+  email      String?
+  hospitals  Hospital[]
+  patients   Patient[]
+}
+
+model Hospital {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String?
+  address    String?
+  phone      String?
+  email      String?
+  physicians Physician[]
+  patients   Patient[]
 }
