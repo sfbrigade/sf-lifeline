@@ -1,3 +1,6 @@
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
 const MedicalSurgicalURL =
   'https://nemsis.org/media/nemsis_v3/master/SuggestedLists/MedicalSurgicalHistory/MedicalSurgicalHistory.json';
 const MedicationAllergyURL =
@@ -17,11 +20,13 @@ const AllergyType = {
   DRUG: 'DRUG',
   OTHER: 'OTHER',
 };
+
 async function seedConditions() {
   try {
     const response = await fetch(MedicalSurgicalURL);
     const data = await response.json();
     const codeList = data.DefinedList.Codes.Code;
+
     const formattedCodesList = codeList.map((code) => {
       return {
         name: code.SuggestedLabel,
@@ -29,9 +34,14 @@ async function seedConditions() {
         code: code.Value.Value,
       };
     });
-    console.log(formattedCodesList);
+
+    await prisma.condition.createMany({
+      data: formattedCodesList,
+    });
+
+    console.log('Conditions seeded successfully');
   } catch (error) {
-    console.error('Error fetching the JSON file:', error);
+    console.error('Error seeding conditions:', error);
   }
 }
 
@@ -40,6 +50,7 @@ async function seedMedicationAllergies() {
     const response = await fetch(MedicationAllergyURL);
     const data = await response.json();
     const codeList = data.DefinedList.Codes.Code;
+
     const formattedCodesList = codeList.map((code) => {
       return {
         name: code.SuggestedLabel,
@@ -48,9 +59,14 @@ async function seedMedicationAllergies() {
         code: code.Value.Value,
       };
     });
-    console.log(formattedCodesList);
+
+    await prisma.allergy.createMany({
+      data: formattedCodesList,
+    });
+
+    console.log('Medication allergies seeded successfully');
   } catch (error) {
-    console.error('Error fetching the JSON file:', error);
+    console.error('Error seeding medication allergies:', error);
   }
 }
 
@@ -59,17 +75,23 @@ async function seedEnvFoodAllergies() {
     const response = await fetch(EnvFoodAllergyURL);
     const data = await response.json();
     const codeList = data.DefinedList.Codes.Code;
+
     const formattedCodesList = codeList.map((code) => {
       return {
         name: code.SuggestedLabel,
-        type: code.Category,
+        type: AllergyType.OTHER,
         system: CodingSystemEnum.SNOMED,
         code: code.Value.Value,
       };
     });
-    console.log(formattedCodesList);
+
+    await prisma.allergy.createMany({
+      data: formattedCodesList,
+    });
+
+    console.log('Env/Food allergies seeded successfully');
   } catch (error) {
-    console.error('Error fetching the JSON file:', error);
+    console.error('Error seeding env/food allergies:', error);
   }
 }
 
@@ -83,30 +105,68 @@ async function seedMedications() {
 
     const data = await response.json();
     const codeList = data.minConceptGroup.minConcept;
+
+    const packRegex = /\{([^}]+)\} Pack(?: \[([^\]]+)\])?/;
+    const nonPackRegex = /^(.*?)\s?(\[([^\]]+)\])?$/;
+
     const formattedCodesList = codeList.map((code) => {
-      const regex = /(?:{(\d+) )?([^}]+)(?:})?/;
-      const match = code.name.match(regex);
-      if (match) {
-        const numberOfPacks = match[1] ? parseInt(match[1]) : 1;
-        const medicineDetails = match[2].trim().replace(/^\((.*)\)$/, '$1');
+      const packMatch = code.name.match(packRegex);
+      const nonPackMatch = code.name.match(nonPackRegex);
+
+      let name = '';
+      let alt = '';
+
+      if (packMatch) {
+        const medicineDetails = packMatch[1].trim();
+        const nameMatch = packMatch[2];
+
+        if (nameMatch) {
+          name = nameMatch.trim();
+          alt = medicineDetails;
+        } else {
+          name = medicineDetails;
+        }
+      } else if (nonPackMatch) {
+        const medicineDetails = nonPackMatch[1].trim();
+        const nameMatch = nonPackMatch[3] ? nonPackMatch[3].trim() : '';
+        if (nameMatch) {
+          name = nameMatch;
+          alt = medicineDetails;
+        } else {
+          name = medicineDetails;
+        }
       } else {
-        console.log('No match found');
+        console.log('no match: ', code.name);
       }
+
       return {
-        name: code.name,
-        alternate_names: code.name,
+        name: name,
+        altNames: alt,
         system: CodingSystemEnum.RXNORM,
         code: code.rxcui,
       };
     });
 
-    // console.log(formattedCodesList);
+    await prisma.medication.createMany({
+      data: formattedCodesList,
+    });
+    console.log('Medications seeded successfully');
   } catch (error) {
-    console.error('Error fetching the RxNorm API:', error);
+    console.error('Error seeding medications :', error);
   }
 }
 
-// seedConditions();
-// seedMedicationAllergies();
-// seedEnvFoodAllergies();
+try {
+  await prisma.condition.deleteMany();
+  await prisma.allergy.deleteMany();
+  await prisma.medication.deleteMany();
+} catch (error) {
+  console.error('Error clearing tables:', error);
+}
+
+seedConditions();
+seedMedicationAllergies();
+seedEnvFoodAllergies();
 seedMedications();
+
+await prisma.$disconnect();
