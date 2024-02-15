@@ -21,6 +21,6 @@ test('License API returns error for no matching results', async (t) => {
     url: '/api/v1/licenses?license=1'
   });
   const { message } = JSON.parse(res.body);
-  assert.equal(res.statusCode, 500);
+  assert.equal(res.statusCode, 404);
   assert.equal(message, 'No match.');
 })

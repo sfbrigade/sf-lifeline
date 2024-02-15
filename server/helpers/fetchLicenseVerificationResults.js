@@ -28,6 +28,6 @@ export default async function fetchLicenseVerificationResults(website, formData,
 
     return emsPersonnelInfo;
   } else {
-    throw new LicenseMatchError('No match.');
+    throw new LicenseMatchError(404, 'No match.');
   }
 }
