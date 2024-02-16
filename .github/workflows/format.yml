@@ -1,7 +1,5 @@
 name: Format
-on:
-  push:
-    branches: [dev]
+on: [push]
 jobs:
   format:
     runs-on: ubuntu-latest
