@@ -26,4 +26,4 @@ jobs:
             exit 1
           fi
       - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+        run: npm run lint --workspaces
