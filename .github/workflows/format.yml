@@ -15,4 +15,5 @@ jobs:
         with:
           node-version: "20"
       - run: npm ci
-      - run: npm run format
+      - name: Format Files
+        run: npm run format
