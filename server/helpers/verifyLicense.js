@@ -1,8 +1,8 @@
 'use strict';
 
-import LicenseMatchError from '../errors/LicenseErrors.js';
 import fetchLicenseVerificationForm from './fetchLicenseVerificationForm.js';
 import fetchLicenseVerificationResults from './fetchLicenseVerificationResults.js';
+import { LicenseMatchError, LicenseWebsiteError } from '../errors/LicenseErrors.js';
 
 const EMS_VERIFICATION_WEBSITE = 'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
 
@@ -24,7 +24,7 @@ export default async function verifyLicense(license) {
     sessionCookie = res.sessionCookie;
   } catch (err) {
     console.error(err);
-    throw new Error('Unable to access verification website, try again later.');
+    throw new LicenseWebsiteError(503, 'Unable to access verification website, try again later.');
   }
 
   if (sessionCookie) {
@@ -35,7 +35,8 @@ export default async function verifyLicense(license) {
       if (err instanceof LicenseMatchError) {
         throw err;
       }
-      throw new Error('Unable to access verification results, try again later.');
+      console.error(err);
+      throw new LicenseWebsiteError(503, 'Unable to access verification results, try again later.');
     }
   }
 };
