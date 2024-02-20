@@ -30,6 +30,7 @@ async function seedConditions() {
     const formattedCodesList = codeList.map((code) => {
       return {
         name: code.SuggestedLabel,
+        category: code.Category,
         system: CodingSystemEnum.ICD10,
         code: code.Value.Value,
       };
@@ -156,13 +157,13 @@ async function seedMedications() {
   }
 }
 
-try {
-  await prisma.condition.deleteMany();
-  await prisma.allergy.deleteMany();
-  await prisma.medication.deleteMany();
-} catch (error) {
-  console.error('Error clearing tables:', error);
-}
+// try {
+//   await prisma.condition.deleteMany();
+//   await prisma.allergy.deleteMany();
+//   await prisma.medication.deleteMany();
+// } catch (error) {
+//   console.error('Error clearing tables:', error);
+// }
 
 seedConditions();
 seedMedicationAllergies();

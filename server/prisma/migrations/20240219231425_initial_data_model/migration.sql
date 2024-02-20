@@ -120,6 +120,7 @@ CREATE TABLE "Medication" (
 CREATE TABLE "Condition" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
     "system" "CodingSystem" NOT NULL,
     "code" TEXT NOT NULL,
 
