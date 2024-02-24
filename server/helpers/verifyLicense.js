@@ -2,9 +2,13 @@
 
 import fetchLicenseVerificationForm from './fetchLicenseVerificationForm.js';
 import fetchLicenseVerificationResults from './fetchLicenseVerificationResults.js';
-import { LicenseMatchError, LicenseWebsiteError } from '../errors/LicenseErrors.js';
+import {
+  LicenseMatchError,
+  LicenseWebsiteError,
+} from '../errors/LicenseErrors.js';
 
-const EMS_VERIFICATION_WEBSITE = 'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
+const EMS_VERIFICATION_WEBSITE =
+  'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
 
 /**
  * Search for an EMS personnel on California's EMS personnel registry website
@@ -18,25 +22,38 @@ export default async function verifyLicense(license) {
   let sessionCookie;
 
   try {
-    const res = await fetchLicenseVerificationForm(EMS_VERIFICATION_WEBSITE, license);
+    const res = await fetchLicenseVerificationForm(
+      EMS_VERIFICATION_WEBSITE,
+      license,
+    );
 
     formData = res.formData;
     sessionCookie = res.sessionCookie;
   } catch (err) {
     console.error(err);
-    throw new LicenseWebsiteError(503, 'Unable to access verification website, try again later.');
+    throw new LicenseWebsiteError(
+      503,
+      'Unable to access verification website, try again later.',
+    );
   }
 
   if (sessionCookie) {
     try {
-      const emsPersonnelInfo = await fetchLicenseVerificationResults(EMS_VERIFICATION_WEBSITE, formData, sessionCookie);
+      const emsPersonnelInfo = await fetchLicenseVerificationResults(
+        EMS_VERIFICATION_WEBSITE,
+        formData,
+        sessionCookie,
+      );
       return emsPersonnelInfo;
     } catch (err) {
       if (err instanceof LicenseMatchError) {
         throw err;
       }
       console.error(err);
-      throw new LicenseWebsiteError(503, 'Unable to access verification results, try again later.');
+      throw new LicenseWebsiteError(
+        503,
+        'Unable to access verification results, try again later.',
+      );
     }
   }
-};
+}
