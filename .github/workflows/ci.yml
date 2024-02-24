@@ -4,22 +4,29 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
+    container: node:20.11.0-bookworm
+    services:
+      postgres:
+        image: postgres:15.5
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
       - name: Install Dependencies
         run: npm ci
       - name: Check Formatting
         run: npm run format:check
       - name: Run ESLint
         run: npm run lint --workspaces
+      - name: Generate Prisma client
+        run: cd server; npx prisma generate
       - name: Run Tests
         run: npm test
