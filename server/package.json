@@ -13,7 +13,6 @@
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
     "migrate": "docker-compose exec server sh -c 'cd server && npx prisma migrate $@' sh",
     "db": "docker-compose exec server sh -c 'cd server && npx prisma db $@' sh",
-    "pretest": "standard",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "keywords": [],
