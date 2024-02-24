@@ -1,7 +1,8 @@
 name: CI
 on: [push]
 jobs:
-  format:
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
@@ -18,14 +19,6 @@ jobs:
         run: npm ci
       - name: Check Formatting
         run: npm run format:check
-      - name: Fail if not formatted correctly
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Files are formatted correctly."
-          else
-            echo "Files are not formatted correctly. Please run 'prettier' to format your code."
-            exit 1
-          fi
       - name: Run ESLint
         run: npm run lint --workspaces
       - name: Run Tests
