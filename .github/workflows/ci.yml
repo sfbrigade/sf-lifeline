@@ -26,7 +26,11 @@ jobs:
         run: npm run format:check
       - name: Run ESLint
         run: npm run lint --workspaces
-      - name: Generate Prisma client
-        run: cd server; npx prisma generate
+      - name: Initialize database, generate Prisma client
+        run: cd server; npx prisma migrate reset
+        env:
+          DATABASE_URL: postgresql://postgres@db/app
       - name: Run Tests
         run: npm test
+        env:
+          DATABASE_URL: postgresql://postgres@db/app
