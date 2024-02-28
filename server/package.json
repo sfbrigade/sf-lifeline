@@ -28,8 +28,14 @@
     "fastify-plugin": "^4.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.21",
     "c8": "^7.13.0",
+    "eslint-config-prettier": "^9.1.0",
     "prisma": "^5.9.1",
-    "eslint-config-prettier": "^9.1.0"
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed"
   }
 }

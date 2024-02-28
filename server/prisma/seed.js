@@ -157,17 +157,28 @@ async function seedMedications() {
   }
 }
 
-// try {
-//   await prisma.condition.deleteMany();
-//   await prisma.allergy.deleteMany();
-//   await prisma.medication.deleteMany();
-// } catch (error) {
-//   console.error('Error clearing tables:', error);
-// }
+async function main() {
+  // try {
+  //   await prisma.condition.deleteMany();
+  //   await prisma.allergy.deleteMany();
+  //   await prisma.medication.deleteMany();
+  //   console.log("clear db success");
+  // } catch (error) {
+  //   console.error('Error clearing tables:', error);
+  // }
 
-seedConditions();
-seedMedicationAllergies();
-seedEnvFoodAllergies();
-seedMedications();
+  await seedConditions();
+  await seedMedicationAllergies();
+  await seedEnvFoodAllergies();
+  await seedMedications();
+}
 
-await prisma.$disconnect();
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
