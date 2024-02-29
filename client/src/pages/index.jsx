@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 function Index() {
-  const { isFetching, error, data } = useQuery({
+  const { isFetching, error } = useQuery({
     queryKey: ['users'],
     queryFn: () =>
       fetch('/api/v1/users').then((res) => {
