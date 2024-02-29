@@ -9,12 +9,13 @@ function Index() {
         return res.json();
       }),
   });
+
   if (isFetching) {
     return <main>Index is loading</main>;
   }
 
   if (error) {
-    return <main>Index is failed</main>;
+    return <main>Index fetch failed</main>;
   }
 
   return <main>Index is working</main>;
