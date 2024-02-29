@@ -1,28 +1,28 @@
 import fp from 'fastify-plugin';
-import fastifySession from '@fastify/session';
 import fastifyCookie from '@fastify/cookie';
+import fasitfySession from '@fastify/session'
+import fasitfyCsrf from '@fastify/csrf-protection';
+
+
+const isProduction = process.env.NODE_ENV === "production";
+const secret = process.env.SESSION_SECRET;
 
 // the use of fastify-plugin is required to be able
 // to export the decorators to the outer scope
 
-const auth = fp(async (fastify, options) => {
+export default fp(async function (fastify, opts) {
 
-  fastify.register(fastifyCookie);
-  fastify.register(fastifySession, {
-    cookieName: 'sessionId',
-    secret: 'a secret with minimum length of 32 characters',
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
-      secure: false
+  //register csrf protection to perform csrf protection logic
+  fastify.register(fastifyCookie)
+  fastify.register(fasitfySession, {
+    secret,
+    cookie:{
+      maxAge: 1800000,
+      secure: isProduction,
+      sameSite: isProduction && "Lax",
     }
   });
-
-  fastify.addHook('preHandler', async (request, reply) => {
-    if (!request.session.authenticated) {
-      request.session.
-      reply.redirect('/login')
-    }
+  fastify.register(fasitfyCsrf, {
+    sessionPlugin: '@fastify/session',
   });
 });
-
-export default auth;
