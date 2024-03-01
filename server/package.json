@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/auth": "^4.6.1",
     "@fastify/autoload": "^5.0.0",
     "@fastify/cookie": "^9.3.1",
     "@fastify/csrf-protection": "^6.4.1",
