@@ -75,10 +75,11 @@ export default async function (fastify, _opts) {
             items: {
               type: 'object',
               properties: {
-                id: { type: 'number' },
-                name: { type: 'string' },
+                id: { type: 'string' },
+                firstName: { type: 'string' },
+                lastName: {type: 'string'},
+                role: {type: 'string'},
                 email: { type: 'string', format: 'email' },
-                hasPassword: { type: 'boolean' },
               },
             },
           },
