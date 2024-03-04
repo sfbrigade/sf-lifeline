@@ -77,8 +77,8 @@ export default async function (fastify, _opts) {
               properties: {
                 id: { type: 'string' },
                 firstName: { type: 'string' },
-                lastName: {type: 'string'},
-                role: {type: 'string'},
+                lastName: { type: 'string' },
+                role: { type: 'string' },
                 email: { type: 'string', format: 'email' },
               },
             },
