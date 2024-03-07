@@ -7,6 +7,9 @@
   "directories": {
     "test": "test"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed"
+  },
   "scripts": {
     "test": "node --test test/**/*.test.js",
     "start": "fastify start -l info app.js",
@@ -28,8 +31,9 @@
   },
   "devDependencies": {
     "c8": "^9.1.0",
-    "prisma": "^5.10.2",
     "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0"
+    "eslint-config-prettier": "^9.1.0",
+    "prisma": "^5.10.2",
+    "tsx": "^4.7.1"
   }
 }
