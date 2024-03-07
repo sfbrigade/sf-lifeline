@@ -17,7 +17,7 @@
 // }
 
 // User template for the routes
-export default async function (fastify, opts) {
+export default async function (fastify, _opts) {
   fastify.post(
     '/',
     {
