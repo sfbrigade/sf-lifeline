@@ -4,6 +4,7 @@ import './button.css';
 
 /**
  * Primary UI component for user interaction
+ * @param {PropTypes.InferProps<typeof ButtonProps> & React.ButtonHTMLAttributes<HTMLButtonElement>} props
  */
 export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
   const mode = primary
@@ -23,7 +24,7 @@ export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
   );
 };
 
-Button.propTypes = {
+const ButtonProps = {
   /**
    * Is this the principal call to action on the page?
    */
@@ -45,6 +46,8 @@ Button.propTypes = {
    */
   onClick: PropTypes.func,
 };
+
+Button.propTypes = ButtonProps;
 
 Button.defaultProps = {
   backgroundColor: null,

@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { Header } from '../Header/Header';
+import { Header } from '../Header/Header.jsx';
 import './page.css';
 
 export const Page = () => {
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState(null);
 
   return (
     <article>
       <Header
         user={user}
         onLogin={() => setUser({ name: 'Jane Doe' })}
-        onLogout={() => setUser(undefined)}
+        onLogout={() => setUser(null)}
         onCreateAccount={() => setUser({ name: 'Jane Doe' })}
       />
 
