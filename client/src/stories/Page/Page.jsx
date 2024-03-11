@@ -3,8 +3,13 @@ import React from 'react';
 import { Header } from '../Header/Header.jsx';
 import './page.css';
 
+/**
+ * @typedef User
+ * @property {string} name
+ */
+
 export const Page = () => {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState(/** @type {?User} */ (null));
 
   return (
     <article>
