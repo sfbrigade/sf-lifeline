@@ -28,8 +28,8 @@
   },
   "devDependencies": {
     "c8": "^9.1.0",
-    "prisma": "^5.10.2",
     "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0"
+    "eslint-config-prettier": "^9.1.0",
+    "prisma": "^5.10.2"
   }
 }

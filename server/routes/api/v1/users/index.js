@@ -1,4 +1,5 @@
 'use strict';
+import crypto from 'crypto';
 
 // async function preHandler (request, reply) {
 //   const { id } = request.params
@@ -18,45 +19,60 @@
 
 // User template for the routes
 export default async function (fastify, _opts) {
+  //Register a user
   fastify.post(
-    '/',
+    '/register',
     {
       // schema template for fastify-swagger
       schema: {
         body: {
           type: 'object',
-          required: ['name', 'email', 'password'],
+          required: ['firstName', 'lastName', 'email', 'role'],
           properties: {
-            name: { type: 'string' },
+            firstName: { type: 'string' },
+            lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
-            password: { type: 'string' },
+            role: { type: 'string' },
+            hashedPassword: { type: 'string' },
+            licenseNumber: { type: 'string' },
           },
         },
         response: {
           201: {
             type: 'object',
             properties: {
-              id: { type: 'number' },
-              name: { type: 'string' },
+              id: { type: 'string' },
+              firstName: { type: 'string' },
+              lastName: { type: 'string' },
               email: { type: 'string', format: 'email' },
-              hasPassword: { type: 'boolean' },
+              role: { type: 'string' },
+              createdAt: { type: 'string' },
             },
           },
         },
       },
     },
     async (request, reply) => {
-      const { name, email, password } = request.body;
+      const {
+        firstName,
+        lastName,
+        email,
+        role,
+        hashedPassword,
+        licenseNumber,
+      } = request.body;
 
-      // Logic to hash the password and save the user
-      // (use the Auth0 identifier or other logic for hasPassword)
-
+      const buffer = crypto.randomBytes(3);
+      const emailVerificationToken = buffer.toString('hex').toUpperCase();
       const user = await fastify.prisma.user.create({
         data: {
-          name,
+          firstName,
+          lastName,
           email,
-          password,
-          hasPassword: true, // Set to true when saving a password
+          role,
+          hashedPassword,
+          licenseNumber,
+          emailVerificationToken,
         },
       });
 
