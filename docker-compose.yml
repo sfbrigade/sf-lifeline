@@ -19,8 +19,8 @@ services:
     command: bash -l -c "npm install && npm start"
     environment:
       - DATABASE_URL=postgresql://postgres@db/app
-      - EMAIL_USER=jackson.tran00@gmail.com # Provide your email username here
-      - EMAIL_PASS=gdfg qkik eboa dsvs # Provide your email password here
+      - EMAIL_USER=# Provide your email username here
+      - EMAIL_PASS=# Provide your email password here
     ports:
       - 5000:5000 #vite
       - 5100:5100 #fastify
