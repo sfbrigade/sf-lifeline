@@ -1,5 +1,17 @@
 'use strict';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+import 'dotenv/config';
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // async function preHandler (request, reply) {
 //   const { id } = request.params
@@ -74,6 +86,27 @@ export default async function (fastify, _opts) {
           licenseNumber,
           emailVerificationToken,
         },
+      });
+
+      let mailOptions = {
+        from: `"SF Lifeline" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'SF Lifeline - Please Verify Your Email',
+        html: `
+          <p>Hi ${firstName},</p>
+          <p>Enter the 6-character code to verify your email.</p>
+          <p><b>${emailVerificationToken}</b></p>
+          <p>Please allow our admins to review and confirm your identity. Thanks for helping us keep your account secure.</p>
+          <p>Best,<br/>Sf Lifeline</p>
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
       });
 
       reply.code(201).send(user);
