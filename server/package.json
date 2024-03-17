@@ -35,6 +35,7 @@
     "c8": "^9.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "nock": "^14.0.0-beta.5",
     "nodemailer-mock": "^2.0.4",
     "prisma": "^5.10.2",
     "quibble": "^0.9.1",
