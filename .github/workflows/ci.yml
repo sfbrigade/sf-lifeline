@@ -32,7 +32,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint --workspaces
       - name: Initialize database, generate Prisma client
-        run: cd server; npm run test:resetdb
+        run: cd server; npm run test:db:reset
         env:
           DATABASE_URL: postgresql://postgres@db/app
       - name: Run Tests
