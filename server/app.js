@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import path from 'path';
 import AutoLoad from '@fastify/autoload';
 import { fileURLToPath } from 'url';

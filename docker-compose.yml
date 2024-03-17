@@ -19,13 +19,15 @@ services:
     command: bash -l -c "npm install && npm start"
     environment:
       - DATABASE_URL=postgresql://postgres@db/app
-      - EMAIL_USER=# Provide your email username here
-      - EMAIL_PASS=# Provide your email password here
+      - SMTP_HOST=mail
+      - SMTP_PORT=1025
+      - SMTP_USER=
+      - SMTP_PASS=
     ports:
-      - 5000:5000 #vite
-      - 5100:5100 #fastify
-      - 5555:5555 #prismaORM
-      - 6006:6006 #storybook
+      - 5000:5000 # vite
+      - 5100:5100 # fastify
+      - 5555:5555 # prisma
+      - 6006:6006 # storybook
     depends_on:
       - db
       - mail

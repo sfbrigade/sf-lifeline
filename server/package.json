@@ -11,12 +11,12 @@
     "seed": "tsx prisma/seed"
   },
   "scripts": {
-    "test": "node --test test/**/*.test.js",
-    "start": "fastify start -l info app.js",
+    "db:reset": "npx prisma migrate reset --force",
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
-    "migrate": "docker-compose exec server sh -c 'cd server && npx prisma migrate $@' sh",
-    "db": "docker-compose exec server sh -c 'cd server && npx prisma db $@' sh",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "start": "fastify start -l info app.js",
+    "test": "node --test $(find test -name '*.test.js')",
+    "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test npx prisma migrate reset --force"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +35,9 @@
     "c8": "^9.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "nodemailer-mock": "^2.0.4",
     "prisma": "^5.10.2",
+    "quibble": "^0.9.1",
     "tsx": "^4.7.1"
   }
 }

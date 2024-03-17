@@ -1,17 +1,8 @@
 'use strict';
+
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
-import 'dotenv/config';
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import mailer from '../../../../helpers/email/mailer.js';
 
 // async function preHandler (request, reply) {
 //   const { id } = request.params
@@ -101,7 +92,7 @@ export default async function (fastify, _opts) {
         `,
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      mailer.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
         } else {

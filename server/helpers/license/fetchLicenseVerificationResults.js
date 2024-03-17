@@ -1,4 +1,4 @@
-import { LicenseMatchError } from '../errors/LicenseErrors.js';
+import { LicenseMatchError } from '../../errors/LicenseErrors.js';
 
 /**
  * Makes a POST request to California's EMS personnel registry website
