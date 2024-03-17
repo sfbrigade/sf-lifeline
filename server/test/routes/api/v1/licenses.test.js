@@ -1,9 +1,17 @@
-import { describe, it } from 'node:test';
+import { beforeEach, describe, it } from 'node:test';
 import * as assert from 'node:assert';
+import nock from 'nock';
+
 import { build } from '../../../helper.js';
+import nockLicenseVerificationWebsite from '../../../fixtures/network/nockLicenseVerificationWebsite.js';
 
 describe('/api/v1/licenses', () => {
   describe('GET /', () => {
+    beforeEach(() => {
+      nock.cleanAll();
+      nockLicenseVerificationWebsite();
+    });
+
     it('should return valid results', async (t) => {
       const app = await build(t);
 

@@ -13,6 +13,8 @@
   "scripts": {
     "db:reset": "npx prisma migrate reset --force",
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
+    "format": "prettier --write --ignore-unknown .",
+    "format:check": "prettier --check --ignore-unknown .",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "start": "fastify start -l info app.js",
     "test": "node --test $(find test -name '*.test.js')",
@@ -37,6 +39,7 @@
     "eslint-config-prettier": "^9.1.0",
     "nock": "^14.0.0-beta.5",
     "nodemailer-mock": "^2.0.4",
+    "prettier": "^3.2.4",
     "prisma": "^5.10.2",
     "quibble": "^0.9.1",
     "tsx": "^4.7.1"
