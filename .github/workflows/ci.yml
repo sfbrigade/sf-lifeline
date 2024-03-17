@@ -36,7 +36,6 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres@db/app
       - name: Run Tests
-        if: ${{ false }}
         run: npm test
         env:
           DATABASE_URL: postgresql://postgres@db/app
