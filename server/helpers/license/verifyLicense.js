@@ -5,7 +5,7 @@ import fetchLicenseVerificationResults from './fetchLicenseVerificationResults.j
 import {
   LicenseMatchError,
   LicenseWebsiteError,
-} from '../errors/LicenseErrors.js';
+} from '../../errors/LicenseErrors.js';
 
 const EMS_VERIFICATION_WEBSITE =
   'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
