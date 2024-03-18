@@ -16,7 +16,7 @@ export default async function fetchLicenseVerificationResults(
 ) {
   const response = await fetch(website, {
     method: 'POST',
-    body: formData,
+    body: new URLSearchParams(formData),
     headers: {
       cookie: sessionCookie, // Need a valid session cookie to search EMS website
     },

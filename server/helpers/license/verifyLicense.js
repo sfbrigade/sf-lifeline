@@ -7,8 +7,10 @@ import {
   LicenseWebsiteError,
 } from '../../errors/LicenseErrors.js';
 
-const EMS_VERIFICATION_WEBSITE =
-  'https://emsverification.emsa.ca.gov/Verification/Search.aspx';
+export const EMS_VERIFICATION_WEBSITE_BASE_URL =
+  'https://emsverification.emsa.ca.gov';
+export const EMS_VERIFICATION_WEBSITE_PATH = '/Verification/Search.aspx';
+export const EMS_VERIFICATION_WEBSITE = `${EMS_VERIFICATION_WEBSITE_BASE_URL}${EMS_VERIFICATION_WEBSITE_PATH}`;
 
 /**
  * Search for an EMS personnel on California's EMS personnel registry website
