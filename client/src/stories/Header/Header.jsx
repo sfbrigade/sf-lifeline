@@ -6,7 +6,7 @@ import './header.css';
 
 /**
  * Main Header
- * @param {PropTypes.InferProps<typeof HeaderProps>} props
+ * @param {PropTypes.InferProps<typeof HeaderProps>} props MainHeader props
  */
 export const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
   <header>

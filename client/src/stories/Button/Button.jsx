@@ -4,7 +4,7 @@ import './button.css';
 
 /**
  * Primary UI component for user interaction
- * @param {PropTypes.InferProps<typeof ButtonProps> & React.ButtonHTMLAttributes<HTMLButtonElement>} props
+ * @param {PropTypes.InferProps<typeof ButtonProps> & React.ButtonHTMLAttributes<HTMLButtonElement>} props extends HTMLButtonElement
  */
 export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
   const mode = primary
