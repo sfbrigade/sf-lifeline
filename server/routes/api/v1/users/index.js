@@ -30,12 +30,11 @@ export default async function (fastify, _opts) {
       schema: {
         body: {
           type: 'object',
-          required: ['firstName', 'lastName', 'email', 'role'],
+          required: ['firstName', 'lastName', 'email'],
           properties: {
             firstName: { type: 'string' },
             lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
-            role: { type: 'string' },
             hashedPassword: { type: 'string' },
             licenseNumber: { type: 'string' },
           },
@@ -56,14 +55,8 @@ export default async function (fastify, _opts) {
       },
     },
     async (request, reply) => {
-      const {
-        firstName,
-        lastName,
-        email,
-        role,
-        hashedPassword,
-        licenseNumber,
-      } = request.body;
+      const { firstName, lastName, email, hashedPassword, licenseNumber } =
+        request.body;
 
       const buffer = crypto.randomBytes(3);
       const emailVerificationToken = buffer.toString('hex').toUpperCase();
@@ -72,7 +65,7 @@ export default async function (fastify, _opts) {
           firstName,
           lastName,
           email,
-          role,
+          role: 'FIRST_RESPONDER',
           hashedPassword,
           licenseNumber,
           emailVerificationToken,
