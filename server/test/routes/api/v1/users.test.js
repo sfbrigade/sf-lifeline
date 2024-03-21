@@ -1,5 +1,6 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
+import bcrypt from 'bcrypt';
 import { build, nodemailerMock } from '../../../helper.js';
 
 describe('/api/v1/users', () => {
@@ -12,7 +13,7 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         role: 'FIRST_RESPONDER',
-        hashedPassword: 'test',
+        password: 'test',
         licenseNumber: 'test',
       });
 
