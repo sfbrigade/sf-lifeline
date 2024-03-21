@@ -1,6 +1,7 @@
 'use strict';
 
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 import mailer from '../../../../helpers/email/mailer.js';
 
@@ -56,17 +57,17 @@ export default async function (fastify, _opts) {
       },
     },
     async (request, reply) => {
-      const {
-        firstName,
-        lastName,
-        email,
-        role,
-        hashedPassword,
-        licenseNumber,
-      } = request.body;
+      const { firstName, lastName, email, role, password, licenseNumber } =
+        request.body;
 
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Generate verification token
       const buffer = crypto.randomBytes(3);
       const emailVerificationToken = buffer.toString('hex').toUpperCase();
+
+      // Create user in db
       const user = await fastify.prisma.user.create({
         data: {
           firstName,
@@ -79,6 +80,7 @@ export default async function (fastify, _opts) {
         },
       });
 
+      // Format email
       let mailOptions = {
         from: `"SF Lifeline" <${process.env.EMAIL_USER}>`,
         to: email,
@@ -92,6 +94,7 @@ export default async function (fastify, _opts) {
         `,
       };
 
+      // Send mail
       mailer.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
