@@ -52,6 +52,12 @@ export default async function (fastify, _opts) {
               createdAt: { type: 'string' },
             },
           },
+          409: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
         },
       },
     },
@@ -65,8 +71,18 @@ export default async function (fastify, _opts) {
         licenseNumber,
       } = request.body;
 
+      const userFind = await fastify.prisma.user.findUnique({
+        where: { email: email },
+      });
+
+      if (userFind) {
+        reply.code(409).send({ message: 'Email already exists' });
+        return;
+      }
+
       const buffer = crypto.randomBytes(3);
       const emailVerificationToken = buffer.toString('hex').toUpperCase();
+
       const user = await fastify.prisma.user.create({
         data: {
           firstName,
