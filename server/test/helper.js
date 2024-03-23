@@ -52,10 +52,13 @@ async function build(t) {
     prisma.invite.deleteMany(),
     prisma.user.deleteMany(),
   ]);
-  await prisma.$disconnect();
+  t.prisma = prisma;
 
   // tear down our app after we are done
-  t.after(() => app.close());
+  t.after(async () => {
+    await prisma.$disconnect();
+    app.close();
+  });
 
   return app;
 }
