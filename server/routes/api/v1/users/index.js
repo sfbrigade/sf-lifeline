@@ -31,12 +31,11 @@ export default async function (fastify, _opts) {
       schema: {
         body: {
           type: 'object',
-          required: ['firstName', 'lastName', 'email', 'role'],
+          required: ['firstName', 'lastName', 'email'],
           properties: {
             firstName: { type: 'string' },
             lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
-            role: { type: 'string' },
             hashedPassword: { type: 'string' },
             licenseNumber: { type: 'string' },
           },
@@ -57,7 +56,7 @@ export default async function (fastify, _opts) {
       },
     },
     async (request, reply) => {
-      const { firstName, lastName, email, role, password, licenseNumber } =
+      const { firstName, lastName, email, password, licenseNumber } =
         request.body;
 
       // Hash the password
@@ -73,7 +72,7 @@ export default async function (fastify, _opts) {
           firstName,
           lastName,
           email,
-          role,
+          role: 'FIRST_RESPONDER',
           hashedPassword,
           licenseNumber,
           emailVerificationToken,
