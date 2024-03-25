@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-
+import bcrypt from 'bcrypt';
 import { build, nodemailerMock } from '../../../helper.js';
 
 describe('/api/v1/users', () => {
@@ -12,7 +12,8 @@ describe('/api/v1/users', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@test.com',
-        hashedPassword: 'test',
+        role: 'FIRST_RESPONDER',
+        password: 'test',
         licenseNumber: 'test',
       });
 
@@ -25,7 +26,12 @@ describe('/api/v1/users', () => {
       const record = await t.prisma.user.findUnique({
         where: { id: responseBody.id },
       });
+
       assert.deepStrictEqual(record.role, 'FIRST_RESPONDER');
+
+      bcrypt.compare('test', record.hashedPassword, function (err, result) {
+        assert.deepStrictEqual(result, true);
+      });
 
       const sentMails = nodemailerMock.mock.getSentMail();
       assert.deepStrictEqual(sentMails.length, 1);

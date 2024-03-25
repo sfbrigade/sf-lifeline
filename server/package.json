@@ -27,6 +27,7 @@
     "@fastify/autoload": "^5.8.0",
     "@fastify/sensible": "^5.5.0",
     "@prisma/client": "^5.10.2",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
