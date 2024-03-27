@@ -20,5 +20,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'jsdoc/require-returns-description': 'off',
+    'jsdoc/require-param-description': 'off',
+    'jsdoc/require-returns': 'off',
   },
 };
