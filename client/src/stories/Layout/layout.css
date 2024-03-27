@@ -1,0 +1,24 @@
+.layout {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100vw;
+
+  display: grid;
+  grid-template-rows: 100% 1fr 100%;
+  grid-template-areas:
+    'head'
+    'main'
+    'foot';
+}
+
+.layout-header {
+  grid-area: head;
+}
+
+.layout-content {
+  grid-area: main;
+}
+
+.layout-footer {
+  grid-area: foot;
+}
