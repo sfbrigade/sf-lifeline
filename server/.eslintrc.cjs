@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: true,
+    node: true,
     es2020: true,
   },
   extends: ['eslint:recommended', 'prettier'],
@@ -19,5 +19,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  rules: {},
+  rules: {
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+  },
 };

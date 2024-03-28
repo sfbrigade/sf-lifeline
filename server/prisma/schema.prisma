@@ -149,6 +149,7 @@ model Medication {
 model Condition {
   id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name   String
+  category String
   system CodingSystem
   code   String
 }

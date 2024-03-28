@@ -1,0 +1,105 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<HTML>
+	<HEAD>
+		<title>SearchResults</title>
+		<link rel="stylesheet" href="stylesheets/elicense2000.css">
+	</HEAD>
+	<script language="javascript">
+function SetValue(agencyID,licenseID)
+{
+	var href = window.opener.location.href;
+	var form = window.opener.document.forms[0];
+	form.elements["license_id"].value = licenseID;
+	form.elements["tempAgencyID"].value = agencyID;
+//	var action = href.substring(0,href.indexOf("?"));
+//	form.action = action + '?action=lu&agency_id=' + agencyID + '&license_id=' + licenseID;
+	form.submit();
+	window.close();
+}
+	</script>
+	<body>
+		<form name="TheForm" method="post" action="./SearchResults.aspx" id="TheForm">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJNzM2NTgwNzkyD2QWAgIBD2QWAmYPZBYCAgEPZBYCAgEPZBYCAgEPZBYCAgMPZBYCZg9kFgJmDxQrAAsPFhYeE0F1dG9HZW5lcmF0ZUNvbHVtbnNoHghQYWdlU2l6ZQIoHhNVc2VBY2Nlc3NpYmxlSGVhZGVyZx4LXyFJdGVtQ291bnRmHghEYXRhS2V5cxYAHglzb3J0X25hbWUFBERFU0MeEEN1cnJlbnRTb3J0T3JkZXIFDXNvcnRfbmFtZSBBU0MeFV8hRGF0YVNvdXJjZUl0ZW1Db3VudGYeCVBhZ2VDb3VudAIBHgxBbGxvd1NvcnRpbmdnHgtBbGxvd1BhZ2luZ2dkZBYMHghQb3NpdGlvbgsqJ1N5c3RlbS5XZWIuVUkuV2ViQ29udHJvbHMuUGFnZXJQb3NpdGlvbgAeBE1vZGULKiNTeXN0ZW0uV2ViLlVJLldlYkNvbnRyb2xzLlBhZ2VyTW9kZQEeD1BhZ2VCdXR0b25Db3VudAIoHglCYWNrQ29sb3IJdVNK/x4JRm9yZUNvbG9yCqQBHgRfIVNCAoyAoAYWBB8OCXVTSv8fEAIIZGRkZGRkZGRkQjbHhVbIZX04VO9oTRFpCGJ/GZxe7b4auwq7Oh0YgXc=" />
+
+<script type="text/javascript">
+<!--
+var theForm = document.forms['TheForm'];
+if (!theForm) {
+    theForm = document.TheForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+// -->
+</script>
+
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3731BCAC" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAATVf3b3e+gSKyLm4xNj3UoIhcwg9OqhTd6jWyc4xKLB3vxBekyUIxMPUikK+xb1QplDCNvt2lpJCY/C0i4eO6sAY1Q7tas1n/UIERi7m2uKmx4b2YIkK67qXky0Mi6TaXY=" /><table role="presentation" cellspacing="0" cellpadding="0" class="layout">
+	<tr>
+		<td class="banner" rowspan="1" colspan="1"><table role="presentation" class="banner">
+			<tr>
+				<td rowspan="1" colspan="2"><span id="banner_image"></span></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="left" rowspan="1" colspan="1"><table role="presentation" width="160" background="/images/menu_bac.jpg" class="menu" valign="top">
+			<tr>
+			</tr>
+			<tr>
+				<td></td>
+				<td rowspan="1" colspan="1"><a id="home_link" href="Search.aspx">Search</a></td>
+			</tr>
+		</table>
+		</td>
+		<td class="center" rowspan="1" colspan="1"><table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%">
+		</table>
+		<table role="presentation" class="center">
+			<tr>
+				<td class="pagetitle" rowspan="1" colspan="4"><span id="Title">Search Results</span></td>
+			</tr>
+			<tr>
+				<td class="instructions" rowspan="1" colspan="4"><span id="instructions_top" class="instructions"><ol><li>For a more detailed view of a licensee's background, click on the licensee name from the alphabetical list below. Results will open in a new window.<li>Click the numbers below the grid to see additional pages of licensees. <li>To download a delimited text file of the search results, click the <strong>Download</strong> button.<li>To return to the Search page, use the <strong>New Person Search</strong> button below.  <strong><i>Do not use your browser's back button.</i></strong></ol></span></td>
+			</tr>
+			<tr>
+				<td align="center" class="button" rowspan="1" colspan="1"><span id="button_newsearch"><input type="reset" name="my_button" value="New Person Search" id="my_button" class="button" maxlength="9" onclick="javascript:document.location.href='Search.aspx' "/><br><br><br></span></td>
+				<td align="center" valign="top" class="button" rowspan="1" colspan="1"><input type="submit" name="btnPreviewFile" value="Preview File" id="btnPreviewFile" class="button" /></td>
+				<td align="center" class="button" valign="top" rowspan="1" colspan="1"><input type="submit" name="btnBulkDownLoad" value="Download File" id="btnBulkDownLoad" class="button" /></td>
+			</tr>
+			<tr>
+				<td rowspan="1" colspan="4"><table cellspacing="0" rules="all" border="1" id="datagrid_results" style="border-collapse:collapse;">
+					<tr style="background-color:#4A5375;">
+						<th scope="col"><font face=Arial size=2 color=white><b>Name</b></th><th scope="col"><font face=Arial size=2 color=white><center><b>License Type</b></center></th><th scope="col"><font face=Arial size=2 color=white><center><b>Status</b></center></th><th scope="col"><a href="javascript:__doPostBack(&#39;datagrid_results$_ctl2$_ctl0&#39;,&#39;&#39;)"><font face=Arial size=2 color=white><center><b>License/Cert #</b></center></a></th>
+					</tr><tr style="color:White;background-color:#4A5375;">
+						<td colspan="4"><span>1</span></td>
+					</tr>
+				</table></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+	</tr>
+	<tr>
+	</tr>
+	<tr>
+		<td class="footer" rowspan="1" colspan="2"><table role="presentation" class="footer">
+			<tr>
+				<td rowspan="1" colspan="1"><span id="footer"></span></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+</table>
+</form>
+	</body>
+</HTML>

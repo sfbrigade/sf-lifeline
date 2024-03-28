@@ -6,8 +6,12 @@ export default async function (fastify, opts) {
   });
 
   // Protect a route with CSRF protection middleware using shorthand method
-  fastify.post('/', { onRequest: fastify.csrfProtection }, async (req, reply) => {
-    // Handle the POST request
-    return req.body;
-  });
+  fastify.post(
+    '/',
+    { onRequest: fastify.csrfProtection },
+    async (req, reply) => {
+      // Handle the POST request
+      return req.body;
+    },
+  );
 }

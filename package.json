@@ -7,13 +7,12 @@
   ],
   "scripts": {
     "start": "nf start -j Procfile.dev",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write --ignore-unknown .",
-    "format:check": "prettier --check --ignore-unknown .",
+    "test": "npm run test --workspaces",
+    "format": "npm run format --workspaces",
+    "format:check": "npm run format --workspaces",
     "lint": "npm run lint --workspaces"
   },
   "dependencies": {
-    "foreman": "^3.0.1",
-    "prettier": "^3.2.4"
+    "foreman": "^3.0.1"
   }
 }
