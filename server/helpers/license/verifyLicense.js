@@ -1,5 +1,3 @@
-'use strict';
-
 import fetchLicenseVerificationForm from './fetchLicenseVerificationForm.js';
 import fetchLicenseVerificationResults from './fetchLicenseVerificationResults.js';
 import {

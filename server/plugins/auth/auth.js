@@ -1,17 +1,18 @@
 import fp from 'fastify-plugin';
 import fastifyAuth from '@fastify/auth';
+import bcrypt from 'bcrypt';
 
 // the use of fastify-plugin is required to be able
 // to export the decorators to the outer scope
 
-export default fp(async function (fastify, opts) {
+export default fp(async function (fastify, _opts) {
   fastify
-    .decorate('verifyAdmin', function (request, reply, done) {
+    .decorate('verifyAdmin', function (_request, _reply, done) {
       // your validation logic
       done(); // pass an error if the authentication fails
     })
     // Local strategy to authenticate users with username and password
-    .decorate('localStrategy', async (request, reply, done) => {
+    .decorate('localStrategy', async (request, _reply, done) => {
       try {
         //findUniqueOrThrow is a method provided by Prisma to return a single record or an error if none found
         const user = fastify.prisma.users.findUniqueOrThrow({

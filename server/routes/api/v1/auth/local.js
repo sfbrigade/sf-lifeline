@@ -1,52 +1,50 @@
-'use strict';
-
 import bcrypt from 'bcrypt';
 
 // could be reimplamented with fastify-passport
-export default async function (fastify, opts) {
+export default async function (fastify, _opts) {
   // add a login route that returns a login page
-  fastify.get('/login', (req, res) => {
+  fastify.get('/login', (_request, reply) => {
     // currently only redirects to login page
-    res.redirect('/login');
+    reply.redirect('/login');
   });
 
   // add a login route that handles the actual login
-  fastify.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+  fastify.post('/login', async (request, reply) => {
+    const { email, password } = request.body;
     try {
       const user = await fastify.prisma.user.findUnique({ email });
       if (!user) {
-        res.status(401);
-        res.send('No user with that email');
+        reply.status(401);
+        reply.send('No user with that email');
         return;
       }
 
       const result = await bcrypt.compare(password, user.password);
       if (!result) {
-        res.status(401);
-        res.send('Invalid password');
+        reply.status(401);
+        reply.send('Invalid password');
         return;
       }
-      return (req.session.authenticated = true);
+      return (request.session.authenticated = true);
     } catch (error) {
-      res.status(500);
-      res.send('Internal Server Error');
+      reply.status(500);
+      reply.send('Internal Server Error');
     }
   });
 
   // add a logout route
-  fastify.get('/logout', (req, res) => {
-    if (req.session.authenticated) {
-      req.session.destroy((err) => {
+  fastify.get('/logout', (request, reply) => {
+    if (request.session.authenticated) {
+      request.session.destroy((err) => {
         if (err) {
-          res.status(500);
-          res.send('Internal Server Error');
+          reply.status(500);
+          reply.send('Internal Server Error');
         } else {
-          res.redirect('/');
+          reply.redirect('/');
         }
       });
     } else {
-      res.redirect('/');
+      reply.redirect('/');
     }
   });
 }
