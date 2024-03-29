@@ -37,7 +37,7 @@ export default async function (fastify, _opts) {
         if (!user) {
           return reply.notFound();
         }
-        const result = await bcrypt.compare(password, user.password);
+        const result = await bcrypt.compare(password, user.hashedPassword);
         if (!result) {
           return reply.unauthorized();
         }
