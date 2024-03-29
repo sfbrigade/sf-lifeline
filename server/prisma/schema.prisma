@@ -27,7 +27,7 @@ model User {
   emailVerifiedAt        DateTime?
   role                   Role
   hashedPassword         String
-  licenseNumber          String
+  licenseNumber          String?
   licenseData            Json?
   approvedAt             DateTime?
   approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])

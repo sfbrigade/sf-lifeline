@@ -27,7 +27,7 @@ CREATE TABLE "User" (
     "emailVerifiedAt" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "hashedPassword" TEXT NOT NULL,
-    "licenseNumber" TEXT NOT NULL,
+    "licenseNumber" TEXT,
     "licenseData" JSONB,
     "approvedAt" TIMESTAMP(3),
     "approvedById" UUID,

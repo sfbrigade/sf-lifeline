@@ -29,6 +29,7 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(record.role, 'FIRST_RESPONDER');
 
+      console.log(record.hashedPassword);
       bcrypt.compare('test', record.hashedPassword, function (err, result) {
         assert.deepStrictEqual(result, true);
       });
