@@ -24,17 +24,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fastify/auth": "^4.6.1",
     "@fastify/autoload": "^5.8.0",
     "@fastify/cookie": "^9.3.1",
+    "@fastify/secure-session": "^7.1.0",
     "@fastify/sensible": "^5.5.0",
-    "@fastify/session": "^10.7.0",
     "@prisma/client": "^5.10.2",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.5.1",
+    "http-status-codes": "^2.3.0",
     "nodemailer": "^6.9.12"
   },
   "devDependencies": {
