@@ -25,7 +25,27 @@ describe('/api/v1/auth', () => {
       assert.deepStrictEqual(response.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return ok and a secure session cookie for valid credentials', async (t) => {
+    it('should return forbidden for a user with unverified email', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const response = await app.inject().post('/api/v1/auth/login').payload({
+        email: 'unverified.email@test.com',
+        password: 'test',
+      });
+      assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should return forbidden for an unapproved user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const response = await app.inject().post('/api/v1/auth/login').payload({
+        email: 'unapproved.user@test.com',
+        password: 'test',
+      });
+      assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should return ok and a secure session cookie for valid credentials and valid user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
       const response = await app.inject().post('/api/v1/auth/login').payload({

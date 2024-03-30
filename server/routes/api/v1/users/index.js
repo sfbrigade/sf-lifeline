@@ -1,23 +1,7 @@
-import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+import { StatusCodes } from 'http-status-codes';
 
 import mailer from '../../../../helpers/email/mailer.js';
-
-// async function preHandler (request, reply) {
-//   const { id } = request.params
-//   const user = await fastify.prisma.user.findUnique({
-//     where: { id: Number(id) }
-//   })
-
-//   if (!user) {
-//     reply.code(404).send({
-//       code: 'USER_NOT_FOUND',
-//       message: `The user #${id} not found!`
-//     })
-//   } else {
-//     reply.send(user)
-//   }
-// }
+import User from '../../../../models/user.js';
 
 // User template for the routes
 export default async function (fastify, _opts) {
@@ -32,6 +16,7 @@ export default async function (fastify, _opts) {
           required: ['firstName', 'lastName', 'email'],
           properties: {
             firstName: { type: 'string' },
+            middleName: { type: 'string' },
             lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
             hashedPassword: { type: 'string' },
@@ -39,11 +24,12 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          201: {
+          [StatusCodes.CREATED]: {
             type: 'object',
             properties: {
               id: { type: 'string' },
               firstName: { type: 'string' },
+              middleName: { type: 'string' },
               lastName: { type: 'string' },
               email: { type: 'string', format: 'email' },
               role: { type: 'string' },
@@ -54,28 +40,26 @@ export default async function (fastify, _opts) {
       },
     },
     async (request, reply) => {
-      const { firstName, lastName, email, password, licenseNumber } =
-        request.body;
+      const {
+        firstName,
+        middleName,
+        lastName,
+        email,
+        password,
+        licenseNumber,
+      } = request.body;
 
+      let data = { firstName, middleName, lastName, email, licenseNumber };
+      const user = new User(data);
       // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
+      await user.setPassword(password);
       // Generate verification token
-      const buffer = crypto.randomBytes(3);
-      const emailVerificationToken = buffer.toString('hex').toUpperCase();
+      user.generateEmailVerificationToken();
+      // Set role
+      user.role = 'FIRST_RESPONDER';
 
       // Create user in db
-      const user = await fastify.prisma.user.create({
-        data: {
-          firstName,
-          lastName,
-          email,
-          role: 'FIRST_RESPONDER',
-          hashedPassword,
-          licenseNumber,
-          emailVerificationToken,
-        },
-      });
+      data = await fastify.prisma.user.create({ data });
 
       // Format email
       let mailOptions = {
@@ -85,7 +69,7 @@ export default async function (fastify, _opts) {
         html: `
           <p>Hi ${firstName},</p>
           <p>Enter the 6-character code to verify your email.</p>
-          <p><b>${emailVerificationToken}</b></p>
+          <p><b>${user.emailVerificationToken}</b></p>
           <p>Please allow our admins to review and confirm your identity. Thanks for helping us keep your account secure.</p>
           <p>Best,<br/>Sf Lifeline</p>
         `,
@@ -100,7 +84,7 @@ export default async function (fastify, _opts) {
         }
       });
 
-      reply.code(201).send(user);
+      reply.code(StatusCodes.CREATED).send(data);
     },
   );
 
@@ -110,7 +94,7 @@ export default async function (fastify, _opts) {
     {
       schema: {
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'array',
             items: {
               type: 'object',
@@ -198,7 +182,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'object',
             properties: {
               id: { type: 'number' },
@@ -242,7 +226,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'object',
             properties: {
               message: { type: 'string' },

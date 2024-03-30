@@ -4,5 +4,20 @@ items:
     firstName: Admin
     lastName: User
     email: admin.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
     role: ADMIN
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
+  user2:
+    firstName: Unverified
+    lastName: Email
+    email: unverified.email@test.com
+    role: FIRST_RESPONDER
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+  user3:
+    firstName: Unapproved
+    lastName: User
+    email: unapproved.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: FIRST_RESPONDER
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test

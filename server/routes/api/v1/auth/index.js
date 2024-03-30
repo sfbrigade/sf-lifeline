@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import User from '../../../../models/user.js';
 
 export default async function (fastify, _opts) {
   // add a login route that handles the actual login
@@ -32,19 +32,19 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       const { email, password } = request.body;
-      try {
-        const user = await fastify.prisma.user.findUnique({ where: { email } });
-        if (!user) {
-          return reply.notFound();
-        }
-        const result = await bcrypt.compare(password, user.hashedPassword);
-        if (!result) {
-          return reply.unauthorized();
-        }
-        request.session.set('userId', user.id);
-      } catch (error) {
-        return error;
+      let user = await fastify.prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        return reply.notFound();
       }
+      user = new User(user);
+      const result = await user.comparePassword(password);
+      if (!result) {
+        return reply.unauthorized();
+      }
+      if (!user.isActive) {
+        return reply.forbidden();
+      }
+      request.session.set('userId', user.id);
     },
   );
 

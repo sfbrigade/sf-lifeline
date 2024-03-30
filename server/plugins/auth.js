@@ -1,7 +1,6 @@
 import fp from 'fastify-plugin';
 
-// the use of fastify-plugin is required to be able
-// to export the decorators to the outer scope
+import User from '../models/user.js';
 
 export default fp(async function (fastify) {
   // set up secure encrypted cookie-based sessions
@@ -22,7 +21,7 @@ export default fp(async function (fastify) {
     if (id) {
       const user = await fastify.prisma.user.findUnique({ where: { id } });
       if (user) {
-        request.user = user;
+        request.user = new User(user);
       } else {
         // session data is invalid, delete
         request.session.delete();
