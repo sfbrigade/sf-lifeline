@@ -8,6 +8,13 @@ import quibble from 'quibble';
 import { fileURLToPath } from 'url';
 
 import { PrismaClient } from '@prisma/client';
+import {
+  Builder,
+  fixturesIterator,
+  Loader,
+  Parser,
+  Resolver,
+} from '@getbigger-io/prisma-fixtures-cli';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +60,18 @@ async function build(t) {
     prisma.user.deleteMany(),
   ]);
   t.prisma = prisma;
+
+  // set up fixture loader
+  const loader = new Loader();
+  const resolver = new Resolver();
+  const builder = new Builder(prisma, new Parser());
+  t.loadFixtures = async function () {
+    loader.load(path.resolve(__dirname, 'fixtures/db'));
+    const fixtures = resolver.resolve(loader.fixtureConfigs);
+    for (const fixture of fixturesIterator(fixtures)) {
+      await builder.build(fixture);
+    }
+  };
 
   // tear down our app after we are done
   t.after(async () => {

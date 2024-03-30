@@ -1,5 +1,3 @@
-'use strict';
-
 import verifyLicense from '../../../../helpers/license/verifyLicense.js';
 
 export default async function (fastify) {
