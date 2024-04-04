@@ -13,13 +13,13 @@ export default async function (fastify, _opts) {
       schema: {
         body: {
           type: 'object',
-          required: ['firstName', 'lastName', 'email'],
+          required: ['firstName', 'lastName', 'email', 'password'],
           properties: {
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
-            hashedPassword: { type: 'string' },
+            password: { type: 'string' },
             licenseNumber: { type: 'string' },
           },
         },
