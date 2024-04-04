@@ -90,7 +90,7 @@ export default async function (fastify, _opts) {
 
   // Read All Users
   fastify.get(
-    '/',
+    '',
     {
       schema: {
         response: {
