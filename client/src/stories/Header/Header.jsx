@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from '../Button/Button';
+import { Button } from '../Button/Button.jsx';
 import './header.css';
 
+/**
+ * Main Header
+ * @param {PropTypes.InferProps<typeof HeaderProps>} props MainHeader props
+ */
 export const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
   <header>
     <div className="storybook-header">
@@ -55,7 +59,7 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
   </header>
 );
 
-Header.propTypes = {
+const HeaderProps = {
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }),
@@ -64,6 +68,7 @@ Header.propTypes = {
   onCreateAccount: PropTypes.func.isRequired,
 };
 
+Header.propTypes = HeaderProps;
 Header.defaultProps = {
   user: null,
 };
