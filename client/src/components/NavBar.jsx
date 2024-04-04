@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Primary navigation component.
+ */
 function NavBar() {
   return (
     <nav>

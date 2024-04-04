@@ -7,6 +7,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:storybook/recommended',
     'plugin:react/recommended',
+    'plugin:jsdoc/recommended',
     'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
@@ -19,5 +20,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'jsdoc/require-returns-description': 'off',
+    'jsdoc/require-param-description': 'off',
+    'jsdoc/require-returns': 'off',
   },
 };

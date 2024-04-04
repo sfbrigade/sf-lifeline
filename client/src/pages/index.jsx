@@ -1,6 +1,9 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
+/**
+ * Home page component.
+ */
 function Index() {
   const { isFetching, error } = useQuery({
     queryKey: ['users'],

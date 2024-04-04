@@ -4,6 +4,9 @@ import Index from './pages';
 import Login from './pages/login';
 import NavBar from './components/NavBar';
 
+/**
+ * Top-level application component.
+ */
 function App() {
   return (
     <>
