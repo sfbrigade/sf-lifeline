@@ -4,10 +4,10 @@ import { Header } from '../Header/Header.jsx';
 import './page.css';
 
 /**
+ * Storybook demo page component.
  * @typedef User
- * @property {string} name
+ * @property {string} name Full name of the User.
  */
-
 export const Page = () => {
   const [user, setUser] = React.useState(/** @type {?User} */ (null));
 
