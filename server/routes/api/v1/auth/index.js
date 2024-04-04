@@ -17,14 +17,15 @@ export default async function (fastify, _opts) {
         },
         response: {
           200: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              role: { type: 'string' },
-              createdAt: { type: 'string' },
+            type: 'null',
+            description:
+              'Successfully authenticated. The response sets a cookie named `session` that should be sent in subsequent requests for authentication. This cookie will NOT appear in the web-based API tester infterface because it is an HttpOnly cookie that cannot be accessed by JavaScript.',
+            headers: {
+              'Set-Cookie': {
+                schema: {
+                  type: 'string',
+                },
+              },
             },
           },
         },

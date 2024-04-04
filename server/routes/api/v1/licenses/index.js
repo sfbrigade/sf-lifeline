@@ -2,7 +2,7 @@ import verifyLicense from '../../../../helpers/license/verifyLicense.js';
 
 export default async function (fastify) {
   fastify.get(
-    '/',
+    '',
     {
       schema: {
         querystring: {
