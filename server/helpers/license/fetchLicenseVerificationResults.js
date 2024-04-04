@@ -1,4 +1,4 @@
-import { LicenseMatchError } from '../errors/LicenseErrors.js';
+import { LicenseMatchError } from '../../errors/LicenseErrors.js';
 
 /**
  * Makes a POST request to California's EMS personnel registry website
@@ -16,7 +16,7 @@ export default async function fetchLicenseVerificationResults(
 ) {
   const response = await fetch(website, {
     method: 'POST',
-    body: formData,
+    body: new URLSearchParams(formData),
     headers: {
       cookie: sessionCookie, // Need a valid session cookie to search EMS website
     },

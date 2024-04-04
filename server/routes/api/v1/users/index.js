@@ -1,66 +1,90 @@
-'use strict';
+import { StatusCodes } from 'http-status-codes';
 
-// async function preHandler (request, reply) {
-//   const { id } = request.params
-//   const user = await fastify.prisma.user.findUnique({
-//     where: { id: Number(id) }
-//   })
-
-//   if (!user) {
-//     reply.code(404).send({
-//       code: 'USER_NOT_FOUND',
-//       message: `The user #${id} not found!`
-//     })
-//   } else {
-//     reply.send(user)
-//   }
-// }
+import mailer from '../../../../helpers/email/mailer.js';
+import User from '../../../../models/user.js';
 
 // User template for the routes
 export default async function (fastify, _opts) {
+  //Register a user
   fastify.post(
-    '/',
+    '/register',
     {
       // schema template for fastify-swagger
       schema: {
         body: {
           type: 'object',
-          required: ['name', 'email', 'password'],
+          required: ['firstName', 'lastName', 'email'],
           properties: {
-            name: { type: 'string' },
+            firstName: { type: 'string' },
+            middleName: { type: 'string' },
+            lastName: { type: 'string' },
             email: { type: 'string', format: 'email' },
-            password: { type: 'string' },
+            hashedPassword: { type: 'string' },
+            licenseNumber: { type: 'string' },
           },
         },
         response: {
-          201: {
+          [StatusCodes.CREATED]: {
             type: 'object',
             properties: {
-              id: { type: 'number' },
-              name: { type: 'string' },
+              id: { type: 'string' },
+              firstName: { type: 'string' },
+              middleName: { type: 'string' },
+              lastName: { type: 'string' },
               email: { type: 'string', format: 'email' },
-              hasPassword: { type: 'boolean' },
+              role: { type: 'string' },
+              createdAt: { type: 'string' },
             },
           },
         },
       },
     },
     async (request, reply) => {
-      const { name, email, password } = request.body;
+      const {
+        firstName,
+        middleName,
+        lastName,
+        email,
+        password,
+        licenseNumber,
+      } = request.body;
 
-      // Logic to hash the password and save the user
-      // (use the Auth0 identifier or other logic for hasPassword)
+      let data = { firstName, middleName, lastName, email, licenseNumber };
+      const user = new User(data);
+      // Hash the password
+      await user.setPassword(password);
+      // Generate verification token
+      user.generateEmailVerificationToken();
+      // Set role
+      user.role = 'FIRST_RESPONDER';
 
-      const user = await fastify.prisma.user.create({
-        data: {
-          name,
-          email,
-          password,
-          hasPassword: true, // Set to true when saving a password
-        },
+      // Create user in db
+      data = await fastify.prisma.user.create({ data });
+
+      // Format email
+      let mailOptions = {
+        from: `"SF Lifeline" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'SF Lifeline - Please Verify Your Email',
+        html: `
+          <p>Hi ${firstName},</p>
+          <p>Enter the 6-character code to verify your email.</p>
+          <p><b>${user.emailVerificationToken}</b></p>
+          <p>Please allow our admins to review and confirm your identity. Thanks for helping us keep your account secure.</p>
+          <p>Best,<br/>Sf Lifeline</p>
+        `,
+      };
+
+      // Send mail
+      mailer.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
       });
 
-      reply.code(201).send(user);
+      reply.code(StatusCodes.CREATED).send(data);
     },
   );
 
@@ -70,15 +94,16 @@ export default async function (fastify, _opts) {
     {
       schema: {
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'array',
             items: {
               type: 'object',
               properties: {
-                id: { type: 'number' },
-                name: { type: 'string' },
+                id: { type: 'string' },
+                firstName: { type: 'string' },
+                lastName: { type: 'string' },
+                role: { type: 'string' },
                 email: { type: 'string', format: 'email' },
-                hasPassword: { type: 'boolean' },
               },
             },
           },
@@ -157,7 +182,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'object',
             properties: {
               id: { type: 'number' },
@@ -201,7 +226,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          200: {
+          [StatusCodes.OK]: {
             type: 'object',
             properties: {
               message: { type: 'string' },

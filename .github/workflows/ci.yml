@@ -31,12 +31,11 @@ jobs:
         run: npm run format:check
       - name: Run ESLint
         run: npm run lint --workspaces
-      - name: Initialize database, generate Prisma client
-        run: cd server; npx prisma migrate reset --force
+      - name: Initialize database, set up .env, generate Prisma client
+        run: cd server; cp example.env .env; npm run test:db:reset
         env:
           DATABASE_URL: postgresql://postgres@db/app
       - name: Run Tests
-        if: ${{ false }}
         run: npm test
         env:
           DATABASE_URL: postgresql://postgres@db/app
