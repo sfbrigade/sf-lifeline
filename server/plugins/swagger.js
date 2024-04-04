@@ -22,8 +22,8 @@ export default fp(async (fastify) => {
         securitySchemes: {
           apiKey: {
             type: 'apiKey',
-            name: 'apiKey',
-            in: 'header',
+            name: 'session',
+            in: 'cookie',
           },
         },
       },
