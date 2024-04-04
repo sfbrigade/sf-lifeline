@@ -16,7 +16,8 @@ export const Layout = ({ children }) => {
       <div className="layout-header">
         <Header />
       </div>
-      <div className="layout-content">{children}</div>
+      <div
+        className="layout-content">{children}</div>
       <div className="layout-footer">
         <Footer />
       </div>
