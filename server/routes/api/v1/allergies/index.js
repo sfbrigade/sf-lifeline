@@ -14,13 +14,7 @@ export default async function (fastify) {
         where: { name: { contains: allergy, mode: 'insensitive' } },
       });
 
-      if (!results.length) {
-        const other = await fastify.prisma.allergy.findFirst({
-          where: {name: "Other medication or biological substance"},
-        })
-        reply.send(other);
-        return;
-      }
+      // if no results create a new alllergy and return it?
 
       reply.send(results);
     },
