@@ -11,7 +11,7 @@ export default async function (fastify) {
     async (request, reply) => {
       const { allergy } = request.query;
       const results = await fastify.prisma.allergy.findMany({
-        where: { name: { startsWith: allergy, mode: 'insensitive' } },
+        where: { name: { contains: allergy, mode: 'insensitive' } },
       });
 
       if (!results.length) {
