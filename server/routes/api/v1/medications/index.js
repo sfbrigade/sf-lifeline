@@ -24,6 +24,7 @@ export default async function (fastify) {
       const results = await fastify.prisma.medication.findMany({
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: medication, mode: 'insensitive' } },
+        select: { name: true },
       });
 
       // if no results create a new medication and return it?

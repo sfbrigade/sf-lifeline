@@ -25,6 +25,7 @@ export default async function (fastify) {
       const results = await fastify.prisma.allergy.findMany({
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: allergy, mode: 'insensitive' } },
+        select: { name: true },
       });
 
       // if no results create a new alllergy and return it?

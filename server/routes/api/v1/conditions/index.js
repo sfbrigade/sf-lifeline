@@ -24,6 +24,7 @@ export default async function (fastify) {
       const results = await fastify.prisma.condition.findMany({
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: condition, mode: 'insensitive' } },
+        select: { name: true },
       });
 
       // if no results create a new condition and return it?
