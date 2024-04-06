@@ -21,7 +21,17 @@ describe('/api/v1/allergies', () => {
       const res = await app.inject().get('/api/v1/allergies?allergy=');
 
       assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), []);
+      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
+    });
+
+    it('should return nothing for an unknown allergy', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().get('/api/v1/allergies?allergy=newallergy');
+
+      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No results found in the database' });
     });
 
     it('should return no known allergies for n/a', async (t) => {

@@ -13,7 +13,7 @@ export default async function (fastify) {
 
       // prevent empty string from returning all allergies
       if (!allergy.length) {
-        return [];
+        return reply.send({ message: 'No query provided' });
       }
 
       const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
@@ -28,7 +28,9 @@ export default async function (fastify) {
         select: { name: true },
       });
 
-      // if no results create a new alllergy and return it?
+      if (!results.length) {
+        return reply.send({ message: 'No results found in the database' });
+      }
 
       reply.send(results);
     },
