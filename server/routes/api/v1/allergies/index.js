@@ -29,7 +29,7 @@ export default async function (fastify) {
       });
 
       if (!results.length) {
-        return reply.send({ message: 'No results found in the database' });
+        return reply.notFound();
       }
 
       reply.send(results);

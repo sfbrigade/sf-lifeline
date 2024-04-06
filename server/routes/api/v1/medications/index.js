@@ -18,7 +18,7 @@ export default async function (fastify) {
       const NO_MEDICATIONS = ['none', 'no medications', 'no known medications', 'n/a'];
 
       if (NO_MEDICATIONS.includes(medication.toLowerCase())) {
-        return reply.send('No known medications');
+        return reply.send({message: 'No known medications'});
       }
 
       const results = await fastify.prisma.medication.findMany({
@@ -28,7 +28,7 @@ export default async function (fastify) {
       });
 
       if (!results.length) {
-        return reply.send({ message: 'No results found in the database' });
+        return reply.notFound();
       }
 
       reply.send(results);
