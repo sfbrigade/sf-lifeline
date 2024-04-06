@@ -14,7 +14,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Grass Pollen' }, { name: 'Pollen' }]);
     });
 
-    it('should return nothing when no query provided', async (t) => {
+    it('should return no query message when no query provided', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
@@ -24,7 +24,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
-    it('should return nothing for an unknown allergy', async (t) => {
+    it('should return no results from database message for an unknown allergy', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
