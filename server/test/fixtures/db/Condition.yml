@@ -1,0 +1,17 @@
+entity: condition
+items:
+  condition1:
+    name: Diabetes Type I
+    category: Endocrine
+    system: ICD10
+    code: E10.8
+  condition2:
+    name: Diabetes Type II
+    category: Endocrine
+    system: ICD10
+    code: E11.8
+  condition3:
+    name: Deaf
+    category: EENT
+    system: ICD10
+    code: H91.3
