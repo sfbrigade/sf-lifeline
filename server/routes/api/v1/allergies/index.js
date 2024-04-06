@@ -13,13 +13,13 @@ export default async function (fastify) {
 
       // prevent empty string from returning all allergies
       if (!allergy.length) {
-        return
+        return [];
       }
 
       const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
 
       if (NO_ALLERGIES.includes(allergy.toLowerCase())) {
-        return reply.send('No known allergies');
+        return reply.send({name: 'No known allergies'});
       }
 
       const results = await fastify.prisma.allergy.findMany({
