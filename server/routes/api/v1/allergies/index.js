@@ -9,8 +9,21 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { allergy } = request.query;
+      const allergy  = request.query.allergy.trim();
+    
+      // prevent empty string from returning all allergies
+      if (!allergy.length) {
+        return
+      }
+
+      const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
+
+      if (NO_ALLERGIES.includes(allergy.toLowerCase())){
+        return reply.send('No known allergies');
+      }
+
       const results = await fastify.prisma.allergy.findMany({
+        orderBy: [{ name: 'asc' }],
         where: { name: { contains: allergy, mode: 'insensitive' } },
       });
 
