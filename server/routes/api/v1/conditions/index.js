@@ -9,7 +9,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const condition  = request.query.condition.trim();
+      const condition = request.query.condition.trim();
 
       if (!condition.length) {
         return
@@ -17,7 +17,7 @@ export default async function (fastify) {
 
       const NO_CONDITIONS = ['none', 'no conditions', 'no known conditions', 'n/a'];
 
-      if (NO_CONDITIONS.includes(condition.toLowerCase())){
+      if (NO_CONDITIONS.includes(condition.toLowerCase())) {
         return reply.send('No known conditions');
       }
 

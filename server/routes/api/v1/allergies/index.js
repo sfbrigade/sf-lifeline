@@ -9,8 +9,8 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const allergy  = request.query.allergy.trim();
-    
+      const allergy = request.query.allergy.trim();
+
       // prevent empty string from returning all allergies
       if (!allergy.length) {
         return
@@ -18,7 +18,7 @@ export default async function (fastify) {
 
       const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
 
-      if (NO_ALLERGIES.includes(allergy.toLowerCase())){
+      if (NO_ALLERGIES.includes(allergy.toLowerCase())) {
         return reply.send('No known allergies');
       }
 

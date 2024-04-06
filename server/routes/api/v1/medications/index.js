@@ -9,7 +9,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const  medication = request.query.medication.trim();
+      const medication = request.query.medication.trim();
 
       if (!medication.length) {
         return
@@ -17,7 +17,7 @@ export default async function (fastify) {
 
       const NO_MEDICATIONS = ['none', 'no medications', 'no known medications', 'n/a'];
 
-      if (NO_MEDICATIONS.includes(medication.toLowerCase())){
+      if (NO_MEDICATIONS.includes(medication.toLowerCase())) {
         return reply.send('No known medications');
       }
 
