@@ -2,16 +2,16 @@ entity: medication
 items:
   medication1:
     name: acetaminophen / ibuprofen
-    type: OTHER
+    altNames: ''
     system: RXNORM
     code: "818102"
   medication2:
     name: ibuprofen 125 MG
-    type: OTHER
+    altNames: ''
     system: RXNORM
     code: "2387531"
   medication3:
     name: Prozac
-    type: OTHER
+    altNames: ''
     system: RXNORM
     code: "261287"
