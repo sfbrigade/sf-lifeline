@@ -18,7 +18,7 @@ export default async function (fastify) {
       const NO_CONDITIONS = ['none', 'no conditions', 'no known conditions', 'n/a'];
 
       if (NO_CONDITIONS.includes(condition.toLowerCase())) {
-        return reply.send({name: 'No known conditions'});
+        return reply.send({message: 'No known conditions'});
       }
 
       const results = await fastify.prisma.condition.findMany({

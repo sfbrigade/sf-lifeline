@@ -19,7 +19,7 @@ export default async function (fastify) {
       const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
 
       if (NO_ALLERGIES.includes(allergy.toLowerCase())) {
-        return reply.send({name: 'No known allergies'});
+        return reply.send({message: 'No known allergies'});
       }
 
       const results = await fastify.prisma.allergy.findMany({

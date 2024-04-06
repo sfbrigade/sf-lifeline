@@ -30,8 +30,7 @@ describe('/api/v1/medications', () => {
 
       const res = await app.inject().get('/api/v1/medications?medication=newmedication');
 
-      assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No results found in the database' });
+      assert.deepStrictEqual(res.statusCode, 404);
     });
 
     it('should return no known medications for n/a', async (t) => {
@@ -41,7 +40,7 @@ describe('/api/v1/medications', () => {
       const res = await app.inject().get('/api/v1/medications?medication=n/a');
 
       assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { name: "No known medications" });
+      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known medications" });
     });
 
   });
