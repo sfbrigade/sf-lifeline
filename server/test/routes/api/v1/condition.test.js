@@ -10,7 +10,7 @@ describe('/api/v1/conditions', () => {
 
       const res = await app.inject().get('/api/v1/conditions?condition=diabetes');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }]);
     });
 
@@ -20,7 +20,7 @@ describe('/api/v1/conditions', () => {
 
       const res = await app.inject().get('/api/v1/conditions?condition=');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
@@ -30,8 +30,7 @@ describe('/api/v1/conditions', () => {
 
       const res = await app.inject().get('/api/v1/conditions?condition=newcondition');
 
-      assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No results found in the database' });
+      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
     });
 
     it('should return no known conditions for n/a', async (t) => {
@@ -40,8 +39,8 @@ describe('/api/v1/conditions', () => {
 
       const res = await app.inject().get('/api/v1/conditions?condition=n/a');
 
-      assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { name: "No known conditions" });
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known conditions" });
     });
 
   });

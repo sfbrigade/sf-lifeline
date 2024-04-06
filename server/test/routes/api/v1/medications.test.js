@@ -10,7 +10,7 @@ describe('/api/v1/medications', () => {
 
       const res = await app.inject().get('/api/v1/medications?medication=ibuprofen');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }]);
     });
 
@@ -20,7 +20,7 @@ describe('/api/v1/medications', () => {
 
       const res = await app.inject().get('/api/v1/medications?medication=');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
@@ -30,7 +30,7 @@ describe('/api/v1/medications', () => {
 
       const res = await app.inject().get('/api/v1/medications?medication=newmedication');
 
-      assert.deepStrictEqual(res.statusCode, 404);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
     });
 
     it('should return no known medications for n/a', async (t) => {
@@ -39,7 +39,7 @@ describe('/api/v1/medications', () => {
 
       const res = await app.inject().get('/api/v1/medications?medication=n/a');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known medications" });
     });
 

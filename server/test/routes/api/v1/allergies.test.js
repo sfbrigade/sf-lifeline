@@ -1,6 +1,7 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { build } from '../../../helper.js';
+import { StatusCodes } from 'http-status-codes';
 
 describe('/api/v1/allergies', () => {
   describe('GET /', () => {
@@ -10,7 +11,7 @@ describe('/api/v1/allergies', () => {
 
       const res = await app.inject().get('/api/v1/allergies?allergy=p');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Grass Pollen' }, { name: 'Pollen' }]);
     });
 
@@ -20,7 +21,7 @@ describe('/api/v1/allergies', () => {
 
       const res = await app.inject().get('/api/v1/allergies?allergy=');
 
-      assert.deepStrictEqual(res.statusCode, 200);
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
@@ -30,8 +31,7 @@ describe('/api/v1/allergies', () => {
 
       const res = await app.inject().get('/api/v1/allergies?allergy=newallergy');
 
-      assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No results found in the database' });
+      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
     });
 
     it('should return no known allergies for n/a', async (t) => {
@@ -40,8 +40,8 @@ describe('/api/v1/allergies', () => {
 
       const res = await app.inject().get('/api/v1/allergies?allergy=n/a');
 
-      assert.deepStrictEqual(res.statusCode, 200);
-      assert.deepStrictEqual(JSON.parse(res.payload), { name: "No known allergies" });
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known allergies" });
     });
 
   });
