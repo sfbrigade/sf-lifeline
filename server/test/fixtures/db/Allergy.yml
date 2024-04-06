@@ -1,0 +1,17 @@
+entity: allergy
+items:
+  allergy1:
+    name: Pollen
+    type: OTHER
+    system: SNOMED
+    code: "300910009"
+  allergy2:
+    name: Grass Pollen
+    type: OTHER
+    system: SNOMED
+    code: "418689008"
+  allergy3:
+    name: Wool
+    type: OTHER
+    system: SNOMED
+    code: "425605001"
