@@ -12,7 +12,7 @@ export default async function (fastify) {
       const medication = request.query.medication.trim();
 
       if (!medication.length) {
-        return
+        return reply.send({ message: 'No query provided' });
       }
 
       const NO_MEDICATIONS = ['none', 'no medications', 'no known medications', 'n/a'];
@@ -27,7 +27,9 @@ export default async function (fastify) {
         select: { name: true },
       });
 
-      // if no results create a new medication and return it?
+      if (!results.length) {
+        return reply.send({ message: 'No results found in the database' });
+      }
 
       reply.send(results);
     },

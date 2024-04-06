@@ -12,7 +12,7 @@ export default async function (fastify) {
       const condition = request.query.condition.trim();
 
       if (!condition.length) {
-        return
+        return reply.send({ message: 'No query provided' });
       }
 
       const NO_CONDITIONS = ['none', 'no conditions', 'no known conditions', 'n/a'];
@@ -27,7 +27,9 @@ export default async function (fastify) {
         select: { name: true },
       });
 
-      // if no results create a new condition and return it?
+      if (!results.length) {
+        return reply.send({ message: 'No results found in the database' });
+      }
 
       reply.send(results);
     },
