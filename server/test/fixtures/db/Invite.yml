@@ -1,0 +1,33 @@
+entity: invite
+connectedFields: ['invitedBy']
+items:
+  invite1:
+    firstName: Invited
+    middleName: Volunteer
+    lastName: One
+    email: invited.volunteer.one@test.com
+    role: VOLUNTEER
+    invitedBy: '@user1'
+    expiresAt: '3024-04-21T16:53:41-07:00'
+    updatedAt: '2024-04-07T16:53:41-07:00'
+    createdAt: '2024-04-07T16:53:41-07:00'
+  invite2:
+    firstName: Invited
+    middleName: Staff
+    lastName: One
+    email: invited.staff.one@test.com
+    role: STAFF
+    invitedBy: '@user1'
+    expiresAt: '3024-04-21T16:53:41-07:00'
+    updatedAt: '2024-04-07T16:53:41-07:00'
+    createdAt: '2024-04-07T16:53:41-07:00'
+  invite3:
+    firstName: Invited
+    middleName: Responder
+    lastName: One
+    email: invited.responder.one@test.com
+    role: FIRST_RESPONDER
+    invitedBy: '@user1'
+    expiresAt: '3024-04-21T16:53:41-07:00'
+    updatedAt: '2024-04-07T16:53:41-07:00'
+    createdAt: '2024-04-07T16:53:41-07:00'

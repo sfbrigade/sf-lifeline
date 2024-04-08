@@ -48,6 +48,7 @@ model Invite {
   middleName   String?
   lastName     String?
   email        String
+  role         Role
   expiresAt    DateTime
   invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
   invitedById  String    @db.Uuid
