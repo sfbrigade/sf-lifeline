@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
@@ -7,11 +7,6 @@ import Base from './base.js';
 class User extends Base {
   constructor(data) {
     super(Prisma.UserScalarFieldEnum, data);
-    this.test = 'foo';
-  }
-
-  set test2(newValue) {
-    this._test2 = newValue;
   }
 
   get isActive() {
@@ -40,4 +35,5 @@ class User extends Base {
   }
 }
 
+export { User, Role };
 export default User;
