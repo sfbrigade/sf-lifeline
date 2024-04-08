@@ -6,8 +6,8 @@ const prisma = new PrismaClient({
   name: 'paginate',
   model: {
     $allModels: {
-      async paginate({ page, ...options }) {
-        const take = 25;
+      async paginate({ page, perPage, ...options }) {
+        const take = parseInt(perPage, 10);
         const skip = (parseInt(page, 10) - 1) * take;
         const context = Prisma.getExtensionContext(this);
         const total = await context.count(options);

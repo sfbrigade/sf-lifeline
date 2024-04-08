@@ -17,7 +17,7 @@
     "format:check": "prettier --check --ignore-unknown .",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "start": "fastify start -l info app.js",
-    "test": "node --test $(find test -name '*.test.js')",
+    "test": "node --test-concurrency 1 --test $(find test -name '*.test.js')",
     "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test npx prisma migrate reset --force"
   },
   "keywords": [],

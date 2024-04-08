@@ -1,5 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { Role } from '../../../../models/user.js';
+
 export default async function (fastify, _opts) {
   fastify.get(
     '',
@@ -33,11 +35,16 @@ export default async function (fastify, _opts) {
           },
         },
       },
+      onRequest: fastify.requireUser(Role.ADMIN),
     },
     async (request, reply) => {
-      const { page = '1' } = request.query;
-      const { records, total } = await fastify.prisma.invite.paginate({ page });
-      reply.send(records);
+      const { page = '1', perPage = '25' } = request.query;
+      const { records, total } = await fastify.prisma.invite.paginate({
+        page,
+        perPage,
+        orderBy: [{ createdAt: 'desc' }],
+      });
+      reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
 }
