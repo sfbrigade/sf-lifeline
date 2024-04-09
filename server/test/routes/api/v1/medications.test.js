@@ -14,7 +14,7 @@ describe('/api/v1/medications', () => {
   });
 
   describe('GET /', () => {
-    it('should return valid results for admin user', async (t) => {
+    it('should return valid results for admin user', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=ibuprofen')
@@ -48,7 +48,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }]);
     });
 
-    it('require a user to be admin/staff/volunteer to make requests', async (t) => {
+    it('require a user to be admin/staff/volunteer to make requests', async () => {
 
       const res = await app
         .inject()
@@ -57,7 +57,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return no query message when no query provided', async (t) => {
+    it('should return no query message when no query provided', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=')
@@ -67,7 +67,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
-    it('should return no results from database message for an unknown medication', async (t) => {
+    it('should return no results from database message for an unknown medication', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=newmedication')
@@ -76,7 +76,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
     });
 
-    it('should return no known medications for n/a', async (t) => {
+    it('should return no known medications for n/a', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=n/a')

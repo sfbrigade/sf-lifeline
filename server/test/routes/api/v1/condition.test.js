@@ -14,7 +14,7 @@ describe('/api/v1/conditions', () => {
   });
 
   describe('GET /', () => {
-    it('should return valid results for admin user', async (t) => {
+    it('should return valid results for admin user', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=diabetes')
@@ -48,7 +48,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }]);
     });
 
-    it('require a user to be admin/staff/volunteer to make requests', async (t) => {
+    it('require a user to be admin/staff/volunteer to make requests', async () => {
 
       const res = await app
         .inject()
@@ -57,7 +57,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return no query message when no query provided', async (t) => {
+    it('should return no query message when no query provided', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=')
@@ -67,7 +67,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
     });
 
-    it('should return no results from database message for an unknown condition', async (t) => {
+    it('should return no results from database message for an unknown condition', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=newcondition')
@@ -76,7 +76,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
     });
 
-    it('should return no known conditions for n/a', async (t) => {
+    it('should return no known conditions for n/a', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=n/a')
