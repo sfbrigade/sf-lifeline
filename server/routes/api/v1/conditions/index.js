@@ -1,3 +1,6 @@
+import { StatusCodes } from 'http-status-codes';
+import { Role } from '../../../../models/user.js';
+
 export default async function (fastify) {
   fastify.get(
     '',
@@ -7,6 +10,7 @@ export default async function (fastify) {
           condition: { type: 'string' },
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
       const condition = request.query.condition.trim();

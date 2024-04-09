@@ -1,3 +1,6 @@
+import { StatusCodes } from 'http-status-codes';
+import { Role } from '../../../../models/user.js';
+
 export default async function (fastify) {
   fastify.get(
     '',
@@ -7,6 +10,7 @@ export default async function (fastify) {
           allergy: { type: 'string' },
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
       const allergy = request.query.allergy.trim();
@@ -19,7 +23,7 @@ export default async function (fastify) {
       const NO_ALLERGIES = ['none', 'no allergies', 'no known allergies', 'n/a'];
 
       if (NO_ALLERGIES.includes(allergy.toLowerCase())) {
-        return reply.send({message: 'No known allergies'});
+        return reply.send({ message: 'No known allergies' });
       }
 
       const results = await fastify.prisma.allergy.findMany({
