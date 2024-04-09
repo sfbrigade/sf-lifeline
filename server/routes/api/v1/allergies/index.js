@@ -1,4 +1,3 @@
-import { StatusCodes } from 'http-status-codes';
 import { Role } from '../../../../models/user.js';
 
 export default async function (fastify) {

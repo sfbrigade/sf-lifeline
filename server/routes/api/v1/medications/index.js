@@ -1,4 +1,3 @@
-import { StatusCodes } from 'http-status-codes';
 import { Role } from '../../../../models/user.js';
 
 export default async function (fastify) {
@@ -22,7 +21,7 @@ export default async function (fastify) {
       const NO_MEDICATIONS = ['none', 'no medications', 'no known medications', 'n/a'];
 
       if (NO_MEDICATIONS.includes(medication.toLowerCase())) {
-        return reply.send({message: 'No known medications'});
+        return reply.send({ message: 'No known medications' });
       }
 
       const results = await fastify.prisma.medication.findMany({
