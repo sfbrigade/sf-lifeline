@@ -21,3 +21,19 @@ items:
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+  user4:
+    firstName: Staff
+    lastName: User
+    email: staff.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: STAFF
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
+  user5:
+    firstName: Volunteer
+    lastName: User
+    email: volunteer.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: VOLUNTEER
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
