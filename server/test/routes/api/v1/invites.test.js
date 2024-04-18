@@ -9,7 +9,7 @@ describe('/api/v1/invites', () => {
   let headers;
 
   beforeEach(async (t) => {
-    app = await build(t);
+    app = await build(t, { trace: true });
     await t.loadFixtures();
     headers = await t.authenticate('admin.user@test.com', 'test');
   });
@@ -35,6 +35,34 @@ describe('/api/v1/invites', () => {
       assert.deepStrictEqual(data.length, 2);
       assert.deepStrictEqual(data[0].email, 'invited.responder.one@test.com');
       assert.deepStrictEqual(data[1].email, 'invited.staff.one@test.com');
+    });
+  });
+
+  describe('POST /', () => {
+    it('should create and return Invite records (and send invite emails)', async () => {
+      const reply = await app
+        .inject()
+        .post('/api/v1/invites')
+        .payload({
+          recipients: `invitee.1@test.com
+                       invitee.2@test.com
+                       John Doe <john.doe@test.com>, "Jane M. Doe" <jane.m.doe@test.com>`,
+          role: 'STAFF',
+        })
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 4);
+      assert.deepStrictEqual(data[0].email, 'invitee.1@test.com');
+      assert.deepStrictEqual(data[1].email, 'invitee.2@test.com');
+      assert.deepStrictEqual(data[2].firstName, 'John');
+      assert.deepStrictEqual(data[2].lastName, 'Doe');
+      assert.deepStrictEqual(data[2].email, 'john.doe@test.com');
+      assert.deepStrictEqual(data[3].firstName, 'Jane');
+      assert.deepStrictEqual(data[3].middleName, 'M.');
+      assert.deepStrictEqual(data[3].lastName, 'Doe');
+      assert.deepStrictEqual(data[3].email, 'jane.m.doe@test.com');
     });
   });
 });

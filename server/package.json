@@ -38,6 +38,7 @@
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.5.1",
     "http-status-codes": "^2.3.0",
+    "luxon": "^3.4.4",
     "nodemailer": "^6.9.12"
   },
   "devDependencies": {
