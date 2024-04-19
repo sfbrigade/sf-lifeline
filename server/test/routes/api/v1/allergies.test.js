@@ -75,7 +75,7 @@ describe('/api/v1/allergies', () => {
         .get('/api/v1/allergies?allergy=newallergy')
         .headers(headers);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
+      assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
     it('should return no known allergies for n/a', async () => {

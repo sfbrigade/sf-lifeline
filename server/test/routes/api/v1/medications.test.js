@@ -73,7 +73,7 @@ describe('/api/v1/medications', () => {
         .get('/api/v1/medications?medication=newmedication')
         .headers(headers);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
+        assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
     it('should return no known medications for n/a', async () => {

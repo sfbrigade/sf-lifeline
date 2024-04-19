@@ -30,10 +30,6 @@ export default async function (fastify) {
         select: { name: true },
       });
 
-      if (!results.length) {
-        return reply.notFound();
-      }
-
       reply.send(results);
     },
   );

@@ -73,7 +73,7 @@ describe('/api/v1/conditions', () => {
         .get('/api/v1/conditions?condition=newcondition')
         .headers(headers);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
+        assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
     it('should return no known conditions for n/a', async () => {
