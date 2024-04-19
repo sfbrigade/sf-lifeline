@@ -18,12 +18,6 @@ export default async function (fastify) {
         return reply.send({ message: 'No query provided' });
       }
 
-      const NO_MEDICATIONS = ['none', 'no medications', 'no known medications', 'n/a'];
-
-      if (NO_MEDICATIONS.includes(medication.toLowerCase())) {
-        return reply.send({ message: 'No known medications' });
-      }
-
       const results = await fastify.prisma.medication.findMany({
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: medication, mode: 'insensitive' } },

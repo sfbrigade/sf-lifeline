@@ -73,17 +73,7 @@ describe('/api/v1/medications', () => {
         .get('/api/v1/medications?medication=newmedication')
         .headers(headers);
 
-        assert.deepStrictEqual(JSON.parse(res.payload), []);
-    });
-
-    it('should return no known medications for n/a', async () => {
-      const res = await app
-        .inject()
-        .get('/api/v1/medications?medication=n/a')
-        .headers(headers);
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known medications" });
+      assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
   });

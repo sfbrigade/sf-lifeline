@@ -78,16 +78,5 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
-    it('should return no known allergies for n/a', async () => {
-
-      const res = await app
-        .inject()
-        .get('/api/v1/allergies?allergy=n/a')
-        .headers(headers);
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known allergies" });
-    });
-
   });
 });

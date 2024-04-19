@@ -18,12 +18,6 @@ export default async function (fastify) {
         return reply.send({ message: 'No query provided' });
       }
 
-      const NO_CONDITIONS = ['none', 'no conditions', 'no known conditions', 'n/a'];
-
-      if (NO_CONDITIONS.includes(condition.toLowerCase())) {
-        return reply.send({ message: 'No known conditions' });
-      }
-
       const results = await fastify.prisma.condition.findMany({
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: condition, mode: 'insensitive' } },

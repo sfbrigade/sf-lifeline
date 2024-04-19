@@ -73,17 +73,7 @@ describe('/api/v1/conditions', () => {
         .get('/api/v1/conditions?condition=newcondition')
         .headers(headers);
 
-        assert.deepStrictEqual(JSON.parse(res.payload), []);
-    });
-
-    it('should return no known conditions for n/a', async () => {
-      const res = await app
-        .inject()
-        .get('/api/v1/conditions?condition=n/a')
-        .headers(headers);
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: "No known conditions" });
+      assert.deepStrictEqual(JSON.parse(res.payload), []);
     });
 
   });
