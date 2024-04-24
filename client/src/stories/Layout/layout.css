@@ -22,3 +22,23 @@
 .layout-footer {
   grid-area: foot;
 }
+
+.layout-sidebar {
+  display: none;
+  grid-area: sidebar;
+  padding: 0 var(--mantine-spacing-md, 1rem);
+}
+
+@media (min-width: 48em) {
+  .layout {
+    grid-template-areas:
+      'head head head'
+      'sidebar main main'
+      'foot foot foot';
+  }
+
+  .layout-sidebar {
+    display: block;
+    max-width: 18rem;
+  }
+}

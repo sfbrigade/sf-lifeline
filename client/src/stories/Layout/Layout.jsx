@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
+import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
 import './layout.css';
 
@@ -13,11 +14,13 @@ import './layout.css';
 export const Layout = ({ children }) => {
   return (
     <div className="layout">
+      <div className="layout-sidebar">
+        <Sidebar />
+      </div>
       <div className="layout-header">
         <Header />
       </div>
-      <div
-        className="layout-content">{children}</div>
+      <div className="layout-content">{children}</div>
       <div className="layout-footer">
         <Footer />
       </div>

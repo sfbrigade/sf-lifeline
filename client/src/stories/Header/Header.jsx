@@ -1,70 +1,80 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  Group,
+  Button,
+  ScrollArea,
+  Box,
+  Burger,
+  Drawer,
+  rem,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
-import { Button } from '../Button/Button.jsx';
-import './header.css';
+import classes from './header.module.css';
+import { Sidebar } from '../../components/Sidebar/Sidebar';
 
 /**
- * Main Header
- * @param {PropTypes.InferProps<typeof HeaderProps>} props MainHeader props
+ * Buttons for logged out buttons
+ * @param {PropTypes.InferProps<typeof HeaderProps>} props
  */
-export const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
-  <header>
-    <div className="storybook-header">
-      <div>
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg"
+export function Header({ user, onLogin, onCreateAccount }) {
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
+
+  return (
+    <Box>
+      <header className={classes.header}>
+        <Group justify="end" h="100%">
+          {user ? (
+            <Group visibleFrom="sm">
+              <Button variant="default">Alerts</Button>
+              <Button>Profile</Button>
+            </Group>
+          ) : (
+            <LoggedOutButtons
+              visibleFrom="sm"
+              onLogin={onLogin}
+              onCreateAccount={onCreateAccount}
+            />
+          )}
+
+          <Burger
+            opened={drawerOpened}
+            onClick={toggleDrawer}
+            hiddenFrom="sm"
+          />
+        </Group>
+      </header>
+
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        size="100%"
+        padding="md"
+        title="Navigation"
+        hiddenFrom="sm"
+        zIndex={1}
+        position="left"
+        className={classes.header_drawer}
+      >
+        <ScrollArea
+          className={classes.drawerBody}
+          h={`calc(100vh - ${rem(80)})`}
+          mx="-md"
         >
-          <g fill="none" fillRule="evenodd">
-            <path
-              d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
-              fill="#FFF"
-            />
-            <path
-              d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z"
-              fill="#555AB9"
-            />
-            <path
-              d="M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z"
-              fill="#91BAF8"
-            />
-          </g>
-        </svg>
-        <h1>Acme</h1>
-      </div>
-      <div>
-        {user ? (
-          <>
-            <span className="welcome">
-              Welcome, <b>{user.name}</b>!
-            </span>
-            <Button size="small" onClick={onLogout} label="Log out" />
-          </>
-        ) : (
-          <>
-            <Button size="small" onClick={onLogin} label="Log in" />
-            <Button
-              primary
-              size="small"
-              onClick={onCreateAccount}
-              label="Sign up"
-            />
-          </>
-        )}
-      </div>
-    </div>
-  </header>
-);
+          <Sidebar />
+        </ScrollArea>
+      </Drawer>
+    </Box>
+  );
+}
 
 const HeaderProps = {
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }),
   onLogin: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
   onCreateAccount: PropTypes.func.isRequired,
 };
 
@@ -72,3 +82,24 @@ Header.propTypes = HeaderProps;
 Header.defaultProps = {
   user: null,
 };
+
+const LoggedOutButtonsProps = {
+  onLogin: PropTypes.func.isRequired,
+  onCreateAccount: PropTypes.func.isRequired,
+};
+
+/**
+ * Buttons for logged out buttons
+ * @param {PropTypes.InferProps<typeof LoggedOutButtonsProps>} props
+ */
+const LoggedOutButtons = (props) => {
+  return (
+    <Group {...props}>
+      <Button variant="default" onClick={props.onLogin}>
+        Log in
+      </Button>
+      <Button onClick={props.onCreateAccount}>Sign up</Button>
+    </Group>
+  );
+};
+LoggedOutButtons.propTypes = LoggedOutButtonsProps;
