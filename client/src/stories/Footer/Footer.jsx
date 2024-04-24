@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container, Group, Anchor } from '@mantine/core';
 import './footer.css';
 
@@ -11,8 +10,7 @@ const links = [
 ];
 
 /**
- * Footer
- * @param {PropTypes.InferProps<typeof FooterProps>} props
+ * Basic Footer component
  */
 export const Footer = () => {
   return (
@@ -34,14 +32,4 @@ export const Footer = () => {
       </Container>
     </footer>
   );
-};
-
-const FooterProps = {
-  children: PropTypes.node,
-};
-
-Footer.propTypes = FooterProps;
-
-Footer.defaultProps = {
-  children: null,
 };
