@@ -92,7 +92,7 @@ const LoggedOutButtonsProps = {
  * Buttons for logged out buttons
  * @param {PropTypes.InferProps<typeof LoggedOutButtonsProps>} props
  */
-const LoggedOutButtons = ({ onLogin, onCreateAccount, ...groupProps}) => {
+const LoggedOutButtons = ({ onLogin, onCreateAccount, ...groupProps }) => {
   return (
     <Group {...groupProps}>
       <Button variant="default" onClick={onLogin}>
