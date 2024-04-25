@@ -12,13 +12,22 @@ import './layout.css';
  * @param {PropTypes.InferProps<typeof LayoutProps>} props
  */
 export const Layout = ({ children }) => {
+  const [user, setUser] = React.useState(null);
   return (
     <div className="layout">
       <div className="layout-sidebar">
         <Sidebar />
       </div>
       <div className="layout-header">
-        <Header />
+        <Header
+          user={user}
+          onCreateAccount={() => {
+            setUser({ name: 'John Doe' });
+          }}
+          onLogin={() => {
+            setUser({ name: 'Jane Doe' });
+          }}
+        />
       </div>
       <div className="layout-content">{children}</div>
       <div className="layout-footer">
