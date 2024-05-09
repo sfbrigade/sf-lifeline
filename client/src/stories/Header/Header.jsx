@@ -61,6 +61,7 @@ export function Header({ user, onLogin, onCreateAccount }) {
           className={classes.drawerBody}
           h={`calc(100vh - ${rem(80)})`}
           mx="-md"
+          scrollbars="y"
         >
           <Sidebar />
         </ScrollArea>
