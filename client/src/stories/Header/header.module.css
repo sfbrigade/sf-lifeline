@@ -39,9 +39,6 @@
   left: 0;
 }
 
-.drawerBody {
-  padding-left: var(--mantine-spacing-md);
-}
 .drawerBody > a,
 .drawerBody > button {
   display: block;

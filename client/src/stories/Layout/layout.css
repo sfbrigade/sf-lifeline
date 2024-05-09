@@ -26,7 +26,6 @@
 .layout-sidebar {
   display: none;
   grid-area: sidebar;
-  padding: 0 var(--mantine-spacing-md, 1rem);
 }
 
 @media (min-width: 48em) {

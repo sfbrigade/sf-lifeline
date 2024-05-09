@@ -51,7 +51,6 @@ export function Header({ user, onLogin, onCreateAccount }) {
         opened={drawerOpened}
         onClose={closeDrawer}
         size="100%"
-        padding="md"
         title="Navigation"
         hiddenFrom="sm"
         zIndex={1}

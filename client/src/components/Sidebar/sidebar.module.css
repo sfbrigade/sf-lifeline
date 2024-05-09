@@ -40,6 +40,7 @@
 .linksInner {
   padding-top: var(--mantine-spacing-xl);
   padding-bottom: var(--mantine-spacing-xl);
+  padding-left: var(--mantine-spacing-md);
   display: flex;
   flex-direction: column;
 }
