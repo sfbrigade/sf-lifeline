@@ -1,29 +1,49 @@
 import React from 'react';
 import { ScrollArea } from '@mantine/core';
+import {
+  IconDashboard,
+  IconGridGoldenratio,
+  IconEmergencyBed,
+  IconUsersGroup,
+  IconZoomCheck,
+  IconQrcode,
+  IconSettings,
+  IconUserCircle,
+  IconNotification,
+  IconSpeakerphone,
+} from '@tabler/icons-react';
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
 import classes from './sidebar.module.css';
 
 const sections = [
-  { label: 'Dashboard', icon: '🚘', href: '/' },
+  { label: 'Dashboard', icon: <IconDashboard stroke={2} />, href: '/' },
   {
     label: 'Management',
-    icon: '🗄️',
+    icon: <IconGridGoldenratio stroke={2} />,
     links: [
-      { label: 'Patient', href: '/', icon: '👩‍🦳' },
-      { label: 'Team Member', href: '/', icon: '👩‍⚕️' },
-      { label: 'Verification', href: '/', icon: '📺' },
-      { label: 'QR Code', href: '/', icon: '📱' },
+      { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
+      { label: 'Team Member', href: '/', icon: <IconUsersGroup stroke={2} /> },
+      { label: 'Verification', href: '/', icon: <IconZoomCheck stroke={2} /> },
+      { label: 'QR Code', href: '/', icon: <IconQrcode stroke={2} /> },
     ],
   },
   {
     label: 'Settings',
-    icon: '⚙️',
+    icon: <IconSettings stroke={2} />,
     links: [
-      { label: 'Account', href: '/', icon: '💼' },
-      { label: 'Notification', href: '/', icon: '📢' },
-      { label: 'Report Issue', href: '/', icon: '🚨' },
+      { label: 'Account', href: '/', icon: <IconUserCircle stroke={2} /> },
+      {
+        label: 'Notification',
+        href: '/',
+        icon: <IconNotification stroke={2} />,
+      },
+      {
+        label: 'Report Issue',
+        href: '/',
+        icon: <IconSpeakerphone stroke={2} />,
+      },
     ],
   },
 ];
