@@ -9,7 +9,7 @@ import './layout.css';
 
 /**
  * Main layout
- * @param {PropTypes.InferProps<typeof LayoutProps>} props
+ * @param {PropTypes.InferProps<typeof layoutProps>} props
  */
 export const Layout = ({ children }) => {
   const [user, setUser] = React.useState(null);
@@ -37,11 +37,11 @@ export const Layout = ({ children }) => {
   );
 };
 
-const LayoutProps = {
+const layoutProps = {
   children: PropTypes.node,
 };
 
-Layout.propTypes = LayoutProps;
+Layout.propTypes = layoutProps;
 
 Layout.defaultProps = {
   children: null,

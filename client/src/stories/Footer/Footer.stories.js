@@ -1,4 +1,5 @@
 import { Footer } from './Footer';
+import '@mantine/core/styles.css';
 
 export default {
   title: 'Example/Footer',

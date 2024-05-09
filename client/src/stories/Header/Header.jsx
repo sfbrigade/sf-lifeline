@@ -16,7 +16,7 @@ import { Sidebar } from '../../components/Sidebar/Sidebar';
 
 /**
  * Buttons for logged out buttons
- * @param {PropTypes.InferProps<typeof HeaderProps>} props
+ * @param {PropTypes.InferProps<typeof headerProps>} props
  */
 export function Header({ user, onLogin, onCreateAccount }) {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -69,7 +69,7 @@ export function Header({ user, onLogin, onCreateAccount }) {
   );
 }
 
-const HeaderProps = {
+const headerProps = {
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }),
@@ -77,19 +77,19 @@ const HeaderProps = {
   onCreateAccount: PropTypes.func.isRequired,
 };
 
-Header.propTypes = HeaderProps;
+Header.propTypes = headerProps;
 Header.defaultProps = {
   user: null,
 };
 
-const LoggedOutButtonsProps = {
+const loggedOutButtonsProps = {
   onLogin: PropTypes.func.isRequired,
   onCreateAccount: PropTypes.func.isRequired,
 };
 
 /**
  * Buttons for logged out buttons
- * @param {PropTypes.InferProps<typeof LoggedOutButtonsProps>} props
+ * @param {PropTypes.InferProps<typeof loggedOutButtonsProps>} props
  */
 const LoggedOutButtons = ({ onLogin, onCreateAccount, ...groupProps }) => {
   return (
@@ -101,4 +101,4 @@ const LoggedOutButtons = ({ onLogin, onCreateAccount, ...groupProps }) => {
     </Group>
   );
 };
-LoggedOutButtons.propTypes = LoggedOutButtonsProps;
+LoggedOutButtons.propTypes = loggedOutButtonsProps;

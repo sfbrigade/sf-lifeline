@@ -1,4 +1,5 @@
 import { Header } from './Header';
+import '@mantine/core/styles.css';
 
 export default {
   title: 'Example/Header',
