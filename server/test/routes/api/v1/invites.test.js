@@ -92,4 +92,23 @@ describe('/api/v1/invites', () => {
       });
     });
   });
+
+  describe('DELETE /:id', () => {
+    it('revokes an Invite record by id', async (t) => {
+      const reply = await app
+        .inject()
+        .delete('/api/v1/invites/6ed61e21-1062-4b10-a967-53b395f5c34c')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const invite = await t.prisma.invite.findUnique({
+        where: { id: '6ed61e21-1062-4b10-a967-53b395f5c34c' },
+      });
+      assert.ok(invite.revokedAt);
+      assert.deepStrictEqual(
+        invite.revokedById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+    });
+  });
 });

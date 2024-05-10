@@ -40,8 +40,7 @@ export default async function (fastify, _opts) {
         where: { id },
       });
       if (!invite) {
-        reply.notFound();
-        return;
+        return reply.notFound();
       }
       reply.send(invite);
     },
