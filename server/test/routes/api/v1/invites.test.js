@@ -9,7 +9,7 @@ describe('/api/v1/invites', () => {
   let headers;
 
   beforeEach(async (t) => {
-    app = await build(t, { trace: true });
+    app = await build(t);
     await t.loadFixtures();
     headers = await t.authenticate('admin.user@test.com', 'test');
   });
@@ -63,6 +63,33 @@ describe('/api/v1/invites', () => {
       assert.deepStrictEqual(data[3].middleName, 'M.');
       assert.deepStrictEqual(data[3].lastName, 'Doe');
       assert.deepStrictEqual(data[3].email, 'jane.m.doe@test.com');
+    });
+  });
+
+  describe('GET /:id', () => {
+    it('returns an Invite record by id', async () => {
+      const reply = await app
+        .inject()
+        .get('/api/v1/invites/6ed61e21-1062-4b10-a967-53b395f5c34c');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data, {
+        id: '6ed61e21-1062-4b10-a967-53b395f5c34c',
+        firstName: 'Invited',
+        middleName: 'Volunteer',
+        lastName: 'One',
+        email: 'invited.volunteer.one@test.com',
+        role: 'VOLUNTEER',
+        expiresAt: '3024-04-21T23:53:41.000Z',
+        invitedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        acceptedAt: '',
+        acceptedById: '',
+        revokedAt: '',
+        revokedById: '',
+        updatedAt: '2024-04-07T23:53:41.000Z',
+        createdAt: '2024-04-07T23:53:41.000Z',
+      });
     });
   });
 });
