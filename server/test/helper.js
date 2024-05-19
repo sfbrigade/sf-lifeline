@@ -6,6 +6,7 @@ import path from 'path';
 import * as nodemailerMock from 'nodemailer-mock';
 import quibble from 'quibble';
 import { fileURLToPath } from 'url';
+import { StatusCodes } from 'http-status-codes';
 
 import { PrismaClient } from '@prisma/client';
 import {
@@ -34,14 +35,25 @@ function config() {
 }
 
 // automatically build and tear down our instance
-async function build(t) {
+async function build(t, options = { trace: false }) {
   // you can set all the options supported by the fastify CLI command
   const argv = [AppPath];
 
   // fastify-plugin ensures that all decorators
   // are exposed for testing purposes, this is
   // different from the production setup
-  const app = await helper.build(argv, config());
+  const logger = options?.trace
+    ? {
+        level: 'trace',
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            destination: 2,
+          },
+        },
+      }
+    : false;
+  const app = await helper.build(argv, config(), { logger });
 
   // clear all the db tables
   const prisma = new PrismaClient({
@@ -73,8 +85,25 @@ async function build(t) {
     }
   };
 
+  // set up auth helper
+  t.authenticate = async function (email, password) {
+    const response = await app.inject().post('/api/v1/auth/login').payload({
+      email,
+      password,
+    });
+    if (!response.statusCode === StatusCodes.OK) {
+      throw new Error();
+    }
+    // send back headers needed to authenticate
+    return {
+      cookie: response.headers['set-cookie']
+        ?.split(';')
+        .map((t) => t.trim())[0],
+    };
+  };
+
   // tear down our app after we are done
-  t.after(async () => {
+  t.afterEach(async () => {
     await prisma.$disconnect();
     app.close();
   });

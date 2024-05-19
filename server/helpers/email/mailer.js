@@ -1,6 +1,7 @@
+import Email from 'email-templates';
 import nodemailer from 'nodemailer';
 
-let transporter = nodemailer.createTransport({
+const transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   auth: {
@@ -9,4 +10,17 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-export default transporter;
+const mailer = new Email({
+  message: {
+    from: process.env.MAILER_FROM,
+  },
+  send: true,
+  transport,
+  views: {
+    options: {
+      extension: 'ejs',
+    },
+  },
+});
+
+export default mailer;

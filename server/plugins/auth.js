@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 
-import User from '../models/user.js';
+import User, { Role } from '../models/user.js';
 
 export default fp(async function (fastify) {
   // set up secure encrypted cookie-based sessions
@@ -29,9 +29,16 @@ export default fp(async function (fastify) {
     }
   });
   // onRequest handler to be used to ensure a user is logged in
-  fastify.decorate('requireUser', async (request, reply) => {
-    if (!request.user) {
-      reply.unauthorized();
-    }
+  fastify.decorate('requireUser', (role) => {
+    return async (request, reply) => {
+      if (!request.user) {
+        reply.unauthorized();
+      }
+      if (role) {
+        if (request.user.role !== Role.ADMIN && request.user.role !== role) {
+          reply.forbidden();
+        }
+      }
+    };
   });
 });

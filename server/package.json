@@ -17,7 +17,7 @@
     "format:check": "prettier --check --ignore-unknown .",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "start": "fastify start -l info app.js",
-    "test": "node --test $(find test -name '*.test.js')",
+    "test": "node --test-concurrency 1 --test $(find test -name '*.test.js')",
     "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test npx prisma migrate reset --force"
   },
   "keywords": [],
@@ -34,10 +34,13 @@
     "@scalar/fastify-api-reference": "^1.20.20",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "email-templates": "^11.1.1",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.5.1",
     "http-status-codes": "^2.3.0",
+    "luxon": "^3.4.4",
     "nodemailer": "^6.9.12"
   },
   "devDependencies": {
