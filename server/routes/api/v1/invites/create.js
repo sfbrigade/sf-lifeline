@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { StatusCodes } from 'http-status-codes';
 
 import { Role } from '../../../../models/user.js';
+import Invite from '../../../../models/invite.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
@@ -53,7 +54,7 @@ export default async function (fastify, _opts) {
           ),
         ].map(async (match) => {
           const [, fullName, email] = match;
-          const data = {
+          let data = {
             email,
             role,
             expiresAt,
@@ -71,9 +72,10 @@ export default async function (fastify, _opts) {
               data.lastName = names.join(' ');
             }
           }
-          const invite = await fastify.prisma.invite.create({ data });
-          // TODO: send email
-          return invite;
+          data = await fastify.prisma.invite.create({ data });
+          const invite = new Invite(data);
+          await invite.sendInviteEmail();
+          return data;
         }),
       );
       reply.code(StatusCodes.CREATED).send(payload);

@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import User from '../../../../models/user.js';
+import Invite from '../../../../models/invite.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
@@ -49,17 +50,14 @@ export default async function (fastify, _opts) {
 
       let invite;
       if (inviteId) {
-        invite = await fastify.prisma.invite.findUnique({
+        const inviteData = await fastify.prisma.invite.findUnique({
           where: { id: inviteId },
         });
-        if (!invite) {
+        if (!inviteData) {
           return reply.notFound();
         }
-        if (
-          Date.parse(invite.expiresAt) < Date.now() ||
-          !!invite.acceptedAt ||
-          !!invite.revokedAt
-        ) {
+        invite = new Invite(inviteData);
+        if (!invite.isValid) {
           return reply.gone();
         }
       }

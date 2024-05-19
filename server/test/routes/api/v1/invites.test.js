@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { StatusCodes } from 'http-status-codes';
 
-import { build } from '../../../helper.js';
+import { build, nodemailerMock } from '../../../helper.js';
 
 describe('/api/v1/invites', () => {
   let app;
@@ -63,6 +63,14 @@ describe('/api/v1/invites', () => {
       assert.deepStrictEqual(data[3].middleName, 'M.');
       assert.deepStrictEqual(data[3].lastName, 'Doe');
       assert.deepStrictEqual(data[3].email, 'jane.m.doe@test.com');
+
+      const sentMails = nodemailerMock.mock.getSentMail();
+      assert.deepStrictEqual(sentMails.length, 4);
+      assert.deepStrictEqual(sentMails[0].to, '<invitee.1@test.com>');
+      assert.deepStrictEqual(
+        sentMails[0].subject,
+        'Your invitation to SF Life Line',
+      );
     });
   });
 
