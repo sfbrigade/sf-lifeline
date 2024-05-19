@@ -1,0 +1,12 @@
+<%- include('../_header.html.ejs') %>
+
+<p>Dear <%= firstName %>,</p>
+
+<p>Thank you for signing up with San Francisco Life Line as a first responder. Please verify your email by clicking on the following link:</p>
+
+<%- include('../_button.html.ejs', { label: 'Verify Email', url }) %>
+
+<p>Sincerely,<br />
+The SF Life Line Team</p>
+
+<%- include('../_footer.html.ejs') %>
