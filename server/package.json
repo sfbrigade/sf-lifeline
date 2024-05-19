@@ -34,6 +34,8 @@
     "@scalar/fastify-api-reference": "^1.20.20",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "email-templates": "^11.1.1",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.1.1",
     "fastify-plugin": "^4.5.1",

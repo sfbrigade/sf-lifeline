@@ -36,10 +36,10 @@ describe('/api/v1/users', () => {
 
       const sentMails = nodemailerMock.mock.getSentMail();
       assert.deepStrictEqual(sentMails.length, 1);
-      assert.deepStrictEqual(sentMails[0].to, 'john.doe@test.com');
+      assert.deepStrictEqual(sentMails[0].to, 'John Doe <john.doe@test.com>');
       assert.deepStrictEqual(
         sentMails[0].subject,
-        'SF Lifeline - Please Verify Your Email',
+        'Please verify your email with SF Life Line',
       );
     });
 
