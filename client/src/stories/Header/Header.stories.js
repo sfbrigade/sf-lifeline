@@ -1,4 +1,5 @@
 import { Header } from './Header';
+import '@mantine/core/styles.css';
 
 export default {
   title: 'Example/Header',
@@ -16,7 +17,16 @@ export const LoggedIn = {
     user: {
       name: 'Jane Doe',
     },
+    onLogin: function () {},
+    onLogout: function () {},
+    onCreateAccount: function () {},
   },
 };
 
-export const LoggedOut = {};
+export const LoggedOut = {
+  args: {
+    onLogin: function () {},
+    onLogout: function () {},
+    onCreateAccount: function () {},
+  },
+};
