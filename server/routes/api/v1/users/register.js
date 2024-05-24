@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import User from '../../../../models/user.js';
 import Invite from '../../../../models/invite.js';
+import verifyLicense from '../../../../helpers/license/verifyLicense.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
@@ -64,6 +65,17 @@ export default async function (fastify, _opts) {
 
       let data = { firstName, middleName, lastName, email, licenseNumber };
       const user = new User(data);
+
+      // Validate License Numbers
+      try {
+        await verifyLicense(licenseNumber);
+      } catch (error) {
+        reply.code(422).send({
+          error: 'Unprocessable Entity',
+          message: 'Invalid License Number',
+        });
+      }
+
       // Hash the password
       await user.setPassword(password);
       if (invite) {
