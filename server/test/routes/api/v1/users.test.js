@@ -15,7 +15,7 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'test',
-        licenseNumber: 'test',
+        licenseNumber: 'P39332',
       });
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
@@ -29,6 +29,7 @@ describe('/api/v1/users', () => {
       });
 
       assert.deepStrictEqual(record.role, 'FIRST_RESPONDER');
+      assert.deepEqual(record.licenseNumber, 'P39332');
 
       bcrypt.compare('test', record.hashedPassword, function (err, result) {
         assert.deepStrictEqual(result, true);
@@ -52,6 +53,7 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'test',
+        licenseNumber: 'P39332',
         inviteId: '6ed61e21-1062-4b10-a967-53b395f5c34c',
       });
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
