@@ -44,6 +44,7 @@ CREATE TABLE "Invite" (
     "middleName" TEXT,
     "lastName" TEXT,
     "email" TEXT NOT NULL,
+    "role" "Role" NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "invitedById" UUID NOT NULL,
     "acceptedById" UUID,

@@ -29,8 +29,6 @@ describe('User', () => {
       const user = new User(data);
       await user.setPassword('newpassword');
       assert.ok(await bcrypt.compare('newpassword', data.hashedPassword));
-
-      user.test = 'bar';
     });
   });
 

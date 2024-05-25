@@ -1,4 +1,5 @@
 import { within, userEvent, expect } from '@storybook/test';
+import '@mantine/core/styles.css';
 
 import { Page } from './Page';
 

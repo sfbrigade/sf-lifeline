@@ -29,13 +29,13 @@ export default fp(async function (fastify) {
     }
   });
   // onRequest handler to be used to ensure a user is logged in
-  fastify.decorate('requireUser', (roles) => {
+  fastify.decorate('requireUser', (role) => {
     return async (request, reply) => {
       if (!request.user) {
         reply.unauthorized();
       }
-      if (roles.length > 0) {
-        if (request.user.role !== Role.ADMIN && !roles.includes(request.user.role)) {
+      if (role) {
+        if (request.user.role !== Role.ADMIN && request.user.role !== role) {
           reply.forbidden();
         }
       }
