@@ -14,17 +14,21 @@ export default async function (fastify) {
     async (request, reply) => {
       const condition = request.query.condition.trim();
 
-      if (!condition.length) {
-        return reply.send({ message: 'No query provided' });
-      }
-
-      const results = await fastify.prisma.condition.findMany({
+      const query = {
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: condition, mode: 'insensitive' } },
         select: { name: true },
+      }
+      const results = await fastify.prisma.condition.findMany({
+        take: 10,
+        ...query
       });
 
-      reply.send(results);
+      const { name: total } = await fastify.prisma.condition.count(query);
+
+      const showing = `Showing ${results.length} of ${total} result${results.length === 1 ? "" : "s"}.`;
+
+      reply.send({results, showing});
     },
   );
 }

@@ -14,18 +14,22 @@ export default async function (fastify) {
     async (request, reply) => {
       const allergy = request.query.allergy.trim();
 
-      // prevent empty string from returning all allergies
-      if (!allergy.length) {
-        return reply.send({ message: 'No query provided' });
-      }
-
-      const results = await fastify.prisma.allergy.findMany({
+      const query = {
         orderBy: [{ name: 'asc' }],
         where: { name: { contains: allergy, mode: 'insensitive' } },
         select: { name: true },
-      });
+      }
 
-      reply.send(results);
+      const results = await fastify.prisma.allergy.findMany({
+        take: 10,
+        ...query
+      })
+
+      const { name: total } = await fastify.prisma.allergy.count(query)
+
+      const showing = `Showing ${results.length} of ${total} result${results.length === 1 ? "" : "s"}.`
+
+      reply.send({ results, showing });
     },
   );
 }
