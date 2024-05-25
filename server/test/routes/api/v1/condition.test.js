@@ -21,7 +21,7 @@ describe('/api/v1/conditions', () => {
         .headers(headers);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), { results: [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }], showing: 'Showing 2 of 2 results.' });
     });
 
     it('should return valid results for staff user', async (t) => {
@@ -33,7 +33,7 @@ describe('/api/v1/conditions', () => {
         .headers(staffHeaders);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), { results: [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }], showing: 'Showing 2 of 2 results.' });
     });
 
     it('should return valid results for volunteer user', async (t) => {
@@ -45,7 +45,7 @@ describe('/api/v1/conditions', () => {
         .headers(volunteerHeaders);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), { results: [{ name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }], showing: 'Showing 2 of 2 results.' });
     });
 
     it('require a user to be admin/staff/volunteer to make requests', async () => {
@@ -57,23 +57,23 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return no query message when no query provided', async () => {
+    it('should return paginated results of all conditions when no query provided', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=')
         .headers(headers);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
+      assert.deepStrictEqual(JSON.parse(res.payload), { results: [{ name: "Deaf" }, { name: 'Diabetes Type I' }, { name: 'Diabetes Type II' }], showing: 'Showing 3 of 3 results.' });
     });
 
-    it('should return no results from database message for an unknown condition', async () => {
+    it('should return no results from database for an unknown condition', async () => {
       const res = await app
         .inject()
         .get('/api/v1/conditions?condition=newcondition')
         .headers(headers);
 
-      assert.deepStrictEqual(JSON.parse(res.payload), []);
+      assert.deepStrictEqual(JSON.parse(res.payload), { results: [], showing: 'Showing 0 of 0 results.' });
     });
 
   });

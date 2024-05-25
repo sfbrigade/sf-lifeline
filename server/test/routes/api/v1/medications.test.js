@@ -21,7 +21,7 @@ describe('/api/v1/medications', () => {
         .headers(headers);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }], showing:'Showing 2 of 2 results.'});
     });
 
     it('should return valid results for staff user', async (t) => {
@@ -33,7 +33,7 @@ describe('/api/v1/medications', () => {
         .headers(staffHeaders);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }], showing:'Showing 2 of 2 results.'});
     });
 
     it('should return valid results for volunteer user', async (t) => {
@@ -45,7 +45,7 @@ describe('/api/v1/medications', () => {
         .headers(volunteerHeaders);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }]);
+      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }], showing:'Showing 2 of 2 results.'});
     });
 
     it('require a user to be admin/staff/volunteer to make requests', async () => {
@@ -57,23 +57,23 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return no query message when no query provided', async () => {
+    it('should return paginated results of all medications when no query provided', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=')
         .headers(headers);
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), { message: 'No query provided' });
+      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'acetaminophen / ibuprofen' }, { name: 'ibuprofen 125 MG' }, {name: "Prozac"}], showing:'Showing 3 of 3 results.'});
     });
 
-    it('should return no results from database message for an unknown medication', async () => {
+    it('should return no results from database for an unknown medication', async () => {
       const res = await app
         .inject()
         .get('/api/v1/medications?medication=newmedication')
         .headers(headers);
 
-      assert.deepStrictEqual(JSON.parse(res.payload), []);
+      assert.deepStrictEqual(JSON.parse(res.payload), {results: [], showing:'Showing 0 of 0 results.'});
     });
 
   });
