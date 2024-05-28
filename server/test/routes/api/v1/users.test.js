@@ -29,7 +29,16 @@ describe('/api/v1/users', () => {
       });
 
       assert.deepStrictEqual(record.role, 'FIRST_RESPONDER');
+
+      const validLicense = {
+        name: 'Koo, Chih Ren Nicholas',
+        licenseType: 'Paramedic',
+        status: 'Active',
+        licenseNumber: 'P39332',
+      };
+
       assert.deepEqual(record.licenseNumber, 'P39332');
+      assert.deepStrictEqual(record.licenseData, validLicense);
 
       bcrypt.compare('test', record.hashedPassword, function (err, result) {
         assert.deepStrictEqual(result, true);
@@ -81,6 +90,58 @@ describe('/api/v1/users', () => {
       assert.ok(invite);
       assert.ok(invite.acceptedAt);
       assert.ok(invite.acceptedById, user.id);
+    });
+
+    it('should return error 422 for invalid license number', async (t) => {
+      const app = await build(t);
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@test.com',
+        password: 'test',
+        licenseNumber: 'INVALIDLICENSE',
+      });
+
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.equal(message, 'No license match.');
+    });
+
+    it('should return error 422 for expired license', async (t) => {
+      const app = await build(t);
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@test.com',
+        password: 'test',
+        licenseNumber: 'E167667',
+      });
+
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.equal(message, 'Expired or unprocessable license data');
+    });
+
+    it('should return error 422 for duplicated license', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@test.com',
+        password: 'test',
+        licenseNumber: 'E148420',
+      });
+
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.equal(message, 'License already in used by another account');
     });
   });
 });

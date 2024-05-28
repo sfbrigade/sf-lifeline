@@ -161,6 +161,9 @@ CREATE TABLE "_HospitalToPhysician" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Patient_emergencyContactId_key" ON "Patient"("emergencyContactId");
 
 -- CreateIndex

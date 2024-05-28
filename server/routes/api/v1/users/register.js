@@ -68,11 +68,24 @@ export default async function (fastify, _opts) {
 
       // Validate License Numbers
       try {
-        await verifyLicense(licenseNumber);
+        const licenseData = await verifyLicense(licenseNumber);
+        if (licenseData && licenseData.status != 'Expired') {
+          const userFromLicense = await fastify.prisma.user.findUnique({
+            where: { licenseNumber: licenseNumber },
+          });
+
+          if (userFromLicense) {
+            throw new Error('License already in used by another account');
+          }
+
+          user.licenseData = licenseData;
+        } else {
+          throw new Error('Expired or unprocessable license data');
+        }
       } catch (error) {
-        reply.code(422).send({
+        return reply.code(StatusCodes.UNPROCESSABLE_ENTITY).send({
           error: 'Unprocessable Entity',
-          message: 'Invalid License Number',
+          message: error.message,
         });
       }
 
