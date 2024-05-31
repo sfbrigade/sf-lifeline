@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Header } from '../Header/Header.jsx';
 import './page.css';
+import { useAuthorization } from '../../hooks/useAuthorization.jsx';
 
 /**
  * Storybook demo page component.
@@ -9,15 +10,15 @@ import './page.css';
  * @property {string} name Full name of the User.
  */
 export const Page = () => {
-  const [user, setUser] = React.useState(/** @type {?User} */ (null));
+  const { user, handleLogin, handleLogout } = useAuthorization();
 
   return (
     <article>
       <Header
         user={user}
-        onLogin={() => setUser({ name: 'Jane Doe' })}
-        onLogout={() => setUser(null)}
-        onCreateAccount={() => setUser({ name: 'Jane Doe' })}
+        onLogin={() => handleLogin({ name: 'Jane Doe' })}
+        onLogout={handleLogout}
+        onCreateAccount={() => handleLogin({ name: 'Jane Doe' })}
       />
 
       <section className="storybook-page">

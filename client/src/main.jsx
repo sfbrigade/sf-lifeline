@@ -8,17 +8,20 @@ import '@mantine/core/styles.css';
 import { theme } from './theme';
 
 import { MantineProvider } from '@mantine/core';
+import { ContextProvider } from './Context.jsx';
 
 const queryClient = new QueryClient({});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <MantineProvider theme={theme}>
-          <App />
-        </MantineProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <MantineProvider theme={theme}>
+            <App />
+          </MantineProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ContextProvider>
   </React.StrictMode>,
 );

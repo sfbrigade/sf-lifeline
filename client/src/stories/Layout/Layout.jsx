@@ -5,6 +5,8 @@ import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
 import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
+import { useAuthorization } from '../../hooks/useAuthorization';
+
 import './layout.css';
 
 /**
@@ -12,7 +14,7 @@ import './layout.css';
  * @param {PropTypes.InferProps<typeof layoutProps>} props
  */
 export const Layout = ({ children }) => {
-  const [user, setUser] = React.useState(null);
+  const { user, handleLogin } = useAuthorization();
   return (
     <div className="layout">
       <div className="layout-sidebar">
@@ -22,10 +24,10 @@ export const Layout = ({ children }) => {
         <Header
           user={user}
           onCreateAccount={() => {
-            setUser({ name: 'John Doe' });
+            handleLogin({ name: 'John Doe' });
           }}
           onLogin={() => {
-            setUser({ name: 'Jane Doe' });
+            handleLogin({ name: 'Jane Doe' });
           }}
         />
       </div>
