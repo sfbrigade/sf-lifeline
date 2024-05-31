@@ -149,7 +149,7 @@ export default async function (fastify, _opts) {
         user.role = 'FIRST_RESPONDER';
         // Generate verification token and send
         user.generateEmailVerificationToken();
-        // await user.sendVerificationEmail();
+        await user.sendVerificationEmail();
       }
       // Create user in db
       await fastify.prisma.$transaction(async (tx) => {

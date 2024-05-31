@@ -50,7 +50,7 @@ describe('/api/v1/licenses', () => {
       });
       const { message } = JSON.parse(res.body);
       assert.equal(res.statusCode, 404);
-      assert.equal(message, 'No license match.');
+      assert.equal(message, 'No license match');
     });
   });
 });
