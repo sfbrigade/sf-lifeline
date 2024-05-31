@@ -54,7 +54,7 @@ export default async function (fastify, _opts) {
 
       // Validate request body
       try {
-        const parsedBody = userSchema.parse(request.body);
+        userSchema.parse(request.body);
       } catch (error) {
         const parseErrors = JSON.parse(error.message);
         parseErrors.forEach((e) =>
