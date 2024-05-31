@@ -1,5 +1,5 @@
-import { useContext, useCallback, useState } from 'react';
-// import { useMutation } from '@tanstack/react-query';
+import { useContext } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import Context from '../Context';
 
@@ -16,63 +16,48 @@ import Context from '../Context';
  */
 export function useAuthorization() {
   const { user, setUser } = useContext(Context);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // const mutation = useMutation({
-  //   mutationFn: (event) => {
-  //     event.preventDefault();
-  //     return fetch('/api/v1/users', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({}),
-  //     });
-  //   },
-  // });
-
-  const handleLogin = useCallback(
-    async (credentials) => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/v1/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-        });
-        const updatedUser = await response.json();
-        setUser(updatedUser);
-        setIsLoading(false);
-        return true;
-      } catch (error) {
-        setIsLoading(false);
-        return false;
-      }
+  const loginMutation = useMutation({
+    mutationFn: (credentials) => {
+      return fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
     },
-    [setUser],
-  );
+    onSuccess: (data) => {
+      setUser(data);
+    },
+  });
 
-  const handleLogout = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/v1/auth/logout');
-      setIsLoading(false);
-      if (response.status === 200) {
-        setUser(null);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      setIsLoading(false);
-    }
-  }, [setUser]);
+  const logoutMutation = useMutation({
+    mutationFn: (userToLogout) => {
+      return fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userToLogout),
+      });
+    },
+    onSuccess: () => {
+      setUser(null);
+    },
+  });
+
+  const handleLogin = async (credentials) => {
+    loginMutation.mutate(credentials);
+  };
+
+  const handleLogout = async () => {
+    logoutMutation.mutate(user);
+  };
 
   return {
     user,
-    isLoading,
-    // mutation,
+    isLoading: loginMutation.isPending || logoutMutation.isPending,
     handleLogin,
     handleLogout,
   };
