@@ -27,7 +27,10 @@ export const Layout = ({ children }) => {
             handleLogin({ name: 'John Doe' });
           }}
           onLogin={() => {
-            handleLogin({ name: 'Jane Doe' });
+            handleLogin({
+              email: 'admin.user@test.com',
+              password: 'Abcd1234!',
+            });
           }}
         />
       </div>
