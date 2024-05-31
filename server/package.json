@@ -41,7 +41,8 @@
     "fastify-plugin": "^4.5.1",
     "http-status-codes": "^2.3.0",
     "luxon": "^3.4.4",
-    "nodemailer": "^6.9.12"
+    "nodemailer": "^6.9.12",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "c8": "^9.1.0",
