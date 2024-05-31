@@ -6,6 +6,39 @@ import { StatusCodes } from 'http-status-codes';
 import { build, nodemailerMock } from '../../../helper.js';
 
 describe('/api/v1/users', () => {
+  describe('GET /me', () => {
+    it('returns an unauthorized error if not logged in', async (t) => {
+      const app = await build(t);
+      const reply = await app.inject().get('/api/v1/users/me');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+    });
+
+    it('returns the currently logged in User data', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app.inject().get('/api/v1/users/me').headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data, {
+        id: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        firstName: 'Admin',
+        middleName: '',
+        lastName: 'User',
+        email: 'admin.user@test.com',
+        emailVerifiedAt: data.emailVerifiedAt,
+        licenseNumber: '',
+        licenseData: {},
+        role: 'ADMIN',
+        approvedAt: data.approvedAt,
+        approvedById: '',
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      });
+    });
+  });
+
   describe('POST /register', () => {
     it('should return valid results', async (t) => {
       const app = await build(t);
