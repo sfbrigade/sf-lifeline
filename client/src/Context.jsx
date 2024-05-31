@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 /**
  * @typedef {object} lifeLineContext
  * @property {user | null} user object
+ * @property {Function} setUser update function for user
  */
 
 const Context = createContext(/** @type {lifeLineContext} */ (null));
@@ -29,19 +30,9 @@ const contextProviderProps = {
 function ContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const handleLogout = () => {
-    setUser(null);
-  };
-
-  const handleLogin = (user) => {
-    setUser(user);
-  };
-
   const contextValue = {
     user,
     setUser,
-    handleLogin,
-    handleLogout,
   };
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
