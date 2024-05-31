@@ -1,5 +1,5 @@
 entity: user
-connectedFields: ['approvedBy']
+connectedFields: ['approvedBy', 'rejectedBy']
 items:
   user1:
     id: 555740af-17e9-48a3-93b8-d5236dfd2c29
@@ -55,3 +55,13 @@ items:
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
     approvedBy: '@user1'
+  user7:
+    id: bf6ef159-7de6-4b74-8d16-3b773ebcbb80
+    firstName: Rejected
+    lastName: User
+    email: rejected.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: FIRST_RESPONDER
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    rejectedAt: <%= new Date().toISOString() %>
+    rejectedBy: '@user1'

@@ -6,6 +6,106 @@ import { StatusCodes } from 'http-status-codes';
 import { build, nodemailerMock } from '../../../helper.js';
 
 describe('/api/v1/users', () => {
+  describe('GET /', () => {
+    it('returns a paginated list of User records', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/users?perPage=2')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=4>; rel="last"',
+      );
+      assert.deepStrictEqual(reply.headers['x-page'], '1');
+      assert.deepStrictEqual(reply.headers['x-per-page'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '7');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 2);
+      assert.deepStrictEqual(data[0].lastName, 'Email');
+      assert.deepStrictEqual(data[0].firstName, 'Unverified');
+    });
+
+    it('returns a paginated list of unapproved User records', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/users?status=unapproved&perPage=2')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(reply.headers['link'], '');
+      assert.deepStrictEqual(reply.headers['x-page'], '1');
+      assert.deepStrictEqual(reply.headers['x-per-page'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '1');
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 2);
+      assert.deepStrictEqual(data[0].lastName, 'Email');
+      assert.deepStrictEqual(data[0].firstName, 'Unverified');
+    });
+
+    it('returns a paginated list of approved User records', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/users?status=approved&perPage=2')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next"',
+      );
+      assert.deepStrictEqual(reply.headers['x-page'], '1');
+      assert.deepStrictEqual(reply.headers['x-per-page'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '4');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '2');
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 2);
+      assert.deepStrictEqual(data[0].lastName, 'Responder');
+      assert.deepStrictEqual(data[0].firstName, 'First');
+    });
+
+    it('returns a paginated list of rejected User records', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/users?status=rejected&perPage=2')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(reply.headers['link'], '');
+      assert.deepStrictEqual(reply.headers['x-page'], '1');
+      assert.deepStrictEqual(reply.headers['x-per-page'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '1');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '1');
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 1);
+      assert.deepStrictEqual(data[0].lastName, 'User');
+      assert.deepStrictEqual(data[0].firstName, 'Rejected');
+    });
+  });
+
   describe('POST /register', () => {
     it('should return valid results', async (t) => {
       const app = await build(t);

@@ -33,6 +33,10 @@ model User {
   approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
   approvedById           String?   @db.Uuid
   approvedUsers          User[]    @relation("UserApprovedBy")
+  rejectedAt             DateTime?
+  rejectedBy             User?     @relation("UserRejectedBy", fields: [rejectedById], references: [id])
+  rejectedById           String?   @db.Uuid
+  rejectedUsers          User[]    @relation("UserRejectedBy")
   invitedUsers           Invite[]  @relation("UserInvitedBy")
   acceptedInvites        Invite[]  @relation("UserAcceptedBy")
   revokedInvites         Invite[]  @relation("UserRevokedBy")
