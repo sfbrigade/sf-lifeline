@@ -1,4 +1,5 @@
 entity: user
+connectedFields: ['approvedBy']
 items:
   user1:
     id: 555740af-17e9-48a3-93b8-d5236dfd2c29
@@ -24,3 +25,33 @@ items:
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+  user4:
+    id: 2e96234a-671d-45a2-9d20-f647d891e7ee
+    firstName: Volunteer
+    lastName: User
+    email: volunteer.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: VOLUNTEER
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
+    approvedBy: '@user1'
+  user5:
+    id: b6310669-1400-4346-ae61-7f872dfdedd3
+    firstName: Staff
+    lastName: User
+    email: staff.user@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: STAFF
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
+    approvedBy: '@user1'
+  user6:
+    id: 5c8260f3-a935-4b99-856f-f8cf4dc8848f
+    firstName: First
+    lastName: Responder
+    email: first.responder@test.com
+    emailVerifiedAt: <%= new Date().toISOString() %>
+    role: FIRST_RESPONDER
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    approvedAt: <%= new Date().toISOString() %>
+    approvedBy: '@user1'

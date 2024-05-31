@@ -35,7 +35,14 @@ export default fp(async function (fastify) {
         reply.unauthorized();
       }
       if (role) {
-        if (request.user.role !== Role.ADMIN && request.user.role !== role) {
+        if (Array.isArray(role)) {
+          if (!role.includes(request.user.role)) {
+            reply.forbidden();
+          }
+        } else if (
+          request.user.role !== Role.ADMIN &&
+          request.user.role !== role
+        ) {
           reply.forbidden();
         }
       }

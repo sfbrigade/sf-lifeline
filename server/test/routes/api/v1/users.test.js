@@ -81,4 +81,86 @@ describe('/api/v1/users', () => {
       assert.ok(invite.acceptedById, user.id);
     });
   });
+
+  describe('PATCH /:id/approve', () => {
+    it('should return an error if not an ADMIN or STAFF user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/approve');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/approve')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/approve')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to approve a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/approve')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.approvedById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(data.approvedAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'f4a4be16-e1a5-49dd-9f21-11b1650057f5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.approvedById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(user.approvedAt);
+    });
+
+    it('should allow STAFF to approve a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/approve')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.approvedById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(data.approvedAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'f4a4be16-e1a5-49dd-9f21-11b1650057f5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.approvedById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(user.approvedAt);
+    });
+  });
 });
