@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes';
 import User from '../../../../models/user.js';
 import Invite from '../../../../models/invite.js';
 import verifyLicense from '../../../../helpers/license/verifyLicense.js';
-import userSchema from '../../../../schemas/userSchema.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
@@ -54,10 +53,9 @@ export default async function (fastify, _opts) {
 
       // Validate request body
       try {
-        userSchema.parse(request.body);
+        User.schema.parse(request.body);
       } catch (error) {
-        const parseErrors = JSON.parse(error.message);
-        parseErrors.forEach((e) =>
+        error.errors.forEach((e) =>
           errorList.push({ path: e.path[0], message: e.message }),
         );
       }

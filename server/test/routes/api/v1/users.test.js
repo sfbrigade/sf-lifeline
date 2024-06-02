@@ -150,6 +150,30 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(message, expectedMessage);
     });
 
+    it('should return error for duplicated email with different case', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'ADMIN.USER@TEST.COM',
+        password: 'Test123!',
+        licenseNumber: 'P39332',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'email',
+          message: 'Email already registered',
+        },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
+    });
+
     it('should return error for expired license', async (t) => {
       const app = await build(t);
 
