@@ -1,3 +1,6 @@
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "citext";
+
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'STAFF', 'VOLUNTEER', 'FIRST_RESPONDER');
 
@@ -22,7 +25,7 @@ CREATE TABLE "User" (
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" CITEXT NOT NULL,
     "emailVerificationToken" TEXT,
     "emailVerifiedAt" TIMESTAMP(3),
     "role" "Role" NOT NULL,
@@ -159,6 +162,9 @@ CREATE TABLE "_HospitalToPhysician" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Patient_emergencyContactId_key" ON "Patient"("emergencyContactId");
