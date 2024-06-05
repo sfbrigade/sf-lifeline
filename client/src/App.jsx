@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Index from './pages';
-import Login from './pages/login';
+import Login from './pages/login/login';
 import { Layout } from './stories/Layout/Layout';
 
 /**
@@ -11,12 +11,13 @@ import { Layout } from './stories/Layout/Layout';
 function App() {
   return (
     <>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Layout>
+        </Route>
+
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </>
   );
 }
