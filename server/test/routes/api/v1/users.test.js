@@ -114,8 +114,8 @@ describe('/api/v1/users', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@test.com',
-        password: 'test',
-        licenseNumber: 'test',
+        password: 'Test123!',
+        licenseNumber: 'P39332',
       });
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
@@ -130,7 +130,17 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(record.role, 'FIRST_RESPONDER');
 
-      bcrypt.compare('test', record.hashedPassword, function (err, result) {
+      const validLicense = {
+        name: 'Koo, Chih Ren Nicholas',
+        licenseType: 'Paramedic',
+        status: 'Active',
+        licenseNumber: 'P39332',
+      };
+
+      assert.deepEqual(record.licenseNumber, 'P39332');
+      assert.deepStrictEqual(record.licenseData, validLicense);
+
+      bcrypt.compare('Test123!', record.hashedPassword, function (err, result) {
         assert.deepStrictEqual(result, true);
       });
 
@@ -151,7 +161,8 @@ describe('/api/v1/users', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@test.com',
-        password: 'test',
+        password: 'Test123!',
+        licenseNumber: 'P39332',
         inviteId: '6ed61e21-1062-4b10-a967-53b395f5c34c',
       });
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
@@ -179,6 +190,135 @@ describe('/api/v1/users', () => {
       assert.ok(invite);
       assert.ok(invite.acceptedAt);
       assert.ok(invite.acceptedById, user.id);
+    });
+
+    it('should validate all field with rules', async (t) => {
+      const app = await build(t);
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: '',
+        lastName: 'abcdefghijklmnopqrstuvwxyz123123123',
+        email: 'john.doe@',
+        password: 'invalid pass',
+        licenseNumber: 'INVALIDLICENSE',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'firstName',
+          message: 'First name must be between 2 and 30 characters long',
+        },
+        {
+          path: 'lastName',
+          message: 'Last name must be between 2 and 30 characters long',
+        },
+        { path: 'email', message: 'Invalid email format' },
+        {
+          path: 'password',
+          message:
+            'Password must include uppercase, lowercase, number, and special character',
+        },
+        { path: 'licenseNumber', message: 'No license match' },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
+    });
+
+    it('should return error for duplicated email', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'admin.user@test.com',
+        password: 'Test123!',
+        licenseNumber: 'P39332',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'email',
+          message: 'Email already registered',
+        },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
+    });
+
+    it('should return error for duplicated email with different case', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'ADMIN.USER@TEST.COM',
+        password: 'Test123!',
+        licenseNumber: 'P39332',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'email',
+          message: 'Email already registered',
+        },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
+    });
+
+    it('should return error for expired license', async (t) => {
+      const app = await build(t);
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@test.com',
+        password: 'Test123!',
+        licenseNumber: 'E167667',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'licenseNumber',
+          message: 'Expired or unprocessable license data',
+        },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
+    });
+
+    it('should return error for duplicated license', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject().post('/api/v1/users/register').payload({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@test.com',
+        password: 'Test123!',
+        licenseNumber: 'E148420',
+      });
+
+      const expectedMessage = [
+        {
+          path: 'licenseNumber',
+          message: 'License already registered',
+        },
+      ];
+      const { message } = JSON.parse(res.body);
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      assert.deepStrictEqual(message, expectedMessage);
     });
   });
 

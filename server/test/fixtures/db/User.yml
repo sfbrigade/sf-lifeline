@@ -25,6 +25,7 @@ items:
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    licenseNumber: E148420
   user4:
     id: 2e96234a-671d-45a2-9d20-f647d891e7ee
     firstName: Volunteer
