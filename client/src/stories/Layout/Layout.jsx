@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Outlet } from 'react-router-dom';
 
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
@@ -11,9 +11,8 @@ import './layout.css';
 
 /**
  * Main layout
- * @param {PropTypes.InferProps<typeof layoutProps>} props
  */
-export const Layout = ({ children }) => {
+export const Layout = () => {
   const { user, handleLogin } = useAuthorization();
   return (
     <div className="layout">
@@ -34,20 +33,12 @@ export const Layout = ({ children }) => {
           }}
         />
       </div>
-      <div className="layout-content">{children}</div>
+      <div className="layout-content">
+        <Outlet />
+      </div>
       <div className="layout-footer">
         <Footer />
       </div>
     </div>
   );
-};
-
-const layoutProps = {
-  children: PropTypes.node,
-};
-
-Layout.propTypes = layoutProps;
-
-Layout.defaultProps = {
-  children: null,
 };
