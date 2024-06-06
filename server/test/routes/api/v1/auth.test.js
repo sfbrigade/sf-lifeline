@@ -60,6 +60,25 @@ describe('/api/v1/auth', () => {
       assert.ok(cookie.includes('HttpOnly'));
       assert.ok(cookie.includes('Secure'));
       assert.ok(cookie.includes('SameSite=Strict'));
+
+      const data = JSON.parse(response.body);
+      assert.deepStrictEqual(data, {
+        id: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        firstName: 'Admin',
+        middleName: '',
+        lastName: 'User',
+        email: 'admin.user@test.com',
+        emailVerifiedAt: data.emailVerifiedAt,
+        licenseNumber: '',
+        licenseData: {},
+        role: 'ADMIN',
+        approvedAt: data.approvedAt,
+        approvedById: '',
+        rejectedAt: '',
+        rejectedById: '',
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      });
     });
   });
 });
