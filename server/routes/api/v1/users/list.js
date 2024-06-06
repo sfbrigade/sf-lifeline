@@ -11,7 +11,7 @@ export default async function (fastify, _opts) {
           perPage: { type: 'integer' },
           status: {
             type: 'string',
-            enum: ['unapproved', 'approved', 'rejected'],
+            enum: ['unapproved', 'approved', 'rejected', 'disabled'],
           },
         },
         response: {
@@ -35,6 +35,8 @@ export default async function (fastify, _opts) {
                 approvedById: { type: 'string' },
                 rejectedAt: { type: 'string' },
                 rejectedById: { type: 'string' },
+                disabledAt: { type: 'string' },
+                disabledById: { type: 'string' },
               },
             },
           },
@@ -63,6 +65,9 @@ export default async function (fastify, _opts) {
           break;
         case 'rejected':
           options.where = { rejectedAt: { not: null } };
+          break;
+        case 'disabled':
+          options.where = { disabledAt: { not: null } };
           break;
       }
       const { records, total } = await fastify.prisma.user.paginate(options);

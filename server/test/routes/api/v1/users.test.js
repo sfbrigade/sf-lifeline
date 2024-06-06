@@ -24,7 +24,7 @@ describe('/api/v1/users', () => {
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '7');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '8');
       assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
 
       const data = JSON.parse(reply.body);
@@ -69,12 +69,12 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next"',
+        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=3>; rel="last"',
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '4');
-      assert.deepStrictEqual(reply.headers['x-total-pages'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '5');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '3');
 
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(data.length, 2);
@@ -103,6 +103,29 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(data.length, 1);
       assert.deepStrictEqual(data[0].lastName, 'User');
       assert.deepStrictEqual(data[0].firstName, 'Rejected');
+    });
+
+    it('returns a paginated list of disabled User records', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/users?status=disabled&perPage=2')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(reply.headers['link'], '');
+      assert.deepStrictEqual(reply.headers['x-page'], '1');
+      assert.deepStrictEqual(reply.headers['x-per-page'], '2');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '1');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '1');
+
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.length, 1);
+      assert.deepStrictEqual(data[0].lastName, 'User');
+      assert.deepStrictEqual(data[0].firstName, 'Disabled');
     });
   });
 
@@ -401,6 +424,240 @@ describe('/api/v1/users', () => {
         'b6310669-1400-4346-ae61-7f872dfdedd3',
       );
       assert.ok(user.approvedAt);
+    });
+  });
+
+  describe('PATCH /:id/reject', () => {
+    it('should return an error if not an ADMIN or STAFF user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/reject');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/reject')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/reject')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to reject a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/reject')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.rejectedById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(data.rejectedAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'f4a4be16-e1a5-49dd-9f21-11b1650057f5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.rejectedById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(user.rejectedAt);
+    });
+
+    it('should allow STAFF to reject a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/f4a4be16-e1a5-49dd-9f21-11b1650057f5/reject')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.rejectedById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(data.rejectedAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'f4a4be16-e1a5-49dd-9f21-11b1650057f5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.rejectedById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(user.rejectedAt);
+    });
+  });
+
+  describe('PATCH /:id/disable', () => {
+    it('should return an error if not an ADMIN or STAFF user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .patch('/api/v1/users/5c8260f3-a935-4b99-856f-f8cf4dc8848f/disable');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/5c8260f3-a935-4b99-856f-f8cf4dc8848f/disable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/5c8260f3-a935-4b99-856f-f8cf4dc8848f/disable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to disable a user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/5c8260f3-a935-4b99-856f-f8cf4dc8848f/disable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.disabledById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(data.disabledAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: '5c8260f3-a935-4b99-856f-f8cf4dc8848f' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.disabledById,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.ok(user.disabledAt);
+    });
+
+    it('should allow STAFF to reject a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/5c8260f3-a935-4b99-856f-f8cf4dc8848f/disable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        data.disabledById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(data.disabledAt);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: '5c8260f3-a935-4b99-856f-f8cf4dc8848f' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(
+        user.disabledById,
+        'b6310669-1400-4346-ae61-7f872dfdedd3',
+      );
+      assert.ok(user.disabledAt);
+    });
+  });
+
+  describe('PATCH /:id/enable', () => {
+    it('should return an error if not an ADMIN or STAFF user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .patch('/api/v1/users/df1e3040-ae06-4a4f-a15b-be2bf0bd0b39/enable');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/df1e3040-ae06-4a4f-a15b-be2bf0bd0b39/enable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .patch('/api/v1/users/df1e3040-ae06-4a4f-a15b-be2bf0bd0b39/enable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to re-enable a user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/df1e3040-ae06-4a4f-a15b-be2bf0bd0b39/enable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.disabledById, '');
+      assert.deepStrictEqual(data.disabledAt, '');
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'df1e3040-ae06-4a4f-a15b-be2bf0bd0b39' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.disabledById, null);
+      assert.deepStrictEqual(user.disabledAt, null);
+    });
+
+    it('should allow STAFF to reject a pending user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/df1e3040-ae06-4a4f-a15b-be2bf0bd0b39/enable')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.disabledById, '');
+      assert.deepStrictEqual(data.disabledAt, '');
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'df1e3040-ae06-4a4f-a15b-be2bf0bd0b39' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.disabledById, null);
+      assert.deepStrictEqual(user.disabledAt, null);
     });
   });
 });

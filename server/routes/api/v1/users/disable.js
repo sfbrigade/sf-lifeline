@@ -3,7 +3,7 @@ import { User, Role } from '../../../../models/user.js';
 
 export default async function (fastify, _opts) {
   fastify.patch(
-    '/:id/approve',
+    '/:id/disable',
     {
       schema: {
         params: {
@@ -48,14 +48,12 @@ export default async function (fastify, _opts) {
         return reply.notFound();
       }
       const user = new User(data);
-      if (!user.isApproved) {
+      if (!user.isDisabled) {
         data = await fastify.prisma.user.update({
           where: { id },
           data: {
-            approvedAt: new Date(),
-            approvedById: request.user.id,
-            rejectedAt: null,
-            rejectedById: null,
+            disabledAt: new Date(),
+            disabledById: request.user.id,
           },
         });
       }
