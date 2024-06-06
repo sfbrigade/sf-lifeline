@@ -19,9 +19,9 @@ export default fp(async function (fastify) {
     // first check cookie-based session
     const id = request.session.get('userId');
     if (id) {
-      const user = await fastify.prisma.user.findUnique({ where: { id } });
-      if (user) {
-        request.user = new User(user);
+      const data = await fastify.prisma.user.findUnique({ where: { id } });
+      if (data) {
+        request.user = new User(data);
       } else {
         // session data is invalid, delete
         request.session.delete();
@@ -32,11 +32,21 @@ export default fp(async function (fastify) {
   fastify.decorate('requireUser', (role) => {
     return async (request, reply) => {
       if (!request.user) {
-        reply.unauthorized();
+        return reply.unauthorized();
+      }
+      if (!request.user.isActive) {
+        return reply.forbidden();
       }
       if (role) {
-        if (request.user.role !== Role.ADMIN && request.user.role !== role) {
-          reply.forbidden();
+        if (Array.isArray(role)) {
+          if (!role.includes(request.user.role)) {
+            return reply.forbidden();
+          }
+        } else if (
+          request.user.role !== Role.ADMIN &&
+          request.user.role !== role
+        ) {
+          return reply.forbidden();
         }
       }
     };

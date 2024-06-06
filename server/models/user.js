@@ -44,11 +44,23 @@ class User extends Base {
   }
 
   get isActive() {
-    return this.isApproved && this.isEmailVerified;
+    return this.isApproved && this.isEmailVerified && !this.isDisabled;
+  }
+
+  get isUnapproved() {
+    return !this.isApproved && !this.isRejected;
   }
 
   get isApproved() {
     return !!this.approvedAt;
+  }
+
+  get isRejected() {
+    return !!this.isRejectedAt;
+  }
+
+  get isDisabled() {
+    return !!this.disabledAt;
   }
 
   get isEmailVerified() {

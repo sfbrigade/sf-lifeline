@@ -34,6 +34,10 @@ CREATE TABLE "User" (
     "licenseData" JSONB,
     "approvedAt" TIMESTAMP(3),
     "approvedById" UUID,
+    "rejectedAt" TIMESTAMP(3),
+    "rejectedById" UUID,
+    "disabledAt" TIMESTAMP(3),
+    "disabledById" UUID,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -177,6 +181,12 @@ CREATE INDEX "_HospitalToPhysician_B_index" ON "_HospitalToPhysician"("B");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_approvedById_fkey" FOREIGN KEY ("approvedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_rejectedById_fkey" FOREIGN KEY ("rejectedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_disabledById_fkey" FOREIGN KEY ("disabledById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_invitedById_fkey" FOREIGN KEY ("invitedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
