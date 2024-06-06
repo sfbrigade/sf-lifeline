@@ -25,6 +25,10 @@ const AppPath = path.join(__dirname, '..', 'app.js');
 process.env.NODE_ENV = 'test';
 process.env.DATABASE_URL = `${process.env.DATABASE_URL}_test`;
 
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
+
 // Dependency mocks for testing
 await quibble.esm('nodemailer', { default: nodemailerMock });
 
@@ -56,9 +60,6 @@ async function build(t, options = { trace: false }) {
   const app = await helper.build(argv, config(), { logger });
 
   // clear all the db tables
-  const prisma = new PrismaClient({
-    datasourceUrl: process.env.DATABASE_URL,
-  });
   await prisma.$connect();
   await prisma.$transaction([
     prisma.physician.deleteMany(),
@@ -103,7 +104,7 @@ async function build(t, options = { trace: false }) {
   };
 
   // tear down our app after we are done
-  t.afterEach(async () => {
+  t.after(async () => {
     await prisma.$disconnect();
     app.close();
   });
