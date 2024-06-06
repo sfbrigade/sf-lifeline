@@ -10,16 +10,11 @@ import { useAuthorization } from '../../hooks/useAuthorization.jsx';
  * @property {string} name Full name of the User.
  */
 export const Page = () => {
-  const { user, handleLogin, handleLogout } = useAuthorization();
+  const { user, handleLogout } = useAuthorization();
 
   return (
     <article>
-      <Header
-        user={user}
-        onLogin={() => handleLogin({ name: 'Jane Doe' })}
-        onLogout={handleLogout}
-        onCreateAccount={() => handleLogin({ name: 'Jane Doe' })}
-      />
+      <Header user={user} onLogout={handleLogout} />
 
       <section className="storybook-page">
         <h2>Pages in Storybook</h2>

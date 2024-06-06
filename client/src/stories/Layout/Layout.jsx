@@ -13,25 +13,14 @@ import './layout.css';
  * Main layout
  */
 export const Layout = () => {
-  const { user, handleLogin } = useAuthorization();
+  const { user } = useAuthorization();
   return (
     <div className="layout">
       <div className="layout-sidebar">
         <Sidebar />
       </div>
       <div className="layout-header">
-        <Header
-          user={user}
-          onCreateAccount={() => {
-            handleLogin({ name: 'John Doe' });
-          }}
-          onLogin={() => {
-            handleLogin({
-              email: 'admin.user@test.com',
-              password: 'Abcd1234!',
-            });
-          }}
-        />
+        <Header user={user} />
       </div>
       <div className="layout-content">
         <Outlet />
