@@ -1,48 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Outlet } from 'react-router-dom';
 
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
 import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
+import { useAuthorization } from '../../hooks/useAuthorization';
+
 import './layout.css';
 
 /**
  * Main layout
- * @param {PropTypes.InferProps<typeof layoutProps>} props
  */
-export const Layout = ({ children }) => {
-  const [user, setUser] = React.useState(null);
+export const Layout = () => {
+  const { user } = useAuthorization();
   return (
     <div className="layout">
       <div className="layout-sidebar">
         <Sidebar />
       </div>
       <div className="layout-header">
-        <Header
-          user={user}
-          onCreateAccount={() => {
-            setUser({ name: 'John Doe' });
-          }}
-          onLogin={() => {
-            setUser({ name: 'Jane Doe' });
-          }}
-        />
+        <Header user={user} />
       </div>
-      <div className="layout-content">{children}</div>
+      <div className="layout-content">
+        <Outlet />
+      </div>
       <div className="layout-footer">
         <Footer />
       </div>
     </div>
   );
-};
-
-const layoutProps = {
-  children: PropTypes.node,
-};
-
-Layout.propTypes = layoutProps;
-
-Layout.defaultProps = {
-  children: null,
 };

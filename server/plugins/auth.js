@@ -7,9 +7,10 @@ export default fp(async function (fastify) {
   await fastify.register(import('@fastify/secure-session'), {
     key: Buffer.from(process.env.SESSION_SECRET_KEY, 'hex'),
     cookie: {
+      path: '/',
       httpOnly: true,
       sameSite: true,
-      secure: true,
+      secure: process.env.BASE_URL?.startsWith('https'),
     },
   });
   // add a user object reference to the request instance
