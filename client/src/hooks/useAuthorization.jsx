@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 import Context from '../Context';
 
@@ -16,6 +17,7 @@ import Context from '../Context';
  */
 export function useAuthorization() {
   const { user, setUser } = useContext(Context);
+  const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: (credentials) => {
@@ -27,8 +29,10 @@ export function useAuthorization() {
         body: JSON.stringify(credentials),
       });
     },
-    onSuccess: (data) => {
-      setUser(data);
+    onSuccess: async (data) => {
+      const result = await data.json();
+      setUser(result);
+      navigate('/');
     },
   });
 
