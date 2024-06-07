@@ -68,7 +68,8 @@ export function Header({ user }) {
 
 const headerProps = {
   user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    email: PropTypes.string,
+    firstName: PropTypes.string,
   }),
 };
 
