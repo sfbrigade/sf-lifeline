@@ -2,12 +2,10 @@ import React from 'react';
 import { ScrollArea } from '@mantine/core';
 import {
   IconDashboard,
-  IconGridGoldenratio,
   IconEmergencyBed,
   IconUsersGroup,
   IconZoomCheck,
   IconQrcode,
-  IconSettings,
   IconUserCircle,
   IconNotification,
   IconSpeakerphone,
@@ -21,7 +19,7 @@ const sections = [
   { label: 'Dashboard', icon: <IconDashboard stroke={2} />, href: '/' },
   {
     label: 'Management',
-    icon: <IconGridGoldenratio stroke={2} />,
+    icon: null,
     links: [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
       { label: 'Team Member', href: '/', icon: <IconUsersGroup stroke={2} /> },
@@ -31,7 +29,7 @@ const sections = [
   },
   {
     label: 'Settings',
-    icon: <IconSettings stroke={2} />,
+    icon: null,
     links: [
       { label: 'Account', href: '/', icon: <IconUserCircle stroke={2} /> },
       {
