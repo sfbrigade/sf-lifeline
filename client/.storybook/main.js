@@ -20,7 +20,8 @@ const config = {
     getAbsolutePath('storybook-dark-mode'),
     getAbsolutePath('@storybook/addon-mdx-gfm'),
     getAbsolutePath("@storybook/addon-mdx-gfm"),
-    '@chromatic-com/storybook'
+    getAbsolutePath("@chromatic-com/storybook"),
+    getAbsolutePath("@storybook/addon-mdx-gfm")
   ],
 
   framework: {
@@ -28,5 +29,10 @@ const config = {
     options: {},
   },
 
+  docs: {},
+
+  typescript: {
+    reactDocgen: 'react-docgen-typescript'
+  }
 };
 export default config;
