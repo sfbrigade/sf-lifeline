@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from './client.js';
+import { User, Role } from '../models/user.js';
 
 const MedicalSurgicalURL =
   'https://nemsis.org/media/nemsis_v3/master/SuggestedLists/MedicalSurgicalHistory/MedicalSurgicalHistory.json';
@@ -157,16 +157,23 @@ async function seedMedications() {
   }
 }
 
-async function main() {
-  // try {
-  //   await prisma.condition.deleteMany();
-  //   await prisma.allergy.deleteMany();
-  //   await prisma.medication.deleteMany();
-  //   console.log("clear db success");
-  // } catch (error) {
-  //   console.error('Error clearing tables:', error);
-  // }
+async function seedAdminUser() {
+  const now = new Date();
+  const data = {};
+  const user = new User(data);
+  user.firstName = 'Admin';
+  user.lastName = 'User';
+  user.email = 'admin.user@test.com';
+  await user.setPassword('Abcd1234!');
+  user.role = Role.ADMIN;
+  user.emailVerifiedAt = now;
+  user.approvedAt = now;
+  await prisma.user.create({ data });
+  console.log('Admin User seeded successfully');
+}
 
+async function main() {
+  await seedAdminUser();
   await seedConditions();
   await seedMedicationAllergies();
   await seedEnvFoodAllergies();

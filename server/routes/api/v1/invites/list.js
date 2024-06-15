@@ -9,6 +9,7 @@ export default async function (fastify, _opts) {
       schema: {
         querystring: {
           page: { type: 'integer' },
+          perPage: { type: 'integer' },
         },
         response: {
           [StatusCodes.OK]: {

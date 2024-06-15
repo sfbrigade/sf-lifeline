@@ -18,7 +18,7 @@ import { Sidebar } from '../../components/Sidebar/Sidebar';
  * Buttons for logged out buttons
  * @param {PropTypes.InferProps<typeof headerProps>} props
  */
-export function Header({ user, onLogin, onCreateAccount }) {
+export function Header({ user }) {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
@@ -32,11 +32,7 @@ export function Header({ user, onLogin, onCreateAccount }) {
               <Button>Profile</Button>
             </Group>
           ) : (
-            <LoggedOutButtons
-              visibleFrom="sm"
-              onLogin={onLogin}
-              onCreateAccount={onCreateAccount}
-            />
+            <LoggedOutButtons visibleFrom="sm" />
           )}
 
           <Burger
@@ -72,10 +68,9 @@ export function Header({ user, onLogin, onCreateAccount }) {
 
 const headerProps = {
   user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    email: PropTypes.string,
+    firstName: PropTypes.string,
   }),
-  onLogin: PropTypes.func.isRequired,
-  onCreateAccount: PropTypes.func.isRequired,
 };
 
 Header.propTypes = headerProps;
@@ -83,22 +78,21 @@ Header.defaultProps = {
   user: null,
 };
 
-const loggedOutButtonsProps = {
-  onLogin: PropTypes.func.isRequired,
-  onCreateAccount: PropTypes.func.isRequired,
-};
+const loggedOutButtonsProps = {};
 
 /**
  * Buttons for logged out buttons
  * @param {PropTypes.InferProps<typeof loggedOutButtonsProps>} props
  */
-const LoggedOutButtons = ({ onLogin, onCreateAccount, ...groupProps }) => {
+const LoggedOutButtons = ({ ...groupProps }) => {
   return (
     <Group {...groupProps}>
-      <Button variant="default" onClick={onLogin}>
+      <Button variant="default" component="a" href="/login">
         Log in
       </Button>
-      <Button onClick={onCreateAccount}>Sign up</Button>
+      <Button component="a" href="/login">
+        Sign up
+      </Button>
     </Group>
   );
 };

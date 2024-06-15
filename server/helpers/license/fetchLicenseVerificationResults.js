@@ -36,7 +36,7 @@ export default async function fetchLicenseVerificationResults(
     const emsPersonnelInfo = { name, licenseType, status, licenseNumber };
     return emsPersonnelInfo;
   } else if (noResults && !matchingPersonnel) {
-    throw new LicenseMatchError(404, 'No match.');
+    throw new LicenseMatchError(404, 'No license match');
   } else {
     throw new Error();
   }
