@@ -1,0 +1,11 @@
+.footer {
+  padding: 1rem 1rem;
+  width: 100%;
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.footer > div {
+  width: fit-content;
+  margin: 0 auto;
+}

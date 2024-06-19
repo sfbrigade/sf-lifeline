@@ -1,32 +1,19 @@
-import React from 'react';
-import { DataTable } from '../../../components/DataTable/DataTable';
+import React, { useState } from 'react';
+import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
 import { IconSearch } from '@tabler/icons-react';
 
 import classes from './adminUsers.module.css';
-import { Badge, Button, Group, TextInput } from '@mantine/core';
-
-const mockUsersList = [
-  {
-    id: '1',
-    name: 'tester',
-    status: 'tester',
-    role: 'tester',
-    languages: 'tester',
-    email: 'tester',
-    organization: 'tester',
-    more: '...',
-  },
-  {
-    id: '2',
-    name: 'tester2',
-    status: 'tester2',
-    role: 'tester2',
-    languages: 'tester2',
-    email: 'tester2',
-    organization: 'tester2',
-    more: '...',
-  },
-];
+import {
+  Badge,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Group,
+  LoadingOverlay,
+  TextInput,
+} from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 
 const headers = [
   { key: 'name', text: 'Name' },
@@ -38,15 +25,27 @@ const headers = [
   { key: 'more', text: '' },
 ];
 
-const pendingMembers = 4;
-
-// TODO: Add in search/filter for the table
-// TODO: Add custom render for cells
-// TODO: Add location highlighting in side navigation component
-
 export const AdminUsers = () => {
+  const [pendingMembers, setPendingMembers] = useState(0);
+  const { isFetching, data } = useQuery({
+    queryKey: ['users'],
+    queryFn: () =>
+      fetch('/api/v1/users/list', { credentials: 'include' })
+        .then((res) => {
+          return res.json();
+        })
+        .then((users) => {
+          setPendingMembers(users.length);
+
+          return users.map((user) => ({
+            ...user,
+            name: user.firstName + ' ' + user.lastName,
+          }));
+        }),
+  });
+
   return (
-    <>
+    <Container>
       <div className={classes.header}>
         <h4>Members</h4>
         <Group className={classes.actions}>
@@ -58,22 +57,30 @@ export const AdminUsers = () => {
           <div className={classes.relative}>
             <Button variant="default">Pending Members</Button>
             {pendingMembers > 0 ? (
-              <Badge className={classes.badge} size="xs" circle color='red'>
+              <Badge className={classes.badge} size="xs" circle color="red">
                 {pendingMembers}
               </Badge>
-            ): null}
+            ) : null}
           </div>
           <Button variant="filled">Invite Member</Button>
         </Group>
       </div>
-      <div className={classes.datatableWrapper}>
-        <DataTable
-          headers={headers}
-          rows={mockUsersList}
-          highlightOnHover
-          verticalSpacing="lg"
-        />
-      </div>
-    </>
+      <Divider mb="xl" />
+      <Container className={classes.datatableWrapper}>
+        <Box pos="relative">
+          <LoadingOverlay
+            visible={isFetching}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+          />
+          <UserDataTable
+            headers={headers}
+            rows={data}
+            highlightOnHover
+            verticalSpacing="lg"
+          />
+        </Box>
+      </Container>
+    </Container>
   );
 };

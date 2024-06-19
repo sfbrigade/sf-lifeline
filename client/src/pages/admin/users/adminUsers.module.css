@@ -1,7 +1,8 @@
 .datatableWrapper {
   border-radius: 12px;
   overflow: hidden;
-  border: calc(0.0625rem*var(--mantine-scale)) solid var(--mantine-color-gray-3);
+  border: calc(0.0625rem * var(--mantine-scale)) solid
+    var(--mantine-color-gray-3);
 
   margin: 0 2rem;
 }
