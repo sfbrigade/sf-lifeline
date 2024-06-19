@@ -8,7 +8,7 @@ function Index() {
   const { isFetching, error } = useQuery({
     queryKey: ['users'],
     queryFn: () =>
-      fetch('/api/v1/users').then((res) => {
+      fetch('/api/v1/users/list', { credentials: 'include' }).then((res) => {
         return res.json();
       }),
   });

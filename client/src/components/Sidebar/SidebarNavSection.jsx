@@ -37,7 +37,9 @@ export function SidebarNavSection({
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             {icon}
-            <Box ml="md">{label}</Box>
+            <Box className={classes.label} ml="xs">
+              {label}
+            </Box>
           </Box>
         </Group>
       </UnstyledButton>
@@ -69,12 +71,7 @@ export function SidebarLink({ icon, href, label }) {
   return (
     <div className={classes.sublink}>
       <div>{icon}</div>
-      <Text
-        component="a"
-        className={classes.link}
-        href={href}
-        onClick={(event) => event.preventDefault()}
-      >
+      <Text component="a" className={classes.link} href={href}>
         {label}
       </Text>
     </div>

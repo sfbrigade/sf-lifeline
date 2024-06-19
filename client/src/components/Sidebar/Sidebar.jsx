@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollArea } from '@mantine/core';
+import { ActionIcon, Container, Group, ScrollArea } from '@mantine/core';
 import {
   IconDashboard,
   IconEmergencyBed,
@@ -9,11 +9,13 @@ import {
   IconUserCircle,
   IconNotification,
   IconSpeakerphone,
+  IconSquareArrowRight,
 } from '@tabler/icons-react';
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
 import classes from './sidebar.module.css';
+import { useAuthorization } from '../../hooks/useAuthorization';
 
 const sections = [
   { label: 'Dashboard', icon: <IconDashboard stroke={2} />, href: '/' },
@@ -22,7 +24,11 @@ const sections = [
     icon: null,
     links: [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
-      { label: 'Team Member', href: '/', icon: <IconUsersGroup stroke={2} /> },
+      {
+        label: 'Team Member',
+        href: '/admin/users',
+        icon: <IconUsersGroup stroke={2} />,
+      },
       { label: 'Verification', href: '/', icon: <IconZoomCheck stroke={2} /> },
       { label: 'QR Code', href: '/', icon: <IconQrcode stroke={2} /> },
     ],
@@ -52,6 +58,10 @@ const sections = [
 export function Sidebar() {
   return (
     <nav className={classes.navbar}>
+      <Group>
+        <div>Icon</div>
+        <h3 className={classes.title}>SF Life Line</h3>
+      </Group>
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>
           {sections.map((item) => {
@@ -67,6 +77,35 @@ export function Sidebar() {
           })}
         </div>
       </ScrollArea>
+      <AccountFooter />
     </nav>
+  );
+}
+
+/**
+ *
+ */
+export function AccountFooter() {
+  const { user } = useAuthorization();
+
+  return (
+    <footer className={classes.footer}>
+      <Group justify="space-between" py="md" px="md">
+        <Container px="0">
+          <div>
+            <strong>{`${user?.firstName} ${user?.lastName}`}</strong>
+          </div>
+          <div>{user?.email}</div>
+        </Container>
+        <ActionIcon
+          component="a"
+          href="/account"
+          variant="default"
+          aria-label="account"
+        >
+          <IconSquareArrowRight />
+        </ActionIcon>
+      </Group>
+    </footer>
   );
 }

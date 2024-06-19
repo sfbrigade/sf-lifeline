@@ -4,11 +4,10 @@
   width: 100vw;
 
   display: grid;
-  grid-template-rows: 100% 1fr 100%;
+  grid-template-rows: 100% 1fr;
   grid-template-areas:
     'head'
-    'main'
-    'foot';
+    'main';
 }
 
 .layout-header {
@@ -19,21 +18,20 @@
   grid-area: main;
 }
 
-.layout-footer {
-  grid-area: foot;
-}
-
 .layout-sidebar {
   display: none;
   grid-area: sidebar;
 }
 
 @media (min-width: 48em) {
+  .layout-header {
+    display: none;
+  }
   .layout {
+    grid-template-columns: auto 1fr;
     grid-template-areas:
-      'head head head'
-      'sidebar main main'
-      'foot foot foot';
+      'sidebar main'
+      'sidebar main';
   }
 
   .layout-sidebar {
