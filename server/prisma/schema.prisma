@@ -3,11 +3,13 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [citext]
 }
 
 enum Role {
@@ -22,17 +24,25 @@ model User {
   firstName              String
   middleName             String?
   lastName               String
-  email                  String    @unique
+  email                  String    @unique @db.Citext
   emailVerificationToken String?
   emailVerifiedAt        DateTime?
   role                   Role
   hashedPassword         String
-  licenseNumber          String?
+  licenseNumber          String?   @unique
   licenseData            Json?
   approvedAt             DateTime?
   approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
   approvedById           String?   @db.Uuid
   approvedUsers          User[]    @relation("UserApprovedBy")
+  rejectedAt             DateTime?
+  rejectedBy             User?     @relation("UserRejectedBy", fields: [rejectedById], references: [id])
+  rejectedById           String?   @db.Uuid
+  rejectedUsers          User[]    @relation("UserRejectedBy")
+  disabledAt             DateTime?
+  disabledBy             User?     @relation("UserDisabledBy", fields: [disabledById], references: [id])
+  disabledById           String?   @db.Uuid
+  disabledUsers          User[]    @relation("UserDisabledBy")
   invitedUsers           Invite[]  @relation("UserInvitedBy")
   acceptedInvites        Invite[]  @relation("UserAcceptedBy")
   revokedInvites         Invite[]  @relation("UserRevokedBy")

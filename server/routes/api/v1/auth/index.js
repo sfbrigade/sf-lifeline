@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import User from '../../../../models/user.js';
 
 export default async function (fastify, _opts) {
@@ -16,8 +17,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          200: {
-            type: 'null',
+          [StatusCodes.OK]: {
             description:
               'Successfully authenticated. The response sets a cookie named `session` that should be sent in subsequent requests for authentication. This cookie will NOT appear in the web-based API tester infterface because it is an HttpOnly cookie that cannot be accessed by JavaScript.',
             headers: {
@@ -27,17 +27,35 @@ export default async function (fastify, _opts) {
                 },
               },
             },
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              firstName: { type: 'string' },
+              middleName: { type: 'string' },
+              lastName: { type: 'string' },
+              email: { type: 'string' },
+              emailVerifiedAt: { type: 'string' },
+              licenseNumber: { type: 'string' },
+              licenseData: { type: 'object' },
+              role: { type: 'string' },
+              approvedAt: { type: 'string' },
+              approvedById: { type: 'string' },
+              rejectedAt: { type: 'string' },
+              rejectedById: { type: 'string' },
+              createdAt: { type: 'string' },
+              updatedAt: { type: 'string' },
+            },
           },
         },
       },
     },
     async (request, reply) => {
       const { email, password } = request.body;
-      let user = await fastify.prisma.user.findUnique({ where: { email } });
-      if (!user) {
+      const data = await fastify.prisma.user.findUnique({ where: { email } });
+      if (!data) {
         return reply.notFound();
       }
-      user = new User(user);
+      const user = new User(data);
       const result = await user.comparePassword(password);
       if (!result) {
         return reply.unauthorized();
@@ -46,6 +64,7 @@ export default async function (fastify, _opts) {
         return reply.forbidden();
       }
       request.session.set('userId', user.id);
+      reply.send(data);
     },
   );
 
