@@ -23,11 +23,7 @@ export const UserDataTableCell = ({ type, value }) => {
     case 'role':
       return (
         <Table.Td>
-          <Badge color={value === 'ADMIN' ? 'purple' : 'blue'}>
-            <Text fw={700} tt="capitalize" size="sm">
-              {value.toLocaleLowerCase().replace('_', ' ')}
-            </Text>
-          </Badge>
+          <UserRoleBadge value={value ?? ''} />
         </Table.Td>
       );
     case 'more':
@@ -42,3 +38,39 @@ export const UserDataTableCell = ({ type, value }) => {
 };
 
 UserDataTableCell.propTypes = userDataTableProps;
+
+const userRoleBadgeProps = {
+  value: PropTypes.string.isRequired,
+};
+
+/**
+ * Basic DataTable
+ * @param {PropTypes.InferProps<typeof userRoleBadgeProps>} props
+ */
+const UserRoleBadge = ({ value }) => {
+  let color = 'purple';
+  switch (value) {
+    case 'ADMIN':
+      color = 'purple';
+      break;
+    case 'STAFF':
+      color = 'green';
+      break;
+    case 'FIRST_RESPONDER':
+      color = 'blue';
+      break;
+    case 'VOLUNTEER':
+    default:
+      color = 'orange';
+      break;
+  }
+  return (
+    <Badge color={color}>
+      <Text fw={700} tt="capitalize" size="sm">
+        {value.toLocaleLowerCase().replace('_', ' ')}
+      </Text>
+    </Badge>
+  );
+};
+
+UserRoleBadge.propTypes = userRoleBadgeProps;
