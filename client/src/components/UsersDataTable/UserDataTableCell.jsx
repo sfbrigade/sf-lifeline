@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Table } from '@mantine/core';
+import { Badge, Table, Text } from '@mantine/core';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
@@ -23,7 +23,11 @@ export const UserDataTableCell = ({ type, value }) => {
     case 'role':
       return (
         <Table.Td>
-          <Badge color={value === 'Admin' ? 'purple' : 'blue'}>{value}</Badge>
+          <Badge color={value === 'ADMIN' ? 'purple' : 'blue'}>
+            <Text fw={700} tt="capitalize" size="sm">
+              {value.toLocaleLowerCase().replace('_', ' ')}
+            </Text>
+          </Badge>
         </Table.Td>
       );
     case 'more':
