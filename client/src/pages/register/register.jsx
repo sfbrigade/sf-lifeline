@@ -1,8 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import classes from './register.module.css';
 import { RegisterForm } from './RegisterForm';
-import { Container, Flex } from '@mantine/core';
+import { Flex } from '@mantine/core';
 
+/**
+ * Register page component
+ */
 function Register() {
   const [user, setUser] = useState({
     firstName: '',
@@ -25,6 +28,10 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
 
+  /**
+   * Handles input fields in the Registration form
+   * @param {*} event text field events
+   */
   function onFormChange(event) {
     const newUserChange = {},
       newErrorsChange = {};
@@ -34,6 +41,10 @@ function Register() {
     setErrors({ ...errors, ...newErrorsChange });
   }
 
+  /**
+   * Checks if License Number is a valid license number.
+   * Toggles Error if invalid.
+   */
   function fetchLicenseNumber() {
     setIsLoading(true);
     fetch('/api/v1/licenses?license=' + user.licenseNumber)
@@ -61,6 +72,10 @@ function Register() {
       });
   }
 
+  /**
+   * Process the Registration with the Register API
+   * Toggles any field errors if any is invalid
+   */
   function handleRegister() {
     fetch('/api/v1/users/register', {
       method: 'POST',

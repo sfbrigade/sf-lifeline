@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, TextInput, Button, PasswordInput } from '@mantine/core';
 import classes from './register.module.css';
@@ -14,6 +14,10 @@ const registerFormProps = {
   formState: PropTypes.number.isRequired,
 };
 
+/**
+ * Register Form component for Register page
+ * @param {PropTypes.InferProps<typeof registerFormProps>} props
+ */
 export function RegisterForm({
   user,
   errors,
@@ -49,7 +53,7 @@ export function RegisterForm({
             type="button"
             className={classes.button}
           >
-            I don't have a license
+            I don&#39;t have a license
           </button>
           {formState === 2 && (
             <>
@@ -117,7 +121,7 @@ export function RegisterForm({
                 <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
                 if we have made a mistake.
               </p>
-              <h3>Don't have a license?</h3>
+              <h3>Don&#39;t have a license?</h3>
               <p>
                 Sign up to volunteer! Email{' '}
                 <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
