@@ -5,6 +5,7 @@ import Login from './pages/login/login';
 import { Layout } from './stories/Layout/Layout';
 import Context from './Context';
 import { useQuery } from '@tanstack/react-query';
+import Register from './pages/register/register';
 
 /**
  * Top-level application component.  *
@@ -34,6 +35,7 @@ function App() {
         </Route>
 
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );
