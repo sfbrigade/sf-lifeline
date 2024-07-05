@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import classes from './register.module.css';
-import { RegistrationForm } from './RegisterForm';
+import { RegisterForm } from './RegisterForm';
 import { Container, Flex } from '@mantine/core';
 
 function Register() {
@@ -105,10 +105,11 @@ function Register() {
           </p>
         </div>
         <Flex direction="column" gap="md">
-          <RegistrationForm
+          <RegisterForm
             user={user}
             errors={errors}
             isLoading={isLoading}
+            showLicenseHelper={showLicenseHelper}
             onFormChange={onFormChange}
             onSubmit={formState === 1 ? fetchLicenseNumber : handleRegister}
             setShowLicenseHelper={() => {
@@ -116,22 +117,6 @@ function Register() {
             }}
             formState={formState}
           />
-          <Container hidden={!showLicenseHelper} size="25rem">
-            <div className={classes.licenseHelper}>
-              <h3>License not found?</h3>
-              <p>
-                Contact{' '}
-                <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
-                if we have made a mistake.
-              </p>
-              <h3>Don't have a license?</h3>
-              <p>
-                Sign up to volunteer! Email{' '}
-                <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
-                with your name and contact information.
-              </p>
-            </div>
-          </Container>
         </Flex>
       </div>
     </div>

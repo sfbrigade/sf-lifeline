@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, TextInput, Button, PasswordInput } from '@mantine/core';
 import classes from './register.module.css';
 
-const registrationFormProps = {
+const registerFormProps = {
   user: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  showLicenseHelper: PropTypes.bool.isRequired,
   onFormChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   setShowLicenseHelper: PropTypes.func.isRequired,
   formState: PropTypes.number.isRequired,
 };
 
-export function RegistrationForm({
+export function RegisterForm({
   user,
   errors,
   isLoading,
+  showLicenseHelper,
   onFormChange,
   onSubmit,
   setShowLicenseHelper,
@@ -103,6 +105,26 @@ export function RegistrationForm({
               />
             </>
           )}
+          <Container
+            hidden={!showLicenseHelper}
+            size="25rem"
+            styles={{ root: { padding: 0 } }}
+          >
+            <div className={classes.licenseHelper}>
+              <h3>License not found?</h3>
+              <p>
+                Contact{' '}
+                <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
+                if we have made a mistake.
+              </p>
+              <h3>Don't have a license?</h3>
+              <p>
+                Sign up to volunteer! Email{' '}
+                <a href="mailto:admin@SFLifeline.com">admin@SFLifeline.com</a>{' '}
+                with your name and contact information.
+              </p>
+            </div>
+          </Container>
           <Button type="submit">
             {formState === 2 ? 'Send Interest Form' : 'Next'}
           </Button>
@@ -112,4 +134,4 @@ export function RegistrationForm({
   );
 }
 
-RegistrationForm.propTypes = registrationFormProps;
+RegisterForm.propTypes = registerFormProps;
