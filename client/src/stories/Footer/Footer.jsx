@@ -1,16 +1,9 @@
 import React from 'react';
-import { Container, Group, Anchor, Button } from '@mantine/core';
+import { Group, Button } from '@mantine/core';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
 
 import classes from './footer.module.css';
-
-const links = [
-  { link: '#', label: 'Contact' },
-  { link: '#', label: 'Privacy' },
-  { link: '#', label: 'Blog' },
-  { link: '#', label: 'Careers' },
-];
 
 /**
  *
