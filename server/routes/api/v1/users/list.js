@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify, _opts) {
   fastify.get(
-    '/list',
+    '/',
     {
       schema: {
         querystring: {

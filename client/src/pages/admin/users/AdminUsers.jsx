@@ -30,7 +30,7 @@ export const AdminUsers = () => {
   const { isFetching, data } = useQuery({
     queryKey: ['users'],
     queryFn: () =>
-      fetch('/api/v1/users/list', { credentials: 'include' })
+      fetch('/api/v1/users', { credentials: 'include' })
         .then((res) => {
           return res.json();
         })
