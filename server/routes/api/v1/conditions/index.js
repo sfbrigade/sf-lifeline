@@ -1,4 +1,5 @@
 import { Role } from '../../../../models/user.js';
+import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify) {
   fastify.get(
@@ -6,29 +7,42 @@ export default async function (fastify) {
     {
       schema: {
         querystring: {
+          page: { type: 'integer' },
+          perPage: { type: 'integer' },
           condition: { type: 'string' },
+        },
+      },
+      response: {
+        [StatusCodes.OK]: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              category: { type: 'string' },
+              system: { type: 'string' },
+              code: { type: 'string' },
+            },
+          },
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const condition = request.query.condition.trim();
+      const { page = '1', perPage = '25', condition } = request.query;
 
-      const query = {
-        orderBy: [{ name: 'asc' }],
-        where: { name: { contains: condition, mode: 'insensitive' } },
-        select: { name: true },
-      }
-      const results = await fastify.prisma.condition.findMany({
-        take: 10,
-        ...query
-      });
+      const options = {
+        page,
+        perPage,
+        orderBy: [
+          { name: 'asc' },
+        ],
+        where: { name: { contains: condition.trim(), mode: 'insensitive' } },
+      };
 
-      const { name: total } = await fastify.prisma.condition.count(query);
-
-      const showing = `Showing ${results.length} of ${total} result${results.length === 1 ? "" : "s"}.`;
-
-      reply.send({results, showing});
+      const { records, total } = await fastify.prisma.condition.paginate(options);
+      reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
 }

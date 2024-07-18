@@ -27,11 +27,11 @@ export default async function (fastify) {
           },
         },
       },
-      // onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
       const { page = '1', perPage = '25', allergy } = request.query;
-      
+
       const options = {
         page,
         perPage,
