@@ -38,7 +38,7 @@ export default async function (fastify) {
         orderBy: [
           { name: 'asc' },
         ],
-        where: { name: { contains: allergy, mode: 'insensitive' } },
+        where: { name: { contains: allergy.trim(), mode: 'insensitive' } },
       };
 
       const { records, total } = await fastify.prisma.allergy.paginate(options);
