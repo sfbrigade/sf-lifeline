@@ -1,16 +1,19 @@
 entity: condition
 items:
   condition1:
+    id: 471c8529-81fc-4129-8ca0-f1b7406ed90c
     name: Diabetes Type I
     category: Endocrine
     system: ICD10
     code: E10.8
   condition2:
+    id: 33f9a0d8-2abc-4d08-bc1a-bba5fae521a5
     name: Diabetes Type II
     category: Endocrine
     system: ICD10
     code: E11.8
   condition3:
+    id: 061047c4-00b2-4793-a58b-12f93a509d23
     name: Deaf
     category: EENT
     system: ICD10
