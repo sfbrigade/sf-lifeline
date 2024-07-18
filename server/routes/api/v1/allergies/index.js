@@ -1,4 +1,5 @@
 import { Role } from '../../../../models/user.js';
+import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify) {
   fastify.get(
@@ -6,30 +7,42 @@ export default async function (fastify) {
     {
       schema: {
         querystring: {
+          page: { type: 'integer' },
+          perPage: { type: 'integer' },
           allergy: { type: 'string' },
         },
       },
-      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
+      response: {
+        [StatusCodes.OK]: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              type: { type: 'string' },
+              system: { type: 'string' },
+              code: { type: 'string' },
+            },
+          },
+        },
+      },
+      // onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const allergy = request.query.allergy.trim();
-
-      const query = {
-        orderBy: [{ name: 'asc' }],
+      const { page = '1', perPage = '25', allergy } = request.query;
+      
+      const options = {
+        page,
+        perPage,
+        orderBy: [
+          { name: 'asc' },
+        ],
         where: { name: { contains: allergy, mode: 'insensitive' } },
-        select: { name: true },
-      }
+      };
 
-      const results = await fastify.prisma.allergy.findMany({
-        take: 10,
-        ...query
-      })
-
-      const { name: total } = await fastify.prisma.allergy.count(query)
-
-      const showing = `Showing ${results.length} of ${total} result${results.length === 1 ? "" : "s"}.`
-
-      reply.send({ results, showing });
+      const { records, total } = await fastify.prisma.allergy.paginate(options);
+      reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
 }
