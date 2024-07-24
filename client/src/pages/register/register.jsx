@@ -56,7 +56,16 @@ function Register() {
       })
       .then((license) => {
         if (license) {
-          setUser({ ...user, licenseNumber: license.licenseNumber });
+          const [lastName, name] = license.name.split(', ');
+          const match = name.match(/^(\w+)\s+(.+)$/);
+
+          setUser({
+            ...user,
+            firstName: match[1],
+            middleName: match[2],
+            lastName,
+            licenseNumber: license.licenseNumber,
+          });
           setFormState(2);
           setShowLicenseHelper(false);
         }
