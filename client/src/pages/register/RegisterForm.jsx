@@ -134,7 +134,7 @@ export function RegisterForm({
             </div>
           </Container>
           {formState !== 3 && 
-            <Button type="submit">
+            <Button type="submit" disabled={!user.licenseNumber.length}>
               {formState === 2 ? 'Send Interest Form' : 'Next'}
             </Button>
           }
