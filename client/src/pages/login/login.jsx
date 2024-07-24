@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from './login.module.css';
 
-const loginProps = {
-  isLoggedIn: PropTypes.bool,
-};
-
 /**
  * Login page component.
- * @param {PropTypes.InferProps<typeof loginProps>} props
  */
-function Login({ isLoggedIn }) {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const { handleLogin } = useAuthorization();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/');
-    }
-  }, [isLoggedIn, navigate]);
+  const location = useLocation();
 
   const login = () => {
     let isValid = true;
@@ -40,7 +28,8 @@ function Login({ isLoggedIn }) {
       isValid = false;
     }
     if (isValid) {
-      handleLogin({ email, password });
+      const { redirectTo } = location.state ?? {};
+      handleLogin({ email, password, redirectTo });
     }
   };
 
@@ -68,7 +57,5 @@ function Login({ isLoggedIn }) {
     </div>
   );
 }
-
-Login.propTypes = loginProps;
 
 export default Login;

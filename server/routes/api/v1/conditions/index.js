@@ -35,13 +35,12 @@ export default async function (fastify) {
       const options = {
         page,
         perPage,
-        orderBy: [
-          { name: 'asc' },
-        ],
+        orderBy: [{ name: 'asc' }],
         where: { name: { contains: condition.trim(), mode: 'insensitive' } },
       };
 
-      const { records, total } = await fastify.prisma.condition.paginate(options);
+      const { records, total } =
+        await fastify.prisma.condition.paginate(options);
       reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );

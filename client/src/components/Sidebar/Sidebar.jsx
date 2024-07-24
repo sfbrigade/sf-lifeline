@@ -86,7 +86,15 @@ export function Sidebar() {
  *
  */
 export function AccountFooter() {
-  const { user } = useAuthorization();
+  const { user, handleLogout } = useAuthorization();
+
+  /**
+   * @param {Event} event
+   */
+  async function onLogout(event) {
+    event.preventDefault();
+    handleLogout();
+  }
 
   return (
     <footer className={classes.footer}>
@@ -99,7 +107,8 @@ export function AccountFooter() {
         </Container>
         <ActionIcon
           component="a"
-          href="/account"
+          href="/logout"
+          onClick={onLogout}
           variant="default"
           aria-label="account"
         >
