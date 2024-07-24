@@ -15,14 +15,7 @@ function Register() {
     password: '',
     licenseNumber: '',
   });
-  const [errors, setErrors] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    licenseNumber: '',
-  });
+  const [errors, setErrors] = useState({});
 
   const [showLicenseHelper, setShowLicenseHelper] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +79,7 @@ function Register() {
    * Toggles any field errors if any is invalid
    */
   function handleRegister() {
+    setErrors({});
     fetch('/api/v1/users/register', {
       method: 'POST',
       headers: {
