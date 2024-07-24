@@ -99,3 +99,23 @@ export const State2ErrorForm = {
     formState: 2,
   },
 };
+
+export const State3Form = {
+  args: {
+    user: {
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      licenseNumber: '',
+    },
+    errors: {},
+    isLoading: false,
+    showLicenseHelper: false,
+    onFormChange: () => {},
+    onSubmit: () => {},
+    setShowLicenseHelper: () => {},
+    formState: 3,
+  },
+};

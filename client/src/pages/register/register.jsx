@@ -100,7 +100,8 @@ function Register() {
         return response.json();
       })
       .then((result) => {
-        console.log('success', result);
+        console.log('successfully registered', result);
+        setFormState(3);
       })
       .catch((error) => {
         error.json().then(({ message }) => {

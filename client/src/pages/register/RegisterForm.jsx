@@ -35,26 +35,30 @@ export function RegisterForm({
           event.preventDefault();
           onSubmit();
         }}
-      >
+      > 
         <Container size="25rem" className={classes.form}>
-          <TextInput
-            disabled={isLoading || formState === 2}
-            className=""
-            name="licenseNumber"
-            label="First Responder License Number"
-            placeholder="License Number"
-            value={user.licenseNumber}
-            onChange={onFormChange}
-            error={errors.licenseNumber}
-          />
-          <button
-            hidden={formState === 2}
-            onClick={setShowLicenseHelper}
-            type="button"
-            className={classes.button}
-          >
-            I don&#39;t have a license
-          </button>
+        {formState !== 3 && (
+          <> 
+            <TextInput
+              disabled={isLoading || formState === 2}
+              className=""
+              name="licenseNumber"
+              label="First Responder License Number"
+              placeholder="License Number"
+              value={user.licenseNumber}
+              onChange={onFormChange}
+              error={errors.licenseNumber}
+            />
+            <button
+              hidden={formState === 2}
+              onClick={setShowLicenseHelper}
+              type="button"
+              className={classes.button}s
+            >
+              I don&#39;t have a license
+            </button>
+          </>
+        )}
           {formState === 2 && (
             <>
               <TextInput
@@ -129,9 +133,24 @@ export function RegisterForm({
               </p>
             </div>
           </Container>
-          <Button type="submit">
-            {formState === 2 ? 'Send Interest Form' : 'Next'}
-          </Button>
+          {formState !== 3 && 
+            <Button type="submit">
+              {formState === 2 ? 'Send Interest Form' : 'Next'}
+            </Button>
+          }
+
+          {formState === 3 && 
+            <Container
+              size="25rem"
+              styles={{ root: { padding: 0 } }}
+            >
+              <div className={classes.formCompletion}>
+                <p>Form Complete! You will receive a confirmation email shortly. Acceptance into SF life line will also be sent via the email address you submitted.</p>
+                <p>Save this site to your browser window for convenience.</p>
+              </div>
+            </Container>
+          }
+         
         </Container>
       </form>
     </>

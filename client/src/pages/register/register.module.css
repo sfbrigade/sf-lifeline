@@ -55,6 +55,13 @@
   align-self: flex-end;
 }
 
+.formCompletion {
+  background: #EBFBEE;
+  padding: 0.1rem 1rem;
+  color: #2B8A3E;
+  font-size: small;
+}
+
 @media (min-width: 48em) {
   .register {
     display: flex;
