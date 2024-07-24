@@ -53,7 +53,7 @@ export function RegisterForm({
               hidden={formState === 2}
               onClick={setShowLicenseHelper}
               type="button"
-              className={classes.button}s
+              className={classes.button}
             >
               I don&#39;t have a license
             </button>
