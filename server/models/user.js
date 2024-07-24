@@ -15,8 +15,7 @@ class User extends Base {
 
     middleName: z
       .string()
-      .min(2, 'Middle name must be between 2 and 30 characters long')
-      .max(30, 'Middle name must be between 2 and 30 characters long')
+      .max(30, 'Middle name must be at most 30 characters long')
       .optional(),
 
     lastName: z

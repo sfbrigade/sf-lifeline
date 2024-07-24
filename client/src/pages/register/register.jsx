@@ -57,7 +57,7 @@ function Register() {
       .then((license) => {
         if (license) {
           const [lastName, name] = license.name.split(', ');
-          const match = name.match(/^(\w+)\s+(.+)$/);
+          const match = name.match(/^(\w+)\s*(.*)$/);
 
           setUser({
             ...user,
