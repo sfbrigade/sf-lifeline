@@ -1,27 +1,27 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+
+const indexProps = {
+  redirectToLogin: PropTypes.bool,
+};
 
 /**
  * Home page component.
+ * @param {PropTypes.InferProps<typeof indexProps>} props
  */
-function Index() {
-  const { isFetching, error } = useQuery({
-    queryKey: ['users'],
-    queryFn: () =>
-      fetch('/api/v1/users', { credentials: 'include' }).then((res) => {
-        return res.json();
-      }),
-  });
+function Index({ redirectToLogin }) {
+  const navigate = useNavigate();
 
-  if (isFetching) {
-    return <main>Index is loading</main>;
-  }
-
-  if (error) {
-    return <main>Index fetch failed</main>;
-  }
+  useEffect(() => {
+    if (redirectToLogin) {
+      navigate('/login');
+    }
+  }, [redirectToLogin, navigate]);
 
   return <main>Index is working</main>;
 }
+
+Index.propTypes = indexProps;
 
 export default Index;

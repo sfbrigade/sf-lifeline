@@ -13,7 +13,7 @@ import { AdminUsers } from './pages/admin/users/AdminUsers';
  */
 function App() {
   const { setUser } = useContext(Context);
-  useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ['user'],
     queryFn: () => {
       return fetch('/api/v1/users/me', { credentials: 'include' })
@@ -26,16 +26,17 @@ function App() {
         });
     },
   });
+  const isLoggedIn = !isLoading && !!data?.id;
 
   return (
     <>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Index redirectToLogin={!isLoggedIn} />} />
           <Route path="/admin/users" element={<AdminUsers />} />
         </Route>
 
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />} />
       </Routes>
     </>
   );
