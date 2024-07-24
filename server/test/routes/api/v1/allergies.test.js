@@ -15,67 +15,121 @@ describe('/api/v1/allergies', () => {
 
   describe('GET /', () => {
     it('should return valid results for admin user', async () => {
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy=p')
+        .get('/api/v1/allergies?allergy=p&perPage=1')
         .headers(headers);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'Grass Pollen' }, { name: 'Pollen' }], showing:'Showing 2 of 2 results.'});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      console.log("GET / Headers" ,reply.payload)
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload),
+        [{
+          id: "ceb1cd02-d5a7-46ef-915f-766cee886d0d",
+          name: "Grass Pollen",
+          type: "OTHER",
+          system: "SNOMED",
+          code: "418689008"
+        }]
+      );
     });
 
     it('should return valid results for staff user', async (t) => {
       const staffHeaders = await t.authenticate('staff.user@test.com', 'test');
 
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy=p')
+        .get('/api/v1/allergies?allergy=p&perPage=1')
         .headers(staffHeaders);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'Grass Pollen' }, { name: 'Pollen' }], showing:'Showing 2 of 2 results.'});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload),
+        [{
+          id: "ceb1cd02-d5a7-46ef-915f-766cee886d0d",
+          name: "Grass Pollen",
+          type: "OTHER",
+          system: "SNOMED",
+          code: "418689008"
+        }]
+      );
     });
 
     it('should return valid results for volunteer user', async (t) => {
       const volunteerHeaders = await t.authenticate('volunteer.user@test.com', 'test');
 
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy=p')
+        .get('/api/v1/allergies?allergy=p&perPage=1')
         .headers(volunteerHeaders);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'Grass Pollen' }, { name: 'Pollen' }], showing:'Showing 2 of 2 results.'});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload),
+        [{
+          id: "ceb1cd02-d5a7-46ef-915f-766cee886d0d",
+          name: "Grass Pollen",
+          type: "OTHER",
+          system: "SNOMED",
+          code: "418689008"
+        }]
+      );
     });
 
     it('require a user to be admin/staff/volunteer to make requests', async () => {
 
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy=p')
+        .get('/api/v1/allergies?allergy=p&perPage=1')
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
     it('should return paginated results of all allergies when no query provided', async () => {
 
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy')
+        .get('/api/v1/allergies?allergy=&perPage=1')
         .headers(headers);
 
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-      assert.deepStrictEqual(JSON.parse(res.payload), {results: [{ name: 'Grass Pollen' }, { name: 'Pollen' }, {name: "Wool"}], showing:'Showing 3 of 3 results.'});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/allergies?allergy=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/allergies?allergy=&perPage=1&page=3>; rel="last"',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload),
+        [{
+          id: "ceb1cd02-d5a7-46ef-915f-766cee886d0d",
+          name: "Grass Pollen",
+          type: "OTHER",
+          system: "SNOMED",
+          code: "418689008"
+        }]
+      );
     });
 
     it('should return no results from database an unknown allergy', async () => {
 
-      const res = await app
+      const reply = await app
         .inject()
-        .get('/api/v1/allergies?allergy=newallergy')
+        .get('/api/v1/allergies?allergy=newallergy&perPage=1')
         .headers(headers);
 
-      assert.deepStrictEqual(JSON.parse(res.payload), {results: [], showing:'Showing 0 of 0 results.'});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload), []);
     });
 
   });
