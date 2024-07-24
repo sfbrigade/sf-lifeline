@@ -16,7 +16,6 @@ function Register() {
     licenseNumber: '',
   });
   const [errors, setErrors] = useState({});
-
   const [showLicenseHelper, setShowLicenseHelper] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
