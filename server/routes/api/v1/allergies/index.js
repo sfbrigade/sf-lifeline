@@ -35,9 +35,7 @@ export default async function (fastify) {
       const options = {
         page,
         perPage,
-        orderBy: [
-          { name: 'asc' },
-        ],
+        orderBy: [{ name: 'asc' }],
         where: { name: { contains: allergy.trim(), mode: 'insensitive' } },
       };
 

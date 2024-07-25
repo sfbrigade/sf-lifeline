@@ -92,8 +92,7 @@ function Register() {
         }
         return response.json();
       })
-      .then((result) => {
-        console.log('successfully registered', result);
+      .then(() => {
         setFormState(3);
       })
       .catch((error) => {

@@ -1,35 +1,27 @@
 import React from 'react';
-import { Container, Group, Anchor } from '@mantine/core';
-import './footer.css';
+import { Group, Button } from '@mantine/core';
 
-const links = [
-  { link: '#', label: 'Contact' },
-  { link: '#', label: 'Privacy' },
-  { link: '#', label: 'Blog' },
-  { link: '#', label: 'Careers' },
-];
+import { useAuthorization } from '../../hooks/useAuthorization';
+
+import classes from './footer.module.css';
 
 /**
- * Basic Footer component
+ *
  */
-export const Footer = () => {
+export function Footer() {
+  const { user } = useAuthorization();
+
   return (
-    <footer className="footer">
-      <Container>
-        <Group className="links">
-          {links.map((link) => (
-            <Anchor
-              c="dimmed"
-              key={link.label}
-              href={link.link}
-              onClick={(event) => event.preventDefault()}
-              size="sm"
-            >
-              {link.label}
-            </Anchor>
-          ))}
-        </Group>
-      </Container>
+    <footer className={classes.footer}>
+      <Group justify="space-between" py="md" px="sm">
+        <div>
+          <div>
+            <strong>{`${user?.firstName} ${user?.lastName}`}</strong>
+          </div>
+          <div>{user?.email}</div>
+        </div>
+        <Button>G</Button>
+      </Group>
     </footer>
   );
-};
+}

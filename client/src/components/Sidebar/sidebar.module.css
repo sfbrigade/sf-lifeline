@@ -11,14 +11,8 @@
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
-.header {
-  padding: var(--mantine-spacing-md);
-  padding-top: 0;
-  margin-left: calc(var(--mantine-spacing-md) * -1);
-  margin-right: calc(var(--mantine-spacing-md) * -1);
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  border-bottom: rem(1px) solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+.title {
+  margin-bottom: 0;
 }
 
 .links {
@@ -52,7 +46,17 @@
 .sectionHeaderButton {
   margin-top: 1rem;
 }
+
+.label {
+  font-size: 0.875rem;
+}
+
 .section {
   margin-top: 0.5rem;
   padding-left: 0.5rem;
+}
+
+.footer {
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }

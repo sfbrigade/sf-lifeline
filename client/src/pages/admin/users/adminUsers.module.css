@@ -1,0 +1,33 @@
+.datatableWrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  border: calc(0.0625rem * var(--mantine-scale)) solid
+    var(--mantine-color-gray-3);
+
+  margin: 0 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+}
+
+.header > * {
+  display: inline-block;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.25rem;
+}
