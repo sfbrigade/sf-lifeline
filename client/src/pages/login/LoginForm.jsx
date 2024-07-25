@@ -36,41 +36,52 @@ export function LoginForm({
 }) {
   const [visible, { toggle }] = useDisclosure(false);
 
+  /**
+   *
+   * @param {Event} event
+   */
+  function onSubmit(event) {
+    event.preventDefault();
+    onLogin();
+  }
+
   return (
     <>
-      <Container size="25rem">
-        <TextInput
-          className={classes.email}
-          label="Email"
-          placeholder="user@email.com"
-          value={email}
-          onChange={onEmailChange}
-          error={emailError}
-        />
-        <PasswordInput
-          className={classes.password}
-          label="Password"
-          placeholder="password"
-          value={password}
-          onChange={onPasswordChange}
-          visible={visible}
-          onVisibilityChange={toggle}
-          error={passwordError}
-        />
-      </Container>
-      <Container size="25rem">
-        <Button
-          className={classes.loginBtn}
-          variant="filled"
-          fullWidth
-          onClick={onLogin}
-        >
-          Log in
-        </Button>
-        <div className={classes.anchor}>
-          <Anchor href="/forgot-password">Forgot password</Anchor>
-        </div>
-      </Container>
+      <form onSubmit={onSubmit}>
+        <Container size="25rem">
+          <TextInput
+            className={classes.email}
+            label="Email"
+            placeholder="user@email.com"
+            value={email}
+            onChange={onEmailChange}
+            error={emailError}
+          />
+          <PasswordInput
+            className={classes.password}
+            label="Password"
+            placeholder="password"
+            value={password}
+            onChange={onPasswordChange}
+            visible={visible}
+            onVisibilityChange={toggle}
+            error={passwordError}
+          />
+        </Container>
+        <Container size="25rem">
+          <Button
+            className={classes.loginBtn}
+            variant="filled"
+            fullWidth
+            type="submit"
+          >
+            Log in
+          </Button>
+          <div className={classes.anchor}>
+            <Anchor href="/forgot-password">Forgot password</Anchor>
+          </div>
+        </Container>
+      </form>
     </>
   );
 }

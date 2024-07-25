@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Header } from '../Header/Header';
-import { Footer } from '../Footer/Footer';
 import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
@@ -24,9 +23,6 @@ export const Layout = () => {
       </div>
       <div className="layout-content">
         <Outlet />
-      </div>
-      <div className="layout-footer">
-        <Footer />
       </div>
     </div>
   );

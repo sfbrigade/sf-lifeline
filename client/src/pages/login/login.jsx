@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useAuthorization } from '../../hooks/useAuthorization';
+import { useLocation } from 'react-router-dom';
 
+import { useAuthorization } from '../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from './login.module.css';
@@ -14,6 +15,7 @@ function Login() {
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const { handleLogin } = useAuthorization();
+  const location = useLocation();
 
   const login = () => {
     let isValid = true;
@@ -26,7 +28,8 @@ function Login() {
       isValid = false;
     }
     if (isValid) {
-      handleLogin({ email, password });
+      const { redirectTo } = location.state ?? {};
+      handleLogin({ email, password, redirectTo });
     }
   };
 

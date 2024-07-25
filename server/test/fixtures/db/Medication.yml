@@ -5,16 +5,16 @@ items:
     name: acetaminophen / ibuprofen
     altNames: ''
     system: RXNORM
-    code: "818102"
+    code: '818102'
   medication2:
     id: cd22bf21-5b35-45ac-8a56-4cab8c68ae25
     name: ibuprofen 125 MG
     altNames: ''
     system: RXNORM
-    code: "2387531"
+    code: '2387531'
   medication3:
     id: a6279695-be28-4c93-b95f-588119841353
     name: Prozac
     altNames: ''
     system: RXNORM
-    code: "261287"
+    code: '261287'
