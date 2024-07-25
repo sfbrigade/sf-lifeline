@@ -15,15 +15,7 @@ function Register() {
     password: '',
     licenseNumber: '',
   });
-  const [errors, setErrors] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    licenseNumber: '',
-  });
-
+  const [errors, setErrors] = useState({});
   const [showLicenseHelper, setShowLicenseHelper] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
@@ -57,7 +49,7 @@ function Register() {
       .then((license) => {
         if (license) {
           const [lastName, name] = license.name.split(', ');
-          const match = name.match(/^(\w+)\s+(.+)$/);
+          const match = name.match(/^(\w+)\s*(.*)$/);
 
           setUser({
             ...user,
@@ -86,6 +78,7 @@ function Register() {
    * Toggles any field errors if any is invalid
    */
   function handleRegister() {
+    setErrors({});
     fetch('/api/v1/users/register', {
       method: 'POST',
       headers: {
