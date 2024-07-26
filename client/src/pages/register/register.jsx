@@ -80,6 +80,7 @@ function Register() {
    */
   function handleRegister() {
     setErrors({});
+    setIsLoading(true);
     fetch('/api/v1/users/register', {
       method: 'POST',
       headers: {
@@ -109,6 +110,9 @@ function Register() {
           });
           setErrors(updatedErrors);
         });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, TextInput, Button, PasswordInput } from '@mantine/core';
+import { Container, TextInput, Button, PasswordInput, Loader } from '@mantine/core';
 import classes from './register.module.css';
 
 const registerFormProps = {
@@ -134,8 +134,10 @@ export function RegisterForm({
             </div>
           </Container>
           {formState !== 3 && 
-            <Button type="submit" disabled={!user.licenseNumber.length}>
-              {formState === 2 ? 'Send Interest Form' : 'Next'}
+            <Button type="submit" disabled={!user.licenseNumber.length || isLoading}>
+              {
+                isLoading ? <Loader size={20} /> : formState === 2 ? 'Send Interest Form' : 'Next'
+              }
             </Button>
           }
 
