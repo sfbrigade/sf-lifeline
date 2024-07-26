@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QRCode } from 'react-qrcode-logo';
 
 /**
- * 
+ *
  * @returns {React.ReactElement}
  */
 function AdminPatientsGenerate() {
