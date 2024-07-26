@@ -16,7 +16,6 @@ function Register() {
     licenseNumber: '',
   });
   const [errors, setErrors] = useState({});
-
   const [showLicenseHelper, setShowLicenseHelper] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
@@ -94,8 +93,7 @@ function Register() {
         }
         return response.json();
       })
-      .then((result) => {
-        console.log('successfully registered', result);
+      .then(() => {
         setFormState(3);
       })
       .catch((error) => {

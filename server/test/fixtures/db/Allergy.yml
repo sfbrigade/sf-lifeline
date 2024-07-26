@@ -1,0 +1,20 @@
+entity: allergy
+items:
+  allergy1:
+    id: 5c057fc3-15d2-40fc-b664-707d04ba66c2
+    name: Pollen
+    type: OTHER
+    system: SNOMED
+    code: '300910009'
+  allergy2:
+    id: ceb1cd02-d5a7-46ef-915f-766cee886d0d
+    name: Grass Pollen
+    type: OTHER
+    system: SNOMED
+    code: '418689008'
+  allergy3:
+    id: ebcca2da-655f-48d4-be90-307f36870dc0
+    name: Wool
+    type: OTHER
+    system: SNOMED
+    code: '425605001'

@@ -172,12 +172,52 @@ async function seedAdminUser() {
   console.log('Admin User seeded successfully');
 }
 
+async function seedUsers() {
+  const names = [
+    'Staff User',
+    'Volunteer User',
+    'First Responder',
+    'John Doe',
+    'Jane Doe',
+  ];
+  const roles = [Role.STAFF, Role.VOLUNTEER, Role.FIRST_RESPONDER, Role.ADMIN];
+
+  const seedPromises = names.map((name, index) => {
+    const tuple = name.split(' ');
+    return seedUser(tuple[0], tuple[1], roles[index % roles.length]);
+  });
+
+  await Promise.all(seedPromises);
+  console.log('Seeded multiple users successfully');
+}
+
+/**
+ *
+ * @param {string} first name
+ * @param {string} last name
+ * @param {Role} role user role
+ */
+async function seedUser(first, last, role) {
+  const now = new Date();
+  const data = {};
+  const user = new User(data);
+  user.firstName = first;
+  user.lastName = last;
+  user.email = `${first}.${last}@test.com`;
+  await user.setPassword('Abcd1234!');
+  user.role = role;
+  user.emailVerifiedAt = now;
+  user.approvedAt = now;
+  await prisma.user.create({ data });
+}
+
 async function main() {
   await seedAdminUser();
   await seedConditions();
   await seedMedicationAllergies();
   await seedEnvFoodAllergies();
   await seedMedications();
+  await seedUsers();
 }
 
 main()

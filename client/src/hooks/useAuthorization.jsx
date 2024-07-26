@@ -30,25 +30,20 @@ export function useAuthorization() {
         credentials: 'include',
       });
     },
-    onSuccess: async (data) => {
+    onSuccess: async (data, { redirectTo }) => {
       const result = await data.json();
       setUser(result);
-      navigate('/');
+      navigate(redirectTo ?? '/');
     },
   });
 
   const logoutMutation = useMutation({
-    mutationFn: (userToLogout) => {
-      return fetch('/api/v1/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userToLogout),
-      });
+    mutationFn: () => {
+      return fetch('/api/v1/auth/logout');
     },
     onSuccess: () => {
       setUser(null);
+      navigate('/');
     },
   });
 
@@ -57,7 +52,7 @@ export function useAuthorization() {
   };
 
   const handleLogout = async () => {
-    logoutMutation.mutate(user);
+    logoutMutation.mutate();
   };
 
   return {

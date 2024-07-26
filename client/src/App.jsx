@@ -1,41 +1,100 @@
-import React, { useContext } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import {
+  Outlet,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { Loader } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
+import PropTypes from 'prop-types';
+
+import { Layout } from './stories/Layout/Layout';
 import Index from './pages';
 import Login from './pages/login/login';
-import { Layout } from './stories/Layout/Layout';
-import Context from './Context';
-import { useQuery } from '@tanstack/react-query';
 import Register from './pages/register/register';
+import Dashboard from './pages/dashboard/dashboard';
+import { AdminUsers } from './pages/admin/users/AdminUsers';
+
+const RedirectProps = {
+  isLoading: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedInRequired: PropTypes.bool,
+};
+
+/**
+ * Redirects browser based on props
+ * @param {PropTypes.InferProps<typeof RedirectProps>} props
+ * @returns {React.ReactElement}
+ */
+function Redirect({ isLoading, isLoggedIn, isLoggedInRequired }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoading) {
+      if (isLoggedInRequired && !isLoggedIn) {
+        let redirectTo = `${location.pathname}`;
+        if (location.search) {
+          redirectTo = `${redirectTo}?${location.search}`;
+        }
+        navigate('/login', { state: { redirectTo } });
+      } else if (!isLoggedInRequired && isLoggedIn) {
+        navigate('/dashboard');
+      }
+    }
+  }, [isLoading, isLoggedIn, isLoggedInRequired, location, navigate]);
+  if (isLoading) {
+    return <Loader />;
+  }
+  return <Outlet />;
+}
+
+Redirect.propTypes = RedirectProps;
 
 /**
  * Top-level application component.  *
  * @returns {React.ReactElement}
  */
 function App() {
-  const { setUser } = useContext(Context);
-  useQuery({
+  const { user, setUser } = useContext(Context);
+  const { isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => {
       return fetch('/api/v1/users/me', { credentials: 'include' })
         .then((response) => response.json())
-        .then((user) => {
-          if (user) {
-            setUser(user);
-          }
-          return user;
+        .then((newUser) => {
+          setUser(newUser);
+          return newUser;
         });
     },
   });
+  const isLoggedIn = !isLoading && !!user?.id;
 
   return (
     <>
       <Routes>
-        <Route element={<Layout />}>
+        <Route
+          element={
+            <Redirect
+              isLoading={isLoading}
+              isLoggedIn={isLoggedIn}
+              isLoggedInRequired={true}
+            />
+          }
+        >
+          <Route element={<Layout />}>
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Route>
+        <Route
+          element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
+        >
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
         </Route>
-
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );
