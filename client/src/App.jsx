@@ -17,6 +17,8 @@ import Register from './pages/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
+import Context from './Context';
+
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
