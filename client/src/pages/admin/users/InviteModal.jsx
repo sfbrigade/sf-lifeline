@@ -4,10 +4,12 @@ import { useForm } from '@mantine/form';
 import PropTypes from 'prop-types';
 import classes from './admin.module.css';
 
-const inviteModalProps = {
-  opened: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
-};
+/**
+ * Invite Modal
+ *  @param {object} props - The prop for the component
+ *  @param {boolean} props.opened - State of modal being open or not
+ *  @param {Function} props.close - Function to close the modal
+ */
 export function InviteModal({ opened, close }) {
   const form = useForm({
     mode: 'uncontrolled',
@@ -26,6 +28,13 @@ export function InviteModal({ opened, close }) {
     },
   });
 
+  /**
+   * Calls API to create an invite
+   * @param {object} props - The props that contain form values
+   * @param {string} props.role - Role value on the form
+   * @param {string} props.name - Name of recipient
+   * @param {string} props.email - Email of recipient
+   */
   function onSubmit({ role, name, email }) {
     const formattedBody = {
       recipients: `${name} <${email}>`,
@@ -59,7 +68,7 @@ export function InviteModal({ opened, close }) {
       title={
         <div>
           <h3>Single Invite</h3>
-          <p>Select the role and enter the recepient's name and email</p>
+          <p>Select the role and enter the recepient&apos;s name and email</p>
         </div>
       }
       className={classes.modal}
@@ -96,5 +105,10 @@ export function InviteModal({ opened, close }) {
     </Modal>
   );
 }
+
+const inviteModalProps = {
+  opened: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+};
 
 InviteModal.propTypes = inviteModalProps;
