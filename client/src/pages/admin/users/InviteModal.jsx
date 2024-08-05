@@ -16,24 +16,57 @@ export function InviteModal({ opened, close }) {
       name: '',
       email: '',
     },
+
+    validate: {
+      name: (value) =>
+        /^[a-zA-Z\s\-']{2,30}$/.test(value)
+          ? null
+          : "Name must be between 2 and 30 characters long. It can only contain alphabetic characters (A-Z, a-z), spaces, hyphens (-), and apostrophes (').",
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+    },
   });
 
-  const title = (
-    <div>
-      <h3>Single Invite</h3>
-      <p>Select the role and enter the recepient's name and email</p>
-    </div>
-  );
+  function onSubmit({ role, name, email }) {
+    const formattedBody = {
+      recipients: `${name} <${email}>`,
+      role: role.toLocaleUpperCase().replace(' ', '_'),
+    };
+    fetch('/api/v1/invites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formattedBody),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return Promise.reject(response);
+        }
+        return response.json();
+      })
+      .then(() => {
+        close();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <Modal
       opened={opened}
       onClose={close}
-      title={title}
+      title={
+        <div>
+          <h3>Single Invite</h3>
+          <p>Select the role and enter the recepient's name and email</p>
+        </div>
+      }
       className={classes.modal}
     >
       <form
         className="form"
-        onSubmit={form.onSubmit((values) => console.log(values))}
+        onSubmit={form.onSubmit((values) => onSubmit(values))}
       >
         <Select
           label="Member Type"
