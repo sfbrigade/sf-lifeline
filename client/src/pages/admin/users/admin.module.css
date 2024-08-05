@@ -31,3 +31,19 @@
   top: -0.35rem;
   right: -0.25rem;
 }
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+}

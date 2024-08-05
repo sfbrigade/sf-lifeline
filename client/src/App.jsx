@@ -16,6 +16,7 @@ import Login from './pages/login/login';
 import Register from './pages/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
+import { InviteModal } from './pages/admin/users/InviteModal';
 
 import Context from './Context';
 
