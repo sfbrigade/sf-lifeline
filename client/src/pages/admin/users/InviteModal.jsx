@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Select, TextInput, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import PropTypes from 'prop-types';
 import classes from './admin.module.css';
 
@@ -55,9 +56,19 @@ export function InviteModal({ opened, close }) {
       })
       .then(() => {
         onClose();
+        notifications.show({
+          color: 'green',
+          title: `Invite sent to ${name}`,
+          autoClose: 5000,
+        });
       })
       .catch((error) => {
         console.log(error);
+        notifications.show({
+          color: 'red',
+          title: `Invite failed to send`,
+          autoClose: 5000,
+        });
       });
   }
 

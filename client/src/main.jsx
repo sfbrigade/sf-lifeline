@@ -8,6 +8,8 @@ import '@mantine/core/styles.css';
 import { theme } from './theme';
 
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import { ContextProvider } from './Context.jsx';
 
 const queryClient = new QueryClient({});
@@ -18,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <MantineProvider theme={theme}>
+            <Notifications position="bottom-right" />
             <App />
           </MantineProvider>
         </BrowserRouter>
