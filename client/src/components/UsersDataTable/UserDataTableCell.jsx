@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Table, Text } from '@mantine/core';
+import { Badge, Checkbox, Table, Text } from '@mantine/core';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
   type: PropTypes.string.isRequired,
-  value: PropTypes.node,
+  value: PropTypes.any,
 };
 
 /**
@@ -30,6 +30,12 @@ export const UserDataTableCell = ({ type, value }) => {
       return (
         <Table.Td>
           <DataTableMenu />
+        </Table.Td>
+      );
+    case 'checkbox':
+      return (
+        <Table.Td>
+          <Checkbox checked={value.selected} onChange={value.select} />
         </Table.Td>
       );
     default:

@@ -18,6 +18,7 @@ import Dashboard from './pages/dashboard/dashboard';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
+import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -87,6 +88,10 @@ function App() {
         >
           <Route element={<Layout />}>
             <Route path="/admin/users" element={<AdminUsers />} />
+            <Route
+              path="/admin/pending-users"
+              element={<AdminPendingUsers />}
+            />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>

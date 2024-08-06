@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
 import { IconSearch } from '@tabler/icons-react';
 
@@ -26,6 +27,7 @@ const headers = [
 ];
 
 export const AdminUsers = () => {
+  const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
   const { isFetching, data } = useQuery({
     queryKey: ['users'],
@@ -55,7 +57,12 @@ export const AdminUsers = () => {
             placeholder="Search"
           />
           <div className={classes.relative}>
-            <Button variant="default">Pending Members</Button>
+            <Button
+              variant="default"
+              onClick={() => navigate('/admin/pending-users')}
+            >
+              Pending Members
+            </Button>
             {pendingMembers > 0 ? (
               <Badge className={classes.badge} size="xs" circle color="red">
                 {pendingMembers}
