@@ -6,3 +6,9 @@
 
   margin: 0 2rem;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+}

@@ -1,14 +1,24 @@
-import { Container, Box, LoadingOverlay, Checkbox } from '@mantine/core';
+import {
+  Container,
+  Box,
+  LoadingOverlay,
+  Checkbox,
+  Group,
+  Button,
+} from '@mantine/core';
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { IconChevronLeft } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 import classes from './adminPendingUsers.module.css';
-import { useQuery } from '@tanstack/react-query';
 import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
 
 /**
  * Page for admin to view pending users
  */
 function AdminPendingUsers() {
+  const navigate = useNavigate();
   const [selectedRows, setSelectedRows] = useState([]);
   const { isFetching, data = [] } = useQuery({
     queryKey: ['users'],
@@ -58,7 +68,13 @@ function AdminPendingUsers() {
     { key: 'more', text: '' },
   ];
   return (
-    <Container>
+    <Container fluid={true} mt={20}>
+      <IconChevronLeft
+        stroke={1}
+        size={32}
+        onClick={() => navigate(-1)}
+        cursor={'pointer'}
+      />
       <Container className={classes.datatableWrapper}>
         <LoadingOverlay
           visible={isFetching}
@@ -66,6 +82,14 @@ function AdminPendingUsers() {
           overlayProps={{ radius: 'sm', blur: 2 }}
         />
         <Box>
+          <Container className={classes.header}>
+            <h4>Pending Members</h4>
+            <Group>
+              <Button variant="default">Deny</Button>
+              <Button variant="filled">Approve</Button>
+            </Group>
+          </Container>
+
           <UserDataTable
             headers={headers}
             rows={transformedData}
