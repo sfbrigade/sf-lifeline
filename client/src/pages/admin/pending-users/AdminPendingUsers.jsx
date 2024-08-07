@@ -19,25 +19,33 @@ import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable
  */
 function AdminPendingUsers() {
   const navigate = useNavigate();
-  const [selectedRows, setSelectedRows] = useState([]);
-  const { isFetching, data = [] } = useQuery({
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    isFetching,
+    data = [],
+    refetch,
+  } = useQuery({
     queryKey: ['users'],
     queryFn: () =>
-      fetch('/api/v1/users', { credentials: 'include' }).then((res) => {
-        return res.json();
-      }),
+      fetch('/api/v1/users?status=unapproved', { credentials: 'include' }).then(
+        (res) => {
+          return res.json();
+        },
+      ),
   });
 
   const transformedData = data.map((user) => ({
     ...user,
     name: `${user.firstName} ${user.lastName}`,
+    status: 'Pending',
     checkbox: {
-      selected: selectedRows.includes(user.email),
+      selected: selectedUsers.includes(user),
       select: (e) => {
-        setSelectedRows((prevSelectedRows) => {
+        setSelectedUsers((prevSelectedRows) => {
           return e.target.checked
-            ? [...prevSelectedRows, user.email]
-            : prevSelectedRows.filter((email) => email !== user.email);
+            ? [...prevSelectedRows, user]
+            : prevSelectedRows.filter((other) => other.email !== user.email);
         });
       },
     },
@@ -51,9 +59,9 @@ function AdminPendingUsers() {
           aria-label="Select row"
           onChange={(e) => {
             if (e.target.checked) {
-              setSelectedRows(data.map((user) => user.email));
+              setSelectedUsers(data);
             } else {
-              setSelectedRows([]);
+              setSelectedUsers([]);
             }
           }}
         />
@@ -67,6 +75,36 @@ function AdminPendingUsers() {
     { key: 'organization', text: 'Organization' },
     { key: 'more', text: '' },
   ];
+
+  /**
+   * Approve or rejects selected pending users
+   * @param {string} status string that either holds "approve" or "reject"
+   */
+  async function updateStatus(status) {
+    setIsLoading(true);
+
+    const fetchPromises = selectedUsers.map((user) =>
+      fetch(`/api/v1/users/${user.id}/${status}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(user),
+      }),
+    );
+    try {
+      // Wait for all fetch requests to complete
+      await Promise.all(fetchPromises);
+    } catch (err) {
+      // Handle errors from any of the fetch requests
+      console.error(err);
+    } finally {
+      // Reset loading state
+      refetch();
+      setIsLoading(false);
+    }
+  }
   return (
     <Container fluid={true} mt={20}>
       <IconChevronLeft
@@ -77,7 +115,7 @@ function AdminPendingUsers() {
       />
       <Container className={classes.datatableWrapper}>
         <LoadingOverlay
-          visible={isFetching}
+          visible={isFetching || isLoading}
           zIndex={1000}
           overlayProps={{ radius: 'sm', blur: 2 }}
         />
@@ -85,8 +123,22 @@ function AdminPendingUsers() {
           <Container className={classes.header}>
             <h4>Pending Members</h4>
             <Group>
-              <Button variant="default">Deny</Button>
-              <Button variant="filled">Approve</Button>
+              <Button
+                variant="default"
+                onClick={() => {
+                  updateStatus('reject');
+                }}
+              >
+                Deny
+              </Button>
+              <Button
+                variant="filled"
+                onClick={() => {
+                  updateStatus('approve');
+                }}
+              >
+                Approve
+              </Button>
             </Group>
           </Container>
 

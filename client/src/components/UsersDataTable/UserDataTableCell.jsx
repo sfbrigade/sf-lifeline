@@ -14,12 +14,19 @@ const userDataTableProps = {
  */
 export const UserDataTableCell = ({ type, value }) => {
   switch (type) {
-    case 'status':
+    case 'status': {
+      const color =
+        value === 'Disabled' || value === 'Rejected'
+          ? 'red'
+          : value === 'Active'
+            ? 'green'
+            : 'yellow';
       return (
         <Table.Td>
-          <Badge color={value === 'Active' ? 'green' : 'red'}>{value}</Badge>
+          <Badge color={color}>{value}</Badge>
         </Table.Td>
       );
+    }
     case 'role':
       return (
         <Table.Td>

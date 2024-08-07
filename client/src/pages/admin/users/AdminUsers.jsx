@@ -37,12 +37,24 @@ export const AdminUsers = () => {
           return res.json();
         })
         .then((users) => {
-          setPendingMembers(users.length);
+          const pendingUsers = users.filter(
+            (user) =>
+              user.approvedAt.length == 0 && user.rejectedAt.length == 0,
+          );
+          setPendingMembers(pendingUsers.length);
 
-          return users.map((user) => ({
-            ...user,
-            name: user.firstName + ' ' + user.lastName,
-          }));
+          return users.map((user) => {
+            return {
+              ...user,
+              name: user.firstName + ' ' + user.lastName,
+              status:
+                user.rejectedAt.length > 0
+                  ? 'Rejected'
+                  : user.approvedAt.length > 0
+                    ? 'Active'
+                    : 'Pending',
+            };
+          });
         }),
   });
 
