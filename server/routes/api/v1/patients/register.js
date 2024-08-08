@@ -44,7 +44,6 @@ export default async function (fastify, _opts) {
           },
         });
 
-
         return patient.id;
       });
 
