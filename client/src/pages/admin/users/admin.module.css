@@ -31,3 +31,31 @@
   top: -0.35rem;
   right: -0.25rem;
 }
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+
+  h3 {
+    font-weight: bold;
+    font-size: 18px;
+    margin-block: 0;
+  }
+
+  h2 {
+    p {
+      font-size: 14px;
+      color: grey;
+      margin-block: 8px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+  }
+}

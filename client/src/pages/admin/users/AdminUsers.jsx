@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
 import { IconSearch } from '@tabler/icons-react';
-
-import classes from './adminUsers.module.css';
 import {
   Badge,
   Box,
@@ -12,9 +9,14 @@ import {
   Divider,
   Group,
   LoadingOverlay,
-  TextInput,
+  TextInput
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
+
+import classes from './admin.module.css';
+import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
+import { InviteModal } from './InviteModal';
 
 const headers = [
   { key: 'name', text: 'Name' },
@@ -29,6 +31,8 @@ const headers = [
 export const AdminUsers = () => {
   const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
+  const [opened, {open, close}] = useDisclosure(false);
+
   const { isFetching, data } = useQuery({
     queryKey: ['users'],
     queryFn: () =>
@@ -60,6 +64,7 @@ export const AdminUsers = () => {
 
   return (
     <Container>
+      <InviteModal opened={opened} close={close}/>
       <div className={classes.header}>
         <h4>Members</h4>
         <Group className={classes.actions}>
@@ -81,7 +86,7 @@ export const AdminUsers = () => {
               </Badge>
             ) : null}
           </div>
-          <Button variant="filled">Invite Member</Button>
+          <Button variant="filled" onClick={open}>Invite Member</Button>
         </Group>
       </div>
       <Divider mb="xl" />
