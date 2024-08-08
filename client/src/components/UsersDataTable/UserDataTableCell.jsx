@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Table, Text } from '@mantine/core';
+import { Badge, Checkbox, Table, Text } from '@mantine/core';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
   type: PropTypes.string.isRequired,
-  value: PropTypes.node,
+  value: PropTypes.any,
 };
 
 /**
@@ -14,12 +14,19 @@ const userDataTableProps = {
  */
 export const UserDataTableCell = ({ type, value }) => {
   switch (type) {
-    case 'status':
+    case 'status': {
+      const color =
+        value === 'Disabled' || value === 'Rejected'
+          ? 'red'
+          : value === 'Active'
+            ? 'green'
+            : 'yellow';
       return (
         <Table.Td>
-          <Badge color={value === 'Active' ? 'green' : 'red'}>{value}</Badge>
+          <Badge color={color}>{value}</Badge>
         </Table.Td>
       );
+    }
     case 'role':
       return (
         <Table.Td>
@@ -30,6 +37,12 @@ export const UserDataTableCell = ({ type, value }) => {
       return (
         <Table.Td>
           <DataTableMenu />
+        </Table.Td>
+      );
+    case 'checkbox':
+      return (
+        <Table.Td>
+          <Checkbox checked={value.selected} onChange={value.select} />
         </Table.Td>
       );
     default:

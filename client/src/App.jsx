@@ -19,6 +19,7 @@ import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate'
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
+import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -92,6 +93,10 @@ function App() {
               element={<AdminPatientsGenerate />}
             />
             <Route path="/admin/users" element={<AdminUsers />} />
+            <Route
+              path="/admin/pending-users"
+              element={<AdminPendingUsers />}
+            />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>

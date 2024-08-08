@@ -12,22 +12,3 @@
   justify-content: space-between;
   margin: 0 1rem;
 }
-
-.header > * {
-  display: inline-block;
-}
-
-.actions {
-  display: inline-flex;
-  gap: 1rem;
-}
-
-.relative {
-  position: relative;
-}
-
-.badge {
-  position: absolute;
-  top: -0.35rem;
-  right: -0.25rem;
-}
