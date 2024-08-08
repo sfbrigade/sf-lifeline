@@ -30,7 +30,11 @@ const sections = [
         icon: <IconUsersGroup stroke={2} />,
       },
       { label: 'Verification', href: '/', icon: <IconZoomCheck stroke={2} /> },
-      { label: 'QR Code', href: '/', icon: <IconQrcode stroke={2} /> },
+      {
+        label: 'QR Code',
+        href: '/admin/patients/generate',
+        icon: <IconQrcode stroke={2} />,
+      },
     ],
   },
   {

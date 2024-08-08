@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, TextInput, Button, PasswordInput, Loader } from '@mantine/core';
+import {
+  Container,
+  TextInput,
+  Button,
+  PasswordInput,
+  Loader,
+} from '@mantine/core';
 import classes from './register.module.css';
 
 const registerFormProps = {
@@ -133,25 +139,33 @@ export function RegisterForm({
               </p>
             </div>
           </Container>
-          {formState !== 3 && 
-            <Button type="submit" disabled={!user.licenseNumber.length || isLoading}>
-              {
-                isLoading ? <Loader size={20} /> : formState === 2 ? 'Send Interest Form' : 'Next'
-              }
-            </Button>
-          }
-
-          {formState === 3 && 
-            <Container
-              size="25rem"
-              styles={{ root: { padding: 0 } }}
+          {formState !== 3 && (
+            <Button
+              type="submit"
+              disabled={!user.licenseNumber.length || isLoading}
             >
+              {isLoading ? (
+                <Loader size={20} />
+              ) : formState === 2 ? (
+                'Send Interest Form'
+              ) : (
+                'Next'
+              )}
+            </Button>
+          )}
+
+          {formState === 3 && (
+            <Container size="25rem" styles={{ root: { padding: 0 } }}>
               <div className={classes.formCompletion}>
-                <p>Form Complete! You will receive a confirmation email shortly. Acceptance into SF life line will also be sent via the email address you submitted.</p>
+                <p>
+                  Form Complete! You will receive a confirmation email shortly.
+                  Acceptance into SF life line will also be sent via the email
+                  address you submitted.
+                </p>
                 <p>Save this site to your browser window for convenience.</p>
               </div>
             </Container>
-          }
+          )}
         </Container>
       </form>
     </>
