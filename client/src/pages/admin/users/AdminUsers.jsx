@@ -9,7 +9,7 @@ import {
   Divider,
   Group,
   LoadingOverlay,
-  TextInput
+  TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
@@ -31,7 +31,7 @@ const headers = [
 export const AdminUsers = () => {
   const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
-  const [opened, {open, close}] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false);
 
   const { isFetching, data } = useQuery({
     queryKey: ['users'],
@@ -64,7 +64,7 @@ export const AdminUsers = () => {
 
   return (
     <Container>
-      <InviteModal opened={opened} close={close}/>
+      <InviteModal opened={opened} close={close} />
       <div className={classes.header}>
         <h4>Members</h4>
         <Group className={classes.actions}>
@@ -86,7 +86,9 @@ export const AdminUsers = () => {
               </Badge>
             ) : null}
           </div>
-          <Button variant="filled" onClick={open}>Invite Member</Button>
+          <Button variant="filled" onClick={open}>
+            Invite Member
+          </Button>
         </Group>
       </div>
       <Divider mb="xl" />
