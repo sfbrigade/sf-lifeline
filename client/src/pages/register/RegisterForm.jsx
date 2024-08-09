@@ -142,7 +142,9 @@ export function RegisterForm({
           {formState !== 3 && (
             <Button
               type="submit"
-              disabled={!user.licenseNumber.length || isLoading}
+              disabled={
+                (!user.licenseNumber.length && !user.inviteId) || isLoading
+              }
             >
               {isLoading ? (
                 <Loader size={20} />
