@@ -10,7 +10,7 @@ import Context from '../Context';
  *
  * @returns {{
  *  user: user,
- *  error: error,
+ *  error: object,
  *  isLoading: boolean,
  *  handleLogin: (credentials: any) => Promise<void>,
  *  handleLogout: () => Promise<void>,
