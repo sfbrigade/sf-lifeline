@@ -695,4 +695,42 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(user.disabledAt, null);
     });
   });
+  describe('PATCH /verify', () => {
+    it('should allow user to verify account through email verification', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app.inject().patch('/api/v1/users/verify').payload({
+        emailVerificationToken: '4DA5B4',
+      });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'dab5dff3-360d-4dbb-98dd-1990dfb5c4c5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.emailVerificationToken, '4DA5B4');
+
+      const date = new Date(user.emailVerifiedAt);
+      const today = new Date();
+
+      assert.deepStrictEqual(
+        date.toISOString().split('T')[0],
+        today.toISOString().split('T')[0],
+      );
+    });
+  });
+
+  it('should return 404 if no token exist', async (t) => {
+    const app = await build(t);
+    await t.loadFixtures();
+
+    const reply = await app.inject().patch('/api/v1/users/verify').payload({
+      emailVerificationToken: 'NOEXIST',
+    });
+
+    assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+    assert.deepStrictEqual(reply.statusMessage, 'Not Found');
+  });
 });
