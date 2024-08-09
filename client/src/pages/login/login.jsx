@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
@@ -14,24 +14,36 @@ function Login() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-  const { handleLogin } = useAuthorization();
+  const { handleLogin, error } = useAuthorization();
   const location = useLocation();
 
-  const login = () => {
-    let isValid = true;
-    if (!email) {
-      setEmailError('Invalid email');
-      isValid = false;
-    }
-    if (!password) {
-      setPasswordError('Invalid password');
-      isValid = false;
-    }
-    if (isValid) {
-      const { redirectTo } = location.state ?? {};
-      handleLogin({ email, password, redirectTo });
-    }
+  const login = async () => {
+    setEmailError(null);
+    setPasswordError(null);
+    const { redirectTo } = location.state ?? {};
+    await handleLogin({ email, password, redirectTo });
   };
+
+  useEffect(() => {
+    if (error && !error.ok) {
+      console.log(error.status);
+
+      switch (error.status) {
+        case 404:
+          setEmailError('The email you entered isn’t connected to an account.');
+          break;
+        case 401:
+          setPasswordError('The password you’ve entered is incorrect.');
+          break;
+        case 403:
+          setEmailError('Your account is no longer active.');
+          break;
+        default:
+          setEmailError(`${error.status}: ${error.statusMessage}`);
+          break;
+      }
+    }
+  }, [error]);
 
   return (
     <div className={classes.login}>
