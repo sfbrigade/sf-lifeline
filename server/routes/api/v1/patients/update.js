@@ -28,12 +28,9 @@ export default async function (fastify, _opts) {
                   type: 'array',
                   items: {
                     type: 'object',
-                    required: ['name'],
+                    required: ['id'],
                     properties: {
-                      name: { type: 'string' },
-                      type: { type: 'string' },
-                      system: { type: 'string' },
-                      code: { type: 'string' },
+                      id: { type: 'string' },
                     },
                   },
                 },
@@ -41,11 +38,9 @@ export default async function (fastify, _opts) {
                   type: 'array',
                   items: {
                     type: 'object',
-                    required: ['name'],
+                    required: ['id'],
                     properties: {
-                      name: { type: 'string' },
-                      system: { type: 'string' },
-                      code: { type: 'string' },
+                      id: { type: 'string' },
                     },
                   },
                 },
@@ -80,6 +75,21 @@ export default async function (fastify, _opts) {
             type: 'object',
             properties: {
               id: { type: 'string' },
+              emergencyContact: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  firstName: { type: 'string' },
+                  middleName: { type: 'string' },
+                  lastName: { type: 'string' },
+                  phone: { type: 'string' },
+                  relationship: { type: 'string' },
+                },
+              },
+              allergies: { type: 'array' },
+              conditions: { type: 'array' },
+              medications: { type: 'array' },
+              updatedById: { type: 'string' },
             },
           },
         },
@@ -109,8 +119,12 @@ export default async function (fastify, _opts) {
               id: patientId,
             },
             data: {
-              emergencyContactId: contact.id,
-              updatedById: userId,
+              emergencyContact: {
+                connect: { id: contact.id },
+              },
+              updatedBy: {
+                connect: { id: userId },
+              },
             },
           });
         }
@@ -119,24 +133,75 @@ export default async function (fastify, _opts) {
           const { allergies, medications, conditions } = medicalData;
 
           if (allergies) {
-            console.log('allergies', allergies);
+            await tx.patient.update({
+              where: {
+                id: patientId,
+              },
+              data: {
+                allergies: {
+                  connect: allergies.map((allergy) => ({
+                    id: allergy.id,
+                  })),
+                },
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              },
+            });
           }
 
           if (medications) {
-            console.log('medications', medications);
+            await tx.patient.update({
+              where: {
+                id: patientId,
+              },
+              data: {
+                medications: {
+                  connect: medications.map((medication) => ({
+                    id: medication.id,
+                  })),
+                },
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              },
+            });
           }
 
           if (conditions) {
-            console.log('conditions', conditions);
+            await tx.patient.update({
+              where: {
+                id: patientId,
+              },
+              data: {
+                conditions: {
+                  connect: conditions.map((condition) => ({
+                    id: condition.id,
+                  })),
+                },
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              },
+            });
           }
 
           if (healthcareChoices) {
             console.log('healthcareChoices', healthcareChoices);
           }
         }
-
-        return patientId;
+        return tx.patient.findUnique({
+          where: { id: patientId },
+          include: {
+            emergencyContact: true,
+            allergies: true,
+            medications: true,
+            conditions: true,
+          },
+        });
       });
+
+      console.log('updatedPatient data', updatedPatient);
 
       reply.code(StatusCodes.OK).send(updatedPatient);
     },
