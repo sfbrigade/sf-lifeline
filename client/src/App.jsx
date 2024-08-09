@@ -15,9 +15,11 @@ import Index from './pages';
 import Login from './pages/login/login';
 import Register from './pages/register/register';
 import Dashboard from './pages/dashboard/dashboard';
+import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
+import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -86,7 +88,15 @@ function App() {
           }
         >
           <Route element={<Layout />}>
+            <Route
+              path="/admin/patients/generate"
+              element={<AdminPatientsGenerate />}
+            />
             <Route path="/admin/users" element={<AdminUsers />} />
+            <Route
+              path="/admin/pending-users"
+              element={<AdminPendingUsers />}
+            />
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Route>

@@ -9,7 +9,7 @@
     "start": "nf start -j Procfile.dev",
     "test": "npm run test --workspaces",
     "format": "npm run format --workspaces",
-    "format:check": "npm run format --workspaces",
+    "format:check": "npm run format:check --workspaces",
     "lint": "npm run lint --workspaces"
   },
   "dependencies": {

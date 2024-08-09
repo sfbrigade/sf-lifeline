@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Group, Box, Text, UnstyledButton, Collapse } from '@mantine/core';
 
@@ -71,7 +72,7 @@ export function SidebarLink({ icon, href, label }) {
   return (
     <div className={classes.sublink}>
       <div>{icon}</div>
-      <Text component="a" className={classes.link} href={href}>
+      <Text component={Link} className={classes.link} to={href}>
         {label}
       </Text>
     </div>

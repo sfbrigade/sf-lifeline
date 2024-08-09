@@ -16,12 +16,15 @@
   },
   "dependencies": {
     "@mantine/core": "^7.5.3",
+    "@mantine/form": "^7.11.2",
     "@mantine/hooks": "^7.5.3",
+    "@mantine/notifications": "^7.12.0",
     "@tabler/core": "^1.0.0-beta20",
     "@tabler/icons-react": "^3.3.0",
     "@tanstack/react-query": "^5.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-qrcode-logo": "^3.0.0",
     "react-router-dom": "^6.22.1"
   },
   "devDependencies": {
