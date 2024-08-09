@@ -101,26 +101,28 @@ export default async function (fastify, _opts) {
       let licenseData;
 
       // Validate License Numbers
-      try {
-        const licenseResponse = await verifyLicense(licenseNumber);
-        if (licenseResponse && licenseResponse.status != 'Expired') {
-          const userFromLicense = await fastify.prisma.user.findUnique({
-            where: { licenseNumber: licenseNumber },
-          });
+      if ((!invite && licenseNumber) || invite.role == 'FIRST_RESPONDER') {
+        try {
+          const licenseResponse = await verifyLicense(licenseNumber);
+          if (licenseResponse && licenseResponse.status != 'Expired') {
+            const userFromLicense = await fastify.prisma.user.findUnique({
+              where: { licenseNumber: licenseNumber },
+            });
 
-          if (userFromLicense) {
-            throw new Error('License already registered');
+            if (userFromLicense) {
+              throw new Error('License already registered');
+            }
+
+            licenseData = licenseResponse;
+          } else {
+            throw new Error('Expired or unprocessable license data');
           }
-
-          licenseData = licenseResponse;
-        } else {
-          throw new Error('Expired or unprocessable license data');
+        } catch (error) {
+          errorList.push({
+            path: 'licenseNumber',
+            message: error.message,
+          });
         }
-      } catch (error) {
-        errorList.push({
-          path: 'licenseNumber',
-          message: error.message,
-        });
       }
 
       if (errorList.length) {

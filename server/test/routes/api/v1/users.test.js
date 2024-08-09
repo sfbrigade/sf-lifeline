@@ -220,7 +220,6 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'Test123!',
-        licenseNumber: 'P39332',
         inviteId: '6ed61e21-1062-4b10-a967-53b395f5c34c',
       });
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
