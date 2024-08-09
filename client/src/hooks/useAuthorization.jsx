@@ -10,7 +10,7 @@ import Context from '../Context';
  *
  * @returns {{
  *  user: user,
- *  error: error
+ *  error: error,
  *  isLoading: boolean,
  *  handleLogin: (credentials: any) => Promise<void>,
  *  handleLogout: () => Promise<void>,
@@ -43,7 +43,8 @@ export function useAuthorization() {
       navigate(redirectTo ?? '/');
     },
     onError: async (error) => {
-      setError(error);
+      const errorBody = await error.json();
+      setError({ ...errorBody, status: error.status });
     },
   });
 

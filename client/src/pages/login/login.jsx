@@ -25,9 +25,7 @@ function Login() {
   };
 
   useEffect(() => {
-    if (error && !error.ok) {
-      console.log(error.status);
-
+    if (error && error.status != 200) {
       switch (error.status) {
         case 404:
           setEmailError('The email you entered isn’t connected to an account.');
@@ -36,10 +34,10 @@ function Login() {
           setPasswordError('The password you’ve entered is incorrect.');
           break;
         case 403:
-          setEmailError('Your account is no longer active.');
+          setEmailError(error.message);
           break;
         default:
-          setEmailError(`${error.status}: ${error.statusMessage}`);
+          setEmailError(`${error.status}: ${error.message}`);
           break;
       }
     }

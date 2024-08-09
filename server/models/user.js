@@ -55,7 +55,7 @@ class User extends Base {
   }
 
   get isRejected() {
-    return !!this.isRejectedAt;
+    return !!this.rejectedAt;
   }
 
   get isDisabled() {
