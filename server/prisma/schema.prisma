@@ -2,13 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
   extensions = [citext]
 }
 
@@ -73,27 +73,30 @@ model Invite {
 }
 
 model Patient {
-  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName          String?
   middleName         String?
   lastName           String?
   dateOfBirth        DateTime?
   gender             Gender?
   language           Language?
+  allergies          Allergy[]
+  medications        Medication[]
+  conditions         Condition[]
   codeStatus         CodeStatus?
   codeStatusAttached Boolean?
-  hospital           Hospital?   @relation(fields: [hospitalId], references: [id])
-  hospitalId         String?     @db.Uuid
-  emergencyContact   Contact?    @relation(fields: [emergencyContactId], references: [id])
-  emergencyContactId String?     @unique @db.Uuid
-  physician          Physician?  @relation(fields: [physicianId], references: [id])
-  physicianId        String?     @db.Uuid
-  createdBy          User        @relation("UserCreatedBy", fields: [createdById], references: [id])
-  createdById        String      @db.Uuid
-  updatedBy          User        @relation("UserUpdatedBy", fields: [updatedById], references: [id])
-  updatedById        String      @db.Uuid
-  updatedAt          DateTime    @updatedAt
-  createdAt          DateTime    @default(now())
+  hospital           Hospital?    @relation(fields: [hospitalId], references: [id])
+  hospitalId         String?      @db.Uuid
+  emergencyContact   Contact?     @relation(fields: [emergencyContactId], references: [id])
+  emergencyContactId String?      @unique @db.Uuid
+  physician          Physician?   @relation(fields: [physicianId], references: [id])
+  physicianId        String?      @db.Uuid
+  createdBy          User         @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById        String       @db.Uuid
+  updatedBy          User         @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String       @db.Uuid
+  updatedAt          DateTime     @updatedAt
+  createdAt          DateTime     @default(now())
 }
 
 enum Gender {
@@ -137,11 +140,12 @@ model Contact {
 }
 
 model Allergy {
-  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
-  type   AllergyType
-  system CodingSystem
-  code   String
+  id      String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  type    AllergyType
+  system  CodingSystem
+  code    String
+  Patient Patient[]
 }
 
 enum AllergyType {
@@ -155,14 +159,16 @@ model Medication {
   altNames String
   system   CodingSystem
   code     String
+  Patient  Patient[]
 }
 
 model Condition {
-  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
+  id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
   category String
-  system CodingSystem
-  code   String
+  system   CodingSystem
+  code     String
+  Patient  Patient[]
 }
 
 enum CodingSystem {
