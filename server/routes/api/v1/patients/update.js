@@ -104,29 +104,48 @@ export default async function (fastify, _opts) {
 
       const updatedPatient = await fastify.prisma.$transaction(async (tx) => {
         if (contactData) {
-          let contact = await tx.contact.create({
-            data: {
-              firstName: contactData.firstName,
-              middleName: contactData.middleName,
-              lastName: contactData.lastName,
-              phone: contactData.phone,
-              relationship: contactData.relationship,
-            },
-          });
+          const existingContact = (await tx.patient.findUnique({
+            where: { id: patientId },
+            include: { emergencyContact: true }
+          })).emergencyContact;
 
-          await tx.patient.update({
-            where: {
-              id: patientId,
-            },
-            data: {
-              emergencyContact: {
-                connect: { id: contact.id },
+          if (existingContact) {
+            await tx.contact.update({
+              where: {
+                id: existingContact.id,
               },
-              updatedBy: {
-                connect: { id: userId },
+              data: {
+                firstName: contactData.firstName,
+                middleName: contactData.middleName,
+                lastName: contactData.lastName,
+                phone: contactData.phone,
+                relationship: contactData.relationship,
               },
-            },
-          });
+            });
+          } else {
+            let contact = await tx.contact.create({
+              data: {
+                firstName: contactData.firstName,
+                middleName: contactData.middleName,
+                lastName: contactData.lastName,
+                phone: contactData.phone,
+                relationship: contactData.relationship,
+              },
+            });
+            await tx.patient.update({
+              where: {
+                id: patientId,
+              },
+              data: {
+                emergencyContact: {
+                  connect: { id: contact.id },
+                },
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              },
+            });
+          }
         }
 
         if (medicalData) {
