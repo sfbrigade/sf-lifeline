@@ -61,7 +61,8 @@ function Register() {
         });
         navigate('/register');
       });
-  });
+  }, [inviteId]);
+
   /**
    * Handles input fields in the Registration form
    * @param {*} event text field events

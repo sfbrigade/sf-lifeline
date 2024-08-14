@@ -240,6 +240,7 @@ describe('/api/v1/users', () => {
         Date.parse(user.approvedAt),
         Date.parse('2024-04-07T16:53:41-07:00'),
       );
+      assert.ok(user.emailVerifiedAt);
 
       const invite = await t.prisma.invite.findUnique({
         where: { id: '6ed61e21-1062-4b10-a967-53b395f5c34c' },
@@ -339,7 +340,7 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'Test123!',
-        licenseNumber: 'E167667',
+        licenseNumber: 'E085213',
       });
 
       const expectedMessage = [

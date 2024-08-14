@@ -101,10 +101,13 @@ export default async function (fastify, _opts) {
       let licenseData;
 
       // Validate License Numbers
-      if ((!invite && licenseNumber) || invite.role == 'FIRST_RESPONDER') {
+      if (
+        (!invite && licenseNumber) ||
+        invite.role == User.Role.FIRST_RESPONDER
+      ) {
         try {
           const licenseResponse = await verifyLicense(licenseNumber);
-          if (licenseResponse && licenseResponse.status != 'Expired') {
+          if (licenseResponse && licenseResponse.status !== 'Expired') {
             const userFromLicense = await fastify.prisma.user.findUnique({
               where: { licenseNumber: licenseNumber },
             });
@@ -144,13 +147,18 @@ export default async function (fastify, _opts) {
 
       // Hash the password
       await user.setPassword(password);
+      const now = new Date().toISOString();
       if (invite) {
         user.role = invite.role;
+        if (user.role !== User.Role.FIRST_RESPONDER) {
+          user.licenseNumber = null;
+        }
         user.approvedById = invite.invitedById;
         user.approvedAt = invite.createdAt;
+        user.emailVerifiedAt = now;
       } else {
         // Set role
-        user.role = 'FIRST_RESPONDER';
+        user.role = User.Role.FIRST_RESPONDER;
         // Generate verification token and send
         user.generateEmailVerificationToken();
         await user.sendVerificationEmail();
@@ -163,7 +171,7 @@ export default async function (fastify, _opts) {
             where: { id: invite.id },
             data: {
               acceptedById: data.id,
-              acceptedAt: new Date().toISOString(),
+              acceptedAt: now,
             },
           });
         }

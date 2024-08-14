@@ -38,6 +38,10 @@ class User extends Base {
     inviteId: z.string().optional(),
   });
 
+  static get Role() {
+    return Role;
+  }
+
   constructor(data) {
     super(Prisma.UserScalarFieldEnum, data);
   }
