@@ -23,15 +23,12 @@ describe('/api/v1/patients', () => {
       const app = await build(t);
       await t.loadFixtures();
 
-      let reply = await app
-        .inject()
-        .post('/api/v1/patients/register')
-        .payload({
-          firstName: 'John',
-          middleName: 'A',
-          lastName: 'Doe',
-          dateOfBirth: '1990-01-01',
-        });
+      let reply = await app.inject().post('/api/v1/patients/register').payload({
+        firstName: 'John',
+        middleName: 'A',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
+      });
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
 
@@ -143,9 +140,11 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
       const result = JSON.parse(reply.body);
-      assert.deepStrictEqual(result.message, "body must have required property 'firstName'");
+      assert.deepStrictEqual(
+        result.message,
+        "body must have required property 'firstName'",
+      );
     });
-
   });
 
   describe('PATCH /update/:patientId', () => {
@@ -196,8 +195,10 @@ describe('/api/v1/patients', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(reply.body);
-      assert.deepStrictEqual(id, "27963f68-ebc1-408a-8bb5-8fbe54671064");
+      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
+        reply.body,
+      );
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jane');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
@@ -220,8 +221,10 @@ describe('/api/v1/patients', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(reply.body);
-      assert.deepStrictEqual(id, "27963f68-ebc1-408a-8bb5-8fbe54671064");
+      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
+        reply.body,
+      );
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jack');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
@@ -244,8 +247,10 @@ describe('/api/v1/patients', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(reply.body);
-      assert.deepStrictEqual(id, "27963f68-ebc1-408a-8bb5-8fbe54671064");
+      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
+        reply.body,
+      );
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jill');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
@@ -279,7 +284,6 @@ describe('/api/v1/patients', () => {
         phone: '123-456-7890',
         relationship: 'Mother',
       });
- 
     });
 
     it('should allow ADMIN to update a patient with medical data', async (t) => {
@@ -311,16 +315,33 @@ describe('/api/v1/patients', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth, allergies, medications, conditions } = JSON.parse(reply.body);
-      assert.deepStrictEqual(id, "27963f68-ebc1-408a-8bb5-8fbe54671064");
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        dateOfBirth,
+        allergies,
+        medications,
+        conditions,
+      } = JSON.parse(reply.body);
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'John');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
-      assert.deepStrictEqual(allergies[0].id, '5c057fc3-15d2-40fc-b664-707d04ba66c2');
-      assert.deepStrictEqual(medications[0].id, '583c7775-9466-4dab-8a4d-edf1056f097f');
-      assert.deepStrictEqual(conditions[0].id, '471c8529-81fc-4129-8ca0-f1b7406ed90c');
+      assert.deepStrictEqual(
+        allergies[0].id,
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+      );
+      assert.deepStrictEqual(
+        medications[0].id,
+        '583c7775-9466-4dab-8a4d-edf1056f097f',
+      );
+      assert.deepStrictEqual(
+        conditions[0].id,
+        '471c8529-81fc-4129-8ca0-f1b7406ed90c',
+      );
     });
-
   });
 });

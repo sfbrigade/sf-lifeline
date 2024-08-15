@@ -16,7 +16,7 @@ export default async function (fastify, _opts) {
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
                 dateOfBirth: { type: 'string', format: 'date' },
-              }
+              },
             },
             contactData: {
               type: 'object',
@@ -79,7 +79,7 @@ export default async function (fastify, _opts) {
           [StatusCodes.OK]: {
             type: 'object',
             properties: {
-              id: { type: 'string'},
+              id: { type: 'string' },
               firstName: { type: 'string' },
               middleName: { type: 'string' },
               lastName: { type: 'string' },
@@ -107,19 +107,24 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       const { patientId } = request.params;
-      const { patientData, contactData, medicalData, healthcareChoices } = request.body;
+      const { patientData, contactData, medicalData, healthcareChoices } =
+        request.body;
 
       const userId = request.user.id;
 
       const updatedPatient = await fastify.prisma.$transaction(async (tx) => {
         if (patientData) {
-          const newPatientData = {}
+          const newPatientData = {};
 
-          if (patientData.firstName) newPatientData.firstName = patientData.firstName;
-          if (patientData.middleName) newPatientData.middleName = patientData.middleName;
-          if (patientData.lastName) newPatientData.lastName = patientData.lastName;
-          if (patientData.dateOfBirth) newPatientData.dateOfBirth = new Date(patientData.dateOfBirth);
-        
+          if (patientData.firstName)
+            newPatientData.firstName = patientData.firstName;
+          if (patientData.middleName)
+            newPatientData.middleName = patientData.middleName;
+          if (patientData.lastName)
+            newPatientData.lastName = patientData.lastName;
+          if (patientData.dateOfBirth)
+            newPatientData.dateOfBirth = new Date(patientData.dateOfBirth);
+
           await tx.patient.update({
             where: {
               id: patientId,
@@ -128,10 +133,12 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
-          const existingContact = (await tx.patient.findUnique({
-            where: { id: patientId },
-            include: { emergencyContact: true }
-          })).emergencyContact;
+          const existingContact = (
+            await tx.patient.findUnique({
+              where: { id: patientId },
+              include: { emergencyContact: true },
+            })
+          ).emergencyContact;
 
           if (existingContact) {
             await tx.contact.update({

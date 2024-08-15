@@ -6,6 +6,6 @@ items:
     firstName: John
     middleName: A
     lastName: Doe
-    dateOfBirth: "2000-10-05T00:00:00.000Z"
+    dateOfBirth: '2000-10-05T00:00:00.000Z'
     createdBy: '@user1'
     updatedBy: '@user1'
