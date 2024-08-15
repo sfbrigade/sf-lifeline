@@ -13,7 +13,7 @@ export default async function (fastify, _opts) {
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
-            dateOfBirth: { type: 'string' },
+            dateOfBirth: { type: 'string', format: 'date' },
           },
         },
         response: {
@@ -21,6 +21,10 @@ export default async function (fastify, _opts) {
             type: 'object',
             properties: {
               id: { type: 'string' },
+              firstName: { type: 'string' },
+              middleName: { type: 'string' },
+              lastName: { type: 'string' },
+              dateOfBirth: { type: 'string', format: 'date' },
             },
           },
         },
@@ -44,10 +48,10 @@ export default async function (fastify, _opts) {
           },
         });
 
-        return patient.id;
+        return patient;
       });
 
-      reply.code(StatusCodes.CREATED).send({ id: newPatient });
+      reply.code(StatusCodes.CREATED).send(newPatient);
     },
   );
 }
