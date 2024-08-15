@@ -22,7 +22,6 @@ export default async function (fastify, _opts) {
             },
             medicalData: {
               type: 'object',
-              // required: ['allergies', 'medications', 'conditions'],
               properties: {
                 allergies: {
                   type: 'array',
@@ -219,8 +218,6 @@ export default async function (fastify, _opts) {
           },
         });
       });
-
-      console.log('updatedPatient data', updatedPatient);
 
       reply.code(StatusCodes.OK).send(updatedPatient);
     },
