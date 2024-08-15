@@ -61,19 +61,19 @@ export default async function (fastify, _opts) {
         return reply.unauthorized();
       }
       if (!user.isEmailVerified) {
-        return reply.status(403).send({
+        return reply.status(StatusCodes.FORBIDDEN).send({
           message:
             'Your account has not been verified. Please check your inbox to verify your account.',
         });
       }
       if (user.isRejected || user.isDisabled) {
-        return reply.status(403).send({
+        return reply.status(StatusCodes.FORBIDDEN).send({
           message:
             'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
         });
       }
       if (user.isUnapproved) {
-        return reply.status(403).send({
+        return reply.status(StatusCodes.FORBIDDEN).send({
           message:
             'Your account has not been approved by admins yet. Please contact support or wait for further instructions.',
         });
