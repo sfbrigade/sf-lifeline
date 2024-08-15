@@ -133,6 +133,7 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
+
           let contact = await tx.contact.create({
             data: {
               firstName: contactData.firstName,
