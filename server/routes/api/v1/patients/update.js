@@ -9,6 +9,15 @@ export default async function (fastify, _opts) {
         body: {
           type: 'object',
           properties: {
+            patientData: {
+              type: 'object',
+              properties: {
+                firstName: { type: 'string' },
+                middleName: { type: 'string' },
+                lastName: { type: 'string' },
+                dateOfBirth: { type: 'string', format: 'date' },
+              }
+            },
             contactData: {
               type: 'object',
               required: ['firstName', 'lastName', 'phone', 'relationship'],
@@ -47,12 +56,9 @@ export default async function (fastify, _opts) {
                   type: 'array',
                   items: {
                     type: 'object',
-                    required: ['name'],
+                    required: ['id'],
                     properties: {
-                      name: { type: 'string' },
-                      category: { type: 'string' },
-                      system: { type: 'string' },
-                      code: { type: 'string' },
+                      id: { type: 'string' },
                     },
                   },
                 },
@@ -73,7 +79,11 @@ export default async function (fastify, _opts) {
           [StatusCodes.OK]: {
             type: 'object',
             properties: {
-              id: { type: 'string' },
+              id: { type: 'string'},
+              firstName: { type: 'string' },
+              middleName: { type: 'string' },
+              lastName: { type: 'string' },
+              dateOfBirth: { type: 'string', format: 'date' },
               emergencyContact: {
                 type: 'object',
                 properties: {
@@ -97,11 +107,26 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       const { patientId } = request.params;
-      const { contactData, medicalData, healthcareChoices } = request.body;
+      const { patientData, contactData, medicalData, healthcareChoices } = request.body;
 
       const userId = request.user.id;
 
       const updatedPatient = await fastify.prisma.$transaction(async (tx) => {
+        if (patientData) {
+          const newPatientData = {}
+
+          if (patientData.firstName) newPatientData.firstName = patientData.firstName;
+          if (patientData.middleName) newPatientData.middleName = patientData.middleName;
+          if (patientData.lastName) newPatientData.lastName = patientData.lastName;
+          if (patientData.dateOfBirth) newPatientData.dateOfBirth = new Date(patientData.dateOfBirth);
+        
+          await tx.patient.update({
+            where: {
+              id: patientId,
+            },
+            data: newPatientData,
+          });
+        }
         if (contactData) {
           const existingContact = (await tx.patient.findUnique({
             where: { id: patientId },
