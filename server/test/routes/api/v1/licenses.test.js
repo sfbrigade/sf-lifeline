@@ -52,5 +52,17 @@ describe('/api/v1/licenses', () => {
       assert.equal(res.statusCode, 404);
       assert.equal(message, 'No license match');
     });
+
+    it('should return 422 error for already registered license', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app.inject({
+        url: '/api/v1/licenses?license=E148420',
+      });
+      const { message } = JSON.parse(res.body);
+      assert.equal(res.statusCode, 422);
+      assert.equal(message, 'License already registered');
+    });
   });
 });
