@@ -340,7 +340,7 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'Test123!',
-        licenseNumber: 'E167667',
+        licenseNumber: 'E085213',
       });
 
       const expectedMessage = [

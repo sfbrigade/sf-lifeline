@@ -1,4 +1,4 @@
-FROM node:20.11.0-bookworm
+FROM node:20.16.0-bookworm
 
 # Set an env variable for the location of the app files
 ENV APP_HOME=/opt/node/app
