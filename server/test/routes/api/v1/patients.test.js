@@ -17,4 +17,105 @@ describe('/api/v1/patients', () => {
       assert.ok(results[0].startsWith(`${process.env.BASE_URL}/patients/`));
     });
   });
+
+  describe('POST /register', () => {
+    it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
+      const app = await build(t);
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          dateOfBirth: '1990-01-01',
+        });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+    });
+
+    it('should allow ADMIN to register a new patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      const result = JSON.parse(reply.body);
+      assert.ok(result.id);
+    });
+
+    it('should allow STAFF to register a new patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      const result = JSON.parse(reply.body);
+      assert.ok(result.id);
+    });
+
+    it('should allow VOLUNTEER to register a new patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('volunteer.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      const result = JSON.parse(reply.body);
+      assert.ok(result.id);
+    });
+
+
+    it('errors if missing required fields', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          lastName: 'Doe',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(result.message, "body must have required property 'firstName'");
+    });
+
+  });
+
+  describe('PATCH /update/:patientId', () => {
+
+  });
 });
