@@ -38,7 +38,7 @@ export default async function (fastify, _opts) {
             firstName: firstName,
             middleName: middleName,
             lastName: lastName,
-            dateOfBirth: dateOfBirth,
+            dateOfBirth: new Date(dateOfBirth),
             createdById: userId,
             updatedById: userId,
           },
@@ -47,7 +47,7 @@ export default async function (fastify, _opts) {
         return patient.id;
       });
 
-      reply.code(StatusCodes.CREATED).send(newPatient);
+      reply.code(StatusCodes.CREATED).send({ id: newPatient });
     },
   );
 }
