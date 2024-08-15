@@ -61,7 +61,7 @@ function Register() {
         });
         navigate('/register');
       });
-  }, [inviteId]);
+  }, [inviteId, navigate]);
 
   /**
    * Handles input fields in the Registration form
