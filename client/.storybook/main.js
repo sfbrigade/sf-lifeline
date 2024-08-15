@@ -18,10 +18,8 @@ const config = {
     getAbsolutePath('@storybook/addon-onboarding'),
     getAbsolutePath('@storybook/addon-interactions'),
     getAbsolutePath('storybook-dark-mode'),
-    getAbsolutePath('@storybook/addon-mdx-gfm'),
-    getAbsolutePath('@storybook/addon-mdx-gfm'),
     getAbsolutePath('@chromatic-com/storybook'),
-    getAbsolutePath('@storybook/addon-mdx-gfm'),
+    getAbsolutePath('@storybook/addon-mdx-gfm')
   ],
 
   framework: {
