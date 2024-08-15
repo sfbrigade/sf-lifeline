@@ -133,50 +133,28 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
-          const existingContact = (
-            await tx.patient.findUnique({
-              where: { id: patientId },
-              include: { emergencyContact: true },
-            })
-          ).emergencyContact;
-
-          if (existingContact) {
-            await tx.contact.update({
-              where: {
-                id: existingContact.id,
+          let contact = await tx.contact.create({
+            data: {
+              firstName: contactData.firstName,
+              middleName: contactData.middleName,
+              lastName: contactData.lastName,
+              phone: contactData.phone,
+              relationship: contactData.relationship,
+            },
+          });
+          await tx.patient.update({
+            where: {
+              id: patientId,
+            },
+            data: {
+              emergencyContact: {
+                connect: { id: contact.id },
               },
-              data: {
-                firstName: contactData.firstName,
-                middleName: contactData.middleName,
-                lastName: contactData.lastName,
-                phone: contactData.phone,
-                relationship: contactData.relationship,
+              updatedBy: {
+                connect: { id: userId },
               },
-            });
-          } else {
-            let contact = await tx.contact.create({
-              data: {
-                firstName: contactData.firstName,
-                middleName: contactData.middleName,
-                lastName: contactData.lastName,
-                phone: contactData.phone,
-                relationship: contactData.relationship,
-              },
-            });
-            await tx.patient.update({
-              where: {
-                id: patientId,
-              },
-              data: {
-                emergencyContact: {
-                  connect: { id: contact.id },
-                },
-                updatedBy: {
-                  connect: { id: userId },
-                },
-              },
-            });
-          }
+            },
+          });
         }
 
         if (medicalData) {
