@@ -15,6 +15,32 @@ export default async function (fastify, _opts) {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
+                gender: {
+                  type: 'string',
+                  enum: [
+                    'FEMALE',
+                    'MALE',
+                    'TRANS_MALE',
+                    'TRANS_FEMALE',
+                    'OTHER',
+                    'UNKNOWN',
+                  ],
+                },
+                language: {
+                  type: 'string',
+                  enum: [
+                    'CANTONESE',
+                    'ENGLISH',
+                    'MANDARIN',
+                    'RUSSIAN',
+                    'SPANISH',
+                    'TAGALOG',
+                  ],
+                },
+                advancedDirective: {
+                  type: 'string',
+                  enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
+                },
                 dateOfBirth: { type: 'string', format: 'date' },
               },
             },
@@ -82,7 +108,10 @@ export default async function (fastify, _opts) {
               firstName: { type: 'string' },
               middleName: { type: 'string' },
               lastName: { type: 'string' },
+              gender: { type: 'string' },
+              language: { type: 'string' },
               dateOfBirth: { type: 'string', format: 'date' },
+              codeStatus: { type: 'string' },
               emergencyContact: {
                 type: 'object',
                 properties: {
@@ -118,6 +147,7 @@ export default async function (fastify, _opts) {
                   email: { type: 'string' },
                 },
               },
+              advancedDirective: { type: 'string' },
               updatedById: { type: 'string' },
             },
           },
@@ -142,6 +172,11 @@ export default async function (fastify, _opts) {
             newPatientData.middleName = patientData.middleName;
           if (patientData.lastName)
             newPatientData.lastName = patientData.lastName;
+          if (patientData.gender) newPatientData.gender = patientData.gender;
+          if (patientData.language)
+            newPatientData.language = patientData.language;
+          if (patientData.advancedDirective)
+            newPatientData.codeStatus = patientData.advancedDirective;
           if (patientData.dateOfBirth)
             newPatientData.dateOfBirth = new Date(patientData.dateOfBirth);
 
