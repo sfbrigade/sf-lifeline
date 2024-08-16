@@ -27,6 +27,8 @@ describe('/api/v1/patients', () => {
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
+        gender: 'MALE',
+        language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
       });
 
@@ -40,6 +42,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
@@ -58,6 +62,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
@@ -69,6 +75,8 @@ describe('/api/v1/patients', () => {
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
+        gender: 'MALE',
+        language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
       });
     });
@@ -84,6 +92,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
@@ -95,6 +105,8 @@ describe('/api/v1/patients', () => {
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
+        gender: 'MALE',
+        language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
       });
     });
@@ -110,6 +122,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
@@ -121,6 +135,8 @@ describe('/api/v1/patients', () => {
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
+        gender: 'MALE',
+        language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
       });
     });
@@ -145,6 +161,31 @@ describe('/api/v1/patients', () => {
         "body must have required property 'firstName'",
       );
     });
+
+    it('errors if providing a language that is not in the enum', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients/register')
+        .payload({
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          gender: 'MALE',
+          language: 'UNKNOWN',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'body/language must be equal to one of the allowed values',
+      );
+    });
   });
 
   describe('PATCH /update/:patientId', () => {
@@ -159,6 +200,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'FEMALE',
+          language: 'TAGALOG',
           dateOfBirth: '1990-01-01',
         });
 
@@ -172,6 +215,8 @@ describe('/api/v1/patients', () => {
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
+          gender: 'FEMALE',
+          language: 'TAGALOG',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
@@ -190,18 +235,30 @@ describe('/api/v1/patients', () => {
           patientData: {
             firstName: 'Jane',
             dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            advancedDirective: 'COMFORT',
           },
         })
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
-        reply.body,
-      );
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        gender,
+        language,
+        codeStatus,
+        dateOfBirth,
+      } = JSON.parse(reply.body);
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jane');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(gender, 'MALE');
+      assert.deepStrictEqual(language, 'RUSSIAN');
+      assert.deepStrictEqual(codeStatus, 'COMFORT');
       assert.deepStrictEqual(dateOfBirth, '1990-01-01');
     });
 
@@ -216,18 +273,30 @@ describe('/api/v1/patients', () => {
           patientData: {
             firstName: 'Jack',
             dateOfBirth: '1990-02-01',
+            language: 'SPANISH',
+            advancedDirective: 'DNR',
           },
         })
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
-        reply.body,
-      );
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        gender,
+        language,
+        codeStatus,
+        dateOfBirth,
+      } = JSON.parse(reply.body);
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jack');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(gender, 'MALE');
+      assert.deepStrictEqual(language, 'SPANISH');
+      assert.deepStrictEqual(codeStatus, 'DNR');
       assert.deepStrictEqual(dateOfBirth, '1990-02-01');
     });
 
@@ -242,18 +311,31 @@ describe('/api/v1/patients', () => {
           patientData: {
             firstName: 'Jill',
             dateOfBirth: '1990-03-01',
+            gender: 'FEMALE',
+            language: 'CANTONESE',
+            advancedDirective: 'DNI',
           },
         })
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { id, firstName, middleName, lastName, dateOfBirth } = JSON.parse(
-        reply.body,
-      );
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        gender,
+        language,
+        codeStatus,
+        dateOfBirth,
+      } = JSON.parse(reply.body);
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'Jill');
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(gender, 'FEMALE');
+      assert.deepStrictEqual(language, 'CANTONESE');
+      assert.deepStrictEqual(codeStatus, 'DNI');
       assert.deepStrictEqual(dateOfBirth, '1990-03-01');
     });
 
