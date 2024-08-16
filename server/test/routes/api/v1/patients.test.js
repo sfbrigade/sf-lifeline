@@ -344,6 +344,87 @@ describe('/api/v1/patients', () => {
       );
     });
 
+    it('should allow ADMIN to replace medical data of a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          medicalData: {
+            allergies: [
+              {
+                id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+              },
+            ],
+            medications: [
+              {
+                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
+              },
+            ],
+            conditions: [
+              {
+                id: '471c8529-81fc-4129-8ca0-f1b7406ed90c',
+              },
+            ],
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      let { id, allergies, medications, conditions } = JSON.parse(reply.body);
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(
+        allergies[0].id,
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+      );
+      assert.deepStrictEqual(
+        medications[0].id,
+        '583c7775-9466-4dab-8a4d-edf1056f097f',
+      );
+      assert.deepStrictEqual(
+        conditions[0].id,
+        '471c8529-81fc-4129-8ca0-f1b7406ed90c',
+      );
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          medicalData: {
+            allergies: [
+              {
+                id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
+              },
+            ],
+            medications: [
+              {
+                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
+              },
+            ],
+            conditions: [],
+          },
+        })
+        .headers(headers);
+
+      allergies = JSON.parse(reply.body).allergies;
+      medications = JSON.parse(reply.body).medications;
+      conditions = JSON.parse(reply.body).conditions;
+
+      assert.deepStrictEqual(
+        allergies[0].id,
+        'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
+      );
+      assert.deepStrictEqual(allergies.length, 1);
+      assert.deepStrictEqual(
+        medications[0].id,
+        '583c7775-9466-4dab-8a4d-edf1056f097f',
+      );
+      assert.deepStrictEqual(medications.length, 1);
+      assert.deepStrictEqual(conditions.length, 0);
+    });
+
     it('should allow ADMIN to update a patient with healthcare choices', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -382,6 +463,58 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(
         physician.id,
         '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+      );
+    });
+
+    it('should allow ADMIN to update healthcare choices of a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+            physicianId: '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      let { id, hospital, physician } = JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(
+        hospital.id,
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+      );
+      assert.deepStrictEqual(
+        physician.id,
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+      );
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'b50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+            physicianId: 'bbbf7f99-36cc-40b5-a26c-cd95daae04b5',
+          },
+        })
+        .headers(headers);
+
+      hospital = JSON.parse(reply.body).hospital;
+      physician = JSON.parse(reply.body).physician;
+
+      assert.deepStrictEqual(
+        hospital.id,
+        'b50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+      );
+      assert.deepStrictEqual(
+        physician.id,
+        'bbbf7f99-36cc-40b5-a26c-cd95daae04b5',
       );
     });
   });

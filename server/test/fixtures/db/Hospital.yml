@@ -7,4 +7,11 @@ items:
     address: 123 Main Street
     phone: 123-456-7890
     email: hospital1@test.com
-    physicians: '@physician1'
+    physicians: ['@physician1', '@physician2']
+  hospital2:
+    id: b50538cd-1e10-42a3-8d6b-f9ae1e48a025
+    name: Hospital 2
+    address: 456 Main Street
+    phone: 123-456-9999
+    email: hospital2@test.com
+    physicians: ['@physician3']

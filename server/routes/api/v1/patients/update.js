@@ -183,16 +183,19 @@ export default async function (fastify, _opts) {
 
           if (allergies) {
             medicalUpdates.allergies = {
+              set: [],
               connect: allergies.map(({ id }) => ({ id })),
             };
           }
           if (medications) {
             medicalUpdates.medications = {
+              set: [],
               connect: medications.map(({ id }) => ({ id })),
             };
           }
           if (conditions) {
             medicalUpdates.conditions = {
+              set: [],
               connect: conditions.map(({ id }) => ({ id })),
             };
           }
