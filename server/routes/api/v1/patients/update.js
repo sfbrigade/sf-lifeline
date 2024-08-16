@@ -253,7 +253,7 @@ export default async function (fastify, _opts) {
             },
           });
         }
-        
+
         return tx.patient.findUnique({
           where: { id: patientId },
           include: {

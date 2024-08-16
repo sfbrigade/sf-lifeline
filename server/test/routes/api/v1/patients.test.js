@@ -375,9 +375,14 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
-      assert.deepStrictEqual(hospital.id, 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025');
-      assert.deepStrictEqual(physician.id, '1ef50c4c-92cb-4298-ab0a-ce7644513bfb');
+      assert.deepStrictEqual(
+        hospital.id,
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+      );
+      assert.deepStrictEqual(
+        physician.id,
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+      );
     });
-
   });
 });
