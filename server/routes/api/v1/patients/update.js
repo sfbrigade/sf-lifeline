@@ -179,57 +179,30 @@ export default async function (fastify, _opts) {
 
         if (medicalData) {
           const { allergies, medications, conditions } = medicalData;
+          const medicalUpdates = {};
 
           if (allergies) {
-            await tx.patient.update({
-              where: {
-                id: patientId,
-              },
-              data: {
-                allergies: {
-                  connect: allergies.map((allergy) => ({
-                    id: allergy.id,
-                  })),
-                },
-                updatedBy: {
-                  connect: { id: userId },
-                },
-              },
-            });
+            medicalUpdates.allergies = {
+              connect: allergies.map(({ id }) => ({ id })),
+            };
           }
-
           if (medications) {
-            await tx.patient.update({
-              where: {
-                id: patientId,
-              },
-              data: {
-                medications: {
-                  connect: medications.map((medication) => ({
-                    id: medication.id,
-                  })),
-                },
-                updatedBy: {
-                  connect: { id: userId },
-                },
-              },
-            });
+            medicalUpdates.medications = {
+              connect: medications.map(({ id }) => ({ id })),
+            };
+          }
+          if (conditions) {
+            medicalUpdates.conditions = {
+              connect: conditions.map(({ id }) => ({ id })),
+            };
           }
 
-          if (conditions) {
+          if (Object.keys(medicalUpdates).length > 0) {
             await tx.patient.update({
-              where: {
-                id: patientId,
-              },
+              where: { id: patientId },
               data: {
-                conditions: {
-                  connect: conditions.map((condition) => ({
-                    id: condition.id,
-                  })),
-                },
-                updatedBy: {
-                  connect: { id: userId },
-                },
+                ...medicalUpdates,
+                updatedBy: { connect: { id: userId } },
               },
             });
           }
