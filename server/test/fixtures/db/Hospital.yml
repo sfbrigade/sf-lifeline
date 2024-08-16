@@ -1,0 +1,11 @@
+entity: hospital
+connectedFields: ['physicians', 'patients']
+items:
+  hospital1:
+    id: a50538cd-1e10-42a3-8d6b-f9ae1e48a025
+    name: Hospital 1
+    address: 123 Main Street
+    phone: 123-456-7890
+    email: hospital1@test.com
+    physicians: '@physician1'
+    

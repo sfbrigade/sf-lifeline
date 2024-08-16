@@ -1,0 +1,11 @@
+entity: physician
+connectedFields: ['hospitals', 'patients']
+items:
+  physician1:
+    id: 1ef50c4c-92cb-4298-ab0a-ce7644513bfb
+    firstName: Physician 1
+    middleName: A
+    lastName: Doe
+    phone: 123-456-7890
+    email: physician1@test.com
+    
