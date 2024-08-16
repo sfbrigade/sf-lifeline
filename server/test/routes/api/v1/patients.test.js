@@ -343,5 +343,41 @@ describe('/api/v1/patients', () => {
         '471c8529-81fc-4129-8ca0-f1b7406ed90c',
       );
     });
+
+    it('should allow ADMIN to update a patient with healthcare choices', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+            physicianId: '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        dateOfBirth,
+        hospital,
+        physician,
+      } = JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(firstName, 'John');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(dateOfBirth, '2000-10-05');
+      assert.deepStrictEqual(hospital.id, 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025');
+      assert.deepStrictEqual(physician.id, '1ef50c4c-92cb-4298-ab0a-ce7644513bfb');
+    });
+
   });
 });

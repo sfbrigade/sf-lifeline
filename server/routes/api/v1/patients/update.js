@@ -66,11 +66,10 @@ export default async function (fastify, _opts) {
             },
             healthcareChoices: {
               type: 'object',
-              required: ['hospital', 'pcp', 'pcpContact'],
+              required: ['hospitalId', 'physicianId'],
               properties: {
-                hospital: { type: 'string' },
-                pcp: { type: 'string' },
-                pcpContact: { type: 'string' },
+                hospitalId: { type: 'string' },
+                physicianId: { type: 'string' },
               },
             },
           },
@@ -98,6 +97,27 @@ export default async function (fastify, _opts) {
               allergies: { type: 'array' },
               conditions: { type: 'array' },
               medications: { type: 'array' },
+              hospital: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  address: { type: 'string' },
+                  phone: { type: 'string' },
+                  email: { type: 'string' },
+                },
+              },
+              physician: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  firstName: { type: 'string' },
+                  middleName: { type: 'string' },
+                  lastName: { type: 'string' },
+                  phone: { type: 'string' },
+                  email: { type: 'string' },
+                },
+              },
               updatedById: { type: 'string' },
             },
           },
@@ -133,7 +153,6 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
-
           let contact = await tx.contact.create({
             data: {
               firstName: contactData.firstName,
@@ -214,11 +233,27 @@ export default async function (fastify, _opts) {
               },
             });
           }
-
-          if (healthcareChoices) {
-            console.log('healthcareChoices', healthcareChoices);
-          }
         }
+
+        if (healthcareChoices) {
+          await tx.patient.update({
+            where: {
+              id: patientId,
+            },
+            data: {
+              hospital: {
+                connect: { id: healthcareChoices.hospitalId },
+              },
+              physician: {
+                connect: { id: healthcareChoices.physicianId },
+              },
+              updatedBy: {
+                connect: { id: userId },
+              },
+            },
+          });
+        }
+        
         return tx.patient.findUnique({
           where: { id: patientId },
           include: {
@@ -226,6 +261,8 @@ export default async function (fastify, _opts) {
             allergies: true,
             medications: true,
             conditions: true,
+            hospital: true,
+            physician: true,
           },
         });
       });
