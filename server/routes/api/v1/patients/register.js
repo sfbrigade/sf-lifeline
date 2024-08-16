@@ -8,11 +8,39 @@ export default async function (fastify, _opts) {
       schema: {
         body: {
           type: 'object',
-          required: ['firstName', 'lastName', 'dateOfBirth'],
+          required: [
+            'firstName',
+            'lastName',
+            'gender',
+            'language',
+            'dateOfBirth',
+          ],
           properties: {
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
+            gender: {
+              type: 'string',
+              enum: [
+                'FEMALE',
+                'MALE',
+                'TRANS_MALE',
+                'TRANS_FEMALE',
+                'OTHER',
+                'UNKNOWN',
+              ],
+            },
+            language: {
+              type: 'string',
+              enum: [
+                'CANTONESE',
+                'ENGLISH',
+                'MANDARIN',
+                'RUSSIAN',
+                'SPANISH',
+                'TAGALOG',
+              ],
+            },
             dateOfBirth: { type: 'string', format: 'date' },
           },
         },
@@ -24,6 +52,8 @@ export default async function (fastify, _opts) {
               firstName: { type: 'string' },
               middleName: { type: 'string' },
               lastName: { type: 'string' },
+              gender: { type: 'string' },
+              language: { type: 'string' },
               dateOfBirth: { type: 'string', format: 'date' },
             },
           },
@@ -32,7 +62,8 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { firstName, middleName, lastName, dateOfBirth } = request.body;
+      const { firstName, middleName, lastName, gender, language, dateOfBirth } =
+        request.body;
 
       const userId = request.user.id;
 
@@ -42,6 +73,8 @@ export default async function (fastify, _opts) {
             firstName: firstName,
             middleName: middleName,
             lastName: lastName,
+            gender: gender,
+            language: language,
             dateOfBirth: new Date(dateOfBirth),
             createdById: userId,
             updatedById: userId,
