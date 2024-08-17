@@ -37,7 +37,7 @@ export default async function (fastify, _opts) {
                     'TAGALOG',
                   ],
                 },
-                advancedDirective: {
+                codeStatus: {
                   type: 'string',
                   enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
                 },
@@ -166,19 +166,11 @@ export default async function (fastify, _opts) {
         if (patientData) {
           const newPatientData = {};
 
-          if (patientData.firstName)
-            newPatientData.firstName = patientData.firstName;
-          if (patientData.middleName)
-            newPatientData.middleName = patientData.middleName;
-          if (patientData.lastName)
-            newPatientData.lastName = patientData.lastName;
-          if (patientData.gender) newPatientData.gender = patientData.gender;
-          if (patientData.language)
-            newPatientData.language = patientData.language;
-          if (patientData.advancedDirective)
-            newPatientData.codeStatus = patientData.advancedDirective;
-          if (patientData.dateOfBirth)
-            newPatientData.dateOfBirth = new Date(patientData.dateOfBirth);
+          // Only update the patient data if the value is truthy
+          for (const [key, value] of Object.entries(patientData)) {
+            if (value) newPatientData[key] = value;
+            if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
+          }
 
           await tx.patient.update({
             where: {
@@ -188,13 +180,16 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
+          const { firstName, middleName, lastName, phone, relationship } =
+            contactData;
+
           let contact = await tx.contact.create({
             data: {
-              firstName: contactData.firstName,
-              middleName: contactData.middleName,
-              lastName: contactData.lastName,
-              phone: contactData.phone,
-              relationship: contactData.relationship,
+              firstName,
+              middleName,
+              lastName,
+              phone,
+              relationship,
             },
           });
           await tx.patient.update({
@@ -213,26 +208,15 @@ export default async function (fastify, _opts) {
         }
 
         if (medicalData) {
-          const { allergies, medications, conditions } = medicalData;
           const medicalUpdates = {};
 
-          if (allergies) {
-            medicalUpdates.allergies = {
-              set: [],
-              connect: allergies.map(({ id }) => ({ id })),
-            };
-          }
-          if (medications) {
-            medicalUpdates.medications = {
-              set: [],
-              connect: medications.map(({ id }) => ({ id })),
-            };
-          }
-          if (conditions) {
-            medicalUpdates.conditions = {
-              set: [],
-              connect: conditions.map(({ id }) => ({ id })),
-            };
+          // Only update the medical data if the value is truthy
+          for (const [key, value] of Object.entries(medicalData)) {
+            if (value)
+              medicalUpdates[key] = {
+                set: [],
+                connect: value.map(({ id }) => ({ id })),
+              };
           }
 
           if (Object.keys(medicalUpdates).length > 0) {

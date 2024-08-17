@@ -236,7 +236,7 @@ describe('/api/v1/patients', () => {
             firstName: 'Jane',
             dateOfBirth: '1990-01-01',
             language: 'RUSSIAN',
-            advancedDirective: 'COMFORT',
+            codeStatus: 'COMFORT',
           },
         })
         .headers(headers);
@@ -274,7 +274,7 @@ describe('/api/v1/patients', () => {
             firstName: 'Jack',
             dateOfBirth: '1990-02-01',
             language: 'SPANISH',
-            advancedDirective: 'DNR',
+            codeStatus: 'DNR',
           },
         })
         .headers(headers);
@@ -313,7 +313,7 @@ describe('/api/v1/patients', () => {
             dateOfBirth: '1990-03-01',
             gender: 'FEMALE',
             language: 'CANTONESE',
-            advancedDirective: 'DNI',
+            codeStatus: 'DNI',
           },
         })
         .headers(headers);
