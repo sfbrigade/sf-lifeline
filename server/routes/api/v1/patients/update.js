@@ -210,15 +210,15 @@ export default async function (fastify, _opts) {
         if (medicalData) {
           const medicalUpdates = {};
 
+          const models = {
+            allergies: 'allergy',
+            medications: 'medication',
+            conditions: 'condition',
+          };
+
           // Only update the medical data if the value is truthy
           for (const [key, value] of Object.entries(medicalData)) {
             if (value) {
-              const models = {
-                allergies: 'allergy',
-                medications: 'medication',
-                conditions: 'condition',
-              };
-
               for (const item of value) {
                 const exists = await tx[models[key]].findUnique({
                   where: { id: item.id },
