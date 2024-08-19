@@ -180,6 +180,9 @@ function Register() {
               setShowLicenseHelper(!showLicenseHelper);
             }}
             formState={formState}
+            showLicenseField={
+              !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
+            }
           />
         </Flex>
       </div>

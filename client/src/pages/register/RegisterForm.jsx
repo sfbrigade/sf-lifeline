@@ -18,6 +18,7 @@ const registerFormProps = {
   onSubmit: PropTypes.func.isRequired,
   setShowLicenseHelper: PropTypes.func.isRequired,
   formState: PropTypes.number.isRequired,
+  showLicenseField: PropTypes.string.isRequired,
 };
 
 /**
@@ -33,6 +34,7 @@ export function RegisterForm({
   onSubmit,
   setShowLicenseHelper,
   formState,
+  showLicenseField,
 }) {
   return (
     <>
@@ -43,7 +45,7 @@ export function RegisterForm({
         }}
       >
         <Container size="25rem" className={classes.form}>
-          {formState !== 3 && (
+          {formState !== 3 && showLicenseField && (
             <>
               <TextInput
                 disabled={isLoading || formState === 2}
