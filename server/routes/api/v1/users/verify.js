@@ -26,13 +26,13 @@ export default async function (fastify, _opts) {
     async (request, reply) => {
       const { emailVerificationToken } = request.body;
 
-      let data = await fastify.prisma.user.findMany({
-        where: { emailVerificationToken: emailVerificationToken },
+      let data = await fastify.prisma.user.findUnique({
+        where: { emailVerificationToken },
       });
-      if (data.length == 0) {
+      if (!data) {
         return reply.notFound();
       }
-      const user = new User(data[0]);
+      const user = new User(data);
 
       if (!user.isEmailVerified) {
         data = await fastify.prisma.user.update({
