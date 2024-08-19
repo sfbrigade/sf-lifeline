@@ -507,6 +507,56 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(conditions.length, 0);
     });
 
+    it('should throw an error if a medical data item does not exist in the database', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          medicalData: {
+            allergies: [
+              {
+                id: '5c057fc3-15d2-40fc-b664-707d04ba66c1',
+              },
+            ],
+          },
+        })
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      let result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'allergies with ID 5c057fc3-15d2-40fc-b664-707d04ba66c1 does not exist in database.',
+      );
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          medicalData: {
+            medications: [
+              {
+                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
+              },
+            ],
+            conditions: [
+              {
+                id: '471c8529-81fc-4129-8ca0-f1b7406ed90a',
+              },
+            ],
+          },
+        })
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'conditions with ID 471c8529-81fc-4129-8ca0-f1b7406ed90a does not exist in database.',
+      );
+    });
+
     it('should allow ADMIN to update a patient with healthcare choices', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -597,6 +647,29 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(
         physician.id,
         'bbbf7f99-36cc-40b5-a26c-cd95daae04b5',
+      );
+    });
+
+    it('should throw an error if a healthcare choices item does not exist in the database', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a022',
+            physicianId: '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Hospital with ID a50538cd-1e10-42a3-8d6b-f9ae1e48a022 does not exist in database.',
       );
     });
   });

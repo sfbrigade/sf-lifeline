@@ -212,11 +212,27 @@ export default async function (fastify, _opts) {
 
           // Only update the medical data if the value is truthy
           for (const [key, value] of Object.entries(medicalData)) {
-            if (value)
+            if (value) {
+              const models = {
+                allergies: 'allergy',
+                medications: 'medication',
+                conditions: 'condition',
+              };
+
+              for (const item of value) {
+                const exists = await tx[models[key]].findUnique({
+                  where: { id: item.id },
+                });
+                if (!exists)
+                  throw fastify.httpErrors.notFound(
+                    `${key} with ID ${item.id} does not exist in database.`,
+                  );
+              }
               medicalUpdates[key] = {
                 set: [],
                 connect: value.map(({ id }) => ({ id })),
               };
+            }
           }
 
           if (Object.keys(medicalUpdates).length > 0) {
@@ -231,6 +247,23 @@ export default async function (fastify, _opts) {
         }
 
         if (healthcareChoices) {
+          // Validate hospital and physician IDs
+          const hospital = await tx.hospital.findUnique({
+            where: { id: healthcareChoices.hospitalId },
+          });
+          if (!hospital)
+            throw new fastify.httpErrors.notFound(
+              `Hospital with ID ${healthcareChoices.hospitalId} does not exist in database.`,
+            );
+
+          const physician = await tx.physician.findUnique({
+            where: { id: healthcareChoices.physicianId },
+          });
+          if (!physician)
+            throw new fastify.httpErrors.notFound(
+              `Physician with ID ${healthcareChoices.physicianId} does not exist in database.`,
+            );
+
           await tx.patient.update({
             where: {
               id: patientId,
