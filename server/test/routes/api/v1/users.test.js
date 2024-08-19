@@ -710,10 +710,7 @@ describe('/api/v1/users', () => {
         where: { id: 'dab5dff3-360d-4dbb-98dd-1990dfb5c4c5' },
       });
       assert.ok(user);
-      assert.deepStrictEqual(
-        user.emailVerificationToken,
-        'be63f7ca-64c5-4eea-a1c0-4c81e7161fa4',
-      );
+      assert.deepStrictEqual(user.emailVerificationToken, null);
 
       const date = new Date(user.emailVerifiedAt);
       const today = new Date();
