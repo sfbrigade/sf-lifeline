@@ -26,7 +26,7 @@ CREATE TABLE "User" (
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
     "email" CITEXT NOT NULL,
-    "emailVerificationToken" TEXT,
+    "emailVerificationToken" UUID,
     "emailVerifiedAt" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "hashedPassword" TEXT NOT NULL,
@@ -166,6 +166,9 @@ CREATE TABLE "_HospitalToPhysician" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_emailVerificationToken_key" ON "User"("emailVerificationToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");

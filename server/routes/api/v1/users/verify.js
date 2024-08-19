@@ -39,6 +39,7 @@ export default async function (fastify, _opts) {
           where: { id: user.id },
           data: {
             emailVerifiedAt: new Date(),
+            emailVerificationToken: null,
           },
         });
       }

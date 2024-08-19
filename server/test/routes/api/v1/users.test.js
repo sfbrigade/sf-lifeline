@@ -701,7 +701,7 @@ describe('/api/v1/users', () => {
       await t.loadFixtures();
 
       const reply = await app.inject().patch('/api/v1/users/verify').payload({
-        emailVerificationToken: '4DA5B4',
+        emailVerificationToken: 'be63f7ca-64c5-4eea-a1c0-4c81e7161fa4',
       });
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
@@ -710,7 +710,10 @@ describe('/api/v1/users', () => {
         where: { id: 'dab5dff3-360d-4dbb-98dd-1990dfb5c4c5' },
       });
       assert.ok(user);
-      assert.deepStrictEqual(user.emailVerificationToken, '4DA5B4');
+      assert.deepStrictEqual(
+        user.emailVerificationToken,
+        'be63f7ca-64c5-4eea-a1c0-4c81e7161fa4',
+      );
 
       const date = new Date(user.emailVerifiedAt);
       const today = new Date();
