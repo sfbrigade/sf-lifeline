@@ -369,9 +369,7 @@ describe('/api/v1/patients', () => {
     });
 
     it('should allow ADMIN to update a patient with medical data', async (t) => {
-      console.log('BEFORE BUILD FOR MEDICAL DATA');
       const app = await build(t);
-      console.log('AFTER BUILD FOR MEDICAL DATA');
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
@@ -428,10 +426,8 @@ describe('/api/v1/patients', () => {
       );
     });
 
-    it('should allow ADMIN to replace medical data of a patient', async (t) => {
-      console.log('BEFORE BUILD FOR REPLACE');
+    it('should allow ADMIN to replace medical data of a patient and keep the order of the items', async (t) => {
       const app = await build(t);
-      console.log('AFTER BUILD FOR REPLACE');
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
       let reply = await app
@@ -442,6 +438,9 @@ describe('/api/v1/patients', () => {
             allergies: [
               {
                 id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+              },
+              {
+                id: 'ebcca2da-655f-48d4-be90-307f36870dc0',
               },
             ],
             medications: [
@@ -466,6 +465,10 @@ describe('/api/v1/patients', () => {
         '5c057fc3-15d2-40fc-b664-707d04ba66c2',
       );
       assert.deepStrictEqual(
+        allergies[1].allergy.id,
+        'ebcca2da-655f-48d4-be90-307f36870dc0',
+      );
+      assert.deepStrictEqual(
         medications[0].medication.id,
         '583c7775-9466-4dab-8a4d-edf1056f097f',
       );
@@ -481,7 +484,10 @@ describe('/api/v1/patients', () => {
           medicalData: {
             allergies: [
               {
-                id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
+                id: 'ebcca2da-655f-48d4-be90-307f36870dc0',
+              },
+              {
+                id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
               },
             ],
             medications: [
@@ -500,9 +506,13 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(
         allergies[0].allergy.id,
-        'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
+        'ebcca2da-655f-48d4-be90-307f36870dc0',
       );
-      assert.deepStrictEqual(allergies.length, 1);
+      assert.deepStrictEqual(
+        allergies[1].allergy.id,
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+      );
+      assert.deepStrictEqual(allergies.length, 2);
       assert.deepStrictEqual(
         medications[0].medication.id,
         '583c7775-9466-4dab-8a4d-edf1056f097f',

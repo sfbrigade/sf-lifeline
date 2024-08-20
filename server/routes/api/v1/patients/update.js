@@ -319,15 +319,15 @@ export default async function (fastify, _opts) {
           include: {
             emergencyContact: true,
             allergies: {
-              select: { allergy: true, sortOrder: true },
+              select: { allergy: true },
               orderBy: { sortOrder: 'asc' },
             },
             medications: {
-              select: { medication: true, sortOrder: true },
+              select: { medication: true },
               orderBy: { sortOrder: 'asc' },
             },
             conditions: {
-              select: { condition: true, sortOrder: true },
+              select: { condition: true },
               orderBy: { sortOrder: 'asc' },
             },
             hospital: true,
