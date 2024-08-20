@@ -1,4 +1,3 @@
-import { set } from 'zod';
 import { Role } from '../../../../models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
@@ -209,20 +208,20 @@ export default async function (fastify, _opts) {
         }
 
         if (medicalData) {
-          const relationKeys = {
+          const RELATION_KEYS = {
             allergies: 'allergy',
             medications: 'medication',
             conditions: 'condition',
           };
 
-          const joinModels = {
+          const JOIN_MODELS = {
             allergies: 'PatientAllergy',
             medications: 'PatientMedication',
             conditions: 'PatientCondition',
           };
 
           for (const key of Object.keys(medicalData)) {
-            const model = joinModels[key];
+            const model = JOIN_MODELS[key];
 
             // Delete previous connections for the patient
             await tx[model].deleteMany({
@@ -232,11 +231,10 @@ export default async function (fastify, _opts) {
             });
           }
 
-          // Only update the medical data if the value is truthy
           for (const [key, value] of Object.entries(medicalData)) {
             if (value) {
-              const model = joinModels[key];
-              const relation = relationKeys[key];
+              const model = JOIN_MODELS[key];
+              const relation = RELATION_KEYS[key];
 
               for (let i = 0; i < value.length; i++) {
                 const item = value[i];
@@ -246,19 +244,19 @@ export default async function (fastify, _opts) {
                   where: { id: item.id },
                 });
                 if (!exists)
-                  throw fastify.httpErrors.notFound(
-                    `${key} with ID ${item.id} does not exist in database.`,
-                  );
-                // Add or update with sortOrder
+                  // Use throw instead of return to make sure transaction is rolled back
+                  throw reply.status(StatusCodes.NOT_FOUND).send({
+                    message: `${key} with ID ${item.id} does not exist in database.`,
+                  });
+
                 await tx[model].upsert({
                   where: {
                     [`patientId_${relation}Id`]: {
-                      // Dynamic composite key
                       patientId: patientId,
                       [`${relation}Id`]: item.id,
                     },
                   },
-                  update: { sortOrder: i }, // Update the sort order
+                  update: { sortOrder: i },
 
                   create: {
                     patientId: patientId,
@@ -284,17 +282,18 @@ export default async function (fastify, _opts) {
             where: { id: healthcareChoices.hospitalId },
           });
           if (!hospital)
-            throw new fastify.httpErrors.notFound(
-              `Hospital with ID ${healthcareChoices.hospitalId} does not exist in database.`,
-            );
+            // Use throw instead of return to make sure transaction is rolled back
+            throw reply.status(StatusCodes.NOT_FOUND).send({
+              message: `Hospital with ID ${healthcareChoices.hospitalId} does not exist in database.`,
+            });
 
           const physician = await tx.physician.findUnique({
             where: { id: healthcareChoices.physicianId },
           });
           if (!physician)
-            throw new fastify.httpErrors.notFound(
-              `Physician with ID ${healthcareChoices.physicianId} does not exist in database.`,
-            );
+            throw reply.status(StatusCodes.NOT_FOUND).send({
+              message: `Physician with ID ${healthcareChoices.physicianId} does not exist in database.`,
+            });
 
           await tx.patient.update({
             where: {
@@ -336,7 +335,7 @@ export default async function (fastify, _opts) {
         });
       });
 
-      reply.code(StatusCodes.OK).send(updatedPatient);
+      return reply.code(StatusCodes.OK).send(updatedPatient);
     },
   );
 }
