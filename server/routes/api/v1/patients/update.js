@@ -1,3 +1,4 @@
+import { set } from 'zod';
 import { Role } from '../../../../models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
@@ -208,42 +209,73 @@ export default async function (fastify, _opts) {
         }
 
         if (medicalData) {
-          const medicalUpdates = {};
-
-          const models = {
+          const relationKeys = {
             allergies: 'allergy',
             medications: 'medication',
             conditions: 'condition',
           };
 
+          const joinModels = {
+            allergies: 'PatientAllergy',
+            medications: 'PatientMedication',
+            conditions: 'PatientCondition',
+          };
+
+          for (const key of Object.keys(medicalData)) {
+            const model = joinModels[key];
+
+            // Delete previous connections for the patient
+            await tx[model].deleteMany({
+              where: {
+                patientId: patientId,
+              },
+            });
+          }
+
           // Only update the medical data if the value is truthy
           for (const [key, value] of Object.entries(medicalData)) {
             if (value) {
-              for (const item of value) {
-                const exists = await tx[models[key]].findUnique({
+              const model = joinModels[key];
+              const relation = relationKeys[key];
+
+              for (let i = 0; i < value.length; i++) {
+                const item = value[i];
+
+                // Check if the referenced record exists
+                const exists = await tx[relation].findUnique({
                   where: { id: item.id },
                 });
                 if (!exists)
                   throw fastify.httpErrors.notFound(
                     `${key} with ID ${item.id} does not exist in database.`,
                   );
+                // Add or update with sortOrder
+                await tx[model].upsert({
+                  where: {
+                    [`patientId_${relation}Id`]: {
+                      // Dynamic composite key
+                      patientId: patientId,
+                      [`${relation}Id`]: item.id,
+                    },
+                  },
+                  update: { sortOrder: i }, // Update the sort order
+
+                  create: {
+                    patientId: patientId,
+                    [`${relation}Id`]: item.id, // Use dynamic relation key (allergyId, medicationId, conditionId)
+                    sortOrder: i, // Set sort order based on input array index
+                  },
+                });
               }
-              medicalUpdates[key] = {
-                set: [],
-                connect: value.map(({ id }) => ({ id })),
-              };
             }
           }
 
-          if (Object.keys(medicalUpdates).length > 0) {
-            await tx.patient.update({
-              where: { id: patientId },
-              data: {
-                ...medicalUpdates,
-                updatedBy: { connect: { id: userId } },
-              },
-            });
-          }
+          await tx.patient.update({
+            where: { id: patientId },
+            data: {
+              updatedBy: { connect: { id: userId } },
+            },
+          });
         }
 
         if (healthcareChoices) {
@@ -286,9 +318,18 @@ export default async function (fastify, _opts) {
           where: { id: patientId },
           include: {
             emergencyContact: true,
-            allergies: true,
-            medications: true,
-            conditions: true,
+            allergies: {
+              select: { allergy: true, sortOrder: true },
+              orderBy: { sortOrder: 'asc' },
+            },
+            medications: {
+              select: { medication: true, sortOrder: true },
+              orderBy: { sortOrder: 'asc' },
+            },
+            conditions: {
+              select: { condition: true, sortOrder: true },
+              orderBy: { sortOrder: 'asc' },
+            },
             hospital: true,
             physician: true,
           },

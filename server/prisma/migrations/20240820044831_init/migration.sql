@@ -136,6 +136,33 @@ CREATE TABLE "Condition" (
 );
 
 -- CreateTable
+CREATE TABLE "PatientAllergy" (
+    "patientId" UUID NOT NULL,
+    "allergyId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientAllergy_pkey" PRIMARY KEY ("patientId","allergyId")
+);
+
+-- CreateTable
+CREATE TABLE "PatientMedication" (
+    "patientId" UUID NOT NULL,
+    "medicationId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientMedication_pkey" PRIMARY KEY ("patientId","medicationId")
+);
+
+-- CreateTable
+CREATE TABLE "PatientCondition" (
+    "patientId" UUID NOT NULL,
+    "conditionId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientCondition_pkey" PRIMARY KEY ("patientId","conditionId")
+);
+
+-- CreateTable
 CREATE TABLE "Physician" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "firstName" TEXT,
@@ -159,24 +186,6 @@ CREATE TABLE "Hospital" (
 );
 
 -- CreateTable
-CREATE TABLE "_AllergyToPatient" (
-    "A" UUID NOT NULL,
-    "B" UUID NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_MedicationToPatient" (
-    "A" UUID NOT NULL,
-    "B" UUID NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_ConditionToPatient" (
-    "A" UUID NOT NULL,
-    "B" UUID NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "_HospitalToPhysician" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
@@ -190,24 +199,6 @@ CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Patient_emergencyContactId_key" ON "Patient"("emergencyContactId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_AllergyToPatient_AB_unique" ON "_AllergyToPatient"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_AllergyToPatient_B_index" ON "_AllergyToPatient"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_MedicationToPatient_AB_unique" ON "_MedicationToPatient"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_MedicationToPatient_B_index" ON "_MedicationToPatient"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_ConditionToPatient_AB_unique" ON "_ConditionToPatient"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_ConditionToPatient_B_index" ON "_ConditionToPatient"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_HospitalToPhysician_AB_unique" ON "_HospitalToPhysician"("A", "B");
@@ -249,22 +240,22 @@ ALTER TABLE "Patient" ADD CONSTRAINT "Patient_createdById_fkey" FOREIGN KEY ("cr
 ALTER TABLE "Patient" ADD CONSTRAINT "Patient_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AllergyToPatient" ADD CONSTRAINT "_AllergyToPatient_A_fkey" FOREIGN KEY ("A") REFERENCES "Allergy"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientAllergy" ADD CONSTRAINT "PatientAllergy_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AllergyToPatient" ADD CONSTRAINT "_AllergyToPatient_B_fkey" FOREIGN KEY ("B") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientAllergy" ADD CONSTRAINT "PatientAllergy_allergyId_fkey" FOREIGN KEY ("allergyId") REFERENCES "Allergy"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_MedicationToPatient" ADD CONSTRAINT "_MedicationToPatient_A_fkey" FOREIGN KEY ("A") REFERENCES "Medication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientMedication" ADD CONSTRAINT "PatientMedication_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_MedicationToPatient" ADD CONSTRAINT "_MedicationToPatient_B_fkey" FOREIGN KEY ("B") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientMedication" ADD CONSTRAINT "PatientMedication_medicationId_fkey" FOREIGN KEY ("medicationId") REFERENCES "Medication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ConditionToPatient" ADD CONSTRAINT "_ConditionToPatient_A_fkey" FOREIGN KEY ("A") REFERENCES "Condition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientCondition" ADD CONSTRAINT "PatientCondition_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ConditionToPatient" ADD CONSTRAINT "_ConditionToPatient_B_fkey" FOREIGN KEY ("B") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PatientCondition" ADD CONSTRAINT "PatientCondition_conditionId_fkey" FOREIGN KEY ("conditionId") REFERENCES "Condition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_HospitalToPhysician" ADD CONSTRAINT "_HospitalToPhysician_A_fkey" FOREIGN KEY ("A") REFERENCES "Hospital"("id") ON DELETE CASCADE ON UPDATE CASCADE;

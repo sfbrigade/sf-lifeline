@@ -369,7 +369,9 @@ describe('/api/v1/patients', () => {
     });
 
     it('should allow ADMIN to update a patient with medical data', async (t) => {
+      console.log('BEFORE BUILD FOR MEDICAL DATA');
       const app = await build(t);
+      console.log('AFTER BUILD FOR MEDICAL DATA');
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
@@ -413,21 +415,23 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
       assert.deepStrictEqual(
-        allergies[0].id,
+        allergies[0].allergy.id,
         '5c057fc3-15d2-40fc-b664-707d04ba66c2',
       );
       assert.deepStrictEqual(
-        medications[0].id,
+        medications[0].medication.id,
         '583c7775-9466-4dab-8a4d-edf1056f097f',
       );
       assert.deepStrictEqual(
-        conditions[0].id,
+        conditions[0].condition.id,
         '471c8529-81fc-4129-8ca0-f1b7406ed90c',
       );
     });
 
     it('should allow ADMIN to replace medical data of a patient', async (t) => {
+      console.log('BEFORE BUILD FOR REPLACE');
       const app = await build(t);
+      console.log('AFTER BUILD FOR REPLACE');
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
       let reply = await app
@@ -458,15 +462,15 @@ describe('/api/v1/patients', () => {
       let { id, allergies, medications, conditions } = JSON.parse(reply.body);
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(
-        allergies[0].id,
+        allergies[0].allergy.id,
         '5c057fc3-15d2-40fc-b664-707d04ba66c2',
       );
       assert.deepStrictEqual(
-        medications[0].id,
+        medications[0].medication.id,
         '583c7775-9466-4dab-8a4d-edf1056f097f',
       );
       assert.deepStrictEqual(
-        conditions[0].id,
+        conditions[0].condition.id,
         '471c8529-81fc-4129-8ca0-f1b7406ed90c',
       );
 
@@ -495,12 +499,12 @@ describe('/api/v1/patients', () => {
       conditions = JSON.parse(reply.body).conditions;
 
       assert.deepStrictEqual(
-        allergies[0].id,
+        allergies[0].allergy.id,
         'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
       );
       assert.deepStrictEqual(allergies.length, 1);
       assert.deepStrictEqual(
-        medications[0].id,
+        medications[0].medication.id,
         '583c7775-9466-4dab-8a4d-edf1056f097f',
       );
       assert.deepStrictEqual(medications.length, 1);
