@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import classes from './passwordReset.module.css';
+import classes from './passwordForgot.module.css';
 import { Flex } from '@mantine/core';
-import { ResetForm } from './ResetForm';
+import { PasswordForgotForm } from './PasswordForgotForm';
 
 /**
  * Password reset page
  */
-function PasswordReset() {
+function PasswordForgot() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
 
+  /**
+   * Password Reset Page
+   */
   function sendPasswordReset() {
     setEmailError(null);
     setIsLoading(true);
@@ -48,7 +51,7 @@ function PasswordReset() {
         </p>
       </div>
       <Flex direction="column" gap="md">
-        <ResetForm
+        <PasswordForgotForm
           email={email}
           emailError={emailError}
           onEmailChange={(event) => {
@@ -64,4 +67,4 @@ function PasswordReset() {
   );
 }
 
-export default PasswordReset;
+export default PasswordForgot;

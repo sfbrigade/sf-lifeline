@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Container, Loader, TextInput } from '@mantine/core';
 import PropTypes from 'prop-types';
-import classes from './passwordReset.module.css';
+import classes from './passwordForgot.module.css';
 
-const resetFormProps = {
+const formProps = {
   email: PropTypes.string.isRequired,
   emailError: PropTypes.string,
   onEmailChange: PropTypes.func.isRequired,
@@ -13,9 +13,9 @@ const resetFormProps = {
 };
 /**
  * Reset Form component for Password Reset page
- * @param {PropTypes.InferProps<typeof resetFormProps>} props
+ * @param {PropTypes.InferProps<typeof formProps>} props
  */
-export function ResetForm({
+export function PasswordForgotForm({
   email,
   emailError,
   onEmailChange,
@@ -62,4 +62,4 @@ export function ResetForm({
   );
 }
 
-ResetForm.propTypes = resetFormProps;
+PasswordForgotForm.propTypes = formProps;

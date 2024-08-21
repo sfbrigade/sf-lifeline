@@ -1,9 +1,9 @@
 import '@mantine/core/styles.css';
-import { ResetForm } from './ResetForm';
+import { PasswordForgotForm } from './PasswordForgotForm';
 
 export default {
-  title: 'Reset Form',
-  component: ResetForm,
+  title: 'Password Forgot Form',
+  component: PasswordForgotForm,
   tags: ['autodocs'],
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
