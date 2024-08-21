@@ -736,7 +736,10 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
       const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(message, 'User not Found');
+      assert.deepStrictEqual(
+        message,
+        'Email not found in SF Life Line Database',
+      );
     });
   });
 });
