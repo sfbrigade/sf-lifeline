@@ -37,7 +37,7 @@ export default async function (fastify, _opts) {
       });
 
       if (!data) {
-        return reply.notFound('User not Found');
+        return reply.notFound('Email not found in SF Life Line Database');
       }
 
       const user = new User(data);
