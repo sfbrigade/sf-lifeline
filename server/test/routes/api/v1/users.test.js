@@ -695,4 +695,48 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(user.disabledAt, null);
     });
   });
+
+  describe('POST /request-password-reset', () => {
+    it('should allow user to request a password reset', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .post('/api/v1/users/request-password-reset')
+        .payload({
+          email: 'volunteer.user@test.com',
+        });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+
+      const sentMails = nodemailerMock.mock.getSentMail();
+
+      assert.notDeepStrictEqual(sentMails.length, 0);
+      assert.deepStrictEqual(
+        sentMails[1].to,
+        'Volunteer User <volunteer.user@test.com>',
+      );
+      assert.deepStrictEqual(
+        sentMails[1].subject,
+        'Reset your password for your SF Lifeline account',
+      );
+    });
+
+    it('should return not found if email does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .post('/api/v1/users/request-password-reset')
+        .payload({
+          email: 'no-exist@test.com',
+        });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
+      const { message } = JSON.parse(res.body);
+      assert.deepStrictEqual(message, 'User not Found');
+    });
+  });
 });

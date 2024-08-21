@@ -92,6 +92,25 @@ class User extends Base {
     });
   }
 
+  generatePasswordResetToken() {
+    this.passwordResetToken = crypto.randomUUID();
+  }
+
+  async sendPasswordResetEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/verify/${this.passwordResetToken}`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordReset',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
   async setPassword(password) {
     this.hashedPassword = await bcrypt.hash(password, 10);
   }

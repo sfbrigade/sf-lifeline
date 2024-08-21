@@ -28,6 +28,8 @@ CREATE TABLE "User" (
     "email" CITEXT NOT NULL,
     "emailVerificationToken" TEXT,
     "emailVerifiedAt" TIMESTAMP(3),
+    "passwordResetToken" TEXT,
+    "passwordResetExpires" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "hashedPassword" TEXT NOT NULL,
     "licenseNumber" TEXT,
@@ -166,6 +168,9 @@ CREATE TABLE "_HospitalToPhysician" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_passwordResetToken_key" ON "User"("passwordResetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");
