@@ -66,6 +66,10 @@ class User extends Base {
     return !!this.emailVerifiedAt;
   }
 
+  get isPasswordResetTokenValid() {
+    return new Date() <= new Date(this.passwordResetExpires);
+  }
+
   get fullNameAndEmail() {
     return `${this.firstName} ${this.middleName ?? ''} ${this.lastName} <${this.email}>`
       .trim()
@@ -98,7 +102,7 @@ class User extends Base {
 
   async sendPasswordResetEmail() {
     const { firstName } = this;
-    const url = `${process.env.BASE_URL}/verify/${this.passwordResetToken}`;
+    const url = `${process.env.BASE_URL}/password-reset/${this.passwordResetToken}`;
     return mailer.send({
       message: {
         to: this.fullNameAndEmail,

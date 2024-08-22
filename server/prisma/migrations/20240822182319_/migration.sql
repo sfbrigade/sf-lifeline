@@ -28,7 +28,7 @@ CREATE TABLE "User" (
     "email" CITEXT NOT NULL,
     "emailVerificationToken" TEXT,
     "emailVerifiedAt" TIMESTAMP(3),
-    "passwordResetToken" TEXT,
+    "passwordResetToken" UUID,
     "passwordResetExpires" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "hashedPassword" TEXT NOT NULL,

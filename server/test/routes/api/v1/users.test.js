@@ -55,12 +55,12 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=4>; rel="last"',
+        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=5>; rel="last"',
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '8');
-      assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '10');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '5');
 
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(data.length, 2);
@@ -104,12 +104,12 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=3>; rel="last"',
+        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=4>; rel="last"',
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '5');
-      assert.deepStrictEqual(reply.headers['x-total-pages'], '3');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '7');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
 
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(data.length, 2);
@@ -739,6 +739,60 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(
         message,
         'Email not found in SF Life Line Database',
+      );
+    });
+  });
+
+  describe('GET /verify-password-reset', () => {
+    it('should return status OK on valid token', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .get(
+          '/api/v1/users/verify-password-reset/' +
+            '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+        );
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+    });
+
+    it('should return status UNAUTHORIZED on invalid token', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .get(
+          '/api/v1/users/verify-password-reset/' +
+            '3b5afcb9-1669-4196-94f1-01251e59f12c',
+        );
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
+      const { message } = JSON.parse(res.body);
+      assert.deepStrictEqual(
+        message,
+        'Password Reset Link is expired or not valid',
+      );
+    });
+
+    it('should return status UNAUTHORIZED on expired token', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .get(
+          '/api/v1/users/verify-password-reset/' +
+            '9a616ebe-f68a-440a-9c4f-fca7f32c88cb',
+        );
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
+      const { message } = JSON.parse(res.body);
+      assert.deepStrictEqual(
+        message,
+        'Password Reset Link is expired or not valid',
       );
     });
   });

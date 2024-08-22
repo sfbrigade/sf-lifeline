@@ -2,22 +2,21 @@ import { StatusCodes } from 'http-status-codes';
 import User from '../../../../models/user.js';
 
 export default async function (fastify, _opts) {
-  fastify.post(
-    '/request-password-reset',
+  fastify.get(
+    '/verify-password-reset/:token',
     {
       schema: {
-        body: {
+        params: {
           type: 'object',
-          required: ['email'],
           properties: {
-            email: { type: 'string' },
+            token: { type: 'string' },
           },
         },
         response: {
           [StatusCodes.OK]: {
             type: 'null',
           },
-          [StatusCodes.NOT_FOUND]: {
+          [StatusCodes.UNAUTHORIZED]: {
             type: 'object',
             properties: {
               message: { type: 'string' },
@@ -27,30 +26,25 @@ export default async function (fastify, _opts) {
       },
     },
     async (request, reply) => {
-      const { email } = request.body;
+      const { token } = request.params;
 
       const data = await fastify.prisma.user.findUnique({
-        where: { email },
+        where: { passwordResetToken: token },
       });
 
       if (!data) {
-        return reply.notFound('Email not found in SF Life Line Database');
+        return reply.unauthorized(
+          'Password Reset Link is expired or not valid',
+        );
       }
 
       const user = new User(data);
 
-      user.generatePasswordResetToken();
-      await user.sendPasswordResetEmail();
-
-      await fastify.prisma.user.update({
-        where: { email },
-        data: {
-          passwordResetToken: user.passwordResetToken,
-          passwordResetExpires: new Date(
-            new Date().getTime() + 30 * 60000,
-          ).toISOString(),
-        },
-      });
+      if (!user.isPasswordResetTokenValid) {
+        return reply.unauthorized(
+          'Password Reset Link is expired or not valid',
+        );
+      }
 
       reply.code(StatusCodes.OK);
     },
