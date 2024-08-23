@@ -78,7 +78,7 @@ export function LoginForm({
             Log in
           </Button>
           <div className={classes.anchor}>
-            <Anchor href="/password-reset">Forgot password</Anchor>
+            <Anchor href="/password-forgot">Forgot password</Anchor>
           </div>
         </Container>
       </form>

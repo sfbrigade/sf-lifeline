@@ -21,6 +21,7 @@ import { AdminUsers } from './pages/admin/users/AdminUsers';
 import Context from './Context';
 import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
 import PasswordForgot from './pages/auth/password-forgot/passwordForgot';
+import PasswordReset from './pages/auth/password-reset/passwordReset';
 import AuthLayout from './stories/AuthLayout/AuthLayout';
 
 const RedirectProps = {
@@ -109,7 +110,11 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/password-reset" element={<PasswordForgot />} />
+            <Route path="/password-forgot" element={<PasswordForgot />} />
+            <Route
+              path="/password-reset/:passwordResetToken"
+              element={<PasswordReset />}
+            />
           </Route>
         </Route>
       </Routes>

@@ -115,6 +115,21 @@ class User extends Base {
     });
   }
 
+  async sendPasswordResetSuccessEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/login`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordResetSuccess',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
   async setPassword(password) {
     this.hashedPassword = await bcrypt.hash(password, 10);
   }

@@ -826,6 +826,37 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(user.passwordResetToken, null);
       assert.deepStrictEqual(user.passwordResetExpires, null);
+
+      const sentMails = nodemailerMock.mock.getSentMail();
+      assert.notDeepStrictEqual(sentMails.length, 0);
+      assert.deepStrictEqual(
+        sentMails[2].to,
+        'ValidPasswordReset User <validreset.user@test.com>',
+      );
+      assert.deepStrictEqual(
+        sentMails[2].subject,
+        'Your SF Lifeline password changed',
+      );
+    });
+
+    it('should return status OK if bad password format', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .patch('/api/v1/users/password-reset')
+        .payload({
+          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+          password: 'bad',
+        });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+      const { message } = JSON.parse(res.body);
+      assert.deepStrictEqual(
+        message,
+        'Password must be at least 8 characters long. Password must include uppercase, lowercase, number, and special character',
+      );
     });
 
     it('should return status UNAUTHORIZED on invalid attempt', async (t) => {

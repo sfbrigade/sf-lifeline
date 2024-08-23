@@ -28,9 +28,16 @@ export default async function (fastify, _opts) {
     async (request, reply) => {
       const { token } = request.params;
 
-      const data = await fastify.prisma.user.findUnique({
-        where: { passwordResetToken: token },
-      });
+      let data;
+      try {
+        data = await fastify.prisma.user.findUnique({
+          where: { passwordResetToken: token },
+        });
+      } catch (error) {
+        return reply.unauthorized(
+          'Password Reset Link is expired or not valid',
+        );
+      }
 
       if (!data) {
         return reply.unauthorized(

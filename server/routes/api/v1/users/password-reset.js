@@ -24,6 +24,12 @@ export default async function (fastify, _opts) {
               message: { type: 'string' },
             },
           },
+          [StatusCodes.UNPROCESSABLE_ENTITY]: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
         },
       },
     },
@@ -40,6 +46,22 @@ export default async function (fastify, _opts) {
         );
       }
 
+      const passwordSchema = User.schema.pick({ password: true });
+      try {
+        passwordSchema.parse({ password: password });
+      } catch (error) {
+        let message = '';
+        error.errors.forEach((e) => {
+          if (message.length > 0) {
+            message += `. ${e.message}`;
+          } else {
+            message = e.message;
+          }
+        });
+
+        return reply.unprocessableEntity(message);
+      }
+
       const user = new User(data);
 
       await user.setPassword(password);
@@ -52,6 +74,7 @@ export default async function (fastify, _opts) {
           hashedPassword: user.hashedPassword,
         },
       });
+      await user.sendPasswordResetSuccessEmail();
 
       reply.code(StatusCodes.OK);
     },
