@@ -1,7 +1,15 @@
-import { useState } from 'react';
-import { Accordion, Container, TextInput, Select, Button } from '@mantine/core';
+import { useState, useRef } from 'react';
+import {
+  Accordion,
+  TextInput,
+  Select,
+  
+} from '@mantine/core';
+
+import MedicalDataSearch from './MedicalDataSearch';
 
 export default function Patients() {
+
   const [patientForm, setPaitentForm] = useState({
     firstName: '',
     middleName: '',
@@ -9,8 +17,6 @@ export default function Patients() {
     gender: null,
     dateOfBirth: '',
   });
-
-  console.log(patientForm);
 
   const [contactData, setContactData] = useState({
     firstName: '',
@@ -27,6 +33,8 @@ export default function Patients() {
     conditions: [],
   });
 
+  console.log(medicalData);
+
   const [healthcareChoices, setHealthcareChoices] = useState({
     hopsital: '',
     pcp: '',
@@ -39,11 +47,6 @@ export default function Patients() {
     console.log('Submitted');
   }
 
-  // Need several forms for each accoridon section
-  // Fpr tje medical data section, need to have an auto complete or search on change
-  // https://mantine.dev/combobox/?e=AsyncAutocomplete
-  // https://mantine.dev/combobox/?e=SearchableMultiSelect
-  // https://mantine.dev/combobox/?e=ActiveOptionsFilter
 
   return (
     <main>
@@ -199,30 +202,9 @@ export default function Patients() {
           <Accordion.Control>Medical Data</Accordion.Control>
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
-              <TextInput
-                label="Allergies"
-                placeholder="Allergies"
-                value={medicalData.allergies}
-                onChange={(value) =>
-                  setMedicalData({ ...medicalData, allergies: value })
-                }
-              />
-              <TextInput
-                label="Medications"
-                placeholder="Medications"
-                value={medicalData.medications}
-                onChange={(value) =>
-                  setMedicalData({ ...medicalData, medications: value })
-                }
-              />
-              <TextInput
-                label="Conditions"
-                placeholder="Conditions"
-                value={medicalData.conditions}
-                onChange={(value) =>
-                  setMedicalData({ ...medicalData, conditions: value })
-                }
-              />
+              {Object.keys(medicalData).map((category) => {
+                return <MedicalDataSearch category={category} key={category} handleMedicalData={setMedicalData} />;
+              })}
             </form>
           </Accordion.Panel>
         </Accordion.Item>
@@ -236,7 +218,10 @@ export default function Patients() {
                 placeholder="Hopsital"
                 value={healthcareChoices.hopsital}
                 onChange={(value) =>
-                  setHealthcareChoices({ ...healthcareChoices, hopsital: value })
+                  setHealthcareChoices({
+                    ...healthcareChoices,
+                    hopsital: value,
+                  })
                 }
               />
               <TextInput
@@ -258,13 +243,7 @@ export default function Patients() {
               <Select
                 label="Code Status"
                 placeholder="Select Code Status"
-                data={[
-                  'Comfort',
-                  'DNR',
-                  'DNI',
-                  'DNR DNI',
-                  'Full',
-                ]}
+                data={['Comfort', 'DNR', 'DNI', 'DNR DNI', 'Full']}
                 value={codeStatus}
                 onChange={(value) => setCodeStatus(value)}
                 clearable

@@ -93,6 +93,7 @@ function App() {
               path="/admin/patients/generate"
               element={<AdminPatientsGenerate />}
             />
+            <Route path="/admin/patients/register" element={<Patients />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
               path="/admin/pending-users"
@@ -104,7 +105,6 @@ function App() {
         <Route
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
-          <Route path="/patients" element={<Patients />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />

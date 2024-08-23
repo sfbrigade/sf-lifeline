@@ -25,6 +25,11 @@ const sections = [
     links: [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
       {
+        label: 'New Patient',
+        href: '/admin/patients/register',
+        icon: <IconEmergencyBed stroke={2} />,
+      },
+      {
         label: 'Team Member',
         href: '/admin/users',
         icon: <IconUsersGroup stroke={2} />,
