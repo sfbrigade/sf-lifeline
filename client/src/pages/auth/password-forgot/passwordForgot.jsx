@@ -19,7 +19,7 @@ function PasswordForgot() {
     setEmailError(null);
     setIsLoading(true);
     fetch('/api/v1/users/request-password-reset', {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },

@@ -696,14 +696,14 @@ describe('/api/v1/users', () => {
     });
   });
 
-  describe('POST /request-password-reset', () => {
+  describe('PATCH /request-password-reset', () => {
     it('should allow user to request a password reset', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
       const res = await app
         .inject()
-        .post('/api/v1/users/request-password-reset')
+        .patch('/api/v1/users/request-password-reset')
         .payload({
           email: 'volunteer.user@test.com',
         });
@@ -729,7 +729,7 @@ describe('/api/v1/users', () => {
 
       const res = await app
         .inject()
-        .post('/api/v1/users/request-password-reset')
+        .patch('/api/v1/users/request-password-reset')
         .payload({
           email: 'no-exist@test.com',
         });
@@ -797,14 +797,14 @@ describe('/api/v1/users', () => {
     });
   });
 
-  describe('POST /password-reset', () => {
+  describe('PATCH /password-reset', () => {
     it('should return status OK on successful password reset', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
       const res = await app
         .inject()
-        .post('/api/v1/users/password-reset')
+        .patch('/api/v1/users/password-reset')
         .payload({
           passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
           password: 'NewPassword123!',
@@ -834,7 +834,7 @@ describe('/api/v1/users', () => {
 
       let res = await app
         .inject()
-        .post('/api/v1/users/password-reset')
+        .patch('/api/v1/users/password-reset')
         .payload({
           passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
           password: 'NewPassword123!',
@@ -842,7 +842,7 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
 
-      res = await app.inject().post('/api/v1/users/password-reset').payload({
+      res = await app.inject().patch('/api/v1/users/password-reset').payload({
         passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
         password: 'AnotherPassword123!',
       });
