@@ -7,7 +7,6 @@ import MedicalDataSearch from './MedicalDataSearch';
  *  Patients page component
  *
  */
-
 export default function Patients() {
   const [patientForm, setPaitentForm] = useState({
     firstName: '',
@@ -41,6 +40,10 @@ export default function Patients() {
 
   const [codeStatus, setCodeStatus] = useState(null);
 
+  /**
+   *
+   * @param {Event} event
+   */
   function handleSubmit(event) {
     event.preventDefault();
     console.log('Submitted');

@@ -12,7 +12,6 @@ const medicalDataSearchProps = {
  *  Medical Data Search component for Medical Data section of patient form
  * @param {PropTypes.InferProps<typeof medicalDataSearchProps>} props
  */
-
 export default function MedicalDataSearch({ category, handleMedicalData }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -27,6 +26,10 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
     conditions: 'condition',
   };
 
+  /**
+   *
+   * @param {string} query
+   */
   async function getAsyncData(query) {
     const response = await fetch(
       `/api/v1/${category}?${API_PATHS[category]}=${query}`,
