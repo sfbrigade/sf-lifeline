@@ -150,3 +150,5 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
     </Combobox>
   );
 }
+
+MedicalDataSearch.propTypes = medicalDataSearchProps;
