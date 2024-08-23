@@ -11,45 +11,45 @@ export default {
   },
 };
 
-export const DefaultResetForm = {
+export const Default = {
   args: {
     email: '',
     emailError: null,
     isLoading: false,
-    onFormChange: () => {},
+    onEmailChange: () => {},
     onSubmit: () => {},
     formState: 1,
   },
 };
 
-export const LoadingResetForm = {
+export const Loading = {
   args: {
     email: 'user@test.com',
     emailError: null,
     isLoading: true,
-    onFormChange: () => {},
+    onEmailChange: () => {},
     onSubmit: () => {},
     formState: 1,
   },
 };
 
-export const ErrorResetForm = {
+export const Error = {
   args: {
     email: 'troll@test.com',
     emailError: 'Email not found in SF Life Line Database',
     isLoading: false,
-    onFormChange: () => {},
+    onEmailChange: () => {},
     onSubmit: () => {},
     formState: 1,
   },
 };
 
-export const SuccessResetForm = {
+export const Success = {
   args: {
     email: 'user@test.com',
     emailError: null,
     isLoading: false,
-    onFormChange: () => {},
+    onEmailChange: () => {},
     onSubmit: () => {},
     formState: 2,
   },

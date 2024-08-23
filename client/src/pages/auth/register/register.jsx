@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classes from './register.module.css';
+import formClasses from '../form.module.css';
 import { RegisterForm } from './RegisterForm';
 import { Flex } from '@mantine/core';
 
@@ -116,7 +116,7 @@ function Register() {
 
   return (
     <div>
-      <div className={classes.header}>
+      <div className={formClasses.header}>
         <h2>Interest Form</h2>
         <p>
           description of filling out interest form to start account registration

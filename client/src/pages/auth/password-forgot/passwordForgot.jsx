@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classes from './passwordForgot.module.css';
+import classes from '../form.module.css';
 import { Flex } from '@mantine/core';
 import { PasswordForgotForm } from './PasswordForgotForm';
 
@@ -13,7 +13,7 @@ function PasswordForgot() {
   const [formState, setFormState] = useState(1);
 
   /**
-   * Password Reset Page
+   * API call to send a request for a password reset to email on account profile
    */
   function sendPasswordReset() {
     setEmailError(null);
@@ -32,7 +32,6 @@ function PasswordForgot() {
         setFormState(2);
       })
       .catch((error) => {
-        console.log(error);
         error.json().then(({ message }) => {
           setEmailError(message);
         });

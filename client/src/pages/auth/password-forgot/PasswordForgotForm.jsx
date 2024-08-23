@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Loader, TextInput } from '@mantine/core';
 import PropTypes from 'prop-types';
-import classes from './passwordForgot.module.css';
+import classes from '../form.module.css';
 
 const formProps = {
   email: PropTypes.string.isRequired,
