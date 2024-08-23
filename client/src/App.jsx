@@ -20,6 +20,7 @@ import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
 import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
+import Patients from './pages/patients/patients';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -103,6 +104,7 @@ function App() {
         <Route
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
+          <Route path="/patients" element={<Patients />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
