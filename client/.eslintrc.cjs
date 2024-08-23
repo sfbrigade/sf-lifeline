@@ -16,6 +16,7 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'react/react-in-jsx-scope': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
