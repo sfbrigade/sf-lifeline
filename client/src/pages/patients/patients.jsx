@@ -1,7 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Accordion, TextInput, Select } from '@mantine/core';
 
 import MedicalDataSearch from './MedicalDataSearch';
+
+/**
+ *  Patients page component
+ *
+ */
 
 export default function Patients() {
   const [patientForm, setPaitentForm] = useState({

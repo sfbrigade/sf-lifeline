@@ -1,12 +1,17 @@
-import {
-  TextInput,
-  Loader,
-  Combobox,
-  useCombobox,
-  Pill,
-  PillsInput,
-} from '@mantine/core';
+import PropTypes from 'prop-types';
+
+import { Loader, Combobox, useCombobox, Pill, PillsInput } from '@mantine/core';
 import { useState, useRef } from 'react';
+
+const medicalDataSearchProps = {
+  category: PropTypes.string.isRequired,
+  handleMedicalData: PropTypes.func.isRequired,
+};
+
+/**
+ *  Medical Data Search component for Medical Data section of patient form
+ * @param {PropTypes.InferProps<typeof medicalDataSearchProps>} props
+ */
 
 export default function MedicalDataSearch({ category, handleMedicalData }) {
   const [loading, setLoading] = useState(false);
