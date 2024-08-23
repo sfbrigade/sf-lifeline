@@ -1,11 +1,19 @@
-import { TextInput, Loader, Combobox, useCombobox } from '@mantine/core';
+import {
+  TextInput,
+  Loader,
+  Combobox,
+  useCombobox,
+  Pill,
+  PillsInput,
+} from '@mantine/core';
 import { useState, useRef } from 'react';
 
-export default function MedicalDataSearch({category}) {
+export default function MedicalDataSearch({ category, handleMedicalData }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState([]);
   const [empty, setEmpty] = useState(false);
+  const [search, setSearch] = useState('');
   const abortController = useRef();
 
   const API_PATHS = {
@@ -15,14 +23,49 @@ export default function MedicalDataSearch({category}) {
   };
 
   async function getAsyncData(query) {
-    const response = await fetch(`/api/v1/${category}?${API_PATHS[category]}=${query}`);
+    const response = await fetch(
+      `/api/v1/${category}?${API_PATHS[category]}=${query}`,
+    );
     const data = await response.json();
-    console.log(data);
     return data;
   }
 
+  const handleValueSelect = (id, key) => {
+    const name = key.children;
+    setValue((current) =>
+      current.includes(id)
+        ? current.filter((v) => v.id !== id)
+        : [...current, { id, name }],
+    );
+    handleMedicalData((current) => ({
+      ...current,
+      [category]: [...current[category], id],
+    }));
+  };
+
+  const handleValueRemove = (val) => {
+    setValue((current) => current.filter((v) => v.id !== val));
+    handleMedicalData((current) => ({
+      ...current,
+      [category]: current[category].filter((v) => v.id !== val),
+    }));
+  };
+
+  const values = value.map((item) => {
+    return (
+      <Pill
+        key={item.id}
+        withRemoveButton
+        onRemove={() => handleValueRemove(item.id)}
+      >
+        {item.name}
+      </Pill>
+    );
+  });
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
   });
 
   const fetchOptions = (query) => {
@@ -42,42 +85,56 @@ export default function MedicalDataSearch({category}) {
   };
 
   const options = (data || []).map((item) => (
-    <Combobox.Option value={item.name} key={item.id}>
+    <Combobox.Option
+      value={item.id}
+      key={item.id}
+      active={value.includes(item.name)}
+    >
       {item.name}
     </Combobox.Option>
   ));
 
   return (
     <Combobox
-      onOptionSubmit={(optionValue) => {
-        setValue(optionValue);
-        combobox.closeDropdown();
-      }}
+      onOptionSubmit={handleValueSelect}
       withinPortal={false}
       store={combobox}
     >
-      <Combobox.Target>
-        <TextInput
-          label={category}
-          placeholder={`Search ${category}`}
-          value={value}
-          onChange={(event) => {
-            setValue(event.currentTarget.value);
-            fetchOptions(event.currentTarget.value);
-            combobox.resetSelectedOption();
-            combobox.openDropdown();
-          }}
-          onClick={() => combobox.openDropdown()}
-          onFocus={() => {
-            combobox.openDropdown();
-            if (data === null) {
-              fetchOptions(value);
-            }
-          }}
-          onBlur={() => combobox.closeDropdown()}
-          rightSection={loading && <Loader size={18} />}
-        />
-      </Combobox.Target>
+      <Combobox.DropdownTarget>
+        <PillsInput onClick={() => combobox.openDropdown()} label={category}>
+          <Pill.Group>
+            {values}
+
+            <Combobox.EventsTarget>
+              <PillsInput.Field
+                onFocus={() => {
+                  combobox.openDropdown();
+                  if (data === null) {
+                    fetchOptions(value);
+                  }
+                }}
+                onBlur={() => combobox.closeDropdown()}
+                value={search}
+                placeholder={`Search ${category}`}
+                onChange={(event) => {
+                  combobox.updateSelectedOptionIndex();
+                  setSearch(event.currentTarget.value);
+                  fetchOptions(event.currentTarget.value);
+                  combobox.resetSelectedOption();
+                  combobox.openDropdown();
+                }}
+                rightSection={loading && <Loader size={18} />}
+                onKeyDown={(event) => {
+                  if (event.key === 'Backspace' && search.length === 0) {
+                    event.preventDefault();
+                    handleValueRemove(value[value.length - 1]);
+                  }
+                }}
+              />
+            </Combobox.EventsTarget>
+          </Pill.Group>
+        </PillsInput>
+      </Combobox.DropdownTarget>
 
       <Combobox.Dropdown hidden={data === null}>
         <Combobox.Options>

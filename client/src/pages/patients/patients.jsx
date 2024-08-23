@@ -1,15 +1,9 @@
 import { useState, useRef } from 'react';
-import {
-  Accordion,
-  TextInput,
-  Select,
-  
-} from '@mantine/core';
+import { Accordion, TextInput, Select } from '@mantine/core';
 
 import MedicalDataSearch from './MedicalDataSearch';
 
 export default function Patients() {
-
   const [patientForm, setPaitentForm] = useState({
     firstName: '',
     middleName: '',
@@ -46,7 +40,6 @@ export default function Patients() {
     event.preventDefault();
     console.log('Submitted');
   }
-
 
   return (
     <main>
@@ -203,7 +196,13 @@ export default function Patients() {
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
               {Object.keys(medicalData).map((category) => {
-                return <MedicalDataSearch category={category} key={category} handleMedicalData={setMedicalData} />;
+                return (
+                  <MedicalDataSearch
+                    category={category}
+                    key={category}
+                    handleMedicalData={setMedicalData}
+                  />
+                );
               })}
             </form>
           </Accordion.Panel>
