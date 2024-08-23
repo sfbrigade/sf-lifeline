@@ -796,4 +796,78 @@ describe('/api/v1/users', () => {
       );
     });
   });
+
+  describe('POST /password-reset', () => {
+    it('should return status OK on successful password reset', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const res = await app
+        .inject()
+        .post('/api/v1/users/password-reset')
+        .payload({
+          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+          password: 'NewPassword123!',
+        });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: '5a848b86-e418-4f7f-9973-cbda82aaaba5' },
+      });
+
+      bcrypt.compare(
+        'NewPassword123!',
+        user.hashedPassword,
+        function (err, result) {
+          assert.deepStrictEqual(result, true);
+        },
+      );
+
+      assert.deepStrictEqual(user.passwordResetToken, null);
+      assert.deepStrictEqual(user.passwordResetExpires, null);
+    });
+
+    it('should return status UNAUTHORIZED on invalid attempt', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let res = await app
+        .inject()
+        .post('/api/v1/users/password-reset')
+        .payload({
+          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+          password: 'NewPassword123!',
+        });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
+
+      res = await app.inject().post('/api/v1/users/password-reset').payload({
+        passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+        password: 'AnotherPassword123!',
+      });
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: '5a848b86-e418-4f7f-9973-cbda82aaaba5' },
+      });
+
+      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
+      const { message } = JSON.parse(res.body);
+      assert.deepStrictEqual(
+        message,
+        'Password Reset Link is expired or not valid',
+      );
+
+      bcrypt.compare(
+        'NewPassword123!',
+        user.hashedPassword,
+        function (err, result) {
+          assert.deepStrictEqual(result, true);
+        },
+      );
+
+      assert.deepStrictEqual(user.passwordResetToken, null);
+      assert.deepStrictEqual(user.passwordResetExpires, null);
+    });
+  });
 });
