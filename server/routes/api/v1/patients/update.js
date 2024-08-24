@@ -24,7 +24,7 @@ export default async function (fastify, _opts) {
                     'TRANS_FEMALE',
                     'OTHER',
                     'UNKNOWN',
-                  ]
+                  ],
                 },
                 language: {
                   type: 'string',
@@ -51,7 +51,10 @@ export default async function (fastify, _opts) {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
-                phone: { type: 'string', pattern: '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' },
+                phone: {
+                  type: 'string',
+                  pattern: '^[0-9]{3}-[0-9]{3}-[0-9]{4}$',
+                },
                 relationship: { type: 'string' },
               },
             },
@@ -61,31 +64,19 @@ export default async function (fastify, _opts) {
                 allergies: {
                   type: 'array',
                   items: {
-                    type: 'object',
-                    required: ['id'],
-                    properties: {
-                      id: { type: 'string' },
-                    },
+                    type: 'string',
                   },
                 },
                 medications: {
                   type: 'array',
                   items: {
-                    type: 'object',
-                    required: ['id'],
-                    properties: {
-                      id: { type: 'string' },
-                    },
+                    type: 'string',
                   },
                 },
                 conditions: {
                   type: 'array',
                   items: {
-                    type: 'object',
-                    required: ['id'],
-                    properties: {
-                      id: { type: 'string' },
-                    },
+                    type: 'string',
                   },
                 },
               },
@@ -241,26 +232,26 @@ export default async function (fastify, _opts) {
 
                 // Check if the referenced record exists
                 const exists = await tx[relation].findUnique({
-                  where: { id: item.id },
+                  where: { id: item },
                 });
                 if (!exists)
                   // Use throw instead of return to make sure transaction is rolled back
                   throw reply.status(StatusCodes.NOT_FOUND).send({
-                    message: `${key} with ID ${item.id} does not exist in database.`,
+                    message: `${key} with ID ${item} does not exist in database.`,
                   });
 
                 await tx[model].upsert({
                   where: {
                     [`patientId_${relation}Id`]: {
                       patientId: patientId,
-                      [`${relation}Id`]: item.id,
+                      [`${relation}Id`]: item,
                     },
                   },
                   update: { sortOrder: i },
 
                   create: {
                     patientId: patientId,
-                    [`${relation}Id`]: item.id, // Use dynamic relation key (allergyId, medicationId, conditionId)
+                    [`${relation}Id`]: item, // Use dynamic relation key (allergyId, medicationId, conditionId)
                     sortOrder: i, // Set sort order based on input array index
                   },
                 });

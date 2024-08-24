@@ -377,25 +377,12 @@ describe('/api/v1/patients', () => {
         .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
-            allergies: [
-              {
-                id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
-              },
-            ],
-            medications: [
-              {
-                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
-              },
-            ],
-            conditions: [
-              {
-                id: '471c8529-81fc-4129-8ca0-f1b7406ed90c',
-              },
-            ],
+            allergies: ['5c057fc3-15d2-40fc-b664-707d04ba66c2'],
+            medications: ['583c7775-9466-4dab-8a4d-edf1056f097f'],
+            conditions: ['471c8529-81fc-4129-8ca0-f1b7406ed90c'],
           },
         })
         .headers(headers);
-
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const {
         id,
@@ -436,23 +423,12 @@ describe('/api/v1/patients', () => {
         .payload({
           medicalData: {
             allergies: [
-              {
-                id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
-              },
-              {
-                id: 'ebcca2da-655f-48d4-be90-307f36870dc0',
-              },
+              '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+
+              'ebcca2da-655f-48d4-be90-307f36870dc0',
             ],
-            medications: [
-              {
-                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
-              },
-            ],
-            conditions: [
-              {
-                id: '471c8529-81fc-4129-8ca0-f1b7406ed90c',
-              },
-            ],
+            medications: ['583c7775-9466-4dab-8a4d-edf1056f097f'],
+            conditions: ['471c8529-81fc-4129-8ca0-f1b7406ed90c'],
           },
         })
         .headers(headers);
@@ -483,18 +459,11 @@ describe('/api/v1/patients', () => {
         .payload({
           medicalData: {
             allergies: [
-              {
-                id: 'ebcca2da-655f-48d4-be90-307f36870dc0',
-              },
-              {
-                id: '5c057fc3-15d2-40fc-b664-707d04ba66c2',
-              },
+              'ebcca2da-655f-48d4-be90-307f36870dc0',
+
+              '5c057fc3-15d2-40fc-b664-707d04ba66c2',
             ],
-            medications: [
-              {
-                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
-              },
-            ],
+            medications: ['583c7775-9466-4dab-8a4d-edf1056f097f'],
             conditions: [],
           },
         })
@@ -530,11 +499,7 @@ describe('/api/v1/patients', () => {
         .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
-            allergies: [
-              {
-                id: '5c057fc3-15d2-40fc-b664-707d04ba66c1',
-              },
-            ],
+            allergies: ['5c057fc3-15d2-40fc-b664-707d04ba66c1'],
           },
         })
         .headers(headers);
@@ -550,16 +515,8 @@ describe('/api/v1/patients', () => {
         .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
-            medications: [
-              {
-                id: '583c7775-9466-4dab-8a4d-edf1056f097f',
-              },
-            ],
-            conditions: [
-              {
-                id: '471c8529-81fc-4129-8ca0-f1b7406ed90a',
-              },
-            ],
+            medications: ['583c7775-9466-4dab-8a4d-edf1056f097f'],
+            conditions: ['471c8529-81fc-4129-8ca0-f1b7406ed90a'],
           },
         })
         .headers(headers);
