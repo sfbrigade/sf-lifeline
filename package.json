@@ -6,6 +6,7 @@
     "server"
   ],
   "scripts": {
+    "heroku-postbuild": "npm run -w client build",
     "start": "nf start -j Procfile.dev",
     "test": "npm run test --workspaces",
     "format": "npm run format --workspaces",
