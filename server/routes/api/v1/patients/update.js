@@ -24,7 +24,7 @@ export default async function (fastify, _opts) {
                     'TRANS_FEMALE',
                     'OTHER',
                     'UNKNOWN',
-                  ],
+                  ]
                 },
                 language: {
                   type: 'string',
@@ -51,7 +51,7 @@ export default async function (fastify, _opts) {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
-                phone: { type: 'string' },
+                phone: { type: 'string', pattern: '^[0-9]{3}-[0-9]{3}-[0-9]{4}$' },
                 relationship: { type: 'string' },
               },
             },
