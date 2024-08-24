@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accordion, TextInput, Select } from '@mantine/core';
+import { Accordion, TextInput, Select, Button } from '@mantine/core';
 
 import MedicalDataSearch from './MedicalDataSearch';
 
@@ -8,7 +8,7 @@ import MedicalDataSearch from './MedicalDataSearch';
  *
  */
 export default function Patients() {
-  const [patientForm, setPaitentForm] = useState({
+  const [patientData, setPaitentData] = useState({
     firstName: '',
     middleName: '',
     lastName: '',
@@ -49,21 +49,25 @@ export default function Patients() {
     console.log('Submitted');
   }
 
+  function handleAccordionChange(value, index) {
+    console.log(value, index);
+  }
+
   return (
     <main>
-      <h1>Patients</h1>
-      <Accordion defaultValue="patient-form">
-        <Accordion.Item value="patient-form">
-          <Accordion.Control>Patient Form</Accordion.Control>
+      <h1>Register Patients</h1>
+      <Accordion defaultValue="patient-data" onChange={handleAccordionChange}>
+        <Accordion.Item value="patient-data">
+          <Accordion.Control>Basic Information</Accordion.Control>
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
               <TextInput
                 label="First Name"
                 placeholder="First Name"
-                value={patientForm.firstName}
+                value={patientData.firstName}
                 onChange={(event) =>
-                  setPaitentForm({
-                    ...patientForm,
+                  setPaitentData({
+                    ...patientData,
                     firstName: event.target.value,
                   })
                 }
@@ -71,10 +75,10 @@ export default function Patients() {
               <TextInput
                 label="Middle Name"
                 placeholder="Middle Name"
-                value={patientForm.middleName}
+                value={patientData.middleName}
                 onChange={(event) =>
-                  setPaitentForm({
-                    ...patientForm,
+                  setPaitentData({
+                    ...patientData,
                     middleName: event.target.value,
                   })
                 }
@@ -82,10 +86,10 @@ export default function Patients() {
               <TextInput
                 label="Last Name"
                 placeholder="Last Name"
-                value={patientForm.lastName}
+                value={patientData.lastName}
                 onChange={(event) =>
-                  setPaitentForm({
-                    ...patientForm,
+                  setPaitentData({
+                    ...patientData,
                     lastName: event.target.value,
                   })
                 }
@@ -101,19 +105,19 @@ export default function Patients() {
                   'Other',
                   'Unknown',
                 ]}
-                value={patientForm.gender}
+                value={patientData.gender}
                 onChange={(value) =>
-                  setPaitentForm({ ...patientForm, gender: value })
+                  setPaitentData({ ...patientData, gender: value })
                 }
                 clearable
               />
               <TextInput
                 label="Date of Birth"
                 placeholder="YYYY-MM-DD"
-                value={patientForm.dateOfBirth}
+                value={patientData.dateOfBirth}
                 onChange={(event) =>
-                  setPaitentForm({
-                    ...patientForm,
+                  setPaitentData({
+                    ...patientData,
                     dateOfBirth: event.target.value,
                   })
                 }
@@ -123,7 +127,7 @@ export default function Patients() {
         </Accordion.Item>
 
         <Accordion.Item value="contact-data">
-          <Accordion.Control>Contact Data</Accordion.Control>
+          <Accordion.Control>Emergency Contact</Accordion.Control>
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
               <TextInput
@@ -200,7 +204,7 @@ export default function Patients() {
         </Accordion.Item>
 
         <Accordion.Item value="medical-data">
-          <Accordion.Control>Medical Data</Accordion.Control>
+          <Accordion.Control>Medical Information</Accordion.Control>
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
               {Object.keys(medicalData).map((category) => {
@@ -244,7 +248,7 @@ export default function Patients() {
         </Accordion.Item>
 
         <Accordion.Item value="code-status">
-          <Accordion.Control>Code Status</Accordion.Control>
+          <Accordion.Control>Advanced Directive</Accordion.Control>
           <Accordion.Panel>
             <form onSubmit={handleSubmit}>
               <Select
@@ -259,6 +263,7 @@ export default function Patients() {
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
+      <Button onClick={handleSubmit}>Register Patient</Button>
     </main>
   );
 }
