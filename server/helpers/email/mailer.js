@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import Email from 'email-templates';
 import nodemailer from 'nodemailer';
 
@@ -19,17 +20,19 @@ if (process.env.AWS_SES_REGION) {
   signature = crypto.createHmac('sha256', signature).update(terminal).digest();
   signature = crypto.createHmac('sha256', signature).update(message).digest();
   signature = Buffer.concat([new Uint8Array([version]), signature]);
-  process.env.SMTP_PASSWORD = signature.toString('base64');
+  process.env.SMTP_PASS = signature.toString('base64');
 }
 
-const transport = nodemailer.createTransport({
+const options = {
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
-});
+};
+
+const transport = nodemailer.createTransport(options);
 
 const mailer = new Email({
   message: {
