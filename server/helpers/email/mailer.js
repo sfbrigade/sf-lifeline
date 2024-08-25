@@ -14,8 +14,16 @@ if (process.env.AWS_SES_REGION) {
   const message = 'SendRawEmail';
   const version = 4;
   let signature;
-  signature = crypto.createHmac('sha256', `AWS4${process.env.AWS_SES_SECRET_ACCESS_KEY}`, { encoding: 'utf8' }).update(date).digest();
-  signature = crypto.createHmac('sha256', signature).update(process.env.AWS_SES_REGION).digest();
+  signature = crypto
+    .createHmac('sha256', `AWS4${process.env.AWS_SES_SECRET_ACCESS_KEY}`, {
+      encoding: 'utf8',
+    })
+    .update(date)
+    .digest();
+  signature = crypto
+    .createHmac('sha256', signature)
+    .update(process.env.AWS_SES_REGION)
+    .digest();
   signature = crypto.createHmac('sha256', signature).update(service).digest();
   signature = crypto.createHmac('sha256', signature).update(terminal).digest();
   signature = crypto.createHmac('sha256', signature).update(message).digest();
