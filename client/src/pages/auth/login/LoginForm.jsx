@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   TextInput,
@@ -78,7 +79,9 @@ export function LoginForm({
             Log in
           </Button>
           <div className={classes.anchor}>
-            <Anchor href="/password-forgot">Forgot password</Anchor>
+            <Anchor component={Link} to="/password/forgot">
+              Forgot password
+            </Anchor>
           </div>
         </Container>
       </form>

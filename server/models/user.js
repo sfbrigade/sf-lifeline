@@ -105,7 +105,7 @@ class User extends Base {
 
   async sendPasswordResetEmail() {
     const { firstName } = this;
-    const url = `${process.env.BASE_URL}/password-reset/${this.passwordResetToken}`;
+    const url = `${process.env.BASE_URL}/password/${this.passwordResetToken}`;
     return mailer.send({
       message: {
         to: this.fullNameAndEmail,
