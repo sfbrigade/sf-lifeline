@@ -33,6 +33,11 @@ describe('/api/v1/auth', () => {
         password: 'test',
       });
       assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+      const { message } = JSON.parse(response.body);
+      assert.deepStrictEqual(
+        message,
+        'Your account has not been verified. Please check your inbox to verify your account.',
+      );
     });
 
     it('should return forbidden for an unapproved user', async (t) => {
@@ -43,6 +48,41 @@ describe('/api/v1/auth', () => {
         password: 'test',
       });
       assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+      const { message } = JSON.parse(response.body);
+      assert.deepStrictEqual(
+        message,
+        'Your account has not been approved by admins yet. Please contact support or wait for further instructions.',
+      );
+    });
+
+    it('should return forbidden for a rejected user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const response = await app.inject().post('/api/v1/auth/login').payload({
+        email: 'rejected.user@test.com',
+        password: 'test',
+      });
+      assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+      const { message } = JSON.parse(response.body);
+      assert.deepStrictEqual(
+        message,
+        'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
+      );
+    });
+
+    it('should return forbidden for a disabled user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const response = await app.inject().post('/api/v1/auth/login').payload({
+        email: 'disabled.user@test.com',
+        password: 'test',
+      });
+      assert.deepStrictEqual(response.statusCode, StatusCodes.FORBIDDEN);
+      const { message } = JSON.parse(response.body);
+      assert.deepStrictEqual(
+        message,
+        'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
+      );
     });
 
     it('should return ok and a secure session cookie for valid credentials and valid user', async (t) => {

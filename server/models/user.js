@@ -38,6 +38,10 @@ class User extends Base {
     inviteId: z.string().optional(),
   });
 
+  static get Role() {
+    return Role;
+  }
+
   constructor(data) {
     super(Prisma.UserScalarFieldEnum, data);
   }
@@ -55,7 +59,7 @@ class User extends Base {
   }
 
   get isRejected() {
-    return !!this.isRejectedAt;
+    return !!this.rejectedAt;
   }
 
   get isDisabled() {
@@ -73,8 +77,7 @@ class User extends Base {
   }
 
   generateEmailVerificationToken() {
-    const buffer = crypto.randomBytes(3);
-    this.emailVerificationToken = buffer.toString('hex').toUpperCase();
+    this.emailVerificationToken = crypto.randomUUID();
   }
 
   async sendVerificationEmail() {
