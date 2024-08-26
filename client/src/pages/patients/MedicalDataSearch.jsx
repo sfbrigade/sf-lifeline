@@ -133,7 +133,6 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
                   combobox.resetSelectedOption();
                   combobox.openDropdown();
                 }}
-                
                 onKeyDown={(event) => {
                   if (event.key === 'Backspace' && search.length === 0) {
                     event.preventDefault();
@@ -148,8 +147,13 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
 
       <Combobox.Dropdown hidden={data === null}>
         <Combobox.Options>
-          {options}
-          {empty && <Combobox.Empty>No results found</Combobox.Empty>}
+          {empty ? (
+            <Combobox.Empty>No results found</Combobox.Empty>
+          ) : options.length === 0 && search.length !== 0 ? (
+            <Combobox.Empty>All options selected</Combobox.Empty>
+          ) : (
+            options
+          )}
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
