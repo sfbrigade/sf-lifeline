@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { StatusCodes } from 'http-status-codes';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
@@ -25,15 +26,15 @@ function Login() {
   };
 
   useEffect(() => {
-    if (error && error.status != 200) {
+    if (error && error.status != StatusCodes.OK) {
       switch (error.status) {
-        case 404:
+        case StatusCodes.NOT_FOUND:
           setEmailError('The email you entered isn’t connected to an account.');
           break;
-        case 401:
+        case StatusCodes.UNAUTHORIZED:
           setPasswordError('The password you’ve entered is incorrect.');
           break;
-        case 403:
+        case StatusCodes.FORBIDDEN:
           setEmailError(error.message);
           break;
         default:
