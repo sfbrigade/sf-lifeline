@@ -92,15 +92,17 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
       .catch(() => {});
   };
 
-  const options = (data || []).map((item) => (
-    <Combobox.Option
-      value={item.id}
-      key={item.id}
-      active={value.includes(item.name)}
-    >
-      {item.name}
-    </Combobox.Option>
-  ));
+  const options = (data || [])
+    .filter((item) => !value.some((v) => v.id === item.id))
+    .map((item) => (
+      <Combobox.Option
+        value={item.id}
+        key={item.id}
+        active={value.includes(item.name)}
+      >
+        {item.name}
+      </Combobox.Option>
+    ));
 
   return (
     <Combobox
@@ -131,7 +133,7 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
                   combobox.resetSelectedOption();
                   combobox.openDropdown();
                 }}
-                rightSection={loading && <Loader size={18} />}
+                
                 onKeyDown={(event) => {
                   if (event.key === 'Backspace' && search.length === 0) {
                     event.preventDefault();
