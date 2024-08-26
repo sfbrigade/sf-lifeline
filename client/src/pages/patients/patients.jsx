@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Accordion, TextInput, Select, Button } from '@mantine/core';
-
+import { useForm } from '@mantine/form';
 import MedicalDataSearch from './MedicalDataSearch';
 
 /**
@@ -8,21 +8,63 @@ import MedicalDataSearch from './MedicalDataSearch';
  *
  */
 export default function Patients() {
-  const [patientData, setPaitentData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    gender: null,
-    dateOfBirth: '',
-  });
-
-  const [contactData, setContactData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    relationship: null,
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      patientData: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        gender: null,
+        dateOfBirth: '',
+      },
+      contactData: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        relationship: null,
+      },
+      medicalData: {
+        allergies: [],
+        medications: [],
+        conditions: [],
+      },
+      healthcareChoices: {
+        hopsital: '',
+        pcp: '',
+      },
+      codeStatus: null,
+    },
+    validate: {
+      patientData: {
+        firstName: (value) => (!value ? 'First Name is required' : null),
+        lastName: (value) => (!value ? 'Last Name is required' : null),
+        gender: (value) => (!value ? 'Gender is required' : null),
+        dateOfBirth: (value) =>
+          value.match(/^\d{4}-\d{2}-\d{2}$/)
+            ? null
+            : 'Date of Birth is not in YYYY-MM-DD format',
+      },
+      contactData: {
+        firstName: (value) => (!value ? 'First Name is required' : null),
+        lastName: (value) => (!value ? 'Last Name is required' : null),
+        phoneNumber: (value) => (!value ? 'Phone Number is required' : null),
+        email: (value) => (!value ? 'Email is required' : null),
+        relationship: (value) => (!value ? 'Relationship is required' : null),
+      },
+      medicalData: {
+        allergies: (value) => (!value ? 'Allergies is required' : null),
+        medications: (value) => (!value ? 'Medications is required' : null),
+        conditions: (value) => (!value ? 'Conditions is required' : null),
+      },
+      healthcareChoices: {
+        hopsital: (value) => (!value ? 'Hopsital is required' : null),
+        pcp: (value) => (!value ? 'PCP is required' : null),
+      },
+      codeStatus: (value) => (!value ? 'Code Status is required' : null),
+    },
   });
 
   const [medicalData, setMedicalData] = useState({
@@ -31,68 +73,50 @@ export default function Patients() {
     conditions: [],
   });
 
-  console.log(medicalData);
-
-  const [healthcareChoices, setHealthcareChoices] = useState({
-    hopsital: '',
-    pcp: '',
-  });
-
-  const [codeStatus, setCodeStatus] = useState(null);
+  // console.log(medicalData);
 
   /**
    *
-   * @param {Event} event
+   * @param {object} values
    */
-  function handleSubmit(event) {
-    event.preventDefault();
+  function submitPatient(values) {
     console.log('Submitted');
+    console.log(values);
   }
 
-  function handleAccordionChange(value, index) {
-    console.log(value, index);
+  /**
+   *
+   * @param {string} value
+   */
+  function handleAccordionChange(value) {
+    console.log(value);
   }
 
   return (
     <main>
       <h1>Register Patients</h1>
-      <Accordion defaultValue="patient-data" onChange={handleAccordionChange}>
-        <Accordion.Item value="patient-data">
-          <Accordion.Control>Basic Information</Accordion.Control>
-          <Accordion.Panel>
-            <form onSubmit={handleSubmit}>
+      <form onSubmit={form.onSubmit(submitPatient)}>
+        <Accordion defaultValue="patient-data" onChange={handleAccordionChange}>
+          <Accordion.Item value="patient-data">
+            <Accordion.Control>Basic Information</Accordion.Control>
+            <Accordion.Panel>
               <TextInput
                 label="First Name"
                 placeholder="First Name"
-                value={patientData.firstName}
-                onChange={(event) =>
-                  setPaitentData({
-                    ...patientData,
-                    firstName: event.target.value,
-                  })
-                }
+                key={form.key('patientData.firstName')}
+                {...form.getInputProps('patientData.firstName')}
               />
               <TextInput
                 label="Middle Name"
                 placeholder="Middle Name"
-                value={patientData.middleName}
-                onChange={(event) =>
-                  setPaitentData({
-                    ...patientData,
-                    middleName: event.target.value,
-                  })
-                }
+                key={form.key('patientData.middleName')}
+                {...form.getInputProps('patientData.middleName')}
               />
               <TextInput
                 label="Last Name"
                 placeholder="Last Name"
-                value={patientData.lastName}
-                onChange={(event) =>
-                  setPaitentData({
-                    ...patientData,
-                    lastName: event.target.value,
-                  })
-                }
+                key={form.key('patientData.lastName')}
+                {...form.getInputProps('patientData.lastName')}
               />
               <Select
                 label="Gender"
@@ -105,82 +129,51 @@ export default function Patients() {
                   'Other',
                   'Unknown',
                 ]}
-                value={patientData.gender}
-                onChange={(value) =>
-                  setPaitentData({ ...patientData, gender: value })
-                }
+                key={form.key('patientData.gender')}
+                {...form.getInputProps('patientData.gender')}
                 clearable
               />
               <TextInput
                 label="Date of Birth"
                 placeholder="YYYY-MM-DD"
-                value={patientData.dateOfBirth}
-                onChange={(event) =>
-                  setPaitentData({
-                    ...patientData,
-                    dateOfBirth: event.target.value,
-                  })
-                }
+                key={form.key('patientData.dateOfBirth')}
+                {...form.getInputProps('patientData.dateOfBirth')}
               />
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </Accordion.Panel>
+          </Accordion.Item>
 
-        <Accordion.Item value="contact-data">
-          <Accordion.Control>Emergency Contact</Accordion.Control>
-          <Accordion.Panel>
-            <form onSubmit={handleSubmit}>
+          <Accordion.Item value="contact-data">
+            <Accordion.Control>Emergency Contact</Accordion.Control>
+            <Accordion.Panel>
               <TextInput
                 label="First Name"
                 placeholder="First Name"
-                value={contactData.firstName}
-                onChange={(event) =>
-                  setContactData({
-                    ...contactData,
-                    firstName: event.target.value,
-                  })
-                }
+                key={form.key('contactData.firstName')}
+                {...form.getInputProps('contactData.firstName')}
               />
               <TextInput
                 label="Middle Name"
                 placeholder="Middle Name"
-                value={contactData.middleName}
-                onChange={(event) =>
-                  setContactData({
-                    ...contactData,
-                    middleName: event.target.value,
-                  })
-                }
+                key={form.key('contactData.middleName')}
+                {...form.getInputProps('contactData.middleName')}
               />
               <TextInput
                 label="Last Name"
                 placeholder="Last Name"
-                value={contactData.lastName}
-                onChange={(event) =>
-                  setContactData({
-                    ...contactData,
-                    lastName: event.target.value,
-                  })
-                }
+                key={form.key('contactData.lastName')}
+                {...form.getInputProps('contactData.lastName')}
               />
               <TextInput
                 label="Phone Number"
                 placeholder="Phone Number"
-                value={contactData.phoneNumber}
-                onChange={(event) =>
-                  setContactData({
-                    ...contactData,
-                    phoneNumber: event.target.value,
-                  })
-                }
+                key={form.key('contactData.phoneNumber')}
+                {...form.getInputProps('contactData.phoneNumber')}
               />
               <TextInput
                 label="Email"
                 placeholder="Email"
-                value={contactData.email}
-                onChange={(event) =>
-                  setContactData({ ...contactData, email: event.target.value })
-                }
+                key={form.key('contactData.email')}
+                {...form.getInputProps('contactData.email')}
               />
               <Select
                 label="Relationship"
@@ -193,20 +186,16 @@ export default function Patients() {
                   'Other',
                   'Unknown',
                 ]}
-                value={contactData.relationship}
-                onChange={(value) =>
-                  setContactData({ ...contactData, relationship: value })
-                }
+                key={form.key('contactData.relationship')}
+                {...form.getInputProps('contactData.relationship')}
                 clearable
               />
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </Accordion.Panel>
+          </Accordion.Item>
 
-        <Accordion.Item value="medical-data">
-          <Accordion.Control>Medical Information</Accordion.Control>
-          <Accordion.Panel>
-            <form onSubmit={handleSubmit}>
+          <Accordion.Item value="medical-data">
+            <Accordion.Control>Medical Information</Accordion.Control>
+            <Accordion.Panel>
               {Object.keys(medicalData).map((category) => {
                 return (
                   <MedicalDataSearch
@@ -216,54 +205,43 @@ export default function Patients() {
                   />
                 );
               })}
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </Accordion.Panel>
+          </Accordion.Item>
 
-        <Accordion.Item value="healthcare-choices">
-          <Accordion.Control>Healthcare Choices</Accordion.Control>
-          <Accordion.Panel>
-            <form onSubmit={handleSubmit}>
+          <Accordion.Item value="healthcare-choices">
+            <Accordion.Control>Healthcare Choices</Accordion.Control>
+            <Accordion.Panel>
               <TextInput
                 label="Hopsital"
                 placeholder="Hopsital"
-                value={healthcareChoices.hopsital}
-                onChange={(value) =>
-                  setHealthcareChoices({
-                    ...healthcareChoices,
-                    hopsital: value,
-                  })
-                }
+                key={form.key('healthcareChoices.hopsital')}
+                {...form.getInputProps('healthcareChoices.hopsital')}
               />
               <TextInput
                 label="PCP"
                 placeholder="PCP"
-                value={healthcareChoices.pcp}
-                onChange={(value) =>
-                  setHealthcareChoices({ ...healthcareChoices, pcp: value })
-                }
+                key={form.key('healthcareChoices.pcp')}
+                {...form.getInputProps('healthcareChoices.pcp')}
               />
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </Accordion.Panel>
+          </Accordion.Item>
 
-        <Accordion.Item value="code-status">
-          <Accordion.Control>Advanced Directive</Accordion.Control>
-          <Accordion.Panel>
-            <form onSubmit={handleSubmit}>
+          <Accordion.Item value="code-status">
+            <Accordion.Control>Advanced Directive</Accordion.Control>
+            <Accordion.Panel>
               <Select
                 label="Code Status"
                 placeholder="Select Code Status"
                 data={['Comfort', 'DNR', 'DNI', 'DNR DNI', 'Full']}
-                value={codeStatus}
-                onChange={(value) => setCodeStatus(value)}
+                key={form.key('codeStatus')}
+                {...form.getInputProps('codeStatus')}
                 clearable
               />
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-      <Button onClick={handleSubmit}>Register Patient</Button>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+        <Button type="submit">Register Patient</Button>
+      </form>
     </main>
   );
 }
