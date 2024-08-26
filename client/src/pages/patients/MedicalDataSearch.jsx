@@ -112,39 +112,36 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
     >
       <Combobox.DropdownTarget>
         <PillsInput onClick={() => combobox.openDropdown()} label={category}>
-          <Pill.Group>
-            {values}
-
-            <Combobox.EventsTarget>
-              <PillsInput.Field
-                onFocus={() => {
-                  combobox.openDropdown();
-                  if (data === null) {
-                    fetchOptions(value);
-                  }
-                }}
-                onBlur={() => combobox.closeDropdown()}
-                value={search}
-                placeholder={`Search ${category}`}
-                onChange={(event) => {
-                  combobox.updateSelectedOptionIndex();
-                  setSearch(event.currentTarget.value);
-                  fetchOptions(event.currentTarget.value);
-                  combobox.resetSelectedOption();
-                  combobox.openDropdown();
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Backspace' && search.length === 0) {
-                    event.preventDefault();
-                    handleValueRemove(value[value.length - 1]);
-                  }
-                }}
-              />
-            </Combobox.EventsTarget>
-          </Pill.Group>
+          <Combobox.EventsTarget>
+            <PillsInput.Field
+              onFocus={() => {
+                combobox.openDropdown();
+                if (data === null) {
+                  fetchOptions(value);
+                }
+              }}
+              onBlur={() => combobox.closeDropdown()}
+              value={search}
+              placeholder={`Search ${category}`}
+              onChange={(event) => {
+                combobox.updateSelectedOptionIndex();
+                setSearch(event.currentTarget.value);
+                fetchOptions(event.currentTarget.value);
+                combobox.resetSelectedOption();
+                combobox.openDropdown();
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Backspace' && search.length === 0) {
+                  event.preventDefault();
+                  handleValueRemove(value[value.length - 1]);
+                }
+              }}
+            />
+          </Combobox.EventsTarget>
         </PillsInput>
       </Combobox.DropdownTarget>
 
+      <Pill.Group> {values}</Pill.Group>
       <Combobox.Dropdown hidden={data === null}>
         <Combobox.Options>
           {empty ? (
