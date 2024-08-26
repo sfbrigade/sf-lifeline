@@ -59,6 +59,9 @@ async function build(t, options = { trace: false }) {
     : false;
   const app = await helper.build(argv, config(), { logger });
 
+  // clear sent mail
+  nodemailerMock.mock.reset();
+
   // clear all the db tables
   await prisma.$connect();
   await prisma.$transaction([

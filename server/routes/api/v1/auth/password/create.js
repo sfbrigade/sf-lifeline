@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
-import User from '../../../../models/user.js';
+import User from '../../../../../models/user.js';
 
 export default async function (fastify, _opts) {
-  fastify.patch(
-    '/request-password-reset',
+  fastify.post(
+    '',
     {
       schema: {
         body: {

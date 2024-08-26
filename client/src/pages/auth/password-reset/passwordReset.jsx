@@ -15,7 +15,7 @@ function PasswordReset() {
   const navigate = useNavigate();
   const { isFetching } = useQuery({
     queryFn: () =>
-      fetch('/api/v1/users/verify-password-reset/' + passwordResetToken, {
+      fetch('/api/v1/auth/password/' + passwordResetToken, {
         method: 'GET',
       })
         .then((response) => {
@@ -65,7 +65,7 @@ function PasswordReset() {
       setErrors({ confirmPassword: 'Passwords do not match' });
       return;
     }
-    fetch('/api/v1/users/password-reset', {
+    fetch('/api/v1/auth/password', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

@@ -696,212 +696,6 @@ describe('/api/v1/users', () => {
     });
   });
 
-  describe('PATCH /request-password-reset', () => {
-    it('should allow user to request a password reset', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .patch('/api/v1/users/request-password-reset')
-        .payload({
-          email: 'volunteer.user@test.com',
-        });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-
-      const sentMails = nodemailerMock.mock.getSentMail();
-
-      assert.notDeepStrictEqual(sentMails.length, 0);
-      assert.deepStrictEqual(
-        sentMails[1].to,
-        'Volunteer User <volunteer.user@test.com>',
-      );
-      assert.deepStrictEqual(
-        sentMails[1].subject,
-        'Reset your password for your SF Lifeline account',
-      );
-    });
-
-    it('should return not found if email does not exist', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .patch('/api/v1/users/request-password-reset')
-        .payload({
-          email: 'no-exist@test.com',
-        });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.NOT_FOUND);
-      const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(
-        message,
-        'Email not found in SF Life Line Database',
-      );
-    });
-  });
-
-  describe('GET /verify-password-reset', () => {
-    it('should return status OK on valid token', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .get(
-          '/api/v1/users/verify-password-reset/' +
-            '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
-        );
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-    });
-
-    it('should return status UNAUTHORIZED on invalid token', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .get(
-          '/api/v1/users/verify-password-reset/' +
-            '3b5afcb9-1669-4196-94f1-01251e59f12c',
-        );
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
-      const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(
-        message,
-        'Password Reset Link is expired or not valid',
-      );
-    });
-
-    it('should return status UNAUTHORIZED on expired token', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .get(
-          '/api/v1/users/verify-password-reset/' +
-            '9a616ebe-f68a-440a-9c4f-fca7f32c88cb',
-        );
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
-      const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(
-        message,
-        'Password Reset Link is expired or not valid',
-      );
-    });
-  });
-
-  describe('PATCH /password-reset', () => {
-    it('should return status OK on successful password reset', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .patch('/api/v1/users/password-reset')
-        .payload({
-          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
-          password: 'NewPassword123!',
-        });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-
-      const user = await t.prisma.user.findUnique({
-        where: { id: '5a848b86-e418-4f7f-9973-cbda82aaaba5' },
-      });
-
-      bcrypt.compare(
-        'NewPassword123!',
-        user.hashedPassword,
-        function (err, result) {
-          assert.deepStrictEqual(result, true);
-        },
-      );
-
-      assert.deepStrictEqual(user.passwordResetToken, null);
-      assert.deepStrictEqual(user.passwordResetExpires, null);
-
-      const sentMails = nodemailerMock.mock.getSentMail();
-      assert.notDeepStrictEqual(sentMails.length, 0);
-      assert.deepStrictEqual(
-        sentMails[2].to,
-        'ValidPasswordReset User <validreset.user@test.com>',
-      );
-      assert.deepStrictEqual(
-        sentMails[2].subject,
-        'Your SF Lifeline password changed',
-      );
-    });
-
-    it('should return status OK if bad password format', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      const res = await app
-        .inject()
-        .patch('/api/v1/users/password-reset')
-        .payload({
-          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
-          password: 'bad',
-        });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
-      const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(
-        message,
-        'Password must be at least 8 characters long. Password must include uppercase, lowercase, number, and special character',
-      );
-    });
-
-    it('should return status UNAUTHORIZED on invalid attempt', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-
-      let res = await app
-        .inject()
-        .patch('/api/v1/users/password-reset')
-        .payload({
-          passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
-          password: 'NewPassword123!',
-        });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
-
-      res = await app.inject().patch('/api/v1/users/password-reset').payload({
-        passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
-        password: 'AnotherPassword123!',
-      });
-
-      const user = await t.prisma.user.findUnique({
-        where: { id: '5a848b86-e418-4f7f-9973-cbda82aaaba5' },
-      });
-
-      assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
-      const { message } = JSON.parse(res.body);
-      assert.deepStrictEqual(
-        message,
-        'Password Reset Link is expired or not valid',
-      );
-
-      bcrypt.compare(
-        'NewPassword123!',
-        user.hashedPassword,
-        function (err, result) {
-          assert.deepStrictEqual(result, true);
-        },
-      );
-
-      assert.deepStrictEqual(user.passwordResetToken, null);
-      assert.deepStrictEqual(user.passwordResetExpires, null);
-    });
-  });
-
   describe('PATCH /verify', () => {
     it('should allow user to verify account through email verification', async (t) => {
       const app = await build(t);
@@ -927,17 +721,17 @@ describe('/api/v1/users', () => {
         today.toISOString().split('T')[0],
       );
     });
-  });
 
-  it('should return 404 if no token exist', async (t) => {
-    const app = await build(t);
-    await t.loadFixtures();
+    it('should return 404 if no token exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
 
-    const reply = await app.inject().patch('/api/v1/users/verify').payload({
-      emailVerificationToken: 'NOEXIST',
+      const reply = await app.inject().patch('/api/v1/users/verify').payload({
+        emailVerificationToken: 'NOEXIST',
+      });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      assert.deepStrictEqual(reply.statusMessage, 'Not Found');
     });
-
-    assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
-    assert.deepStrictEqual(reply.statusMessage, 'Not Found');
   });
 });
