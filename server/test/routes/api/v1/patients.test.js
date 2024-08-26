@@ -18,12 +18,12 @@ describe('/api/v1/patients', () => {
     });
   });
 
-  describe('POST /register', () => {
+  describe('POST /', () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
-      let reply = await app.inject().post('/api/v1/patients/register').payload({
+      let reply = await app.inject().post('/api/v1/patients').payload({
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
@@ -37,7 +37,7 @@ describe('/api/v1/patients', () => {
       let headers = await t.authenticate('first.responder@test.com', 'test');
       reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -57,7 +57,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -87,7 +87,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('staff.user@test.com', 'test');
       const reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -117,7 +117,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('volunteer.user@test.com', 'test');
       const reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -147,7 +147,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           lastName: 'Doe',
           dateOfBirth: '1990-01-01',
@@ -168,7 +168,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .post('/api/v1/patients/register')
+        .post('/api/v1/patients')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -188,14 +188,14 @@ describe('/api/v1/patients', () => {
     });
   });
 
-  describe('PATCH /update/:patientId', () => {
+  describe('PATCH /:id', () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
       let reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -210,7 +210,7 @@ describe('/api/v1/patients', () => {
       let headers = await t.authenticate('first.responder@test.com', 'test');
       reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           firstName: 'John',
           middleName: 'A',
@@ -230,7 +230,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           patientData: {
             firstName: 'Jane',
@@ -268,7 +268,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('staff.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           patientData: {
             firstName: 'Jack',
@@ -306,7 +306,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('volunteer.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           patientData: {
             firstName: 'Jill',
@@ -345,7 +345,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           contactData: {
             firstName: 'Jane',
@@ -374,7 +374,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
             allergies: ['5c057fc3-15d2-40fc-b664-707d04ba66c2'],
@@ -419,7 +419,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       let reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
             allergies: [
@@ -455,7 +455,7 @@ describe('/api/v1/patients', () => {
 
       reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
             allergies: [
@@ -496,7 +496,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       let reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
             allergies: ['5c057fc3-15d2-40fc-b664-707d04ba66c1'],
@@ -512,7 +512,7 @@ describe('/api/v1/patients', () => {
 
       reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           medicalData: {
             medications: ['583c7775-9466-4dab-8a4d-edf1056f097f'],
@@ -534,7 +534,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           healthcareChoices: {
             hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
@@ -575,7 +575,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       let reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           healthcareChoices: {
             hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
@@ -599,7 +599,7 @@ describe('/api/v1/patients', () => {
 
       reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           healthcareChoices: {
             hospitalId: 'b50538cd-1e10-42a3-8d6b-f9ae1e48a025',
@@ -627,7 +627,7 @@ describe('/api/v1/patients', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .patch('/api/v1/patients/update/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
         .payload({
           healthcareChoices: {
             hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a022',

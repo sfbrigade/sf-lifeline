@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify, _opts) {
   fastify.patch(
-    '/update/:patientId',
+    '/:id',
     {
       schema: {
         body: {
@@ -147,7 +147,7 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { patientId } = request.params;
+      const { id } = request.params;
       const { patientData, contactData, medicalData, healthcareChoices } =
         request.body;
 
@@ -164,9 +164,7 @@ export default async function (fastify, _opts) {
           }
 
           await tx.patient.update({
-            where: {
-              id: patientId,
-            },
+            where: { id },
             data: newPatientData,
           });
         }
@@ -184,9 +182,7 @@ export default async function (fastify, _opts) {
             },
           });
           await tx.patient.update({
-            where: {
-              id: patientId,
-            },
+            where: { id },
             data: {
               emergencyContact: {
                 connect: { id: contact.id },
@@ -217,7 +213,7 @@ export default async function (fastify, _opts) {
             // Delete previous connections for the patient
             await tx[model].deleteMany({
               where: {
-                patientId: patientId,
+                patientId: id,
               },
             });
           }
@@ -243,14 +239,14 @@ export default async function (fastify, _opts) {
                 await tx[model].upsert({
                   where: {
                     [`patientId_${relation}Id`]: {
-                      patientId: patientId,
+                      patientId: id,
                       [`${relation}Id`]: item,
                     },
                   },
                   update: { sortOrder: i },
 
                   create: {
-                    patientId: patientId,
+                    patientId: id,
                     [`${relation}Id`]: item, // Use dynamic relation key (allergyId, medicationId, conditionId)
                     sortOrder: i, // Set sort order based on input array index
                   },
@@ -260,7 +256,7 @@ export default async function (fastify, _opts) {
           }
 
           await tx.patient.update({
-            where: { id: patientId },
+            where: { id },
             data: {
               updatedBy: { connect: { id: userId } },
             },
@@ -287,9 +283,7 @@ export default async function (fastify, _opts) {
             });
 
           await tx.patient.update({
-            where: {
-              id: patientId,
-            },
+            where: { id },
             data: {
               hospital: {
                 connect: { id: healthcareChoices.hospitalId },
@@ -305,7 +299,7 @@ export default async function (fastify, _opts) {
         }
 
         return tx.patient.findUnique({
-          where: { id: patientId },
+          where: { id },
           include: {
             emergencyContact: true,
             allergies: {
