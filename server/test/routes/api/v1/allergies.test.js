@@ -21,7 +21,6 @@ describe('/api/v1/allergies', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      console.log('GET / Headers', reply.payload);
       assert.deepStrictEqual(
         reply.headers['link'],
         '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"',

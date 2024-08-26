@@ -17,6 +17,7 @@ items:
     email: unverified.email@test.com
     role: FIRST_RESPONDER
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    emailVerificationToken: be63f7ca-64c5-4eea-a1c0-4c81e7161fa4
   user3:
     id: f4a4be16-e1a5-49dd-9f21-11b1650057f5
     firstName: Unapproved

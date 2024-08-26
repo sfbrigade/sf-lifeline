@@ -220,7 +220,6 @@ describe('/api/v1/users', () => {
         lastName: 'Doe',
         email: 'john.doe@test.com',
         password: 'Test123!',
-        licenseNumber: 'P39332',
         inviteId: '6ed61e21-1062-4b10-a967-53b395f5c34c',
       });
       assert.deepStrictEqual(res.statusCode, StatusCodes.CREATED);
@@ -241,6 +240,7 @@ describe('/api/v1/users', () => {
         Date.parse(user.approvedAt),
         Date.parse('2024-04-07T16:53:41-07:00'),
       );
+      assert.ok(user.emailVerifiedAt);
 
       const invite = await t.prisma.invite.findUnique({
         where: { id: '6ed61e21-1062-4b10-a967-53b395f5c34c' },
@@ -694,5 +694,43 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(user.disabledById, null);
       assert.deepStrictEqual(user.disabledAt, null);
     });
+  });
+  describe('PATCH /verify', () => {
+    it('should allow user to verify account through email verification', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app.inject().patch('/api/v1/users/verify').payload({
+        emailVerificationToken: 'be63f7ca-64c5-4eea-a1c0-4c81e7161fa4',
+      });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const user = await t.prisma.user.findUnique({
+        where: { id: 'dab5dff3-360d-4dbb-98dd-1990dfb5c4c5' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.emailVerificationToken, null);
+
+      const date = new Date(user.emailVerifiedAt);
+      const today = new Date();
+
+      assert.deepStrictEqual(
+        date.toISOString().split('T')[0],
+        today.toISOString().split('T')[0],
+      );
+    });
+  });
+
+  it('should return 404 if no token exist', async (t) => {
+    const app = await build(t);
+    await t.loadFixtures();
+
+    const reply = await app.inject().patch('/api/v1/users/verify').payload({
+      emailVerificationToken: 'NOEXIST',
+    });
+
+    assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+    assert.deepStrictEqual(reply.statusMessage, 'Not Found');
   });
 });
