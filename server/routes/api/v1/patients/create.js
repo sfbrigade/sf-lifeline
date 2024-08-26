@@ -9,6 +9,7 @@ export default async function (fastify, _opts) {
         body: {
           type: 'object',
           required: [
+            'id',
             'firstName',
             'lastName',
             'gender',
@@ -16,6 +17,7 @@ export default async function (fastify, _opts) {
             'dateOfBirth',
           ],
           properties: {
+            id: { type: 'string' },
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
@@ -62,19 +64,27 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { firstName, middleName, lastName, gender, language, dateOfBirth } =
-        request.body;
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        gender,
+        language,
+        dateOfBirth,
+      } = request.body;
 
       const userId = request.user.id;
 
       const newPatient = await fastify.prisma.$transaction(async (tx) => {
         let patient = await tx.patient.create({
           data: {
-            firstName: firstName,
-            middleName: middleName,
-            lastName: lastName,
-            gender: gender,
-            language: language,
+            id,
+            firstName,
+            middleName,
+            lastName,
+            gender,
+            language,
             dateOfBirth: new Date(dateOfBirth),
             createdById: userId,
             updatedById: userId,

@@ -59,6 +59,7 @@ describe('/api/v1/patients', () => {
         .inject()
         .post('/api/v1/patients')
         .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
@@ -71,7 +72,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(result, {
-        id: result.id,
+        id: '0849219e-e2c6-409b-bea4-1a229c3df805',
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
@@ -89,6 +90,7 @@ describe('/api/v1/patients', () => {
         .inject()
         .post('/api/v1/patients')
         .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
@@ -101,7 +103,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(result, {
-        id: result.id,
+        id: '0849219e-e2c6-409b-bea4-1a229c3df805',
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
@@ -119,6 +121,7 @@ describe('/api/v1/patients', () => {
         .inject()
         .post('/api/v1/patients')
         .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
@@ -131,7 +134,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(result, {
-        id: result.id,
+        id: '0849219e-e2c6-409b-bea4-1a229c3df805',
         firstName: 'John',
         middleName: 'A',
         lastName: 'Doe',
@@ -149,6 +152,7 @@ describe('/api/v1/patients', () => {
         .inject()
         .post('/api/v1/patients')
         .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
           lastName: 'Doe',
           dateOfBirth: '1990-01-01',
         })
@@ -170,6 +174,7 @@ describe('/api/v1/patients', () => {
         .inject()
         .post('/api/v1/patients')
         .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
           firstName: 'John',
           middleName: 'A',
           lastName: 'Doe',
