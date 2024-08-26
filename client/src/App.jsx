@@ -20,6 +20,7 @@ import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
 import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
+import Verify from './pages/verify/verify';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -103,9 +104,11 @@ function App() {
         <Route
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/:inviteId" element={<Register />} />
+          <Route path="verify/:emailVerificationToken" element={<Verify />} />
         </Route>
       </Routes>
     </>
