@@ -13,13 +13,14 @@ import { useState, useRef } from 'react';
 const medicalDataSearchProps = {
   category: PropTypes.string.isRequired,
   handleMedicalData: PropTypes.func.isRequired,
+  form: PropTypes.object.isRequired,
 };
 
 /**
  *  Medical Data Search component for Medical Data section of patient form
  * @param {PropTypes.InferProps<typeof medicalDataSearchProps>} props
  */
-export default function MedicalDataSearch({ category, handleMedicalData }) {
+export default function MedicalDataSearch({ category, form }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState([]);
@@ -52,18 +53,17 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
         ? current.filter((v) => v.id !== id)
         : [...current, { id, name }],
     );
-    handleMedicalData((current) => ({
+    form.setFieldValue(`medicalData.${category}`, (current) => [
       ...current,
-      [category]: [...current[category], id],
-    }));
+      id,
+    ]);
   };
 
   const handleValueRemove = (val) => {
     setValue((current) => current.filter((v) => v.id !== val));
-    handleMedicalData((current) => ({
-      ...current,
-      [category]: current[category].filter((v) => v.id !== val),
-    }));
+    form.setFieldValue(`medicalData.${category}`, (current) =>
+      current.filter((v) => v !== val),
+    );
   };
 
   const values = value.map((item) => {
