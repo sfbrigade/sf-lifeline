@@ -104,6 +104,7 @@ function App() {
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
           <Route path="/register" element={<Register />} />
+          <Route path="/register/:inviteId" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
         </Route>
