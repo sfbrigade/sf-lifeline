@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 
-import { Loader, Combobox, useCombobox, Pill, PillsInput } from '@mantine/core';
+import {
+  Loader,
+  Combobox,
+  useCombobox,
+  Pill,
+  ScrollArea,
+  TextInput,
+} from '@mantine/core';
 import { useState, useRef } from 'react';
 
 const medicalDataSearchProps = {
@@ -111,34 +118,34 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
       store={combobox}
     >
       <Combobox.DropdownTarget>
-        <PillsInput onClick={() => combobox.openDropdown()} label={category}>
-          <Combobox.EventsTarget>
-            <PillsInput.Field
-              onFocus={() => {
-                combobox.openDropdown();
-                if (data === null) {
-                  fetchOptions(value);
-                }
-              }}
-              onBlur={() => combobox.closeDropdown()}
-              value={search}
-              placeholder={`Search ${category}`}
-              onChange={(event) => {
-                combobox.updateSelectedOptionIndex();
-                setSearch(event.currentTarget.value);
-                fetchOptions(event.currentTarget.value);
-                combobox.resetSelectedOption();
-                combobox.openDropdown();
-              }}
-              onKeyDown={(event) => {
-                if (event.key === 'Backspace' && search.length === 0) {
-                  event.preventDefault();
-                  handleValueRemove(value[value.length - 1]);
-                }
-              }}
-            />
-          </Combobox.EventsTarget>
-        </PillsInput>
+        <Combobox.EventsTarget>
+          <TextInput
+            label={category}
+            onFocus={() => {
+              combobox.openDropdown();
+              if (data === null) {
+                fetchOptions(value);
+              }
+            }}
+            onBlur={() => combobox.closeDropdown()}
+            value={search}
+            placeholder={`Search ${category}`}
+            onChange={(event) => {
+              combobox.updateSelectedOptionIndex();
+              setSearch(event.currentTarget.value);
+              fetchOptions(event.currentTarget.value);
+              combobox.resetSelectedOption();
+              combobox.openDropdown();
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Backspace' && search.length === 0) {
+                event.preventDefault();
+                handleValueRemove(value[value.length - 1]);
+              }
+            }}
+            rightSection={loading ? <Loader size="xs" /> : null}
+          />
+        </Combobox.EventsTarget>
       </Combobox.DropdownTarget>
 
       <Pill.Group> {values}</Pill.Group>
@@ -149,7 +156,9 @@ export default function MedicalDataSearch({ category, handleMedicalData }) {
           ) : options.length === 0 && search.length !== 0 ? (
             <Combobox.Empty>All options selected</Combobox.Empty>
           ) : (
-            options
+            <ScrollArea.Autosize type="scroll" mah={200}>
+              {options}
+            </ScrollArea.Autosize>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>
