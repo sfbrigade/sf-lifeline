@@ -26,7 +26,7 @@ CREATE TABLE "User" (
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
     "email" CITEXT NOT NULL,
-    "emailVerificationToken" TEXT,
+    "emailVerificationToken" UUID,
     "emailVerifiedAt" TIMESTAMP(3),
     "passwordResetToken" UUID,
     "passwordResetExpires" TIMESTAMP(3),
@@ -138,6 +138,33 @@ CREATE TABLE "Condition" (
 );
 
 -- CreateTable
+CREATE TABLE "PatientAllergy" (
+    "patientId" UUID NOT NULL,
+    "allergyId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientAllergy_pkey" PRIMARY KEY ("patientId","allergyId")
+);
+
+-- CreateTable
+CREATE TABLE "PatientMedication" (
+    "patientId" UUID NOT NULL,
+    "medicationId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientMedication_pkey" PRIMARY KEY ("patientId","medicationId")
+);
+
+-- CreateTable
+CREATE TABLE "PatientCondition" (
+    "patientId" UUID NOT NULL,
+    "conditionId" UUID NOT NULL,
+    "sortOrder" INTEGER NOT NULL,
+
+    CONSTRAINT "PatientCondition_pkey" PRIMARY KEY ("patientId","conditionId")
+);
+
+-- CreateTable
 CREATE TABLE "Physician" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "firstName" TEXT,
@@ -168,6 +195,9 @@ CREATE TABLE "_HospitalToPhysician" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_emailVerificationToken_key" ON "User"("emailVerificationToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_passwordResetToken_key" ON "User"("passwordResetToken");
@@ -216,6 +246,24 @@ ALTER TABLE "Patient" ADD CONSTRAINT "Patient_createdById_fkey" FOREIGN KEY ("cr
 
 -- AddForeignKey
 ALTER TABLE "Patient" ADD CONSTRAINT "Patient_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientAllergy" ADD CONSTRAINT "PatientAllergy_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientAllergy" ADD CONSTRAINT "PatientAllergy_allergyId_fkey" FOREIGN KEY ("allergyId") REFERENCES "Allergy"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientMedication" ADD CONSTRAINT "PatientMedication_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientMedication" ADD CONSTRAINT "PatientMedication_medicationId_fkey" FOREIGN KEY ("medicationId") REFERENCES "Medication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientCondition" ADD CONSTRAINT "PatientCondition_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PatientCondition" ADD CONSTRAINT "PatientCondition_conditionId_fkey" FOREIGN KEY ("conditionId") REFERENCES "Condition"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_HospitalToPhysician" ADD CONSTRAINT "_HospitalToPhysician_A_fkey" FOREIGN KEY ("A") REFERENCES "Hospital"("id") ON DELETE CASCADE ON UPDATE CASCADE;

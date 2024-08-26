@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import formClasses from '../form.module.css';
+import React, { useEffect, useState } from 'react';
+import classes from './register.module.css';
 import { RegisterForm } from './RegisterForm';
 import { Flex } from '@mantine/core';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
 
 /**
  * Register page component
  */
 function Register() {
+  const { inviteId } = useParams();
   const [user, setUser] = useState({
     firstName: '',
     middleName: '',
@@ -19,6 +23,45 @@ function Register() {
   const [showLicenseHelper, setShowLicenseHelper] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState(1);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!inviteId) return;
+    fetch(`/api/v1/invites/${inviteId}`)
+      .then((response) => {
+        if (!response.ok) {
+          return Promise.reject(response);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.acceptedById.length != 0) {
+          throw Error();
+        }
+
+        setUser((prevUser) => ({
+          ...prevUser,
+          firstName: data.firstName,
+          middleName: data.middleName,
+          lastName: data.lastName,
+          email: data.email,
+          role: data.role,
+          inviteId: inviteId,
+        }));
+
+        if (data.role != 'FIRST_RESPONDER') {
+          setFormState(2);
+        }
+      })
+      .catch(() => {
+        notifications.show({
+          color: 'red',
+          title: `Invalid invite`,
+          autoClose: 5000,
+        });
+        navigate('/register');
+      });
+  }, [inviteId, navigate]);
 
   /**
    * Handles input fields in the Registration form
@@ -115,28 +158,34 @@ function Register() {
   }
 
   return (
-    <div>
-      <div className={formClasses.header}>
-        <h2>Interest Form</h2>
-        <p>
-          description of filling out interest form to start account registration
-          process
-        </p>
+    <div className={classes.register}>
+      <div className={classes.banner}>Image goes here</div>
+      <div>
+        <div className={classes.header}>
+          <h2>Interest Form</h2>
+          <p>
+            description of filling out interest form to start account
+            registration process
+          </p>
+        </div>
+        <Flex direction="column" gap="md">
+          <RegisterForm
+            user={user}
+            errors={errors}
+            isLoading={isLoading}
+            showLicenseHelper={showLicenseHelper}
+            onFormChange={onFormChange}
+            onSubmit={formState === 1 ? fetchLicenseNumber : handleRegister}
+            setShowLicenseHelper={() => {
+              setShowLicenseHelper(!showLicenseHelper);
+            }}
+            formState={formState}
+            showLicenseField={
+              !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
+            }
+          />
+        </Flex>
       </div>
-      <Flex direction="column" gap="md">
-        <RegisterForm
-          user={user}
-          errors={errors}
-          isLoading={isLoading}
-          showLicenseHelper={showLicenseHelper}
-          onFormChange={onFormChange}
-          onSubmit={formState === 1 ? fetchLicenseNumber : handleRegister}
-          setShowLicenseHelper={() => {
-            setShowLicenseHelper(!showLicenseHelper);
-          }}
-          formState={formState}
-        />
-      </Flex>
     </div>
   );
 }

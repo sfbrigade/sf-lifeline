@@ -2,13 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
   extensions = [citext]
 }
 
@@ -25,7 +25,7 @@ model User {
   middleName             String?
   lastName               String
   email                  String    @unique @db.Citext
-  emailVerificationToken String?
+  emailVerificationToken String?   @db.Uuid @unique
   emailVerifiedAt        DateTime?
   passwordResetToken     String?   @unique @db.Uuid
   passwordResetExpires   DateTime?
@@ -75,27 +75,30 @@ model Invite {
 }
 
 model Patient {
-  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName          String?
   middleName         String?
   lastName           String?
   dateOfBirth        DateTime?
   gender             Gender?
   language           Language?
+  allergies          PatientAllergy[]
+  medications        PatientMedication[]
+  conditions         PatientCondition[]
   codeStatus         CodeStatus?
   codeStatusAttached Boolean?
-  hospital           Hospital?   @relation(fields: [hospitalId], references: [id])
-  hospitalId         String?     @db.Uuid
-  emergencyContact   Contact?    @relation(fields: [emergencyContactId], references: [id])
-  emergencyContactId String?     @unique @db.Uuid
-  physician          Physician?  @relation(fields: [physicianId], references: [id])
-  physicianId        String?     @db.Uuid
-  createdBy          User        @relation("UserCreatedBy", fields: [createdById], references: [id])
-  createdById        String      @db.Uuid
-  updatedBy          User        @relation("UserUpdatedBy", fields: [updatedById], references: [id])
-  updatedById        String      @db.Uuid
-  updatedAt          DateTime    @updatedAt
-  createdAt          DateTime    @default(now())
+  hospital           Hospital?           @relation(fields: [hospitalId], references: [id])
+  hospitalId         String?             @db.Uuid
+  emergencyContact   Contact?            @relation(fields: [emergencyContactId], references: [id])
+  emergencyContactId String?             @unique @db.Uuid
+  physician          Physician?          @relation(fields: [physicianId], references: [id])
+  physicianId        String?             @db.Uuid
+  createdBy          User                @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById        String              @db.Uuid
+  updatedBy          User                @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String              @db.Uuid
+  updatedAt          DateTime            @updatedAt
+  createdAt          DateTime            @default(now())
 }
 
 enum Gender {
@@ -139,11 +142,12 @@ model Contact {
 }
 
 model Allergy {
-  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
-  type   AllergyType
-  system CodingSystem
-  code   String
+  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  type     AllergyType
+  system   CodingSystem
+  code     String
+  patients PatientAllergy[]
 }
 
 enum AllergyType {
@@ -152,25 +156,57 @@ enum AllergyType {
 }
 
 model Medication {
-  id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   altNames String
   system   CodingSystem
   code     String
+  patients PatientMedication[]
 }
 
 model Condition {
-  id     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
+  id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
   category String
-  system CodingSystem
-  code   String
+  system   CodingSystem
+  code     String
+  patients PatientCondition[]
 }
 
 enum CodingSystem {
   SNOMED
   RXNORM
   ICD10
+}
+
+model PatientAllergy {
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String  @db.Uuid
+  allergy   Allergy @relation(fields: [allergyId], references: [id], onDelete: Cascade)
+  allergyId String  @db.Uuid
+  sortOrder Int
+
+  @@id([patientId, allergyId])
+}
+
+model PatientMedication {
+  patient      Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId    String     @db.Uuid
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId String     @db.Uuid
+  sortOrder    Int
+
+  @@id([patientId, medicationId])
+}
+
+model PatientCondition {
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   String    @db.Uuid
+  condition   Condition @relation(fields: [conditionId], references: [id], onDelete: Cascade)
+  conditionId String    @db.Uuid
+  sortOrder   Int
+
+  @@id([patientId, conditionId])
 }
 
 model Physician {

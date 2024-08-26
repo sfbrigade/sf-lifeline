@@ -23,6 +23,7 @@ import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
 import PasswordForgot from './pages/auth/password-forgot/passwordForgot';
 import PasswordReset from './pages/auth/password-reset/passwordReset';
 import AuthLayout from './stories/AuthLayout/AuthLayout';
+import Verify from './pages/verify/verify';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -109,12 +110,14 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route element={<AuthLayout />}>
             <Route path="/register" element={<Register />} />
+            <Route path="/register/:inviteId" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/password-forgot" element={<PasswordForgot />} />
             <Route
               path="/password-reset/:passwordResetToken"
               element={<PasswordReset />}
             />
+            <Route path="verify/:emailVerificationToken" element={<Verify />} />
           </Route>
         </Route>
       </Routes>
