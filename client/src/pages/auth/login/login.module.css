@@ -1,13 +1,3 @@
-.login {
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-}
-
-.banner {
-  display: none;
-}
-
 .header {
   text-align: center;
   margin: 2rem 0;
@@ -28,24 +18,8 @@
 }
 
 @media (min-width: 48em) {
-  .login {
-    display: flex;
-    height: 100vh;
-
-    & > * {
-      flex: 1;
-    }
-  }
-
   .header {
     margin: 8.75rem 0 2rem 0;
-  }
-
-  .banner {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: aqua;
   }
 }
 

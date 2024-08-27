@@ -28,6 +28,8 @@ CREATE TABLE "User" (
     "email" CITEXT NOT NULL,
     "emailVerificationToken" UUID,
     "emailVerifiedAt" TIMESTAMP(3),
+    "passwordResetToken" UUID,
+    "passwordResetExpires" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "hashedPassword" TEXT NOT NULL,
     "licenseNumber" TEXT,
@@ -196,6 +198,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_emailVerificationToken_key" ON "User"("emailVerificationToken");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_passwordResetToken_key" ON "User"("passwordResetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_licenseNumber_key" ON "User"("licenseNumber");

@@ -12,7 +12,7 @@ export default {
   },
 };
 
-export const DefaultRegisterForm = {
+export const Default = {
   args: {
     user: {
       firstName: '',
@@ -32,7 +32,7 @@ export const DefaultRegisterForm = {
   },
 };
 
-export const LicenseErrorForm = {
+export const LicenseError = {
   args: {
     user: {
       firstName: '',
@@ -52,7 +52,7 @@ export const LicenseErrorForm = {
   },
 };
 
-export const State2Form = {
+export const State2 = {
   args: {
     user: {
       firstName: '',
@@ -72,7 +72,7 @@ export const State2Form = {
   },
 };
 
-export const State2ErrorForm = {
+export const State2Error = {
   args: {
     user: {
       firstName: '',
@@ -100,7 +100,7 @@ export const State2ErrorForm = {
   },
 };
 
-export const State3Form = {
+export const Success = {
   args: {
     user: {
       firstName: '',

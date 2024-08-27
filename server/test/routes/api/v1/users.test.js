@@ -55,12 +55,12 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=4>; rel="last"',
+        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=5>; rel="last"',
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '8');
-      assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '10');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '5');
 
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(data.length, 2);
@@ -104,12 +104,12 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=3>; rel="last"',
+        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=4>; rel="last"',
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
-      assert.deepStrictEqual(reply.headers['x-total-count'], '5');
-      assert.deepStrictEqual(reply.headers['x-total-pages'], '3');
+      assert.deepStrictEqual(reply.headers['x-total-count'], '7');
+      assert.deepStrictEqual(reply.headers['x-total-pages'], '4');
 
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(data.length, 2);
@@ -695,6 +695,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(user.disabledAt, null);
     });
   });
+
   describe('PATCH /verify', () => {
     it('should allow user to verify account through email verification', async (t) => {
       const app = await build(t);
@@ -720,17 +721,17 @@ describe('/api/v1/users', () => {
         today.toISOString().split('T')[0],
       );
     });
-  });
 
-  it('should return 404 if no token exist', async (t) => {
-    const app = await build(t);
-    await t.loadFixtures();
+    it('should return 404 if no token exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
 
-    const reply = await app.inject().patch('/api/v1/users/verify').payload({
-      emailVerificationToken: 'NOEXIST',
+      const reply = await app.inject().patch('/api/v1/users/verify').payload({
+        emailVerificationToken: 'NOEXIST',
+      });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      assert.deepStrictEqual(reply.statusMessage, 'Not Found');
     });
-
-    assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
-    assert.deepStrictEqual(reply.statusMessage, 'Not Found');
   });
 });

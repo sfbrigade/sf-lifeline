@@ -12,14 +12,17 @@ import PropTypes from 'prop-types';
 
 import { Layout } from './stories/Layout/Layout';
 import Index from './pages';
-import Login from './pages/login/login';
-import Register from './pages/register/register';
+import Login from './pages/auth/login/login';
+import Register from './pages/auth/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
 import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
+import PasswordForgot from './pages/auth/password-forgot/passwordForgot';
+import PasswordReset from './pages/auth/password-reset/passwordReset';
+import AuthLayout from './stories/AuthLayout/AuthLayout';
 import Verify from './pages/verify/verify';
 
 const RedirectProps = {
@@ -105,10 +108,17 @@ function App() {
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
           <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/register/:inviteId" element={<Register />} />
-          <Route path="verify/:emailVerificationToken" element={<Verify />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/register" element={<Register />} />
+            <Route path="/register/:inviteId" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/password/forgot" element={<PasswordForgot />} />
+            <Route
+              path="/password/:passwordResetToken"
+              element={<PasswordReset />}
+            />
+            <Route path="verify/:emailVerificationToken" element={<Verify />} />
+          </Route>
         </Route>
       </Routes>
     </>
