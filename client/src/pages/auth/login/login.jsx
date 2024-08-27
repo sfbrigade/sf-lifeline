@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 
-import { useAuthorization } from '../../hooks/useAuthorization';
+import { useAuthorization } from '../../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from './login.module.css';
@@ -45,26 +45,23 @@ function Login() {
   }, [error]);
 
   return (
-    <div className={classes.login}>
-      <div className={classes.banner}>Image goes here</div>
-      <div>
-        <h2 className={classes.header}>Login</h2>
-        <LoginForm
-          email={email}
-          onEmailChange={(event) => {
-            setEmailError(null);
-            setEmail(event.target.value);
-          }}
-          emailError={emailError}
-          password={password}
-          onPasswordChange={(event) => {
-            setPasswordError(null);
-            setPassword(event.target.value);
-          }}
-          passwordError={passwordError}
-          onLogin={login}
-        />
-      </div>
+    <div>
+      <h2 className={classes.header}>Login</h2>
+      <LoginForm
+        email={email}
+        onEmailChange={(event) => {
+          setEmailError(null);
+          setEmail(event.target.value);
+        }}
+        emailError={emailError}
+        password={password}
+        onPasswordChange={(event) => {
+          setPasswordError(null);
+          setPassword(event.target.value);
+        }}
+        passwordError={passwordError}
+        onLogin={login}
+      />
     </div>
   );
 }

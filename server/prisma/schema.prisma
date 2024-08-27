@@ -27,6 +27,8 @@ model User {
   email                  String    @unique @db.Citext
   emailVerificationToken String?   @db.Uuid @unique
   emailVerifiedAt        DateTime?
+  passwordResetToken     String?   @unique @db.Uuid
+  passwordResetExpires   DateTime?
   role                   Role
   hashedPassword         String
   licenseNumber          String?   @unique

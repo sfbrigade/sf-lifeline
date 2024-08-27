@@ -70,6 +70,10 @@ class User extends Base {
     return !!this.emailVerifiedAt;
   }
 
+  get isPasswordResetTokenValid() {
+    return new Date() <= new Date(this.passwordResetExpires);
+  }
+
   get fullNameAndEmail() {
     return `${this.firstName} ${this.middleName ?? ''} ${this.lastName} <${this.email}>`
       .trim()
@@ -88,6 +92,40 @@ class User extends Base {
         to: this.fullNameAndEmail,
       },
       template: 'verify',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
+  generatePasswordResetToken() {
+    this.passwordResetToken = crypto.randomUUID();
+  }
+
+  async sendPasswordResetEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/password/${this.passwordResetToken}`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordReset',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
+  async sendPasswordResetSuccessEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/login`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordResetSuccess',
       locals: {
         firstName,
         url,
