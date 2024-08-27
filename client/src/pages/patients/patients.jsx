@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useForm } from '@mantine/form';
+import { StatusCodes } from 'http-status-codes';
 import MedicalDataSearch from './MedicalDataSearch';
 
 /**
@@ -54,7 +55,12 @@ export default function Patients() {
       contactData: {
         firstName: (value) => (!value ? 'First Name is required' : null),
         lastName: (value) => (!value ? 'Last Name is required' : null),
-        phone: (value) => (!value ? 'Phone number is required' : null),
+        phone: (value) => {
+          if (value.match(/^\d{3}-\d{3}-\d{4}$/)) {
+            return null;
+          }
+          return 'Phone number is not in XXX-XXX-XXXX format';
+        },
         relationship: (value) => (!value ? 'Relationship is required' : null),
       },
       medicalData: {
@@ -75,7 +81,7 @@ export default function Patients() {
    *
    * @param {object} values
    */
-  function submitPatient(values) {
+  async function submitPatient(values) {
     console.log('clicking');
     setLoading(true);
     console.log(values);
@@ -89,44 +95,47 @@ export default function Patients() {
     const patientID = '2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664';
     patientData.id = patientID;
 
-    fetch('/api/v1/patients', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(patientData),
-    })
-      .then((res) =>
-        res.status === 201
-          ? fetch(`/api/v1/patients/${patientID}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                contactData,
-                medicalData,
-                healthcareChoices,
-                patientData: { codeStatus },
-              }),
-            })
-              .then((res) =>
-                res.status === 200
-                  ? console.log('Successfully updated patient')
-                  : Promise.reject(new Error('Failed to update patient')),
-              )
-              .catch((err) => {
-                console.log(err);
-              })
-          : Promise.reject(new Error('Failed to create patient')),
-      )
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        console.log('Finished');
-        setLoading(false);
+    try {
+      const res = await fetch('/api/v1/patients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patientData),
       });
+
+      if (res.status === StatusCodes.CREATED) {
+        const res = await fetch(`/api/v1/patients/${patientID}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contactData,
+            medicalData,
+            healthcareChoices,
+            patientData: { codeStatus },
+          }),
+        });
+        if (res.status === StatusCodes.OK) {
+          console.log('Successfully updated patient');
+        } else {
+          throw new Error('Failed to update patient');
+        }
+      } else {
+        throw new Error('Failed to create patient');
+      }
+    } catch (err) {
+      console.log(err);
+      notifications.show({
+        title: 'Error',
+        message: err.message,
+        color: 'red',
+      });
+    } finally {
+      console.log('Finished');
+      setLoading(false);
+    }
   }
 
   /**
@@ -148,8 +157,8 @@ export default function Patients() {
 
     const errorSectionMapping = {
       patientData: 'Patient Data',
-      contactData: 'Contact Data',
-      medicalData: 'Medical Data',
+      contactData: 'Emergency Contact',
+      medicalData: 'Medical Information',
       healthcareChoices: 'Healthcare Choices',
       codeStatus: 'Advanced Directive',
     };
@@ -317,8 +326,8 @@ export default function Patients() {
                 {...form.getInputProps('healthcareChoices.hospitalId')}
               />
               <TextInput
-                label="PCP"
-                placeholder="PCP"
+                label="Primary Care Provider"
+                placeholder="Primary Care Provider"
                 withAsterisk
                 key={form.key('healthcareChoices.physicianId')}
                 {...form.getInputProps('healthcareChoices.physicianId')}
