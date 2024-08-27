@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accordion, TextInput, Select, Button } from '@mantine/core';
+import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import MedicalDataSearch from './MedicalDataSearch';
 
@@ -8,6 +8,8 @@ import MedicalDataSearch from './MedicalDataSearch';
  *
  */
 export default function Patients() {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -33,7 +35,7 @@ export default function Patients() {
         conditions: [],
       },
       healthcareChoices: {
-        hopsitalId: '',
+        hospitalId: '',
         physicianId: '',
       },
       codeStatus: null,
@@ -51,7 +53,7 @@ export default function Patients() {
       contactData: {
         firstName: (value) => (!value ? 'First Name is required' : null),
         lastName: (value) => (!value ? 'Last Name is required' : null),
-        phone:  (value) => (!value ? 'Phone number is required' : null),
+        phone: (value) => (!value ? 'Phone number is required' : null),
         relationship: (value) => (!value ? 'Relationship is required' : null),
       },
       medicalData: {
@@ -60,31 +62,30 @@ export default function Patients() {
         conditions: (value) => (!value ? 'Conditions is required' : null),
       },
       healthcareChoices: {
-        hopsital: (value) => (!value ? 'Hopsital is required' : null),
-        pcp: (value) => (!value ? 'PCP is required' : null),
+        hospitalId: (value) => (!value ? 'Hospital is required' : null),
+        physicianId: (value) => (!value ? 'PCP is required' : null),
       },
       codeStatus: (value) => (!value ? 'Code Status is required' : null),
     },
     validateInputOnBlur: true,
   });
 
-  const [medicalData, setMedicalData] = useState({
-    allergies: [],
-    medications: [],
-    conditions: [],
-  });
-
-  // console.log(medicalData);
-
   /**
    *
    * @param {object} values
    */
   function submitPatient(values) {
-    
+    console.log('clicking');
+    setLoading(true);
     console.log(values);
-    const {patientData, contactData, medicalData, healthcareChoices, codeStatus} = values;
-    const patientID = "2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664"
+    const {
+      patientData,
+      contactData,
+      medicalData,
+      healthcareChoices,
+      codeStatus,
+    } = values;
+    const patientID = '2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664';
     patientData.id = patientID;
 
     fetch('/api/v1/patients', {
@@ -93,26 +94,38 @@ export default function Patients() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(patientData),
-    }).then((res) => res.status === 201 ? 
-      fetch(`/api/v1/patients/${patientID}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ contactData, medicalData, healthcareChoices, patientData: { codeStatus } }),
+    })
+      .then((res) =>
+        res.status === 201
+          ? fetch(`/api/v1/patients/${patientID}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                contactData,
+                medicalData,
+                healthcareChoices,
+                patientData: { codeStatus },
+              }),
+            })
+              .then((res) =>
+                res.status === 200
+                  ? console.log('Successfully updated patient')
+                  : Promise.reject(new Error('Failed to update patient')),
+              )
+              .catch((err) => {
+                console.log(err);
+              })
+          : Promise.reject(new Error('Failed to create patient')),
+      )
+      .catch((err) => {
+        console.log(err);
       })
-        .then((res) => res.status === 200 ? 
-          console.log('Successfully updated patient')
-          : Promise.reject(new Error('Failed to update patient'))
-        ).catch((err) => {
-          console.log(err);
-        }) 
-      : Promise.reject(new Error('Failed to create patient'))
-    ).catch((err) => {
-      console.log(err); 
-    }).finally(() => {
-      console.log('Finished');
-    });
+      .finally(() => {
+        console.log('Finished');
+        setLoading(false);
+      });
   }
 
   /**
@@ -122,34 +135,20 @@ export default function Patients() {
   function handleAccordionChange(value) {
     console.log(value);
     console.log(form.getValues());
+  }
 
-    // if (value) {
-    //   if (value !== 'patientData') {
-        
-    //   }
-    //   if (value === 'patientData') {
-        
-    //     const {patientData} = form.getValues();
-    //     patientData.id = "2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664";
-    //     patientData.gender = patientData.gender.toUpperCase();
-    //     patientData.language = patientData.language.toUpperCase();
-
-    //     fetch('/api/v1/patients', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(patientData),
-    //     });
-    //   }
-    // }
-
+  /**
+   *
+   * @param {object} errors
+   */
+  function handleErrors(errors) {
+    console.log(errors);
   }
 
   return (
     <main>
       <h1>Register Patients</h1>
-      <form onSubmit={form.onSubmit(submitPatient)}>
+      <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
         <Accordion defaultValue="patientData" onChange={handleAccordionChange}>
           <Accordion.Item value="patientData">
             <Accordion.Control>Basic Information</Accordion.Control>
@@ -274,11 +273,10 @@ export default function Patients() {
           <Accordion.Item value="medicalData">
             <Accordion.Control>Medical Information</Accordion.Control>
             <Accordion.Panel>
-              {Object.keys(medicalData).map((category) => {
+              {Object.keys(form.getValues().medicalData).map((category) => {
                 return (
                   <MedicalDataSearch
                     category={category}
-                    handleMedicalData={setMedicalData}
                     form={form}
                     key={category}
                   />
@@ -291,8 +289,8 @@ export default function Patients() {
             <Accordion.Control>Healthcare Choices</Accordion.Control>
             <Accordion.Panel>
               <TextInput
-                label="Hopsital"
-                placeholder="Hopsital"
+                label="Hospital"
+                placeholder="Hospital"
                 withAsterisk
                 key={form.key('healthcareChoices.hospitalId')}
                 {...form.getInputProps('healthcareChoices.hospitalId')}
@@ -322,7 +320,11 @@ export default function Patients() {
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
-        <Button type="submit">Register Patient</Button>
+        {loading ? (
+          <Loader size="xl" />
+        ) : (
+          <Button type="submit">Register Patient</Button>
+        )}
       </form>
     </main>
   );
