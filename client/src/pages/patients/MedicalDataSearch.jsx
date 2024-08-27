@@ -10,9 +10,14 @@ import {
 } from '@mantine/core';
 import { useState, useRef } from 'react';
 
+const API_PATHS = {
+  allergies: 'allergy',
+  medications: 'medication',
+  conditions: 'condition',
+};
+
 const medicalDataSearchProps = {
   category: PropTypes.string.isRequired,
-  handleMedicalData: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired,
 };
 
@@ -28,12 +33,6 @@ export default function MedicalDataSearch({ category, form }) {
   const [search, setSearch] = useState('');
   const abortController = useRef();
 
-  const API_PATHS = {
-    allergies: 'allergy',
-    medications: 'medication',
-    conditions: 'condition',
-  };
-
   /**
    *
    * @param {string} query
@@ -46,6 +45,11 @@ export default function MedicalDataSearch({ category, form }) {
     return data;
   }
 
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
+  });
+
   const handleValueSelect = (id, key) => {
     const name = key.children;
     setValue((current) =>
@@ -57,6 +61,7 @@ export default function MedicalDataSearch({ category, form }) {
       ...current,
       id,
     ]);
+    combobox.closeDropdown();
   };
 
   const handleValueRemove = (val) => {
@@ -78,13 +83,7 @@ export default function MedicalDataSearch({ category, form }) {
     );
   });
 
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
-  });
-
   const fetchOptions = (query) => {
-    console.log(query);
     abortController.current?.abort();
     abortController.current = new AbortController();
     setLoading(true);
@@ -111,6 +110,26 @@ export default function MedicalDataSearch({ category, form }) {
       </Combobox.Option>
     ));
 
+  function renderComboxContent() {
+    if (empty) {
+      return <Combobox.Empty>No results found</Combobox.Empty>;
+    }
+
+    if (data.length === 0) {
+      return <Combobox.Empty>Start typing to search</Combobox.Empty>;
+    }
+
+    if (options.length === 0 && search.length !== 0) {
+      return <Combobox.Empty>All options selected</Combobox.Empty>;
+    }
+
+    return (
+      <ScrollArea.Autosize type="scroll" mah={200}>
+        {options}
+      </ScrollArea.Autosize>
+    );
+  }
+
   return (
     <Combobox
       onOptionSubmit={handleValueSelect}
@@ -120,7 +139,7 @@ export default function MedicalDataSearch({ category, form }) {
       <Combobox.DropdownTarget>
         <Combobox.EventsTarget>
           <TextInput
-            label={category}
+            label={category.charAt(0).toUpperCase() + category.slice(1)}
             onFocus={() => {
               combobox.openDropdown();
               if (data === null) {
@@ -148,19 +167,9 @@ export default function MedicalDataSearch({ category, form }) {
         </Combobox.EventsTarget>
       </Combobox.DropdownTarget>
 
-      <Pill.Group> {values}</Pill.Group>
-      <Combobox.Dropdown hidden={data === null}>
-        <Combobox.Options>
-          {empty ? (
-            <Combobox.Empty>No results found</Combobox.Empty>
-          ) : options.length === 0 && search.length !== 0 ? (
-            <Combobox.Empty>All options selected</Combobox.Empty>
-          ) : (
-            <ScrollArea.Autosize type="scroll" mah={200}>
-              {options}
-            </ScrollArea.Autosize>
-          )}
-        </Combobox.Options>
+      <Pill.Group style={{ marginTop: '2px' }}> {values}</Pill.Group>
+      <Combobox.Dropdown>
+        <Combobox.Options>{renderComboxContent()}</Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
   );
