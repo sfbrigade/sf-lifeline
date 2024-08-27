@@ -7,7 +7,8 @@ import {
   PasswordInput,
   Loader,
 } from '@mantine/core';
-import classes from './register.module.css';
+import registerClasses from './register.module.css';
+import formClasses from '../form.module.css';
 
 const registerFormProps = {
   user: PropTypes.object.isRequired,
@@ -18,6 +19,7 @@ const registerFormProps = {
   onSubmit: PropTypes.func.isRequired,
   setShowLicenseHelper: PropTypes.func.isRequired,
   formState: PropTypes.number.isRequired,
+  showLicenseField: PropTypes.bool.isRequired,
 };
 
 /**
@@ -33,6 +35,7 @@ export function RegisterForm({
   onSubmit,
   setShowLicenseHelper,
   formState,
+  showLicenseField,
 }) {
   return (
     <>
@@ -42,12 +45,11 @@ export function RegisterForm({
           onSubmit();
         }}
       >
-        <Container size="25rem" className={classes.form}>
-          {formState !== 3 && (
+        <Container size="25rem" className={formClasses.form}>
+          {formState !== 3 && showLicenseField && (
             <>
               <TextInput
                 disabled={isLoading || formState === 2}
-                className=""
                 name="licenseNumber"
                 label="First Responder License Number"
                 placeholder="License Number"
@@ -59,7 +61,7 @@ export function RegisterForm({
                 hidden={formState === 2}
                 onClick={setShowLicenseHelper}
                 type="button"
-                className={classes.button}
+                className={registerClasses.button}
               >
                 I don&#39;t have a license
               </button>
@@ -69,7 +71,6 @@ export function RegisterForm({
             <>
               <TextInput
                 disabled={isLoading}
-                className=""
                 name="firstName"
                 label="First Name"
                 placeholder="Sigmund"
@@ -79,7 +80,6 @@ export function RegisterForm({
               />
               <TextInput
                 disabled={isLoading}
-                className=""
                 name="middleName"
                 label="Middle Name"
                 placeholder="Henry"
@@ -89,7 +89,6 @@ export function RegisterForm({
               />
               <TextInput
                 disabled={isLoading}
-                className=""
                 name="lastName"
                 label="Last Name"
                 placeholder="Stern"
@@ -99,7 +98,6 @@ export function RegisterForm({
               />
               <TextInput
                 disabled={isLoading}
-                className=""
                 name="email"
                 label="Email"
                 placeholder="Email"
@@ -109,7 +107,6 @@ export function RegisterForm({
               />
               <PasswordInput
                 disabled={isLoading}
-                className=""
                 name="password"
                 label="Password"
                 placeholder="Password"
@@ -124,7 +121,7 @@ export function RegisterForm({
             size="25rem"
             styles={{ root: { padding: 0 } }}
           >
-            <div className={classes.licenseHelper}>
+            <div className={registerClasses.licenseHelper}>
               <h3>License not found?</h3>
               <p>
                 Contact{' '}
@@ -142,7 +139,9 @@ export function RegisterForm({
           {formState !== 3 && (
             <Button
               type="submit"
-              disabled={!user.licenseNumber.length || isLoading}
+              disabled={
+                (!user.licenseNumber.length && !user.inviteId) || isLoading
+              }
             >
               {isLoading ? (
                 <Loader size={20} />
@@ -156,7 +155,7 @@ export function RegisterForm({
 
           {formState === 3 && (
             <Container size="25rem" styles={{ root: { padding: 0 } }}>
-              <div className={classes.formCompletion}>
+              <div className={formClasses.formCompletion}>
                 <p>
                   Form Complete! You will receive a confirmation email shortly.
                   Acceptance into SF life line will also be sent via the email

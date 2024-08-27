@@ -12,7 +12,7 @@ export default async function (fastify, _opts) {
           type: 'object',
           required: ['email', 'password'],
           properties: {
-            email: { type: 'string', format: 'email' },
+            email: { type: 'string' },
             password: { type: 'string' },
           },
         },
@@ -60,17 +60,27 @@ export default async function (fastify, _opts) {
       if (!result) {
         return reply.unauthorized();
       }
-      if (!user.isActive) {
-        return reply.forbidden();
+      if (!user.isEmailVerified) {
+        return reply.status(StatusCodes.FORBIDDEN).send({
+          message:
+            'Your account has not been verified. Please check your inbox to verify your account.',
+        });
       }
+      if (user.isRejected || user.isDisabled) {
+        return reply.status(StatusCodes.FORBIDDEN).send({
+          message:
+            'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
+        });
+      }
+      if (user.isUnapproved) {
+        return reply.status(StatusCodes.FORBIDDEN).send({
+          message:
+            'Your account has not been approved by admins yet. Please contact support or wait for further instructions.',
+        });
+      }
+
       request.session.set('userId', user.id);
       reply.send(data);
     },
   );
-
-  // add a logout route
-  fastify.get('/logout', (request, reply) => {
-    request.session.delete();
-    reply.send();
-  });
 }

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import Context from '../Context';
  *
  * @returns {{
  *  user: user,
+ *  error: object,
  *  isLoading: boolean,
  *  handleLogin: (credentials: any) => Promise<void>,
  *  handleLogout: () => Promise<void>,
@@ -17,23 +18,33 @@ import Context from '../Context';
  */
 export function useAuthorization() {
   const { user, setUser } = useContext(Context);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
-    mutationFn: (credentials) => {
-      return fetch('/api/v1/auth/login', {
+    mutationFn: async (credentials) => {
+      return await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials),
         credentials: 'include',
+      }).then((response) => {
+        if (!response.ok) {
+          return Promise.reject(response);
+        }
+        return response;
       });
     },
     onSuccess: async (data, { redirectTo }) => {
       const result = await data.json();
       setUser(result);
       navigate(redirectTo ?? '/');
+    },
+    onError: async (error) => {
+      const errorBody = await error.json();
+      setError({ ...errorBody, status: error.status });
     },
   });
 
@@ -57,6 +68,7 @@ export function useAuthorization() {
 
   return {
     user,
+    error,
     isLoading: loginMutation.isPending || logoutMutation.isPending,
     handleLogin,
     handleLogout,

@@ -1,0 +1,13 @@
+entity: patient
+connectedFields: ['createdBy', 'updatedBy']
+items:
+  patient1:
+    id: 27963f68-ebc1-408a-8bb5-8fbe54671064
+    firstName: John
+    middleName: A
+    lastName: Doe
+    gender: MALE
+    language: ENGLISH
+    dateOfBirth: '2000-10-05T00:00:00.000Z'
+    createdBy: '@user1'
+    updatedBy: '@user1'

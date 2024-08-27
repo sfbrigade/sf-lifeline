@@ -38,6 +38,10 @@ class User extends Base {
     inviteId: z.string().optional(),
   });
 
+  static get Role() {
+    return Role;
+  }
+
   constructor(data) {
     super(Prisma.UserScalarFieldEnum, data);
   }
@@ -55,7 +59,7 @@ class User extends Base {
   }
 
   get isRejected() {
-    return !!this.isRejectedAt;
+    return !!this.rejectedAt;
   }
 
   get isDisabled() {
@@ -66,6 +70,10 @@ class User extends Base {
     return !!this.emailVerifiedAt;
   }
 
+  get isPasswordResetTokenValid() {
+    return new Date() <= new Date(this.passwordResetExpires);
+  }
+
   get fullNameAndEmail() {
     return `${this.firstName} ${this.middleName ?? ''} ${this.lastName} <${this.email}>`
       .trim()
@@ -73,8 +81,7 @@ class User extends Base {
   }
 
   generateEmailVerificationToken() {
-    const buffer = crypto.randomBytes(3);
-    this.emailVerificationToken = buffer.toString('hex').toUpperCase();
+    this.emailVerificationToken = crypto.randomUUID();
   }
 
   async sendVerificationEmail() {
@@ -85,6 +92,40 @@ class User extends Base {
         to: this.fullNameAndEmail,
       },
       template: 'verify',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
+  generatePasswordResetToken() {
+    this.passwordResetToken = crypto.randomUUID();
+  }
+
+  async sendPasswordResetEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/password/${this.passwordResetToken}`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordReset',
+      locals: {
+        firstName,
+        url,
+      },
+    });
+  }
+
+  async sendPasswordResetSuccessEmail() {
+    const { firstName } = this;
+    const url = `${process.env.BASE_URL}/login`;
+    return mailer.send({
+      message: {
+        to: this.fullNameAndEmail,
+      },
+      template: 'passwordResetSuccess',
       locals: {
         firstName,
         url,
