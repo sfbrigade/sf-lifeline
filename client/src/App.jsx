@@ -97,7 +97,10 @@ function App() {
               path="/admin/patients/generate"
               element={<AdminPatientsGenerate />}
             />
-            <Route path="/admin/patients/register" element={<Patients />} />
+            <Route
+              path="/admin/patients/register/:patientId"
+              element={<Patients />}
+            />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
               path="/admin/pending-users"
