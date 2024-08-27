@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { useForm } from '@mantine/form';
 import { StatusCodes } from 'http-status-codes';
+import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
+import { useForm, isNotEmpty, matches } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import MedicalDataSearch from './MedicalDataSearch';
 
 /**
@@ -44,35 +44,28 @@ export default function Patients() {
     },
     validate: {
       patientData: {
-        firstName: (value) => (!value ? 'First Name is required' : null),
-        lastName: (value) => (!value ? 'Last Name is required' : null),
-        gender: (value) => (!value ? 'Gender is required' : null),
-        dateOfBirth: (value) =>
-          value.match(/^\d{4}-\d{2}-\d{2}$/)
-            ? null
-            : 'Date of Birth is not in YYYY-MM-DD format',
+        firstName: isNotEmpty('First Name is required'),
+        lastName: isNotEmpty('Last Name is required'),
+        gender: isNotEmpty('Gender is required'),
+        dateOfBirth: matches(
+          /^\d{4}-\d{2}-\d{2}$/,
+          'Date of Birth is not in YYYY-MM-DD format',
+        ),
       },
       contactData: {
-        firstName: (value) => (!value ? 'First Name is required' : null),
-        lastName: (value) => (!value ? 'Last Name is required' : null),
-        phone: (value) => {
-          if (value.match(/^\d{3}-\d{3}-\d{4}$/)) {
-            return null;
-          }
-          return 'Phone number is not in XXX-XXX-XXXX format';
-        },
-        relationship: (value) => (!value ? 'Relationship is required' : null),
-      },
-      medicalData: {
-        allergies: (value) => (!value ? 'Allergies is required' : null),
-        medications: (value) => (!value ? 'Medications is required' : null),
-        conditions: (value) => (!value ? 'Conditions is required' : null),
+        firstName: isNotEmpty('First Name is required'),
+        lastName: isNotEmpty('Last Name is required'),
+        phone: matches(
+          /^\d{3}-\d{3}-\d{4}$/,
+          'Phone number is not in XXX-XXX-XXXX format',
+        ),
+        relationship: isNotEmpty('Relationship is required'),
       },
       healthcareChoices: {
-        hospitalId: (value) => (!value ? 'Hospital is required' : null),
-        physicianId: (value) => (!value ? 'PCP is required' : null),
+        hospitalId: isNotEmpty('Hospital is required'),
+        physicianId: isNotEmpty('PCP is required'),
       },
-      codeStatus: (value) => (!value ? 'Code Status is required' : null),
+      codeStatus: isNotEmpty('Code Status is required'),
     },
     validateInputOnBlur: true,
   });
