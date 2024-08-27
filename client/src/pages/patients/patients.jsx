@@ -16,13 +16,14 @@ export default function Patients() {
         middleName: '',
         lastName: '',
         gender: null,
+        language: null,
         dateOfBirth: '',
       },
       contactData: {
         firstName: '',
         middleName: '',
         lastName: '',
-        phoneNumber: '',
+        phone: '',
         email: '',
         relationship: null,
       },
@@ -32,8 +33,8 @@ export default function Patients() {
         conditions: [],
       },
       healthcareChoices: {
-        hopsital: '',
-        pcp: '',
+        hopsitalId: '',
+        physicianId: '',
       },
       codeStatus: null,
     },
@@ -50,8 +51,7 @@ export default function Patients() {
       contactData: {
         firstName: (value) => (!value ? 'First Name is required' : null),
         lastName: (value) => (!value ? 'Last Name is required' : null),
-        phoneNumber: (value) => (!value ? 'Phone Number is required' : null),
-        email: (value) => (!value ? 'Email is required' : null),
+        phone:  (value) => (!value ? 'Phone number is required' : null),
         relationship: (value) => (!value ? 'Relationship is required' : null),
       },
       medicalData: {
@@ -65,6 +65,7 @@ export default function Patients() {
       },
       codeStatus: (value) => (!value ? 'Code Status is required' : null),
     },
+    validateInputOnBlur: true,
   });
 
   const [medicalData, setMedicalData] = useState({
@@ -80,8 +81,38 @@ export default function Patients() {
    * @param {object} values
    */
   function submitPatient(values) {
-    console.log('Submitted');
+    
     console.log(values);
+    const {patientData, contactData, medicalData, healthcareChoices, codeStatus} = values;
+    const patientID = "2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664"
+    patientData.id = patientID;
+
+    fetch('/api/v1/patients', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(patientData),
+    }).then((res) => res.status === 201 ? 
+      fetch(`/api/v1/patients/${patientID}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ contactData, medicalData, healthcareChoices, patientData: { codeStatus } }),
+      })
+        .then((res) => res.status === 200 ? 
+          console.log('Successfully updated patient')
+          : Promise.reject(new Error('Failed to update patient'))
+        ).catch((err) => {
+          console.log(err);
+        }) 
+      : Promise.reject(new Error('Failed to create patient'))
+    ).catch((err) => {
+      console.log(err); 
+    }).finally(() => {
+      console.log('Finished');
+    });
   }
 
   /**
@@ -90,19 +121,43 @@ export default function Patients() {
    */
   function handleAccordionChange(value) {
     console.log(value);
+    console.log(form.getValues());
+
+    // if (value) {
+    //   if (value !== 'patientData') {
+        
+    //   }
+    //   if (value === 'patientData') {
+        
+    //     const {patientData} = form.getValues();
+    //     patientData.id = "2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664";
+    //     patientData.gender = patientData.gender.toUpperCase();
+    //     patientData.language = patientData.language.toUpperCase();
+
+    //     fetch('/api/v1/patients', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify(patientData),
+    //     });
+    //   }
+    // }
+
   }
 
   return (
     <main>
       <h1>Register Patients</h1>
       <form onSubmit={form.onSubmit(submitPatient)}>
-        <Accordion defaultValue="patient-data" onChange={handleAccordionChange}>
-          <Accordion.Item value="patient-data">
+        <Accordion defaultValue="patientData" onChange={handleAccordionChange}>
+          <Accordion.Item value="patientData">
             <Accordion.Control>Basic Information</Accordion.Control>
             <Accordion.Panel>
               <TextInput
                 label="First Name"
                 placeholder="First Name"
+                withAsterisk
                 key={form.key('patientData.firstName')}
                 {...form.getInputProps('patientData.firstName')}
               />
@@ -115,39 +170,59 @@ export default function Patients() {
               <TextInput
                 label="Last Name"
                 placeholder="Last Name"
+                withAsterisk
                 key={form.key('patientData.lastName')}
                 {...form.getInputProps('patientData.lastName')}
               />
               <Select
                 label="Gender"
                 placeholder="Select Gender"
+                withAsterisk
                 data={[
-                  'Female',
-                  'Male',
-                  'Trans Male',
-                  'Trans Female',
-                  'Other',
-                  'Unknown',
+                  'FEMALE',
+                  'MALE',
+                  'TRANS_MALE',
+                  'TRANS_FEMALE',
+                  'OTHER',
+                  'UNKNOWN',
                 ]}
                 key={form.key('patientData.gender')}
                 {...form.getInputProps('patientData.gender')}
                 clearable
               />
+              <Select
+                label="Language"
+                placeholder="Select Language"
+                withAsterisk
+                data={[
+                  'CANTONESE',
+                  'ENGLISH',
+                  'MANDARIN',
+                  'RUSSIAN',
+                  'SPANISH',
+                  'TAGALOG',
+                ]}
+                key={form.key('patientData.language')}
+                {...form.getInputProps('patientData.language')}
+                clearable
+              />
               <TextInput
                 label="Date of Birth"
                 placeholder="YYYY-MM-DD"
+                withAsterisk
                 key={form.key('patientData.dateOfBirth')}
                 {...form.getInputProps('patientData.dateOfBirth')}
               />
             </Accordion.Panel>
           </Accordion.Item>
 
-          <Accordion.Item value="contact-data">
+          <Accordion.Item value="contactData">
             <Accordion.Control>Emergency Contact</Accordion.Control>
             <Accordion.Panel>
               <TextInput
                 label="First Name"
                 placeholder="First Name"
+                withAsterisk
                 key={form.key('contactData.firstName')}
                 {...form.getInputProps('contactData.firstName')}
               />
@@ -160,14 +235,16 @@ export default function Patients() {
               <TextInput
                 label="Last Name"
                 placeholder="Last Name"
+                withAsterisk
                 key={form.key('contactData.lastName')}
                 {...form.getInputProps('contactData.lastName')}
               />
               <TextInput
                 label="Phone Number"
                 placeholder="Phone Number"
-                key={form.key('contactData.phoneNumber')}
-                {...form.getInputProps('contactData.phoneNumber')}
+                withAsterisk
+                key={form.key('contactData.phone')}
+                {...form.getInputProps('contactData.phone')}
               />
               <TextInput
                 label="Email"
@@ -178,13 +255,14 @@ export default function Patients() {
               <Select
                 label="Relationship"
                 placeholder="Select Relationship"
+                withAsterisk
                 data={[
-                  'Spouse',
-                  'Parent',
-                  'Child',
-                  'Sibling',
-                  'Other',
-                  'Unknown',
+                  'SPOUSE',
+                  'PARENT',
+                  'CHILD',
+                  'SIBLING',
+                  'OTHER',
+                  'UNKNOWN',
                 ]}
                 key={form.key('contactData.relationship')}
                 {...form.getInputProps('contactData.relationship')}
@@ -193,46 +271,50 @@ export default function Patients() {
             </Accordion.Panel>
           </Accordion.Item>
 
-          <Accordion.Item value="medical-data">
+          <Accordion.Item value="medicalData">
             <Accordion.Control>Medical Information</Accordion.Control>
             <Accordion.Panel>
               {Object.keys(medicalData).map((category) => {
                 return (
                   <MedicalDataSearch
                     category={category}
-                    key={category}
                     handleMedicalData={setMedicalData}
+                    form={form}
+                    key={category}
                   />
                 );
               })}
             </Accordion.Panel>
           </Accordion.Item>
 
-          <Accordion.Item value="healthcare-choices">
+          <Accordion.Item value="healthcareChoices">
             <Accordion.Control>Healthcare Choices</Accordion.Control>
             <Accordion.Panel>
               <TextInput
                 label="Hopsital"
                 placeholder="Hopsital"
-                key={form.key('healthcareChoices.hopsital')}
-                {...form.getInputProps('healthcareChoices.hopsital')}
+                withAsterisk
+                key={form.key('healthcareChoices.hospitalId')}
+                {...form.getInputProps('healthcareChoices.hospitalId')}
               />
               <TextInput
                 label="PCP"
                 placeholder="PCP"
-                key={form.key('healthcareChoices.pcp')}
-                {...form.getInputProps('healthcareChoices.pcp')}
+                withAsterisk
+                key={form.key('healthcareChoices.physicianId')}
+                {...form.getInputProps('healthcareChoices.physicianId')}
               />
             </Accordion.Panel>
           </Accordion.Item>
 
-          <Accordion.Item value="code-status">
+          <Accordion.Item value="codeStatus">
             <Accordion.Control>Advanced Directive</Accordion.Control>
             <Accordion.Panel>
               <Select
                 label="Code Status"
                 placeholder="Select Code Status"
-                data={['Comfort', 'DNR', 'DNI', 'DNR DNI', 'Full']}
+                withAsterisk
+                data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
                 key={form.key('codeStatus')}
                 {...form.getInputProps('codeStatus')}
                 clearable
