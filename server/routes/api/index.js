@@ -3,4 +3,8 @@ export default async function (fastify, _opts) {
   fastify.get('/health', async function (_request, _reply) {
     return { status: 'OK' };
   });
+
+  fastify.get('/*', async function (_request, reply) {
+    return reply.notFound();
+  });
 }
