@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 
+import { useState, useRef } from 'react';
 import {
   Loader,
   Combobox,
@@ -8,7 +9,7 @@ import {
   ScrollArea,
   TextInput,
 } from '@mantine/core';
-import { useState, useRef } from 'react';
+import { notifications } from '@mantine/notifications';
 
 const API_PATHS = {
   allergies: 'allergy',
@@ -37,12 +38,22 @@ export default function MedicalDataSearch({ category, form }) {
    *
    * @param {string} query
    */
-  async function getAsyncData(query) {
-    const response = await fetch(
-      `/api/v1/${category}?${API_PATHS[category]}=${query}`,
-    );
-    const data = await response.json();
-    return data;
+  async function getMedicalData(query) {
+    try {
+      const response = await fetch(
+        `/api/v1/${category}?${API_PATHS[category]}=${query}`,
+      );
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+      notifications.show({
+        title: 'Error',
+        message: "Issue with reaching server",
+        color: 'red',
+      });
+      return [];
+    }
   }
 
   const combobox = useCombobox({
@@ -88,14 +99,22 @@ export default function MedicalDataSearch({ category, form }) {
     abortController.current = new AbortController();
     setLoading(true);
 
-    getAsyncData(query, abortController.current.signal)
+    getMedicalData(query, abortController.current.signal)
       .then((result) => {
         setData(result);
         setLoading(false);
         setEmpty(result.length === 0);
         abortController.current = undefined;
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.error(error);
+        notifications.show({
+          title: 'Error',
+          message: "Issue with fetching data from server",
+          color: 'red',
+        });
+        abortController.current = undefined;
+      });
   };
 
   const options = (data || [])
