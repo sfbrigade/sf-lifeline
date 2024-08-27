@@ -77,6 +77,15 @@ export default async function (fastify, _opts) {
       const userId = request.user.id;
 
       const newPatient = await fastify.prisma.$transaction(async (tx) => {
+        // Check if the patient already exists
+        const exists = await tx.patient.findUnique({
+          where: { id },
+        });
+        if (exists)
+          throw reply.status(StatusCodes.CONFLICT).send({
+            message: `Patient with ID ${id} already exists in database.`,
+          });
+
         let patient = await tx.patient.create({
           data: {
             id,
