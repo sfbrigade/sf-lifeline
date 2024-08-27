@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
 import { useForm, isNotEmpty, matches } from '@mantine/form';
@@ -11,6 +12,8 @@ import MedicalDataSearch from './MedicalDataSearch';
  */
 export default function Patients() {
   const [loading, setLoading] = useState(false);
+  const [openedSection, setOpenedSection] = useState('patientData');
+  const { patientId } = useParams();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -71,11 +74,41 @@ export default function Patients() {
   });
 
   /**
+   * Submit patient data to server for registration
+   * @param {object} data
+   */
+  async function registerPatient(data) {
+    const res = await fetch('/api/v1/patients', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...data, id: patientId }),
+    });
+
+    return res;
+  }
+
+  /**
+   * Submit patient data to server for update
+   * @param {object} data
+   */
+  async function updatePatient(data) {
+    const res = await fetch(`/api/v1/patients/${patientId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return res;
+  }
+
+  /**
    *
    * @param {object} values
    */
   async function submitPatient(values) {
-    console.log('clicking');
     setLoading(true);
     console.log(values);
     const {
@@ -85,33 +118,40 @@ export default function Patients() {
       healthcareChoices,
       codeStatus,
     } = values;
-    const patientID = '2ce9bfc7-ab6d-4fe0-a22e-bb83f1874664';
-    patientData.id = patientID;
 
+    patientData.id = patientId;
     try {
-      const res = await fetch('/api/v1/patients', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(patientData),
-      });
-
+      const res = await registerPatient(patientData);
       if (res.status === StatusCodes.CREATED) {
-        const res = await fetch(`/api/v1/patients/${patientID}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contactData,
-            medicalData,
-            healthcareChoices,
-            patientData: { codeStatus },
-          }),
+        const res = await updatePatient({
+          contactData,
+          medicalData,
+          healthcareChoices,
         });
         if (res.status === StatusCodes.OK) {
-          console.log('Successfully updated patient');
+          notifications.show({
+            title: 'Success',
+            message: 'Successfully updated patient.',
+            color: 'green',
+          });
+        } else {
+          throw new Error('Failed to update patient');
+        }
+      } else if (res.status === StatusCodes.CONFLICT) {
+        patientData.id = patientId;
+        patientData.codeStatus = codeStatus;
+        const res = await updatePatient({
+          patientData,
+          contactData,
+          medicalData,
+          healthcareChoices,
+        });
+        if (res.status === StatusCodes.OK) {
+          notifications.show({
+            title: 'Success',
+            message: 'Successfully updated patient.',
+            color: 'green',
+          });
         } else {
           throw new Error('Failed to update patient');
         }
@@ -135,16 +175,88 @@ export default function Patients() {
    *
    * @param {string} value
    */
-  function handleAccordionChange(value) {
-    console.log(value);
-    console.log(form.getValues());
+  async function handleAccordionChange(value) {
+    console.log(value, openedSection);
+    // console.log(form.getValues()[openedSection]);
+    let errors = 0;
+    for (const field in form.getValues()[openedSection]) {
+      form.validateField(`${openedSection}.${field}`);
+      form.isValid(`${openedSection}.${field}`) ? null : errors++;
+    }
+    console.log(errors);
+    if (errors === 0) {
+      setOpenedSection(value);
+
+      if (openedSection === 'patientData') {
+        try {
+          const res = await registerPatient(form.getValues().patientData);
+          if (res.status === StatusCodes.CREATED) {
+            notifications.show({
+              title: 'Success',
+              message:
+                'Patient basic information has been successfully registered.',
+              color: 'green',
+            });
+          } else if (res.status === StatusCodes.CONFLICT) {
+            const res = await updatePatient(form.getValues().patientData);
+            if (res.status === StatusCodes.OK) {
+              notifications.show({
+                title: 'Success',
+                message:
+                  'Patient basic information has been successfully updated.',
+                color: 'green',
+              });
+            }
+          } else {
+            throw new Error('Failed to register patient');
+          }
+        } catch (err) {
+          console.log(err);
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          });
+        }
+      } else {
+        try {
+          const res = await updatePatient(form.getValues()[openedSection]);
+          if (res.status === StatusCodes.OK) {
+            notifications.show({
+              title: 'Success',
+              message: 'Patient information has been successfully updated.',
+              color: 'green',
+            });
+          } else if (!res.status.ok) {
+            throw new Error('Failed to update patient');
+          }
+        } catch (err) {
+          console.error(err);
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          });
+        }
+      }
+    } else {
+      setOpenedSection(openedSection);
+    }
   }
+
+  // Validate a form field: form.validateField('user.firstName');
 
   /**
    *
    * @param {object} errors
    */
   function handleErrors(errors) {
+    // Set focus to the first error field
+    const firstErrorPath = Object.keys(errors)[0];
+    form.getInputNode(firstErrorPath)?.focus();
+    setOpenedSection(firstErrorPath.split('.')[0]);
+
+    // Create a message for which sections have errors
     const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
     const errorSets = new Set(errorKeys);
 
@@ -172,7 +284,11 @@ export default function Patients() {
     <main>
       <h1>Register Patients</h1>
       <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
-        <Accordion defaultValue="patientData" onChange={handleAccordionChange}>
+        <Accordion
+          defaultValue="patientData"
+          value={openedSection}
+          onChange={handleAccordionChange}
+        >
           <Accordion.Item value="patientData">
             <Accordion.Control>Basic Information</Accordion.Control>
             <Accordion.Panel>

@@ -49,7 +49,7 @@ export default function MedicalDataSearch({ category, form }) {
       console.error(err);
       notifications.show({
         title: 'Error',
-        message: "Issue with reaching server",
+        message: 'Issue with reaching server',
         color: 'red',
       });
       return [];
@@ -110,7 +110,7 @@ export default function MedicalDataSearch({ category, form }) {
         console.error(error);
         notifications.show({
           title: 'Error',
-          message: "Issue with fetching data from server",
+          message: 'Issue with fetching data from server',
           color: 'red',
         });
         abortController.current = undefined;
@@ -129,6 +129,10 @@ export default function MedicalDataSearch({ category, form }) {
       </Combobox.Option>
     ));
 
+  /**
+   *
+   * Conditional rendering of combobox content
+   */
   function renderComboxContent() {
     if (empty) {
       return <Combobox.Empty>No results found</Combobox.Empty>;
