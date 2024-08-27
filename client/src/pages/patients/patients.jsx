@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Accordion, TextInput, Select, Button, Loader } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useForm } from '@mantine/form';
 import MedicalDataSearch from './MedicalDataSearch';
 
@@ -142,7 +143,27 @@ export default function Patients() {
    * @param {object} errors
    */
   function handleErrors(errors) {
-    console.log(errors);
+    const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
+    const errorSets = new Set(errorKeys);
+
+    const errorSectionMapping = {
+      patientData: 'Patient Data',
+      contactData: 'Contact Data',
+      medicalData: 'Medical Data',
+      healthcareChoices: 'Healthcare Choices',
+      codeStatus: 'Advanced Directive',
+    };
+
+    let errorSections = [];
+    errorSets.forEach((key) => {
+      errorSections.push(errorSectionMapping[key]);
+    });
+
+    notifications.show({
+      title: 'Error',
+      message: `Please fix the following sections: ${errorSections.join(', ')}`,
+      color: 'red',
+    });
   }
 
   return (
