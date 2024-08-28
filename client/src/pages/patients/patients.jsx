@@ -95,6 +95,7 @@ export default function Patients() {
    * @param {object} data
    */
   async function updatePatient(data) {
+    console.log(data);
     const res = await fetch(`/api/v1/patients/${patientId}`, {
       method: 'PATCH',
       headers: {
@@ -104,6 +105,22 @@ export default function Patients() {
     });
     return res;
   }
+
+  const showSuccessNotification = (message) => {
+    notifications.show({
+      title: 'Success',
+      message,
+      color: 'green',
+    });
+  };
+
+  const showErrorNotification = (err) => {
+    notifications.show({
+      title: 'Error',
+      message: err.message,
+      color: 'red',
+    });
+  };
 
   /**
    *
@@ -130,26 +147,63 @@ export default function Patients() {
         codeStatus,
       });
       if (res.status === StatusCodes.OK) {
-        notifications.show({
-          title: 'Success',
-          message: 'Successfully registered patient.',
-          color: 'green',
-        });
+        showSuccessNotification('Successfully registered patient.');
       } else {
         throw new Error('Failed to update patient');
       }
-      // } else {
-      //   throw new Error('Failed to create patient');
-      // }
     } catch (err) {
-      console.error(err);
-      notifications.show({
-        title: 'Error',
-        message: err.message,
-        color: 'red',
-      });
+      console.error(err.message);
+      showErrorNotification(err);
     } finally {
       setLoading(false);
+    }
+  }
+
+  /**
+   *
+   * @param {object} data
+   */
+  async function registerOrUpdatePatient(data) {
+    try {
+      const res = await registerPatient(data);
+
+      if (res.status === StatusCodes.CREATED) {
+        showSuccessNotification(
+          'Patient basic information has been successfully registered.',
+        );
+      } else if (res.status === StatusCodes.CONFLICT) {
+        const updateRes = await updatePatient({ patientData: data });
+        if (updateRes.status === StatusCodes.OK) {
+          showSuccessNotification(
+            'Patient basic information has been successfully updated.',
+          );
+        }
+      } else {
+        throw new Error('Failed to register patient');
+      }
+    } catch (err) {
+      console.error(err);
+      showErrorNotification(err);
+    }
+  }
+
+  /**
+   *
+   * @param {object} data
+   */
+  async function updatePatientRecord(data) {
+    try {
+      const res = await updatePatient(data);
+      if (res.status === StatusCodes.OK) {
+        showSuccessNotification(
+          'Patient information has been successfully updated.',
+        );
+      } else if (!res.status.ok) {
+        throw new Error('Failed to update patient');
+      }
+    } catch (err) {
+      console.error(err);
+      showErrorNotification(err);
     }
   }
 
@@ -158,12 +212,18 @@ export default function Patients() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
+    console.log(value, openedSection);
     if (!openedSection) {
       setOpenedSection(value);
       return;
     }
 
     let errorFieldCount = 0;
+
+    if (openedSection === 'codeStatus') {
+      form.isValid(`${openedSection}`) ? null : errorFieldCount++;
+    }
+
     for (const field in form.getValues()[openedSection]) {
       form.validateField(`${openedSection}.${field}`);
       form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
@@ -173,61 +233,12 @@ export default function Patients() {
       setOpenedSection(value);
 
       if (openedSection === 'patientData') {
-        try {
-          const res = await registerPatient(form.getValues().patientData);
-          if (res.status === StatusCodes.CREATED) {
-            notifications.show({
-              title: 'Success',
-              message:
-                'Patient basic information has been successfully registered.',
-              color: 'green',
-            });
-          } else if (res.status === StatusCodes.CONFLICT) {
-            const res = await updatePatient({
-              patientData: form.getValues().patientData,
-            });
-            if (res.status === StatusCodes.OK) {
-              notifications.show({
-                title: 'Success',
-                message:
-                  'Patient basic information has been successfully updated.',
-                color: 'green',
-              });
-            }
-          } else {
-            throw new Error('Failed to register patient');
-          }
-        } catch (err) {
-          console.error(err);
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          });
-        }
+        const patientData = form.getValues().patientData;
+        await registerOrUpdatePatient(patientData);
       } else {
-        try {
-          const res = await updatePatient({
-            [openedSection]: form.getValues()[openedSection],
-          });
-
-          if (res.status === StatusCodes.OK) {
-            notifications.show({
-              title: 'Success',
-              message: 'Patient information has been successfully updated.',
-              color: 'green',
-            });
-          } else if (!res.status.ok) {
-            throw new Error('Failed to update patient');
-          }
-        } catch (err) {
-          console.error(err);
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          });
-        }
+        const formData = form.getValues()[openedSection];
+        console.log(formData);
+        await updatePatientRecord({ [openedSection]: formData });
       }
     } else {
       setOpenedSection(openedSection);
