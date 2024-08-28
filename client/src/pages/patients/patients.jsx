@@ -14,7 +14,7 @@ import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import MedicalDataSearch from './MedicalDataSearch';
 
-import styles from './patients.module.css';
+import classes from './patients.module.css';
 
 /**
  *  Patients page component
@@ -299,7 +299,7 @@ export default function Patients() {
             defaultValue="patientData"
             value={openedSection}
             onChange={handleAccordionChange}
-            classNames={styles}
+            classNames={classes}
           >
             <Accordion.Item value="patientData">
               <Accordion.Control>&#9312; Basic Information</Accordion.Control>
@@ -468,12 +468,13 @@ export default function Patients() {
             </Accordion.Item>
           </Accordion>
           <Flex justify="center" mt="md">
-
-          {loading ? (
-            <Loader size="lg" />
-          ) : (
-            <Button type="submit" color="gray" fullWidth >Register Patient</Button>
-          )}
+            {loading ? (
+              <Loader size="lg" />
+            ) : (
+              <Button type="submit" color="gray" fullWidth>
+                Register Patient
+              </Button>
+            )}
           </Flex>
         </form>
       </Flex>
