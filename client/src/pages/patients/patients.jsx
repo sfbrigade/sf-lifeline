@@ -117,10 +117,10 @@ export default function Patients() {
     });
   };
 
-  const showErrorNotification = (err) => {
+  const showErrorNotification = (message) => {
     notifications.show({
       title: 'Error',
-      message: err.message,
+      message,
       color: 'red',
     });
   };
@@ -155,8 +155,8 @@ export default function Patients() {
         throw new Error('Failed to update patient');
       }
     } catch (err) {
-      console.error(err.message);
-      showErrorNotification(err);
+      console.error(err);
+      showErrorNotification(err.message);
     } finally {
       setLoading(false);
     }
@@ -186,7 +186,7 @@ export default function Patients() {
       }
     } catch (err) {
       console.error(err);
-      showErrorNotification(err);
+      showErrorNotification(err.message);
     }
   }
 
@@ -206,7 +206,7 @@ export default function Patients() {
       }
     } catch (err) {
       console.error(err);
-      showErrorNotification(err);
+      showErrorNotification(err.message);
     }
   }
 
@@ -275,11 +275,9 @@ export default function Patients() {
       errorSections.push(errorSectionMap[key]);
     });
 
-    notifications.show({
-      title: 'Error',
-      message: `Please fix the following sections: ${errorSections.join(', ')}`,
-      color: 'red',
-    });
+    showErrorNotification(
+      `Please fix the following sections: ${errorSections.join(', ')}`,
+    );
   }
 
   return (
