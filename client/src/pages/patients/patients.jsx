@@ -111,7 +111,7 @@ export default function Patients() {
    */
   async function submitPatient(values) {
     setLoading(true);
-    
+
     const {
       patientData,
       contactData,
@@ -122,44 +122,25 @@ export default function Patients() {
 
     patientData.id = patientId;
     try {
-      const res = await registerPatient(patientData);
-      if (res.status === StatusCodes.CREATED) {
-        const res = await updatePatient({
-          contactData,
-          medicalData,
-          healthcareChoices,
+      const res = await updatePatient({
+        patientData,
+        contactData,
+        medicalData,
+        healthcareChoices,
+        codeStatus,
+      });
+      if (res.status === StatusCodes.OK) {
+        notifications.show({
+          title: 'Success',
+          message: 'Successfully registered patient.',
+          color: 'green',
         });
-        if (res.status === StatusCodes.OK) {
-          notifications.show({
-            title: 'Success',
-            message: 'Successfully updated patient.',
-            color: 'green',
-          });
-        } else {
-          throw new Error('Failed to update patient');
-        }
-      } else if (res.status === StatusCodes.CONFLICT) {
-        patientData.id = patientId;
-
-        const res = await updatePatient({
-          patientData,
-          contactData,
-          medicalData,
-          healthcareChoices,
-          codeStatus,
-        });
-        if (res.status === StatusCodes.OK) {
-          notifications.show({
-            title: 'Success',
-            message: 'Successfully updated patient.',
-            color: 'green',
-          });
-        } else {
-          throw new Error('Failed to update patient');
-        }
       } else {
-        throw new Error('Failed to create patient');
+        throw new Error('Failed to update patient');
       }
+      // } else {
+      //   throw new Error('Failed to create patient');
+      // }
     } catch (err) {
       console.error(err);
       notifications.show({
@@ -168,7 +149,6 @@ export default function Patients() {
         color: 'red',
       });
     } finally {
-      
       setLoading(false);
     }
   }
@@ -179,7 +159,7 @@ export default function Patients() {
    */
   async function handleAccordionChange(value) {
     if (!openedSection) {
-      setOpenedSection(value)
+      setOpenedSection(value);
       return;
     }
 
@@ -188,7 +168,7 @@ export default function Patients() {
       form.validateField(`${openedSection}.${field}`);
       form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
     }
-    
+
     if (errorFieldCount === 0) {
       setOpenedSection(value);
 
@@ -230,7 +210,7 @@ export default function Patients() {
           const res = await updatePatient({
             [openedSection]: form.getValues()[openedSection],
           });
-          
+
           if (res.status === StatusCodes.OK) {
             notifications.show({
               title: 'Success',
