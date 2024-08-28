@@ -98,7 +98,6 @@ export default function PatientRegistration() {
    * @param {object} data
    */
   async function updatePatient(data) {
-    console.log(data);
     const res = await fetch(`/api/v1/patients/${patientId}`, {
       method: 'PATCH',
       headers: {
@@ -152,7 +151,7 @@ export default function PatientRegistration() {
         showSuccessNotification('Successfully registered patient.');
         navigate('/dashboard', { replace: true });
       } else {
-        throw new Error('Failed to update patient');
+        throw new Error('Failed to update patient.');
       }
     } catch (err) {
       console.error(err);
@@ -174,15 +173,22 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
         );
-      } else if (res.status === StatusCodes.CONFLICT) {
+      }
+      if (res.status === StatusCodes.CONFLICT) {
         const updateRes = await updatePatient({ patientData: data });
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
         }
-      } else {
-        throw new Error('Failed to register patient');
+      }
+
+      if (res.status === StatusCodes.BAD_REQUEST) {
+        throw new Error('Invalid patient ID URL.');
+      }
+
+      if (!res.status.ok) {
+        throw new Error('Failed to register patient.');
       }
     } catch (err) {
       console.error(err);
@@ -201,8 +207,14 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient information has been successfully updated.',
         );
-      } else if (!res.status.ok) {
-        throw new Error('Failed to update patient');
+      }
+
+      if (res.status === StatusCodes.NOT_FOUND) {
+        throw new Error('Patient ID not found.');
+      }
+
+      if (!res.status.ok) {
+        throw new Error('Failed to update patient.');
       }
     } catch (err) {
       console.error(err);
@@ -215,7 +227,6 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    console.log(value, openedSection);
     if (!openedSection) {
       setOpenedSection(value);
       return;
@@ -240,7 +251,6 @@ export default function PatientRegistration() {
         await registerOrUpdatePatient(patientData);
       } else {
         const formData = form.getValues()[openedSection];
-        console.log(formData);
         await updatePatientRecord({ [openedSection]: formData });
       }
     } else {
