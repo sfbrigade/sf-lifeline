@@ -144,6 +144,32 @@ describe('/api/v1/patients', () => {
       });
     });
 
+    it('errors if creating a patient with an existing ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: '27963f68-ebc1-408a-8bb5-8fbe54671064',
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CONFLICT);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe54671064 already exists in database.',
+      );
+    });
+
     it('errors if missing required fields', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -648,5 +674,36 @@ describe('/api/v1/patients', () => {
         'Hospital with ID a50538cd-1e10-42a3-8d6b-f9ae1e48a022 does not exist in database.',
       );
     });
+
+    it('should allow ADMIN to update a patient with code status', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          codeStatus: 'DNR',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const {
+        id,
+        firstName,
+        middleName,
+        lastName,
+        dateOfBirth,
+        codeStatus,
+      } = JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(firstName, 'John');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(dateOfBirth, '2000-10-05');
+      assert.deepStrictEqual(codeStatus, 'DNR');
+    });
+
   });
 });
