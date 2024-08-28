@@ -1,5 +1,4 @@
-import { useState } from "react";
-import PatientRegistrationAccordion from "./PatientRegistrationAccordion";
+import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
 import '@mantine/core/styles.css';
 
@@ -7,8 +6,8 @@ export default {
   title: 'Patient Registration Accordion',
   component: PatientRegistrationAccordion,
   tags: ['autodocs'],
-  parameters : {
-    layout: 'fullscreen'
+  parameters: {
+    layout: 'fullscreen',
   },
 };
 
@@ -49,8 +48,6 @@ export const Default = {
       validateField: () => true,
     },
     openedSection: 'patientData',
-    handleAccordionChange: (value) => {},
+    handleAccordionChange: () => {},
   },
-};  
-
-
+};
