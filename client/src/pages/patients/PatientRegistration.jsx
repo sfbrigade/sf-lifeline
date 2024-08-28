@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
-import { Flex, Button, Loader } from '@mantine/core';
+import { Flex, Button } from '@mantine/core';
 import { useForm, isNotEmpty, matches } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
@@ -291,13 +291,15 @@ export default function PatientRegistration() {
             handleAccordionChange={handleAccordionChange}
           />
           <Flex justify="center" mt="md">
-            {loading ? (
-              <Loader size="lg" />
-            ) : (
-              <Button type="submit" color="gray" fullWidth>
-                Register Patient
-              </Button>
-            )}
+            <Button
+              type="submit"
+              color="gray"
+              fullWidth
+              loading={loading}
+              loaderProps={{ type: 'dots' }}
+            >
+              Register Patient
+            </Button>
           </Flex>
         </form>
       </Flex>
