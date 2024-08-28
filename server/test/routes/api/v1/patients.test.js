@@ -688,14 +688,8 @@ describe('/api/v1/patients', () => {
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const {
-        id,
-        firstName,
-        middleName,
-        lastName,
-        dateOfBirth,
-        codeStatus,
-      } = JSON.parse(reply.body);
+      const { id, firstName, middleName, lastName, dateOfBirth, codeStatus } =
+        JSON.parse(reply.body);
 
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(firstName, 'John');
@@ -704,6 +698,5 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
       assert.deepStrictEqual(codeStatus, 'DNR');
     });
-
   });
 });
