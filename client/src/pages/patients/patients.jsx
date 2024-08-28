@@ -111,7 +111,7 @@ export default function Patients() {
    */
   async function submitPatient(values) {
     setLoading(true);
-    console.log(values);
+    
     const {
       patientData,
       contactData,
@@ -161,14 +161,14 @@ export default function Patients() {
         throw new Error('Failed to create patient');
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       notifications.show({
         title: 'Error',
         message: err.message,
         color: 'red',
       });
     } finally {
-      console.log('Finished');
+      
       setLoading(false);
     }
   }
@@ -178,14 +178,17 @@ export default function Patients() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    console.log(value, openedSection);
-    // console.log(form.getValues()[openedSection]);
+    if (!openedSection) {
+      setOpenedSection(value)
+      return;
+    }
+
     let errorFieldCount = 0;
     for (const field in form.getValues()[openedSection]) {
       form.validateField(`${openedSection}.${field}`);
       form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
     }
-    console.log(errorFieldCount);
+    
     if (errorFieldCount === 0) {
       setOpenedSection(value);
 
@@ -215,7 +218,7 @@ export default function Patients() {
             throw new Error('Failed to register patient');
           }
         } catch (err) {
-          console.log(err);
+          console.error(err);
           notifications.show({
             title: 'Error',
             message: err.message,
@@ -227,7 +230,7 @@ export default function Patients() {
           const res = await updatePatient({
             [openedSection]: form.getValues()[openedSection],
           });
-          console.log(await res.json());
+          
           if (res.status === StatusCodes.OK) {
             notifications.show({
               title: 'Success',
@@ -250,8 +253,6 @@ export default function Patients() {
       setOpenedSection(openedSection);
     }
   }
-
-  // Validate a form field: form.validateField('user.firstName');
 
   /**
    *
