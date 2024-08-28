@@ -1,0 +1,12 @@
+.control {
+  background-color: var(--mantine-color-gray-6);
+  font-weight: 600;
+
+  &[data-active] {
+    background-color: white;
+  }
+}
+
+.label {
+  font-weight: 600;
+}

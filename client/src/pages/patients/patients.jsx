@@ -14,6 +14,8 @@ import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import MedicalDataSearch from './MedicalDataSearch';
 
+import styles from './patients.module.css';
+
 /**
  *  Patients page component
  *
@@ -297,9 +299,10 @@ export default function Patients() {
             defaultValue="patientData"
             value={openedSection}
             onChange={handleAccordionChange}
+            classNames={styles}
           >
             <Accordion.Item value="patientData">
-              <Accordion.Control>Basic Information</Accordion.Control>
+              <Accordion.Control>&#9312; Basic Information</Accordion.Control>
               <Accordion.Panel>
                 <TextInput
                   label="First Name"
@@ -362,7 +365,7 @@ export default function Patients() {
             </Accordion.Item>
 
             <Accordion.Item value="contactData">
-              <Accordion.Control>Emergency Contact</Accordion.Control>
+              <Accordion.Control>&#9313; Emergency Contact</Accordion.Control>
               <Accordion.Panel>
                 <TextInput
                   label="First Name"
@@ -416,7 +419,7 @@ export default function Patients() {
             </Accordion.Item>
 
             <Accordion.Item value="medicalData">
-              <Accordion.Control>Medical Information</Accordion.Control>
+              <Accordion.Control>&#9314; Medical Information</Accordion.Control>
               <Accordion.Panel>
                 {Object.keys(form.getValues().medicalData).map((category) => {
                   return (
@@ -431,7 +434,7 @@ export default function Patients() {
             </Accordion.Item>
 
             <Accordion.Item value="healthcareChoices">
-              <Accordion.Control>Healthcare Choices</Accordion.Control>
+              <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
               <Accordion.Panel>
                 <TextInput
                   label="Hospital"
@@ -451,7 +454,7 @@ export default function Patients() {
             </Accordion.Item>
 
             <Accordion.Item value="codeStatus">
-              <Accordion.Control>Advanced Directive</Accordion.Control>
+              <Accordion.Control>&#9316; Advanced Directive</Accordion.Control>
               <Accordion.Panel>
                 <Select
                   label="Code Status"
@@ -464,11 +467,14 @@ export default function Patients() {
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
+          <Flex justify="center" mt="md">
+
           {loading ? (
-            <Loader size="xl" />
+            <Loader size="lg" />
           ) : (
-            <Button type="submit">Register Patient</Button>
+            <Button type="submit" color="gray" fullWidth >Register Patient</Button>
           )}
+          </Flex>
         </form>
       </Flex>
     </main>
