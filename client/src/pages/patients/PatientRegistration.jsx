@@ -12,7 +12,7 @@ import PatientRegistrationAccordion from './PatientRegistrationAccordion';
  *  Patients page component
  *
  */
-export default function Patients() {
+export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
@@ -282,7 +282,7 @@ export default function Patients() {
 
   return (
     <main>
-      <h1>Register Patients</h1>
+      <h1>Register Patient</h1>
       <Flex direction="column" gap="md">
         <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
           <PatientRegistrationAccordion
