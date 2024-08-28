@@ -37,10 +37,7 @@ export default async function (fastify, _opts) {
                     'TAGALOG',
                   ],
                 },
-                codeStatus: {
-                  type: 'string',
-                  enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
-                },
+
                 dateOfBirth: { type: 'string', format: 'date' },
               },
             },
@@ -88,6 +85,10 @@ export default async function (fastify, _opts) {
                 hospitalId: { type: 'string' },
                 physicianId: { type: 'string' },
               },
+            },
+            codeStatus: {
+              type: 'string',
+              enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
             },
           },
         },
@@ -148,8 +149,13 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       const { id } = request.params;
-      const { patientData, contactData, medicalData, healthcareChoices } =
-        request.body;
+      const {
+        patientData,
+        contactData,
+        medicalData,
+        healthcareChoices,
+        codeStatus,
+      } = request.body;
 
       const userId = request.user.id;
 
@@ -291,6 +297,18 @@ export default async function (fastify, _opts) {
               physician: {
                 connect: { id: healthcareChoices.physicianId },
               },
+              updatedBy: {
+                connect: { id: userId },
+              },
+            },
+          });
+        }
+
+        if (codeStatus) {
+          await tx.patient.update({
+            where: { id },
+            data: {
+              codeStatus,
               updatedBy: {
                 connect: { id: userId },
               },
