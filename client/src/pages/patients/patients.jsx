@@ -49,6 +49,7 @@ export default function Patients() {
       patientData: {
         firstName: isNotEmpty('First Name is required'),
         lastName: isNotEmpty('Last Name is required'),
+        language: isNotEmpty('Language is required'),
         gender: isNotEmpty('Gender is required'),
         dateOfBirth: matches(
           /^\d{4}-\d{2}-\d{2}$/,
@@ -139,12 +140,13 @@ export default function Patients() {
         }
       } else if (res.status === StatusCodes.CONFLICT) {
         patientData.id = patientId;
-        patientData.codeStatus = codeStatus;
+
         const res = await updatePatient({
           patientData,
           contactData,
           medicalData,
           healthcareChoices,
+          codeStatus,
         });
         if (res.status === StatusCodes.OK) {
           notifications.show({
@@ -178,13 +180,13 @@ export default function Patients() {
   async function handleAccordionChange(value) {
     console.log(value, openedSection);
     // console.log(form.getValues()[openedSection]);
-    let errors = 0;
+    let errorFieldCount = 0;
     for (const field in form.getValues()[openedSection]) {
       form.validateField(`${openedSection}.${field}`);
-      form.isValid(`${openedSection}.${field}`) ? null : errors++;
+      form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
     }
-    console.log(errors);
-    if (errors === 0) {
+    console.log(errorFieldCount);
+    if (errorFieldCount === 0) {
       setOpenedSection(value);
 
       if (openedSection === 'patientData') {
@@ -198,7 +200,9 @@ export default function Patients() {
               color: 'green',
             });
           } else if (res.status === StatusCodes.CONFLICT) {
-            const res = await updatePatient(form.getValues().patientData);
+            const res = await updatePatient({
+              patientData: form.getValues().patientData,
+            });
             if (res.status === StatusCodes.OK) {
               notifications.show({
                 title: 'Success',
@@ -220,7 +224,10 @@ export default function Patients() {
         }
       } else {
         try {
-          const res = await updatePatient(form.getValues()[openedSection]);
+          const res = await updatePatient({
+            [openedSection]: form.getValues()[openedSection],
+          });
+          console.log(await res.json());
           if (res.status === StatusCodes.OK) {
             notifications.show({
               title: 'Success',
@@ -260,7 +267,7 @@ export default function Patients() {
     const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
     const errorSets = new Set(errorKeys);
 
-    const errorSectionMapping = {
+    const errorSectionMap = {
       patientData: 'Patient Data',
       contactData: 'Emergency Contact',
       medicalData: 'Medical Information',
@@ -270,7 +277,7 @@ export default function Patients() {
 
     let errorSections = [];
     errorSets.forEach((key) => {
-      errorSections.push(errorSectionMapping[key]);
+      errorSections.push(errorSectionMap[key]);
     });
 
     notifications.show({
@@ -326,7 +333,6 @@ export default function Patients() {
                 ]}
                 key={form.key('patientData.gender')}
                 {...form.getInputProps('patientData.gender')}
-                clearable
               />
               <Select
                 label="Language"
@@ -342,7 +348,6 @@ export default function Patients() {
                 ]}
                 key={form.key('patientData.language')}
                 {...form.getInputProps('patientData.language')}
-                clearable
               />
               <TextInput
                 label="Date of Birth"
@@ -379,7 +384,7 @@ export default function Patients() {
               />
               <TextInput
                 label="Phone Number"
-                placeholder="Phone Number"
+                placeholder="XXX-XXX-XXXX"
                 withAsterisk
                 key={form.key('contactData.phone')}
                 {...form.getInputProps('contactData.phone')}
@@ -404,7 +409,6 @@ export default function Patients() {
                 ]}
                 key={form.key('contactData.relationship')}
                 {...form.getInputProps('contactData.relationship')}
-                clearable
               />
             </Accordion.Panel>
           </Accordion.Item>
@@ -454,7 +458,6 @@ export default function Patients() {
                 data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
                 key={form.key('codeStatus')}
                 {...form.getInputProps('codeStatus')}
-                clearable
               />
             </Accordion.Panel>
           </Accordion.Item>
