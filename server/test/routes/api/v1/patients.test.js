@@ -217,6 +217,32 @@ describe('/api/v1/patients', () => {
         'body/language must be equal to one of the allowed values',
       );
     });
+
+    it('errors if providing a non-UUID ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: 'not-a-uuid',
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'body/id must match format "uuid"',
+      );
+    });
   });
 
   describe('PATCH /:id', () => {
@@ -368,6 +394,31 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(language, 'CANTONESE');
       assert.deepStrictEqual(codeStatus, 'DNI');
       assert.deepStrictEqual(dateOfBirth, '1990-03-01');
+    });
+
+    it('should throw an error if a patient does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/not-a-uuid')
+        .payload({
+          patientData: {
+            firstName: 'Jane',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID not-a-uuid does not exist in database.',
+      );
     });
 
     it('should allow ADMIN to update a patient with contact data', async (t) => {

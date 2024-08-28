@@ -17,7 +17,7 @@ export default async function (fastify, _opts) {
             'dateOfBirth',
           ],
           properties: {
-            id: { type: 'string' },
+            id: { type: 'string', format: 'uuid' },
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },

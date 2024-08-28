@@ -159,6 +159,19 @@ export default async function (fastify, _opts) {
 
       const userId = request.user.id;
 
+      try {
+        const patient = await fastify.prisma.patient.findUnique({
+          where: { id },
+        });
+        if (!patient) {
+          throw new Error('Patient not found');
+        }
+      } catch (error) {
+        return reply.status(StatusCodes.NOT_FOUND).send({
+          message: `Patient with ID ${id} does not exist in database.`,
+        });
+      }
+
       const updatedPatient = await fastify.prisma.$transaction(async (tx) => {
         if (patientData) {
           const newPatientData = {};
