@@ -209,6 +209,10 @@ export default function PatientRegistration() {
         );
       }
 
+      if (res.status === StatusCodes.BAD_REQUEST) {
+        throw new Error('Invalid data provided.');
+      }
+
       if (res.status === StatusCodes.NOT_FOUND) {
         throw new Error('Patient ID not found.');
       }

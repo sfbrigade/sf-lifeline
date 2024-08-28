@@ -62,18 +62,21 @@ export default async function (fastify, _opts) {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
                 medications: {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
                 conditions: {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
               },
@@ -82,8 +85,8 @@ export default async function (fastify, _opts) {
               type: 'object',
               required: ['hospitalId', 'physicianId'],
               properties: {
-                hospitalId: { type: 'string' },
-                physicianId: { type: 'string' },
+                hospitalId: { type: 'string', format: 'uuid' },
+                physicianId: { type: 'string', format: 'uuid' },
               },
             },
             codeStatus: {
