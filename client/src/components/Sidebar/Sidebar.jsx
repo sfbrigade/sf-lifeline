@@ -27,7 +27,7 @@ const sections = [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
       {
         label: 'New Patient',
-        href: '/admin/patients/register',
+        href: '/',
         icon: <IconClipboardPlus stroke={2} />,
       },
       {
