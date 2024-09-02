@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Select, TextInput, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -120,7 +120,14 @@ export function InviteModal({ opened, close }) {
             <Button variant="outline" color="gray" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Send Invite</Button>
+            <Button
+              disabled={
+                !form.getValues().name.length || !form.getValues().email.length
+              }
+              type="submit"
+            >
+              Send Invite
+            </Button>
           </Group>
         </form>
       </Modal>

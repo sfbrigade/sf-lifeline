@@ -71,6 +71,7 @@ export function LoginForm({
         </Container>
         <Container size="25rem">
           <Button
+            disabled={!email.length || !password.length}
             className={classes.loginBtn}
             variant="filled"
             fullWidth
