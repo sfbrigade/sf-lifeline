@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classes from '../form.module.css';
-import { Button, Container, Loader, PasswordInput } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Flex,
+  Group,
+  Loader,
+  PasswordInput,
+  Progress,
+} from '@mantine/core';
 
 const formProps = {
   form: PropTypes.object.isRequired,
@@ -26,6 +34,27 @@ export function PasswordResetForm({
   formState,
   onBackToLogin,
 }) {
+  const { password } = form;
+
+  const requirements = [
+    { re: /[0-9]/, label: 'Includes number' },
+    { re: /[a-z]/, label: 'Includes lowercase letter' },
+    { re: /[A-Z]/, label: 'Includes uppercase letter' },
+    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
+  ];
+
+  let multiplier = password.length > 7 ? 0 : 1;
+
+  requirements.forEach((requirement) => {
+    if (!requirement.re.test(password)) {
+      multiplier += 1;
+    }
+  });
+
+  const strength = Math.max(
+    100 - (100 / (requirements.length + 1)) * multiplier,
+    0,
+  );
   return (
     <form
       onSubmit={(event) => {
@@ -34,15 +63,32 @@ export function PasswordResetForm({
       }}
     >
       <Container size="25rem" className={classes.form}>
-        <PasswordInput
-          disabled={isLoading || formState == 2}
-          name="password"
-          label="New Password"
-          placeholder="New password"
-          value={form.password}
-          onChange={onFormChange}
-          error={errors.password}
-        />
+        <Group grow>
+          <Flex direction="column" gap="xs">
+            <PasswordInput
+              disabled={isLoading || formState == 2}
+              name="password"
+              label="New Password"
+              placeholder="New password"
+              value={form.password}
+              onChange={onFormChange}
+              error={errors.password}
+            />
+            <Progress
+              value={strength}
+              color={
+                strength == 100
+                  ? 'teal'
+                  : strength > 50
+                    ? 'yellow'
+                    : strength > 20
+                      ? 'orange'
+                      : 'red'
+              }
+            />
+          </Flex>
+        </Group>
+
         <PasswordInput
           disabled={isLoading || formState == 2}
           name="confirmPassword"

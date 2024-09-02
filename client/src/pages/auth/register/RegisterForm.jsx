@@ -5,7 +5,10 @@ import {
   TextInput,
   Button,
   PasswordInput,
+  Progress,
   Loader,
+  Group,
+  Flex,
 } from '@mantine/core';
 import registerClasses from './register.module.css';
 import formClasses from '../form.module.css';
@@ -37,6 +40,28 @@ export function RegisterForm({
   formState,
   showLicenseField,
 }) {
+  const { password } = user;
+
+  const requirements = [
+    { re: /[0-9]/, label: 'Includes number' },
+    { re: /[a-z]/, label: 'Includes lowercase letter' },
+    { re: /[A-Z]/, label: 'Includes uppercase letter' },
+    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
+  ];
+
+  let multiplier = password.length > 7 ? 0 : 1;
+
+  requirements.forEach((requirement) => {
+    if (!requirement.re.test(password)) {
+      multiplier += 1;
+    }
+  });
+
+  const strength = Math.max(
+    100 - (100 / (requirements.length + 1)) * multiplier,
+    0,
+  );
+
   return (
     <>
       <form
@@ -105,15 +130,31 @@ export function RegisterForm({
                 onChange={onFormChange}
                 error={errors.email}
               />
-              <PasswordInput
-                disabled={isLoading}
-                name="password"
-                label="Password"
-                placeholder="Password"
-                value={user.password}
-                onChange={onFormChange}
-                error={errors.password}
-              />
+              <Group grow>
+                <Flex direction="column" gap="xs">
+                  <PasswordInput
+                    disabled={isLoading}
+                    name="password"
+                    label="Password"
+                    placeholder="Password"
+                    value={user.password}
+                    onChange={onFormChange}
+                    error={errors.password}
+                  />
+                  <Progress
+                    value={strength}
+                    color={
+                      strength == 100
+                        ? 'teal'
+                        : strength > 50
+                          ? 'yellow'
+                          : strength > 20
+                            ? 'orange'
+                            : 'red'
+                    }
+                  />
+                </Flex>
+              </Group>
             </>
           )}
           <Container
