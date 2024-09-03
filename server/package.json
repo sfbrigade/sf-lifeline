@@ -11,6 +11,7 @@
     "seed": "tsx prisma/seed"
   },
   "scripts": {
+    "db:preview": "npx prisma studio",
     "db:reset": "npx prisma migrate reset --force",
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
     "format": "prettier --write --ignore-unknown .",
