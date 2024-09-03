@@ -63,6 +63,7 @@ export default function PatientRegistrationAccordion({
                 'OTHER',
                 'UNKNOWN',
               ]}
+              searchable
               key={form.key('patientData.gender')}
               {...form.getInputProps('patientData.gender')}
             />
@@ -78,6 +79,7 @@ export default function PatientRegistrationAccordion({
                 'SPANISH',
                 'TAGALOG',
               ]}
+              searchable
               key={form.key('patientData.language')}
               {...form.getInputProps('patientData.language')}
             />
@@ -139,6 +141,7 @@ export default function PatientRegistrationAccordion({
                 'OTHER',
                 'UNKNOWN',
               ]}
+              searchable
               key={form.key('contactData.relationship')}
               {...form.getInputProps('contactData.relationship')}
             />
@@ -188,6 +191,7 @@ export default function PatientRegistrationAccordion({
               placeholder="Select Code Status"
               withAsterisk
               data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
+              searchable
               key={form.key('codeStatus')}
               {...form.getInputProps('codeStatus')}
             />
