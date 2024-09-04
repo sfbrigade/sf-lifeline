@@ -182,8 +182,7 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
         );
-      }
-      if (res.status === StatusCodes.CONFLICT) {
+      } else if (res.status === StatusCodes.CONFLICT) {
         const updateRes = await updatePatient({ patientData: data });
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
