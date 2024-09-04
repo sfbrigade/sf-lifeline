@@ -181,13 +181,9 @@ export default function PatientRegistration() {
             'Patient basic information has been successfully updated.',
           );
         }
-      }
-
-      if (res.status === StatusCodes.BAD_REQUEST) {
+      } else if (res.status === StatusCodes.BAD_REQUEST) {
         throw new Error('Invalid patient ID URL.');
-      }
-
-      if (!res.status.ok) {
+      } else {
         throw new Error('Failed to register patient.');
       }
     } catch (err) {
@@ -207,17 +203,11 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient information has been successfully updated.',
         );
-      }
-
-      if (res.status === StatusCodes.BAD_REQUEST) {
+      } else if (res.status === StatusCodes.BAD_REQUEST) {
         throw new Error('Invalid data provided.');
-      }
-
-      if (res.status === StatusCodes.NOT_FOUND) {
+      } else if (res.status === StatusCodes.NOT_FOUND) {
         throw new Error('Patient ID not found.');
-      }
-
-      if (!res.status.ok) {
+      } else {
         throw new Error('Failed to update patient.');
       }
     } catch (err) {
