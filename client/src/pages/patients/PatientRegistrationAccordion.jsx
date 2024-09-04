@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select } from '@mantine/core';
 import MedicalDataSearch from './MedicalDataSearch';
-import HealthcareChoicesSearch from './HealthcareChoicesSearch';
+import HealthcareChoicesSearch from './HospitalSearch';
 import PhysicianSearch from './PhysicianSearch';
 
 import classes from './PatientRegistationAccordion.module.css';

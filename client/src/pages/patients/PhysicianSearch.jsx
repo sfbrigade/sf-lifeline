@@ -11,14 +11,18 @@ import {
 
 import { notifications } from '@mantine/notifications';
 
-const healthcareChoicesSearchProps = {
+const physicianSearchProps = {
   form: PropTypes.object.isRequired,
 };
 
-export default function HealthcareChoicesSearch({ form }) {
+/**
+ *
+ * @param {PropTypes.InferProps<typeof physicianSearchProps>} props
+ */
+export default function PhysicianSearch({ form }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [value, setValue] = useState({name: "", id: ""});
+  const [value, setValue] = useState({ name: '', id: '' });
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const abortController = useRef();
@@ -29,7 +33,9 @@ export default function HealthcareChoicesSearch({ form }) {
    */
   async function getHospitals(query) {
     try {
-      const response = await fetch(`/api/v1/hospitals/${form.getValues().healthcareChoices.hospitalId}/physicians?physician=${query}`);
+      const response = await fetch(
+        `/api/v1/hospitals/${form.getValues().healthcareChoices.hospitalId}/physicians?physician=${query}`,
+      );
       const data = await response.json();
       console.log(data);
       return data;
@@ -43,8 +49,6 @@ export default function HealthcareChoicesSearch({ form }) {
       return [];
     }
   }
-
-  
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -76,31 +80,28 @@ export default function HealthcareChoicesSearch({ form }) {
 
   const handleValueSelect = (id, key) => {
     const name = key.children;
-    setValue( { id, name });
+    setValue({ id, name });
     setSearch('');
     form.setFieldValue(`healthcareChoices.physicianId`, id);
     combobox.closeDropdown();
   };
 
   const handleValueRemove = () => {
-    setValue({name: "", id: ""});
+    setValue({ name: '', id: '' });
     setSearch('');
-    fetchOptions("")
-    form.setFieldValue(`healthcareChoices.physicianId`, id);
+    fetchOptions('');
+    form.setFieldValue(`healthcareChoices.physicianId`, '');
   };
 
-  
-
-  const options = (data || [])
-    .map((item) => (
-      <Combobox.Option
-        value={item.id}
-        key={item.id}
-        // active={value.name === item.name}
-      >
-        {item.firstName}
-      </Combobox.Option>
-    ));
+  const options = (data || []).map((item) => (
+    <Combobox.Option
+      value={item.id}
+      key={item.id}
+      // active={value.name === item.name}
+    >
+      {item.firstName}
+    </Combobox.Option>
+  ));
 
   /**
    *
@@ -172,4 +173,4 @@ export default function HealthcareChoicesSearch({ form }) {
   );
 }
 
-HealthcareChoicesSearch.propTypes = healthcareChoicesSearchProps;
+PhysicianSearch.propTypes = physicianSearchProps;

@@ -11,14 +11,18 @@ import {
 
 import { notifications } from '@mantine/notifications';
 
-const healthcareChoicesSearchProps = {
+const hospitalSearchProps = {
   form: PropTypes.object.isRequired,
 };
 
-export default function HealthcareChoicesSearch({ form }) {
+/**
+ *
+ * @param {PropTypes.InferProps<typeof hospitalSearchProps>} props
+ */
+export default function HospitalSearch({ form }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [value, setValue] = useState({name: "", id: ""});
+  const [value, setValue] = useState({ name: '', id: '' });
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const abortController = useRef();
@@ -43,7 +47,7 @@ export default function HealthcareChoicesSearch({ form }) {
     }
   }
 
-  console.log({value, search});
+  console.log({ value, search });
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -75,29 +79,28 @@ export default function HealthcareChoicesSearch({ form }) {
 
   const handleValueSelect = (id, key) => {
     const name = key.children;
-    setValue( { id, name });
+    setValue({ id, name });
     setSearch('');
     form.setFieldValue(`healthcareChoices.hospitalId`, id);
     combobox.closeDropdown();
   };
 
   const handleValueRemove = () => {
-    setValue({name: "", id: ""});
+    setValue({ name: '', id: '' });
     setSearch('');
-    fetchOptions("")
-    form.setFieldValue(`healthcareChoices.hospitalId`, "");
+    fetchOptions('');
+    form.setFieldValue(`healthcareChoices.hospitalId`, '');
   };
 
-  const options = (data || [])
-    .map((item) => (
-      <Combobox.Option
-        value={item.id}
-        key={item.id}
-        active={value.name === item.name}
-      >
-        {item.name}
-      </Combobox.Option>
-    ));
+  const options = (data || []).map((item) => (
+    <Combobox.Option
+      value={item.id}
+      key={item.id}
+      active={value.name === item.name}
+    >
+      {item.name}
+    </Combobox.Option>
+  ));
 
   /**
    *
@@ -169,4 +172,4 @@ export default function HealthcareChoicesSearch({ form }) {
   );
 }
 
-HealthcareChoicesSearch.propTypes = healthcareChoicesSearchProps;
+HospitalSearch.propTypes = hospitalSearchProps;
