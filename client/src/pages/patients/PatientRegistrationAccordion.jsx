@@ -7,7 +7,7 @@ import classes from './PatientRegistationAccordion.module.css';
 
 const PatientRegistrationAccordionProps = {
   form: PropTypes.object.isRequired,
-  openedSection: PropTypes.string.isRequired,
+  openedSection: PropTypes.string,
   handleAccordionChange: PropTypes.func.isRequired,
 };
 
