@@ -157,6 +157,27 @@ async function seedMedications() {
   }
 }
 
+async function seedHospitals() {
+  const hospitals = [
+    'SF General',
+    'CPMC Van Ness',
+    'CPMC Davies',
+    'CPMC Mission Bernal',
+    'Kaiser SF',
+    'St. Francis',
+    "St. Mary's",
+    'Chinese Hospital',
+    'VA Med. Center',
+    'UCSF Parnassus',
+  ];
+  const data = {};
+  for (const name of hospitals) {
+    data.name = name;
+    await prisma.hospital.create({ data });
+  }
+  console.log('Hospitals seeded successfully');
+}
+
 async function seedAdminUser() {
   const now = new Date();
   const data = {};
@@ -217,6 +238,7 @@ async function main() {
   await seedMedicationAllergies();
   await seedEnvFoodAllergies();
   await seedMedications();
+  await seedHospitals();
   await seedUsers();
 }
 
