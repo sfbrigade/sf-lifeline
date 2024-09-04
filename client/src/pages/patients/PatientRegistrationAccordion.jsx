@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select } from '@mantine/core';
 import MedicalDataSearch from './MedicalDataSearch';
+import HealthcareChoicesSearch from './HealthcareChoicesSearch';
+import PhysicianSearch from './PhysicianSearch';
 
 import classes from './PatientRegistationAccordion.module.css';
 
@@ -166,20 +168,8 @@ export default function PatientRegistrationAccordion({
         <Accordion.Item value="healthcareChoices">
           <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
           <Accordion.Panel>
-            <TextInput
-              label="Hospital"
-              placeholder="Hospital"
-              withAsterisk
-              key={form.key('healthcareChoices.hospitalId')}
-              {...form.getInputProps('healthcareChoices.hospitalId')}
-            />
-            <TextInput
-              label="Primary Care Provider"
-              placeholder="Primary Care Provider"
-              withAsterisk
-              key={form.key('healthcareChoices.physicianId')}
-              {...form.getInputProps('healthcareChoices.physicianId')}
-            />
+            <HealthcareChoicesSearch form={form} />
+            <PhysicianSearch form={form} />
           </Accordion.Panel>
         </Accordion.Item>
 
