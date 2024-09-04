@@ -169,6 +169,12 @@ export default function MedicalDataSearch({ category, form }) {
                 fetchOptions(value);
               }
             }}
+            onClick={() => {
+              combobox.openDropdown();
+              if (data === null) {
+                fetchOptions(value);
+              }
+            }}
             onBlur={() => combobox.closeDropdown()}
             value={search}
             placeholder={`Search ${category}`}
