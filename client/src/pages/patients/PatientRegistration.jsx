@@ -8,12 +8,21 @@ import { useNavigate } from 'react-router-dom';
 
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
+const TABS = [
+  'patientData',
+  'contactData',
+  'medicalData',
+  'healthcareChoices',
+  'codeStatus',
+];
+
 /**
  *  Patients page component
  *
  */
 export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState(0);
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -221,8 +230,17 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
+    console.log(value, openedSection, active, TABS.indexOf(value));
     if (!openedSection) {
       setOpenedSection(value);
+      setActive(TABS.indexOf(value));
+
+      return;
+    }
+
+    if (TABS.indexOf(value) < active) {
+      setOpenedSection(value);
+      setActive(TABS.indexOf(value));
       return;
     }
 
@@ -239,6 +257,7 @@ export default function PatientRegistration() {
 
     if (errorFieldCount === 0) {
       setOpenedSection(value);
+      setActive(TABS.indexOf(value));
 
       if (openedSection === 'patientData') {
         const patientData = form.getValues().patientData;
