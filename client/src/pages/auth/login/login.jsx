@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { useAuthorization } from '../../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
-import classes from './login.module.css';
+import classes from '../form.module.css';
 
 /**
  * Login page component.
