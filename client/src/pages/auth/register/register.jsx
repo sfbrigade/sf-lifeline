@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import classes from './register.module.css';
+import classes from '../form.module.css';
 import { RegisterForm } from './RegisterForm';
 import { Flex } from '@mantine/core';
 import { useParams } from 'react-router-dom';
@@ -158,34 +158,31 @@ function Register() {
   }
 
   return (
-    <div className={classes.register}>
-      <div className={classes.banner}>Image goes here</div>
-      <div>
-        <div className={classes.header}>
-          <h2>Interest Form</h2>
-          <p>
-            description of filling out interest form to start account
-            registration process
-          </p>
-        </div>
-        <Flex direction="column" gap="md">
-          <RegisterForm
-            user={user}
-            errors={errors}
-            isLoading={isLoading}
-            showLicenseHelper={showLicenseHelper}
-            onFormChange={onFormChange}
-            onSubmit={formState === 1 ? fetchLicenseNumber : handleRegister}
-            setShowLicenseHelper={() => {
-              setShowLicenseHelper(!showLicenseHelper);
-            }}
-            formState={formState}
-            showLicenseField={
-              !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
-            }
-          />
-        </Flex>
+    <div>
+      <div className={classes.header}>
+        <h2>Interest Form</h2>
+        <p>
+          description of filling out interest form to start account registration
+          process
+        </p>
       </div>
+      <Flex direction="column" gap="md">
+        <RegisterForm
+          user={user}
+          errors={errors}
+          isLoading={isLoading}
+          showLicenseHelper={showLicenseHelper}
+          onFormChange={onFormChange}
+          onSubmit={formState === 1 ? fetchLicenseNumber : handleRegister}
+          setShowLicenseHelper={() => {
+            setShowLicenseHelper(!showLicenseHelper);
+          }}
+          formState={formState}
+          showLicenseField={
+            !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
+          }
+        />
+      </Flex>
     </div>
   );
 }

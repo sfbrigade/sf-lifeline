@@ -1,15 +1,18 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import './authlayout.css';
+import classes from './authlayout.module.css';
+
 /**
  * Auth Layout for login, register, password reset
  */
 export default function AuthLayout() {
   return (
-    <div className="auth-layout">
-      <div className="banner">testing</div>
-      <Outlet />
+    <div className={classes['auth-layout']}>
+      <div className={classes.banner}>testing</div>
+      <div className={classes.form}>
+        <Outlet />
+      </div>
     </div>
   );
 }
