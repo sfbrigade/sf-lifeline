@@ -10,6 +10,7 @@ import { theme } from './theme';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
 import { ContextProvider } from './Context.jsx';
 
 const queryClient = new QueryClient({});
