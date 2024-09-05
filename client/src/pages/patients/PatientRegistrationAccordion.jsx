@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
 import MedicalDataSearch from './MedicalDataSearch';
 import HealthcareChoicesSearch from './HospitalSearch';
 import PhysicianSearch from './PhysicianSearch';
@@ -85,9 +86,12 @@ export default function PatientRegistrationAccordion({
               key={form.key('patientData.language')}
               {...form.getInputProps('patientData.language')}
             />
-            <TextInput
+            <DateInput
               label="Date of Birth"
+              valueFormat="YYYY-MM-DD"
               placeholder="YYYY-MM-DD"
+              defaultLevel="decade"
+              maxDate={new Date()}
               withAsterisk
               key={form.key('patientData.dateOfBirth')}
               {...form.getInputProps('patientData.dateOfBirth')}

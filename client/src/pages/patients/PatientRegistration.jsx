@@ -57,16 +57,20 @@ export default function PatientRegistration() {
       },
       codeStatus: null,
     },
+
+    transformValues: (values) => ({
+      patientData: {
+        dateOfBirth: values.patientData.dateOfBirth.toISOString().split('T')[0],
+      },
+    }),
+
     validate: {
       patientData: {
         firstName: isNotEmpty('First Name is required'),
         lastName: isNotEmpty('Last Name is required'),
         language: isNotEmpty('Language is required'),
         gender: isNotEmpty('Gender is required'),
-        dateOfBirth: matches(
-          /^\d{4}-\d{2}-\d{2}$/,
-          'Date of Birth is not in YYYY-MM-DD format',
-        ),
+        dateOfBirth: isNotEmpty('Date of Birth is required'),
       },
       contactData: {
         firstName: isNotEmpty('First Name is required'),
@@ -147,6 +151,9 @@ export default function PatientRegistration() {
       healthcareChoices,
       codeStatus,
     } = values;
+
+    const { dateOfBirth } = form.getTransformedValues().patientData;
+    patientData.dateOfBirth = dateOfBirth;
 
     try {
       const res = await updatePatient({
@@ -229,7 +236,6 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    console.log(value, openedSection, active, TABS.indexOf(value));
     if (!openedSection) {
       setOpenedSection(value);
       setActive(TABS.indexOf(value));
@@ -259,7 +265,10 @@ export default function PatientRegistration() {
       setActive(TABS.indexOf(value));
 
       if (openedSection === 'patientData') {
-        const patientData = form.getValues().patientData;
+        const patientData = {
+          ...form.getValues().patientData,
+          dateOfBirth: form.getTransformedValues().patientData.dateOfBirth,
+        };
         await registerOrUpdatePatient(patientData);
       } else {
         const formData = form.getValues()[openedSection];
