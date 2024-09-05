@@ -79,9 +79,11 @@ export default function HospitalSearch({ form }) {
     fetchOptions('');
     form.setFieldValue(`healthcareChoices.hospitalId`, '');
   };
+
   const handleSearch = (query) => {
     setSearch(query);
   };
+
   const options = (data || []).map((item) => (
     <Combobox.Option
       value={item.id}

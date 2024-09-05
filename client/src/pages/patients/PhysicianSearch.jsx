@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Combobox, ScrollArea } from '@mantine/core';
 
 import { notifications } from '@mantine/notifications';
@@ -20,7 +20,24 @@ export default function PhysicianSearch({ form }) {
   const [value, setValue] = useState({ name: '', id: '' });
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
+  const [isHospitalSelected, setIsHospitalSelected] = useState(false);
   const abortController = useRef();
+
+  const selectedHospitalId = form.getValues().healthcareChoices.hospitalId;
+
+  useEffect(() => {
+    if (!selectedHospitalId) {
+      setIsHospitalSelected((prev) => !prev);
+    }
+    if (selectedHospitalId) {
+      setValue({ name: '', id: '' });
+      setSearch('');
+      setData([]);
+      setEmpty(false);
+    }
+  }, [selectedHospitalId]);
+
+  console.log(isHospitalSelected, selectedHospitalId, data);
 
   /**
    *
@@ -29,7 +46,7 @@ export default function PhysicianSearch({ form }) {
   async function getHospitals(query) {
     try {
       const response = await fetch(
-        `/api/v1/hospitals/${form.getValues().healthcareChoices.hospitalId}/physicians?physician=${query}`,
+        `/api/v1/hospitals/${selectedHospitalId}/physicians?physician=${query}`,
       );
       const data = await response.json();
       return data;
@@ -123,6 +140,7 @@ export default function PhysicianSearch({ form }) {
       removeValue={removeValue}
       comboboxOptions={renderComboxContent}
       handleSearch={handleSearch}
+      disabled={!isHospitalSelected}
     />
   );
 }
