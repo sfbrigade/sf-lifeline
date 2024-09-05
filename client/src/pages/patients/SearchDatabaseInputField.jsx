@@ -13,7 +13,6 @@ const searchDatabaseInputFieldProps = {
   removeValue: PropTypes.func.isRequired,
   comboboxOptions: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
 };
 
 /**
@@ -31,7 +30,6 @@ export default function SearchDatabaseInputField({
   removeValue,
   comboboxOptions,
   handleSearch,
-  disabled,
 }) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -51,7 +49,6 @@ export default function SearchDatabaseInputField({
       <Combobox.DropdownTarget>
         <Combobox.EventsTarget>
           <TextInput
-            disabled={disabled}
             label={label}
             onFocus={() => {
               combobox.openDropdown();

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Combobox, ScrollArea } from '@mantine/core';
 
 import { notifications } from '@mantine/notifications';
@@ -20,24 +20,8 @@ export default function PhysicianSearch({ form }) {
   const [value, setValue] = useState({ name: '', id: '' });
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
-  const [isHospitalSelected, setIsHospitalSelected] = useState(false);
+
   const abortController = useRef();
-
-  const selectedHospitalId = form.getValues().healthcareChoices.hospitalId;
-
-  useEffect(() => {
-    if (!selectedHospitalId) {
-      setIsHospitalSelected((prev) => !prev);
-    }
-    if (selectedHospitalId) {
-      setValue({ name: '', id: '' });
-      setSearch('');
-      setData([]);
-      setEmpty(false);
-    }
-  }, [selectedHospitalId]);
-
-  console.log(isHospitalSelected, selectedHospitalId, data);
 
   /**
    *
@@ -45,9 +29,7 @@ export default function PhysicianSearch({ form }) {
    */
   async function getHospitals(query) {
     try {
-      const response = await fetch(
-        `/api/v1/hospitals/${selectedHospitalId}/physicians?physician=${query}`,
-      );
+      const response = await fetch(`/api/v1/physicians?physician=${query}`);
       const data = await response.json();
       return data;
     } catch (err) {
@@ -104,7 +86,7 @@ export default function PhysicianSearch({ form }) {
 
   const options = (data || []).map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
-      {item.firstName}
+      {`${item.firstName} ${item.lastName}`}
     </Combobox.Option>
   ));
 
@@ -134,13 +116,12 @@ export default function PhysicianSearch({ form }) {
       loading={loading}
       search={search}
       inputValue={value.name ? value.name : search}
-      label="Primary Care Provider"
+      label="Preferred Care Provider"
       selectValue={selectValue}
       fetchOptions={fetchOptions}
       removeValue={removeValue}
       comboboxOptions={renderComboxContent}
       handleSearch={handleSearch}
-      disabled={!isHospitalSelected}
     />
   );
 }
