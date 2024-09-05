@@ -1,15 +1,10 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef } from 'react';
-import {
-  Loader,
-  Combobox,
-  useCombobox,
-  ScrollArea,
-  TextInput,
-} from '@mantine/core';
+import { Combobox, ScrollArea } from '@mantine/core';
 
 import { notifications } from '@mantine/notifications';
+import SearchDatabaseInputField from './SearchDatabaseInputField';
 
 const physicianSearchProps = {
   form: PropTypes.object.isRequired,
@@ -37,7 +32,6 @@ export default function PhysicianSearch({ form }) {
         `/api/v1/hospitals/${form.getValues().healthcareChoices.hospitalId}/physicians?physician=${query}`,
       );
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (err) {
       console.error(err);
@@ -49,11 +43,6 @@ export default function PhysicianSearch({ form }) {
       return [];
     }
   }
-
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
-  });
 
   const fetchOptions = (query) => {
     abortController.current?.abort();
@@ -78,27 +67,26 @@ export default function PhysicianSearch({ form }) {
       });
   };
 
-  const handleValueSelect = (id, key) => {
+  const selectValue = (id, key) => {
     const name = key.children;
     setValue({ id, name });
     setSearch('');
     form.setFieldValue(`healthcareChoices.physicianId`, id);
-    combobox.closeDropdown();
   };
 
-  const handleValueRemove = () => {
+  const removeValue = () => {
     setValue({ name: '', id: '' });
     setSearch('');
     fetchOptions('');
     form.setFieldValue(`healthcareChoices.physicianId`, '');
   };
 
+  const handleSearch = (query) => {
+    setSearch(query);
+  };
+
   const options = (data || []).map((item) => (
-    <Combobox.Option
-      value={item.id}
-      key={item.id}
-      // active={value.name === item.name}
-    >
+    <Combobox.Option value={item.id} key={item.id}>
       {item.firstName}
     </Combobox.Option>
   ));
@@ -124,52 +112,18 @@ export default function PhysicianSearch({ form }) {
   }
 
   return (
-    <Combobox
-      onOptionSubmit={handleValueSelect}
-      withinPortal={false}
-      store={combobox}
-    >
-      <Combobox.DropdownTarget>
-        <Combobox.EventsTarget>
-          <TextInput
-            label="Primary Care Provider"
-            onFocus={() => {
-              combobox.openDropdown();
-              if (data === null) {
-                fetchOptions(value);
-              }
-            }}
-            onClick={() => {
-              combobox.openDropdown();
-              if (data === null) {
-                fetchOptions(value);
-              }
-            }}
-            onBlur={() => combobox.closeDropdown()}
-            value={value.name ? value.name : search}
-            placeholder={`Search Primary Care Provider`}
-            onChange={(event) => {
-              combobox.updateSelectedOptionIndex();
-              setSearch(event.currentTarget.value);
-              fetchOptions(event.currentTarget.value);
-              combobox.resetSelectedOption();
-              combobox.openDropdown();
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Backspace' && search.length === 0) {
-                event.preventDefault();
-                handleValueRemove();
-              }
-            }}
-            rightSection={loading ? <Loader size="xs" /> : null}
-          />
-        </Combobox.EventsTarget>
-      </Combobox.DropdownTarget>
-
-      <Combobox.Dropdown>
-        <Combobox.Options>{renderComboxContent()}</Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+    <SearchDatabaseInputField
+      data={data}
+      loading={loading}
+      search={search}
+      inputValue={value.name ? value.name : search}
+      label="Primary Care Provider"
+      selectValue={selectValue}
+      fetchOptions={fetchOptions}
+      removeValue={removeValue}
+      comboboxOptions={renderComboxContent}
+      handleSearch={handleSearch}
+    />
   );
 }
 
