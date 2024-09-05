@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify) {
   fastify.get(
-    '/:id/physicians',
+    '/',
     {
       schema: {
         querystring: {
@@ -31,24 +31,36 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const hospitalId = request.params.id;
-      const { physician } = request.query;
+      const { page = '1', perPage = '25', physician } = request.query;
 
-      const { physicians } = await fastify.prisma.hospital.findUnique({
+      const options = {
+        page,
+        perPage,
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
         where: {
-          id: hospitalId,
+          OR: [
+            { firstName: { contains: physician.trim(), mode: 'insensitive' } },
+            { lastName: { contains: physician.trim(), mode: 'insensitive' } },
+            {
+              AND: [
+                {
+                  firstName: {
+                    contains: physician.trim(),
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  lastName: { contains: physician.trim(), mode: 'insensitive' },
+                },
+              ],
+            },
+          ],
         },
-        include: {
-          physicians: true,
-        },
-      });
+      };
 
-      const filteredPhysicians = physicians.filter((pcp) => {
-        const name = pcp.firstName + ' ' + pcp.lastName;
-        return name.toLowerCase().includes(physician.trim().toLowerCase());
-      });
-
-      reply.send(filteredPhysicians);
+      const { records, total } =
+        await fastify.prisma.physician.paginate(options);
+      reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
 }
