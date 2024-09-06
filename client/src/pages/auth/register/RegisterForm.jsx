@@ -187,7 +187,7 @@ export function RegisterForm({
               {isLoading ? (
                 <Loader size={20} />
               ) : formState === 2 ? (
-                'Send Interest Form'
+                'Submit'
               ) : (
                 'Next'
               )}
@@ -198,11 +198,11 @@ export function RegisterForm({
             <Container size="25rem" styles={{ root: { padding: 0 } }}>
               <div className={formClasses.formCompletion}>
                 <p>
-                  Form Complete! You will receive a confirmation email shortly.
-                  Acceptance into SF life line will also be sent via the email
-                  address you submitted.
+                  Registration complete! You will receive a confirmation email
+                  shortly, please click on the link in the email to verify your
+                  address. Acceptance into SF Life Line will also be sent to the
+                  email address you submitted.
                 </p>
-                <p>Save this site to your browser window for convenience.</p>
               </div>
             </Container>
           )}

@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 
 import { Layout } from './stories/Layout/Layout';
-import Index from './pages';
+import Home from './pages/home';
 import Login from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
 import Dashboard from './pages/dashboard/dashboard';
@@ -107,7 +107,7 @@ function App() {
         <Route
           element={<Redirect isLoading={isLoading} isLoggedIn={isLoggedIn} />}
         >
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Home />} />
           <Route element={<AuthLayout />}>
             <Route path="/register" element={<Register />} />
             <Route path="/register/:inviteId" element={<Register />} />
