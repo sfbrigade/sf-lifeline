@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import { Flex, Button } from '@mantine/core';
-import { useForm, isNotEmpty, matches } from '@mantine/form';
+import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,16 +75,17 @@ export default function PatientRegistration() {
       contactData: {
         firstName: isNotEmpty('First Name is required'),
         lastName: isNotEmpty('Last Name is required'),
-        phone: matches(
-          /^\(\d{3}\)-\d{3}-\d{4}$/,
-          'Phone number is not in XXX-XXX-XXXX format',
-        ),
+        phone: (value) =>
+          value.length === 0 || value.match(/^\(\d{3}\)-\d{3}-\d{4}$/)
+            ? null
+            : 'Phone number is not in XXX-XXX-XXXX format',
         relationship: isNotEmpty('Relationship is required'),
       },
       codeStatus: isNotEmpty('Code Status is required'),
     },
     validateInputOnBlur: true,
   });
+
   /**
    * Submit patient data to server for registration
    * @param {object} data

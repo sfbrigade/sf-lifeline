@@ -43,14 +43,17 @@ export default async function (fastify, _opts) {
             },
             contactData: {
               type: 'object',
-              required: ['firstName', 'lastName', 'phone', 'relationship'],
+              required: ['firstName', 'lastName', 'relationship'],
               properties: {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
                 phone: {
                   type: 'string',
-                  pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$',
+                  anyOf: [
+                    { pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$' },
+                    { pattern: '^$' },
+                  ],
                 },
                 relationship: { type: 'string' },
               },

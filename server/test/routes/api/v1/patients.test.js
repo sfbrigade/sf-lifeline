@@ -432,7 +432,7 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: 'Jane',
             lastName: 'Doe',
-            phone: '123-456-7890',
+            phone: '(123)-456-7890',
             relationship: 'Mother',
           },
         })
@@ -445,7 +445,7 @@ describe('/api/v1/patients', () => {
         firstName: 'Jane',
         middleName: '',
         lastName: 'Doe',
-        phone: '123-456-7890',
+        phone: '(123)-456-7890',
         relationship: 'Mother',
       });
     });
