@@ -56,12 +56,12 @@ const mailer = new Email({
   juice: false,
 });
 
-function send(options) {
+async function send(options) {
   options.locals ||= {};
   options.locals._layout = {
     logoUrl: `${process.env.BASE_URL}/logo.svg`,
   };
-  mailer.send(options);
+  return mailer.send(options);
 }
 
 export default { send };
