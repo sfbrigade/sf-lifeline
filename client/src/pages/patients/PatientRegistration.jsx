@@ -81,10 +81,6 @@ export default function PatientRegistration() {
         ),
         relationship: isNotEmpty('Relationship is required'),
       },
-      healthcareChoices: {
-        hospitalId: isNotEmpty('Hospital is required'),
-        physicianId: isNotEmpty('PCP is required'),
-      },
       codeStatus: isNotEmpty('Code Status is required'),
     },
     validateInputOnBlur: true,
@@ -139,10 +135,8 @@ export default function PatientRegistration() {
   /**
    *
    * @param {object} values
-   * @param {object} event
    */
-  async function submitPatient(values, event) {
-    event.preventDefault();
+  async function submitPatient(values) {
     setLoading(true);
 
     const {
@@ -325,7 +319,7 @@ export default function PatientRegistration() {
           />
           <Flex justify="center" mt="md">
             <Button
-              type="submit"
+              onClick={form.onSubmit(submitPatient, handleErrors)}
               color="gray"
               fullWidth
               loading={loading}

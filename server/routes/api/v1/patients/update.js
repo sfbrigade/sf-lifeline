@@ -50,7 +50,7 @@ export default async function (fastify, _opts) {
                 lastName: { type: 'string' },
                 phone: {
                   type: 'string',
-                  pattern: "^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$",
+                  pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$',
                 },
                 relationship: { type: 'string' },
               },
