@@ -64,15 +64,14 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const {
-        id,
-        firstName,
-        middleName,
-        lastName,
-        gender,
-        language,
-        dateOfBirth,
-      } = request.body;
+      const { id, firstName, lastName, gender, language, dateOfBirth } =
+        request.body;
+
+      let middleName = request.body.middleName;
+      if (middleName) {
+        middleName = middleName.trim();
+        if (middleName.length === 0) middleName = null;
+      }
 
       const userId = request.user.id;
 
@@ -89,9 +88,9 @@ export default async function (fastify, _opts) {
         let patient = await tx.patient.create({
           data: {
             id,
-            firstName,
+            firstName: firstName.trim(),
             middleName,
-            lastName,
+            lastName: lastName.trim(),
             gender,
             language,
             dateOfBirth: new Date(dateOfBirth),

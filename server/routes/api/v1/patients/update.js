@@ -43,7 +43,7 @@ export default async function (fastify, _opts) {
             },
             contactData: {
               type: 'object',
-              required: ['firstName', 'lastName', 'relationship'],
+              required: ['firstName', 'lastName', 'phone', 'relationship'],
               properties: {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
@@ -184,7 +184,7 @@ export default async function (fastify, _opts) {
 
           // Only update the patient data if the value is truthy
           for (const [key, value] of Object.entries(patientData)) {
-            if (value) newPatientData[key] = value;
+            if (value) newPatientData[key] = value.trim();
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
           }
 
@@ -194,14 +194,21 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
-          const { firstName, middleName, lastName, phone, relationship } =
-            contactData;
+          const { firstName, lastName, relationship } = contactData;
+
+          let phone = contactData.phone.length === 0 ? null : contactData.phone;
+
+          let middleName = contactData.middleName;
+          if (middleName) {
+            middleName = middleName.trim();
+            if (middleName.length === 0) middleName = null;
+          }
 
           let contact = await tx.contact.create({
             data: {
-              firstName,
+              firstName: firstName.trim(),
               middleName,
-              lastName,
+              lastName: lastName.trim(),
               phone,
               relationship,
             },
