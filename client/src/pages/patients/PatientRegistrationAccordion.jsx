@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 
-import { Accordion, TextInput, Select } from '@mantine/core';
+import { Accordion, TextInput, Select, Input } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { IMaskInput } from 'react-imask';
 import MedicalDataSearch from './MedicalDataSearch';
 import HealthcareChoicesSearch from './HospitalSearch';
 import PhysicianSearch from './PhysicianSearch';
@@ -122,13 +123,17 @@ export default function PatientRegistrationAccordion({
               key={form.key('contactData.lastName')}
               {...form.getInputProps('contactData.lastName')}
             />
-            <TextInput
-              label="Phone Number"
-              placeholder="XXX-XXX-XXXX"
-              withAsterisk
-              key={form.key('contactData.phone')}
-              {...form.getInputProps('contactData.phone')}
-            />
+            <>
+              <Input.Label required>Phone Number</Input.Label>
+              <Input
+                component={IMaskInput}
+                mask="(000)-000-0000"
+                placeholder="(000)-000-0000"
+                key={form.key('contactData.phone')}
+                {...form.getInputProps('contactData.phone')}
+              />
+              
+            </>
             <TextInput
               label="Email"
               placeholder="Email"
