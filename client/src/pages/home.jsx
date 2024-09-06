@@ -35,7 +35,7 @@ function Home() {
           </Box>
         </Container>
         <Container size="sm">
-          <Paper bg="blue.0" p={{ base: '2.5rem 1.5rem', sm: '2.5rem 4rem' }}>
+          <Paper bg="blue.1" p={{ base: '2.5rem 1.5rem', sm: '2.5rem 4rem' }}>
             <Title order={3} mb="1rem">
               First Responder Interest Form
             </Title>
