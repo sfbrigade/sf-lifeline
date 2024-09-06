@@ -18,6 +18,64 @@ describe('/api/v1/patients', () => {
     });
   });
 
+  describe('GET /:id', () => {
+    it('should return a 403 error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to retrieve a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const response = JSON.parse(reply.body);
+      const { id, firstName, middleName, lastName, dateOfBirth } = response;
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(firstName, 'John');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(dateOfBirth, '2000-10-05');
+      assert.deepStrictEqual(Object.keys(response).length, 22);
+    });
+
+    it('should throw a 404 error if a patient id does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe5467106a')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+      );
+    });
+  });
+
   describe('POST /', () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
@@ -443,6 +501,49 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(emergencyContact, {
         id: emergencyContact.id,
         firstName: 'Jane',
+        middleName: '',
+        lastName: 'Doe',
+        phone: '(123)-456-7890',
+        relationship: 'Mother',
+      });
+    });
+
+    it('should trim user inputted text', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          patientData: {
+            firstName: '  Jane  ',
+            middleName: '  A  ',
+            lastName: '  Doe  ',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+          contactData: {
+            firstName: '  Smith  ',
+            lastName: 'Doe  ',
+            phone: '(123)-456-7890',
+            relationship: 'Mother',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
+        reply.body,
+      );
+      assert.deepStrictEqual(firstName, 'Jane');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+
+      assert.deepStrictEqual(emergencyContact, {
+        id: emergencyContact.id,
+        firstName: 'Smith',
         middleName: '',
         lastName: 'Doe',
         phone: '(123)-456-7890',
