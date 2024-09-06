@@ -24,7 +24,6 @@ export default function PatientRegistrationAccordion({
   openedSection,
   handleAccordionChange,
 }) {
-  console.log(form.errors, form.errors, Object.entries(form.errors));
   return (
     <>
       <Accordion

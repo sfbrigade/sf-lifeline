@@ -76,7 +76,7 @@ export default function PatientRegistration() {
         firstName: isNotEmpty('First Name is required'),
         lastName: isNotEmpty('Last Name is required'),
         phone: matches(
-          /^\(\d{3}\)\-\d{3}\-\d{4}$/,
+          /^\(\d{3}\)-\d{3}-\d{4}$/,
           'Phone number is not in XXX-XXX-XXXX format',
         ),
         relationship: isNotEmpty('Relationship is required'),
@@ -89,7 +89,6 @@ export default function PatientRegistration() {
     },
     validateInputOnBlur: true,
   });
-  console.log(form.getValues());
   /**
    * Submit patient data to server for registration
    * @param {object} data
@@ -140,8 +139,10 @@ export default function PatientRegistration() {
   /**
    *
    * @param {object} values
+   * @param {object} event
    */
-  async function submitPatient(values) {
+  async function submitPatient(values, event) {
+    event.preventDefault();
     setLoading(true);
 
     const {
