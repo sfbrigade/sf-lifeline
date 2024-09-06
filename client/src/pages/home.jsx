@@ -37,7 +37,7 @@ function Home() {
         <Container size="sm">
           <Paper bg="blue.1" p={{ base: '2.5rem 1.5rem', sm: '2.5rem 4rem' }}>
             <Title order={3} mb="1rem">
-              First Responder Interest Form
+              For First Responders
             </Title>
             <Title order={4}>Benefits of Signing Up</Title>
             <Text mb="2rem">
