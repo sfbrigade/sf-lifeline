@@ -53,6 +53,15 @@ const mailer = new Email({
       extension: 'ejs',
     },
   },
+  juice: false,
 });
 
-export default mailer;
+function send(options) {
+  options.locals ||= {};
+  options.locals._layout = {
+    logoUrl: `${process.env.BASE_URL}/logo.svg`,
+  };
+  mailer.send(options);
+}
+
+export default { send };
