@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Flex, Text, Title } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+
 import classes from '../form.module.css';
 import { RegisterForm } from './RegisterForm';
-import { Flex } from '@mantine/core';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { notifications } from '@mantine/notifications';
 
 /**
  * Register page component
@@ -160,11 +160,15 @@ function Register() {
   return (
     <div>
       <div className={classes.header}>
-        <h2>Interest Form</h2>
-        <p>
-          description of filling out interest form to start account registration
-          process
-        </p>
+        <Title order={3} mb="1.5rem">
+          First Responder Sign Up
+        </Title>
+        <Text>
+          Thank you for your interest in joining SF Life Line! Please provide
+          the following information to register.
+          <br />
+          An administrator will review your application for acceptance.
+        </Text>
       </div>
       <Flex direction="column" gap="md">
         <RegisterForm

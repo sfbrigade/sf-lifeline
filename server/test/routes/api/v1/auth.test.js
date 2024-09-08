@@ -145,7 +145,7 @@ describe('/api/v1/auth', () => {
         );
         assert.deepStrictEqual(
           sentMails[0].subject,
-          'Reset your password for your SF Lifeline account',
+          'Reset your password for your SF Life Line account',
         );
       });
 
@@ -252,7 +252,7 @@ describe('/api/v1/auth', () => {
         );
         assert.deepStrictEqual(
           sentMails[0].subject,
-          'Your SF Lifeline password changed',
+          'Your SF Life Line password has been changed',
         );
       });
 

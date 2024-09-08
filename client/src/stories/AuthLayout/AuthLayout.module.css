@@ -1,4 +1,4 @@
-.auth-layout {
+.authLayout {
   width: 100vw;
   min-height: 100vh;
   min-height: 100dvh;
@@ -13,7 +13,7 @@
 }
 
 @media (min-width: 48em) {
-  .auth-layout {
+  .authLayout {
     display: flex;
     min-height: 100vh;
 
@@ -26,11 +26,11 @@
     display: block;
     width: 100%;
     min-height: 100%;
-    background-color: aqua;
+    background-color: var(--mantine-color-blue-1);
     background-size: cover;
   }
 
   .form {
-    padding: 4rem 1rem;
+    padding: 8rem 1rem;
   }
 }

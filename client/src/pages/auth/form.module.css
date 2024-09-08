@@ -3,7 +3,8 @@
 }
 
 .header > p {
-  padding: 0 2rem;
+  max-width: 25rem;
+  margin: 0 auto 2.5rem;
 }
 
 .form {
