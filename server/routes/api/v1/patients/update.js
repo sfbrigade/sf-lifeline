@@ -43,7 +43,7 @@ export default async function (fastify, _opts) {
             },
             contactData: {
               type: 'object',
-              required: ['firstName', 'lastName', 'phone', 'relationship'],
+              required: ['firstName', 'lastName', 'relationship'],
               properties: {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
@@ -59,7 +59,17 @@ export default async function (fastify, _opts) {
                     { pattern: '^$' },
                   ],
                 },
-                relationship: { type: 'string' },
+                relationship: {
+                  type: 'string',
+                  enum: [
+                    'SPOUSE',
+                    'PARENT',
+                    'CHILD',
+                    'SIBLING',
+                    'OTHER',
+                    'UNKNOWN',
+                  ],
+                },
               },
             },
             medicalData: {
@@ -190,18 +200,26 @@ export default async function (fastify, _opts) {
           // Only update the patient data if the value is truthy
           for (const [key, value] of Object.entries(patientData)) {
             if (value) newPatientData[key] = value.trim();
+            if (key === 'middleName' && value?.length === 0) {
+              newPatientData[key] = null;
+            }
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
           }
 
           await tx.patient.update({
             where: { id },
-            data: newPatientData,
+            data: {
+              ...newPatientData,
+              updatedBy: {
+                connect: { id: userId },
+              },
+            },
           });
         }
         if (contactData) {
           const { firstName, lastName, relationship } = contactData;
 
-          let phone = contactData.phone.length === 0 ? null : contactData.phone;
+          let phone = contactData?.phone ? contactData.phone : null;
 
           let middleName = contactData?.middleName?.trim();
           if (middleName?.length === 0) middleName = null;
