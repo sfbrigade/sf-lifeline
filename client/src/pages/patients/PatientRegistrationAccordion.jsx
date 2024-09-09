@@ -4,8 +4,9 @@ import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { IMaskInput } from 'react-imask';
 import MedicalDataSearch from './MedicalDataSearch';
-import HealthcareChoicesSearch from './HospitalSearch';
-import PhysicianSearch from './PhysicianSearch';
+// import HealthcareChoicesSearch from './HospitalSearch';
+// import PhysicianSearch from './PhysicianSearch';
+import HealthcareChoicesSearch from './HealthcareChoicesSearch';
 
 import classes from './PatientRegistationAccordion.module.css';
 
@@ -178,8 +179,8 @@ export default function PatientRegistrationAccordion({
         <Accordion.Item value="healthcareChoices">
           <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
           <Accordion.Panel>
-            <HealthcareChoicesSearch form={form} />
-            <PhysicianSearch form={form} />
+            <HealthcareChoicesSearch form={form} choice="hospital" />
+            <HealthcareChoicesSearch form={form} choice="physician" />
           </Accordion.Panel>
         </Accordion.Item>
 

@@ -6,15 +6,18 @@ import { Combobox, ScrollArea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 
-const physicianSearchProps = {
+import LifelineAPI from './LifelineAPI.js';
+
+const healthcareChoicesSearchProps = {
   form: PropTypes.object.isRequired,
+  choice: PropTypes.string.isRequired,
 };
 
 /**
  *
- * @param {PropTypes.InferProps<typeof physicianSearchProps>} props
+ * @param {PropTypes.InferProps<typeof healthcareChoicesSearchProps>} props
  */
-export default function PhysicianSearch({ form }) {
+export default function HealthcareChoicesSearch({ form, choice }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState({ name: '', id: '' });
@@ -23,32 +26,13 @@ export default function PhysicianSearch({ form }) {
 
   const abortController = useRef();
 
-  /**
-   *
-   * @param {string} query
-   */
-  async function getHospitals(query) {
-    try {
-      const response = await fetch(`/api/v1/physicians?physician=${query}`);
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error(err);
-      notifications.show({
-        title: 'Error',
-        message: 'Issue with reaching server',
-        color: 'red',
-      });
-      return [];
-    }
-  }
 
   const fetchOptions = (query) => {
     abortController.current?.abort();
     abortController.current = new AbortController();
     setLoading(true);
 
-    getHospitals(query, abortController.current.signal)
+    LifelineAPI.getHealthcareChoices(choice, query, abortController.current.signal)
       .then((result) => {
         setData(result);
         setLoading(false);
@@ -70,14 +54,14 @@ export default function PhysicianSearch({ form }) {
     const name = key.children;
     setValue({ id, name });
     setSearch('');
-    form.setFieldValue(`healthcareChoices.physicianId`, id);
+    form.setFieldValue(`healthcareChoices.${choice}Id`, id);
   };
 
   const removeValue = () => {
     setValue({ name: '', id: '' });
     setSearch('');
     fetchOptions('');
-    form.setFieldValue(`healthcareChoices.physicianId`, '');
+    form.setFieldValue(`healthcareChoices.${choice}Id`, '');
   };
 
   const handleSearch = (query) => {
@@ -85,8 +69,8 @@ export default function PhysicianSearch({ form }) {
   };
 
   const options = (data || []).map((item) => (
-    <Combobox.Option value={item.id} key={item.id}>
-      {`${item.firstName} ${item.lastName}`}
+    <Combobox.Option value={item.id} key={item.id} >
+      {item.name}
     </Combobox.Option>
   ));
 
@@ -116,7 +100,7 @@ export default function PhysicianSearch({ form }) {
       loading={loading}
       search={search}
       inputValue={value.name ? value.name : search}
-      label="Preferred Care Provider"
+      label={choice === 'hospital' ? 'Hospital' : 'Preferred Care Provider'}
       selectValue={selectValue}
       fetchOptions={fetchOptions}
       removeValue={removeValue}
@@ -126,4 +110,4 @@ export default function PhysicianSearch({ form }) {
   );
 }
 
-PhysicianSearch.propTypes = physicianSearchProps;
+HealthcareChoicesSearch.propTypes = healthcareChoicesSearchProps;
