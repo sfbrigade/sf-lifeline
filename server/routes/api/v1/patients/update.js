@@ -48,6 +48,10 @@ export default async function (fastify, _opts) {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
+                email: {
+                  type: 'string',
+                  anyOf: [{ format: 'email' }, { pattern: '^$' }],
+                },
                 phone: {
                   type: 'string',
                   anyOf: [
@@ -117,6 +121,7 @@ export default async function (fastify, _opts) {
                   firstName: { type: 'string' },
                   middleName: { type: 'string' },
                   lastName: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
                   phone: { type: 'string' },
                   relationship: { type: 'string' },
                 },
@@ -201,11 +206,15 @@ export default async function (fastify, _opts) {
           let middleName = contactData?.middleName?.trim();
           if (middleName?.length === 0) middleName = null;
 
+          let email = contactData?.email?.trim();
+          if (email?.length === 0) email = null;
+
           let contact = await tx.contact.create({
             data: {
               firstName: firstName.trim(),
               middleName,
               lastName: lastName.trim(),
+              email: email,
               phone,
               relationship,
             },
