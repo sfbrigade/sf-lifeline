@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import { Flex, Button } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
@@ -26,6 +27,14 @@ export default function PatientRegistration() {
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
   const navigate = useNavigate();
+
+  const query = useQuery({
+    queryKey: ['patient'],
+    queryFn: async () => {
+      const res = await fetch(`/api/v1/patients/${patientId}`);
+      return res.json();
+    },
+  });
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -85,6 +94,63 @@ export default function PatientRegistration() {
     },
     validateInputOnBlur: true,
   });
+
+
+  useEffect(() => {
+    if (query.data) {
+      const { firstName, middleName, lastName, gender, language, dateOfBirth } =
+        query.data;
+      const {
+        firstName: firstNameContact,
+        middleName: middleNameContact,
+        lastName: lastNameContact,
+        phone,
+        email,
+        relationship,
+      } = query.data.emergencyContact;
+      const { allergies, medications, conditions } = query.data;
+      const { hospital, physician } = query.data;
+      const codeStatus = query.data.codeStatus;
+
+      const patientData = {
+        firstName,
+        middleName,
+        lastName,
+        gender,
+        language,
+        dateOfBirth: new Date(dateOfBirth),
+      };
+      const contactData = {
+        firstName: firstNameContact,
+        middleName: middleNameContact,
+        lastName: lastNameContact,
+        phone: phone ? phone : '',
+        email,
+        relationship,
+      };
+      const medicalData = {
+        allergies: allergies.map((entry) => entry.allergy.id),
+        medications: medications.map((entry) => entry.medication.id),
+        conditions: conditions.map((entry) => entry.condition.id),
+      };
+      const healthcareChoices = { hospital, physician };
+      const codeStatusData = { codeStatus };
+
+
+      form.initialize({
+        patientData,
+        contactData,
+        medicalData,
+        healthcareChoices,
+        codeStatus: codeStatusData,
+      });
+    }
+    
+  }, [query.data]);
+
+
+  console.log(form.getValues());
+
 
   /**
    * Submit patient data to server for registration
