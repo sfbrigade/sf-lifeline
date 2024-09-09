@@ -123,7 +123,7 @@ export default function PatientRegistration() {
         firstName: firstNameContact,
         middleName: middleNameContact,
         lastName: lastNameContact,
-        phone: phone ? phone : '',
+        phone: phone || '',
         email,
         relationship,
       };
@@ -143,6 +143,9 @@ export default function PatientRegistration() {
         codeStatus: codeStatusData,
       });
     }
+
+    // below is necessary to avoid infinite loop when adding form to depedency arrays
+    // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
     // eslint-disable-next-line
   }, [query.data]);
 
