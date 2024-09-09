@@ -25,6 +25,8 @@ export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [initialMedicalData, setInitialMedicalData] = useState({});
+  const [initialHospitalData, setInitialHospitalData] = useState({});
+  const [initialPhysicianData, setInitialPhysicianData] = useState({});
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -122,6 +124,16 @@ export default function PatientRegistration() {
         conditions: conditions.map((entry) => {
           return { id: entry.condition.id, name: entry.condition.name };
         }),
+      });
+
+      setInitialHospitalData({
+        id: hospital.id,
+        name: hospital.name,
+      });
+
+      setInitialPhysicianData({
+        id: physician.id,
+        name: `${physician.firstName} ${physician.lastName}`,
       });
 
       const patientData = {
@@ -394,6 +406,8 @@ export default function PatientRegistration() {
           <PatientRegistrationAccordion
             form={form}
             initialMedicalData={initialMedicalData}
+            initialHospitalData={initialHospitalData}
+            initialPhysicianData={initialPhysicianData}
             openedSection={openedSection}
             handleAccordionChange={handleAccordionChange}
           />

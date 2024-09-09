@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Combobox, ScrollArea } from '@mantine/core';
 
 import { notifications } from '@mantine/notifications';
@@ -11,13 +11,14 @@ import LifelineAPI from './LifelineAPI.js';
 const healthcareChoicesSearchProps = {
   form: PropTypes.object.isRequired,
   choice: PropTypes.string.isRequired,
+  initialData: PropTypes.object,
 };
 
 /**
  *
  * @param {PropTypes.InferProps<typeof healthcareChoicesSearchProps>} props
  */
-export default function HealthcareChoicesSearch({ form, choice }) {
+export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState({ name: '', id: '' });
@@ -26,13 +27,22 @@ export default function HealthcareChoicesSearch({ form, choice }) {
 
   const abortController = useRef();
 
+  useEffect(() => {
+    if (initialData !== undefined) {
+      setValue(initialData);
+    }
+  }, [initialData]);
 
   const fetchOptions = (query) => {
     abortController.current?.abort();
     abortController.current = new AbortController();
     setLoading(true);
 
-    LifelineAPI.getHealthcareChoices(choice, query, abortController.current.signal)
+    LifelineAPI.getHealthcareChoices(
+      choice,
+      query,
+      abortController.current.signal,
+    )
       .then((result) => {
         setData(result);
         setLoading(false);
@@ -69,7 +79,7 @@ export default function HealthcareChoicesSearch({ form, choice }) {
   };
 
   const options = (data || []).map((item) => (
-    <Combobox.Option value={item.id} key={item.id} >
+    <Combobox.Option value={item.id} key={item.id}>
       {item.name}
     </Combobox.Option>
   ));

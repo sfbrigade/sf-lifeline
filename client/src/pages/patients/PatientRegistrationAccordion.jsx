@@ -4,8 +4,6 @@ import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { IMaskInput } from 'react-imask';
 import MedicalDataSearch from './MedicalDataSearch';
-// import HealthcareChoicesSearch from './HospitalSearch';
-// import PhysicianSearch from './PhysicianSearch';
 import HealthcareChoicesSearch from './HealthcareChoicesSearch';
 
 import classes from './PatientRegistationAccordion.module.css';
@@ -15,6 +13,8 @@ const PatientRegistrationAccordionProps = {
   openedSection: PropTypes.string,
   handleAccordionChange: PropTypes.func.isRequired,
   initialMedicalData: PropTypes.object,
+  initialHospitalData: PropTypes.object,
+  initialPhysicianData: PropTypes.object,
 };
 
 /**
@@ -24,6 +24,8 @@ const PatientRegistrationAccordionProps = {
 export default function PatientRegistrationAccordion({
   form,
   initialMedicalData,
+  initialHospitalData,
+  initialPhysicianData,
   openedSection,
   handleAccordionChange,
 }) {
@@ -179,8 +181,16 @@ export default function PatientRegistrationAccordion({
         <Accordion.Item value="healthcareChoices">
           <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
           <Accordion.Panel>
-            <HealthcareChoicesSearch form={form} choice="hospital" />
-            <HealthcareChoicesSearch form={form} choice="physician" />
+            <HealthcareChoicesSearch
+              form={form}
+              choice="hospital"
+              initialData={initialHospitalData}
+            />
+            <HealthcareChoicesSearch
+              form={form}
+              choice="physician"
+              initialData={initialPhysicianData}
+            />
           </Accordion.Panel>
         </Accordion.Item>
 
