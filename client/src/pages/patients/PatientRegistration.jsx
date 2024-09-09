@@ -28,7 +28,7 @@ export default function PatientRegistration() {
   const { patientId } = useParams();
   const navigate = useNavigate();
 
-  const query = useQuery({
+  const { data } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await fetch(`/api/v1/patients/${patientId}`);
@@ -96,9 +96,9 @@ export default function PatientRegistration() {
   });
 
   useEffect(() => {
-    if (query.data) {
+    if (data && data.error === undefined) {
       const { firstName, middleName, lastName, gender, language, dateOfBirth } =
-        query.data;
+        data;
       const {
         firstName: firstNameContact,
         middleName: middleNameContact,
@@ -106,10 +106,10 @@ export default function PatientRegistration() {
         phone,
         email,
         relationship,
-      } = query.data.emergencyContact;
-      const { allergies, medications, conditions } = query.data;
-      const { hospital, physician } = query.data;
-      const codeStatus = query.data.codeStatus;
+      } = data.emergencyContact;
+      const { allergies, medications, conditions } = data;
+      const { hospital, physician } = data;
+      const codeStatus = data.codeStatus;
 
       const patientData = {
         firstName,
@@ -153,7 +153,7 @@ export default function PatientRegistration() {
     // below is necessary to avoid infinite loop when adding form to depedency arrays
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
     // eslint-disable-next-line
-  }, [query.data]);
+  }, [data]);
 
   console.log(form.getValues());
 
