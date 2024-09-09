@@ -64,12 +64,7 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { id, firstName, lastName, gender, language, dateOfBirth } =
-        request.body;
-
-      let middleName = request.body?.middleName?.trim();
-
-      if (middleName?.length === 0) middleName = null;
+      const { id } = request.body;
 
       const userId = request.user.id;
 
@@ -83,15 +78,19 @@ export default async function (fastify, _opts) {
             message: `Patient with ID ${id} already exists in database.`,
           });
 
+        const newPatientData = {};
+
+        for (const [key, value] of Object.entries(request.body)) {
+          if (value) newPatientData[key] = value.trim();
+          if (key === 'middleName' && value?.length === 0) {
+            newPatientData[key] = null;
+          }
+          if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
+        }
+
         let patient = await tx.patient.create({
           data: {
-            id,
-            firstName: firstName.trim(),
-            middleName,
-            lastName: lastName.trim(),
-            gender,
-            language,
-            dateOfBirth: new Date(dateOfBirth),
+            ...newPatientData,
             createdById: userId,
             updatedById: userId,
           },
