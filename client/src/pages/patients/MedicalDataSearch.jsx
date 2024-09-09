@@ -29,7 +29,7 @@ const medicalDataSearchProps = {
 export default function MedicalDataSearch({ category, form }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [value, setValue] = useState([]);
+  // const [value, setValue] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const abortController = useRef();
@@ -63,33 +63,34 @@ export default function MedicalDataSearch({ category, form }) {
 
   const handleValueSelect = (id, key) => {
     const name = key.children;
-    setValue((current) =>
-      current.includes(id)
-        ? current.filter((v) => v.id !== id)
-        : [...current, { id, name }],
-    );
+    // setValue((current) =>
+    //   current.includes(id)
+    //     ? current.filter((v) => v.id !== id)
+    //     : [...current, { id, name }],
+    // );
+
     form.setFieldValue(`medicalData.${category}`, (current) => [
       ...current,
-      id,
+      { id, name },
     ]);
     combobox.closeDropdown();
   };
 
   const handleValueRemove = (val) => {
-    setValue((current) => current.filter((v) => v.id !== val));
+    // setValue((current) => current.filter((v) => v.id !== val));
     form.setFieldValue(`medicalData.${category}`, (current) =>
-      current.filter((v) => v !== val),
+      current.filter((v) => v.id !== val),
     );
   };
 
-  const values = value.map((item) => {
+  const values = form.getValues().medicalData[category].map((item) => {
     return (
       <Pill
-        key={item.id}
+        key={item?.id}
         withRemoveButton
-        onRemove={() => handleValueRemove(item.id)}
+        onRemove={() => handleValueRemove(item?.id)}
       >
-        {item.name}
+        {item?.name}
       </Pill>
     );
   });
@@ -118,12 +119,15 @@ export default function MedicalDataSearch({ category, form }) {
   };
 
   const options = (data || [])
-    .filter((item) => !value.some((v) => v.id === item.id))
+    .filter(
+      (item) =>
+        !form.getValues().medicalData[category].some((v) => v.id === item.id),
+    )
     .map((item) => (
       <Combobox.Option
         value={item.id}
         key={item.id}
-        active={value.includes(item.name)}
+        active={form.getValues().medicalData[category].includes(item)}
       >
         {item.name}
       </Combobox.Option>
@@ -166,13 +170,13 @@ export default function MedicalDataSearch({ category, form }) {
             onFocus={() => {
               combobox.openDropdown();
               if (data === null) {
-                fetchOptions(value);
+                fetchOptions(search);
               }
             }}
             onClick={() => {
               combobox.openDropdown();
               if (data === null) {
-                fetchOptions(value);
+                fetchOptions(search);
               }
             }}
             onBlur={() => combobox.closeDropdown()}
@@ -188,7 +192,6 @@ export default function MedicalDataSearch({ category, form }) {
             onKeyDown={(event) => {
               if (event.key === 'Backspace' && search.length === 0) {
                 event.preventDefault();
-                handleValueRemove(value[value.length - 1]);
               }
             }}
             rightSection={loading ? <Loader size="xs" /> : null}

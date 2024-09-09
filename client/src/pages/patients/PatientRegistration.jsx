@@ -128,9 +128,15 @@ export default function PatientRegistration() {
         relationship,
       };
       const medicalData = {
-        allergies: allergies.map((entry) => entry.allergy.id),
-        medications: medications.map((entry) => entry.medication.id),
-        conditions: conditions.map((entry) => entry.condition.id),
+        allergies: allergies.map((entry) => {
+          return { id: entry.allergy.id, name: entry.allergy.name };
+        }),
+        medications: medications.map((entry) => {
+          return { id: entry.medication.id, name: entry.medication.name };
+        }),
+        conditions: conditions.map((entry) => {
+          return { id: entry.condition.id, name: entry.condition.name };
+        }),
       };
       const healthcareChoices = { hospital, physician };
       const codeStatusData = { codeStatus };
