@@ -217,37 +217,50 @@ export default async function (fastify, _opts) {
           });
         }
         if (contactData) {
-          const { firstName, lastName, relationship } = contactData;
+          const newContactData = {};
 
-          let phone = contactData?.phone ? contactData.phone : null;
+          for (const [key, value] of Object.entries(contactData)) {
+            if (value) newContactData[key] = value.trim();
+            if (key === 'middleName' && value?.length === 0) {
+              newContactData[key] = null;
+            }
+            if (key === 'email' && value?.length === 0) {
+              newContactData[key] = null;
+            }
+            if (key === 'phone' && value?.length === 0) {
+              newContactData[key] = null;
+            }
+          }
 
-          let middleName = contactData?.middleName?.trim();
-          if (middleName?.length === 0) middleName = null;
-
-          let email = contactData?.email?.trim();
-          if (email?.length === 0) email = null;
-
-          let contact = await tx.contact.create({
-            data: {
-              firstName: firstName.trim(),
-              middleName,
-              lastName: lastName.trim(),
-              email: email,
-              phone,
-              relationship,
-            },
-          });
-          await tx.patient.update({
+          const existingContact = await tx.patient.findUnique({
             where: { id },
-            data: {
-              emergencyContact: {
-                connect: { id: contact.id },
-              },
-              updatedBy: {
-                connect: { id: userId },
-              },
+            include: {
+              emergencyContact: true,
             },
           });
+
+          if (existingContact.emergencyContact) {
+            await tx.contact.update({
+              where: { id: existingContact.emergencyContact.id },
+              data: newContactData,
+            });
+          } else {
+            let contact = await tx.contact.create({
+              data: newContactData,
+            });
+
+            await tx.patient.update({
+              where: { id },
+              data: {
+                emergencyContact: {
+                  connect: { id: contact.id },
+                },
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              },
+            });
+          }
         }
 
         if (medicalData) {
