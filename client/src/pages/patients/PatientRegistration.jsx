@@ -95,7 +95,6 @@ export default function PatientRegistration() {
     validateInputOnBlur: true,
   });
 
-
   useEffect(() => {
     if (query.data) {
       const { firstName, middleName, lastName, gender, language, dateOfBirth } =
@@ -136,7 +135,6 @@ export default function PatientRegistration() {
       const healthcareChoices = { hospital, physician };
       const codeStatusData = { codeStatus };
 
-
       form.initialize({
         patientData,
         contactData,
@@ -145,12 +143,10 @@ export default function PatientRegistration() {
         codeStatus: codeStatusData,
       });
     }
-    
+    // eslint-disable-next-line
   }, [query.data]);
 
-
   console.log(form.getValues());
-
 
   /**
    * Submit patient data to server for registration
