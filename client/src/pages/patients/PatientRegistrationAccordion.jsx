@@ -13,6 +13,7 @@ const PatientRegistrationAccordionProps = {
   form: PropTypes.object.isRequired,
   openedSection: PropTypes.string,
   handleAccordionChange: PropTypes.func.isRequired,
+  initialMedicalData: PropTypes.object,
 };
 
 /**
@@ -21,9 +22,11 @@ const PatientRegistrationAccordionProps = {
  */
 export default function PatientRegistrationAccordion({
   form,
+  initialMedicalData,
   openedSection,
   handleAccordionChange,
 }) {
+  console.log(initialMedicalData);
   return (
     <>
       <Accordion
@@ -164,6 +167,7 @@ export default function PatientRegistrationAccordion({
                 <MedicalDataSearch
                   category={category}
                   form={form}
+                  initialMedicalData={initialMedicalData[category]}
                   key={category}
                 />
               );

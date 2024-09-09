@@ -24,6 +24,7 @@ const TABS = [
 export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
+  const [initialMedicalData, setInitialMedicalData] = useState({});
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -111,6 +112,18 @@ export default function PatientRegistration() {
       const { hospital, physician } = data;
       const codeStatus = data.codeStatus;
 
+      setInitialMedicalData({
+        allergies: allergies.map((entry) => {
+          return { id: entry.allergy.id, name: entry.allergy.name };
+        }),
+        medications: medications.map((entry) => {
+          return { id: entry.medication.id, name: entry.medication.name };
+        }),
+        conditions: conditions.map((entry) => {
+          return { id: entry.condition.id, name: entry.condition.name };
+        }),
+      });
+
       const patientData = {
         firstName,
         middleName,
@@ -128,15 +141,9 @@ export default function PatientRegistration() {
         relationship,
       };
       const medicalData = {
-        allergies: allergies.map((entry) => {
-          return { id: entry.allergy.id, name: entry.allergy.name };
-        }),
-        medications: medications.map((entry) => {
-          return { id: entry.medication.id, name: entry.medication.name };
-        }),
-        conditions: conditions.map((entry) => {
-          return { id: entry.condition.id, name: entry.condition.name };
-        }),
+        allergies: allergies.map((entry) => entry.allergy.id),
+        medications: medications.map((entry) => entry.medication.id),
+        conditions: conditions.map((entry) => entry.condition.id),
       };
       const healthcareChoices = { hospital, physician };
       const codeStatusData = { codeStatus };
@@ -386,6 +393,7 @@ export default function PatientRegistration() {
         <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
           <PatientRegistrationAccordion
             form={form}
+            initialMedicalData={initialMedicalData}
             openedSection={openedSection}
             handleAccordionChange={handleAccordionChange}
           />

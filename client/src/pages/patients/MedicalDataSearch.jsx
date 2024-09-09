@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Loader,
   Combobox,
@@ -20,19 +20,30 @@ const API_PATHS = {
 const medicalDataSearchProps = {
   category: PropTypes.string.isRequired,
   form: PropTypes.object.isRequired,
+  initialMedicalData: PropTypes.array,
 };
 
 /**
  *  Medical Data Search component for Medical Data section of patient form
  * @param {PropTypes.InferProps<typeof medicalDataSearchProps>} props
  */
-export default function MedicalDataSearch({ category, form }) {
+export default function MedicalDataSearch({
+  category,
+  form,
+  initialMedicalData,
+}) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  // const [value, setValue] = useState([]);
+  const [value, setValue] = useState(initialMedicalData);
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const abortController = useRef();
+
+  useEffect(() => {
+    if (initialMedicalData !== undefined) {
+      setValue(initialMedicalData);
+    }
+  }, [initialMedicalData]);
 
   /**
    *
@@ -63,27 +74,27 @@ export default function MedicalDataSearch({ category, form }) {
 
   const handleValueSelect = (id, key) => {
     const name = key.children;
-    // setValue((current) =>
-    //   current.includes(id)
-    //     ? current.filter((v) => v.id !== id)
-    //     : [...current, { id, name }],
-    // );
+    setValue((current) =>
+      current.includes(id)
+        ? current.filter((v) => v.id !== id)
+        : [...current, { id, name }],
+    );
 
     form.setFieldValue(`medicalData.${category}`, (current) => [
       ...current,
-      { id, name },
+      id,
     ]);
     combobox.closeDropdown();
   };
 
   const handleValueRemove = (val) => {
-    // setValue((current) => current.filter((v) => v.id !== val));
+    setValue((current) => current.filter((v) => v.id !== val));
     form.setFieldValue(`medicalData.${category}`, (current) =>
-      current.filter((v) => v.id !== val),
+      current.filter((v) => v !== val),
     );
   };
 
-  const values = form.getValues().medicalData[category].map((item) => {
+  const values = value?.map((item) => {
     return (
       <Pill
         key={item?.id}
@@ -119,15 +130,12 @@ export default function MedicalDataSearch({ category, form }) {
   };
 
   const options = (data || [])
-    .filter(
-      (item) =>
-        !form.getValues().medicalData[category].some((v) => v.id === item.id),
-    )
+    .filter((item) => !value.some((v) => v.id === item.id))
     .map((item) => (
       <Combobox.Option
         value={item.id}
         key={item.id}
-        active={form.getValues().medicalData[category].includes(item)}
+        active={value.includes(item.name)}
       >
         {item.name}
       </Combobox.Option>
