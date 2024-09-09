@@ -67,11 +67,9 @@ export default async function (fastify, _opts) {
       const { id, firstName, lastName, gender, language, dateOfBirth } =
         request.body;
 
-      let middleName = request.body.middleName;
-      if (middleName) {
-        middleName = middleName.trim();
-        if (middleName.length === 0) middleName = null;
-      }
+      let middleName = request.body?.middleName?.trim();
+
+      if (middleName?.length === 0) middleName = null;
 
       const userId = request.user.id;
 

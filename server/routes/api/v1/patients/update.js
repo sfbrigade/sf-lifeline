@@ -198,11 +198,8 @@ export default async function (fastify, _opts) {
 
           let phone = contactData.phone.length === 0 ? null : contactData.phone;
 
-          let middleName = contactData.middleName;
-          if (middleName) {
-            middleName = middleName.trim();
-            if (middleName.length === 0) middleName = null;
-          }
+          let middleName = contactData?.middleName?.trim();
+          if (middleName?.length === 0) middleName = null;
 
           let contact = await tx.contact.create({
             data: {
