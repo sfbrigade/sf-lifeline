@@ -79,7 +79,9 @@ export default function PatientRegistration() {
     },
 
     transformValues: (values) => ({
+      
       patientData: {
+        
         dateOfBirth: values.patientData.dateOfBirth.toISOString().split('T')[0],
       },
     }),
@@ -235,31 +237,67 @@ export default function PatientRegistration() {
       medicalData,
       healthcareChoices,
       codeStatus,
-    } = values;
-
-    const { dateOfBirth } = form.getTransformedValues().patientData;
-    patientData.dateOfBirth = dateOfBirth;
+    } = values
+    
+    console.log(patientData, contactData, medicalData, healthcareChoices, codeStatus)
 
     try {
-      const res = await updatePatient({
-        patientData,
-        contactData,
-        medicalData,
-        healthcareChoices,
-        codeStatus,
-      });
-      if (res.status === StatusCodes.OK) {
-        showSuccessNotification('Successfully registered patient.');
-        navigate('/dashboard', { replace: true });
-      } else {
-        throw new Error('Failed to update patient.');
+      const res = await registerPatient(patientData ); 
+
+      console.log(res)
+
+      if (res.status === StatusCodes.CREATED) {
+        const updateRes = await updatePatient({
+          contactData,
+          medicalData,
+          healthcareChoices,
+          codeStatus,
+        });
+        if (updateRes.status === StatusCodes.OK) {
+          showSuccessNotification('Successfully registered patient.');
+          navigate('/dashboard', { replace: true });
+          return;
+        }
       }
+
+      if (res.status === StatusCodes.CONFLICT) {
+        const updateRes = await updatePatient({ patientData, contactData, medicalData, healthcareChoices, codeStatus });
+        if (updateRes.status === StatusCodes.OK) {
+          showSuccessNotification(
+            'Patient basic information has been successfully updated.',
+          );
+          navigate('/dashboard', { replace: true });
+          return;
+        }
+      }
+      throw new Error('Failed to register patient.');
     } catch (err) {
       console.error(err);
       showErrorNotification(err.message);
     } finally {
       setLoading(false);
     }
+
+    // try {
+    //   const res = await updatePatient({
+    //     patientData,
+    //     contactData,
+    //     medicalData,
+    //     healthcareChoices,
+    //     codeStatus,
+    //   });
+    //   if (res.status === StatusCodes.OK) {
+    //     showSuccessNotification('Successfully registered patient.');
+    //     navigate('/dashboard', { replace: true });
+    //   } else {
+    //     throw new Error('Failed to update patient.');
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    //   showErrorNotification(err.message);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   /**
@@ -268,26 +306,30 @@ export default function PatientRegistration() {
    */
   async function registerOrUpdatePatient(data) {
     try {
-      if (isSuccess) {
+      const res = await registerPatient(data);
+      if (res.status === StatusCodes.CREATED) {
+        showSuccessNotification(
+          'Patient basic information has been successfully registered.',
+        );
+        return;
+      }
+
+      if (res.status === StatusCodes.CONFLICT) {
         const updateRes = await updatePatient({ patientData: data });
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
+          return;
         }
-      } else {
-        const res = await registerPatient(data);
-
-        if (res.status === StatusCodes.CREATED) {
-          showSuccessNotification(
-            'Patient basic information has been successfully registered.',
-          );
-        } else if (res.status === StatusCodes.BAD_REQUEST) {
-          throw new Error('Invalid patient ID URL.');
-        } else {
-          throw new Error('Failed to register patient.');
-        }
+        throw new Error('Failed to update patient.');
       }
+
+      if (res.status === StatusCodes.BAD_REQUEST) {
+        throw new Error('Invalid patient ID URL.');
+      }
+
+      throw new Error('Failed to register patient.');
     } catch (err) {
       console.error(err);
       showErrorNotification(err.message);
