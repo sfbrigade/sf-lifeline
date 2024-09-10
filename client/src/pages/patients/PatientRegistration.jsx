@@ -157,10 +157,10 @@ export default function PatientRegistration() {
         conditions: conditions.map((entry) => entry.condition.id),
       };
       const healthcareChoices = {
-        hospitalId: hospital?.id,
-        physicianId: physician?.id,
+        hospitalId: hospital ? hospital.id : '',
+        physicianId: physician ? physician.id : '',
       };
-      const codeStatusData = { codeStatus };
+      const codeStatusData = codeStatus ;
       form.initialize({
         patientData,
         contactData,
