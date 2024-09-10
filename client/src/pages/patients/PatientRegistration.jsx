@@ -31,11 +31,15 @@ export default function PatientRegistration() {
   const { patientId } = useParams();
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await fetch(`/api/v1/patients/${patientId}`);
-      return res.json();
+      if (res.status === StatusCodes.OK) {
+        return res.json();
+      } else {
+        throw new Error('Failed to fetch patient.');
+      }
     },
   });
 
@@ -99,20 +103,13 @@ export default function PatientRegistration() {
   });
 
   useEffect(() => {
-    if (data && data.error === undefined) {
+    if (data && isSuccess) {
       const { firstName, middleName, lastName, gender, language, dateOfBirth } =
         data;
-      const {
-        firstName: firstNameContact,
-        middleName: middleNameContact,
-        lastName: lastNameContact,
-        phone,
-        email,
-        relationship,
-      } = data.emergencyContact;
+      const { emergencyContact } = data;
       const { allergies, medications, conditions } = data;
       const { hospital, physician } = data;
-      const codeStatus = data.codeStatus;
+      const codeStatus = data?.codeStatus;
 
       setInitialMedicalData({
         allergies: allergies.map((entry) => {
@@ -126,15 +123,19 @@ export default function PatientRegistration() {
         }),
       });
 
-      setInitialHospitalData({
-        id: hospital.id,
-        name: hospital.name,
-      });
+      if (hospital) {
+        setInitialHospitalData({
+          id: hospital.id,
+          name: hospital.name,
+        });
+      }
 
-      setInitialPhysicianData({
-        id: physician.id,
-        name: `${physician.firstName} ${physician.lastName}`,
-      });
+      if (physician) {
+        setInitialPhysicianData({
+          id: physician.id,
+          name: `${physician.firstName} ${physician.lastName}`,
+        });
+      }
 
       const patientData = {
         firstName,
@@ -144,22 +145,22 @@ export default function PatientRegistration() {
         language,
         dateOfBirth: new Date(dateOfBirth),
       };
+      console.log('emrgency contact', emergencyContact);
       const contactData = {
-        firstName: firstNameContact,
-        middleName: middleNameContact,
-        lastName: lastNameContact,
-        phone: phone || '',
-        email,
-        relationship,
+        ...emergencyContact,
+        phone: emergencyContact?.phone || '',
       };
       const medicalData = {
         allergies: allergies.map((entry) => entry.allergy.id),
         medications: medications.map((entry) => entry.medication.id),
         conditions: conditions.map((entry) => entry.condition.id),
       };
-      const healthcareChoices = { hospital, physician };
+      const healthcareChoices = {
+        hospitalId: hospital?.id,
+        physicianId: physician?.id,
+      };
       const codeStatusData = { codeStatus };
-
+      console.log('form', patientData);
       form.initialize({
         patientData,
         contactData,
