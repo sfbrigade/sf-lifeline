@@ -29,4 +29,27 @@ export default class LifelineAPI {
     const data = await response.json();
     return data;
   }
+
+  static async registerPatient(data, patientId) {
+    const response = await fetch(`${SERVER_BASE_URL}/patients`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...data, id: patientId }),
+    });
+
+    return response;
+  }
+
+  static async updatePatient(data, patientId) {
+    const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  }
 }

@@ -6,7 +6,7 @@ import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-
+import LifelineAPI from './LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
 const TABS = [
@@ -160,7 +160,7 @@ export default function PatientRegistration() {
         hospitalId: hospital ? hospital.id : '',
         physicianId: physician ? physician.id : '',
       };
-      const codeStatusData = codeStatus ;
+      const codeStatusData = codeStatus;
       form.initialize({
         patientData,
         contactData,
@@ -176,37 +176,6 @@ export default function PatientRegistration() {
   }, [data]);
 
   console.log(form.getValues());
-
-  /**
-   * Submit patient data to server for registration
-   * @param {object} data
-   */
-  async function registerPatient(data) {
-    const res = await fetch('/api/v1/patients', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...data, id: patientId }),
-    });
-
-    return res;
-  }
-
-  /**
-   * Submit patient data to server for update
-   * @param {object} data
-   */
-  async function updatePatient(data) {
-    const res = await fetch(`/api/v1/patients/${patientId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    return res;
-  }
 
   const showSuccessNotification = (message) => {
     notifications.show({
@@ -237,22 +206,21 @@ export default function PatientRegistration() {
       medicalData,
       healthcareChoices,
       codeStatus,
-    } = values
-    
-    console.log(patientData, contactData, medicalData, healthcareChoices, codeStatus)
+    } = values;
 
     try {
-      const res = await registerPatient(patientData ); 
-
-      console.log(res)
+      const res = await LifelineAPI.registerPatient(patientData, patientId);
 
       if (res.status === StatusCodes.CREATED) {
-        const updateRes = await updatePatient({
-          contactData,
-          medicalData,
-          healthcareChoices,
-          codeStatus,
-        });
+        const updateRes = await LifelineAPI.updatePatient(
+          {
+            contactData,
+            medicalData,
+            healthcareChoices,
+            codeStatus,
+          },
+          patientId,
+        );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification('Successfully registered patient.');
           navigate('/dashboard', { replace: true });
@@ -261,7 +229,16 @@ export default function PatientRegistration() {
       }
 
       if (res.status === StatusCodes.CONFLICT) {
-        const updateRes = await updatePatient({ patientData, contactData, medicalData, healthcareChoices, codeStatus });
+        const updateRes = await LifelineAPI.updatePatient(
+          {
+            patientData,
+            contactData,
+            medicalData,
+            healthcareChoices,
+            codeStatus,
+          },
+          patientId,
+        );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
@@ -277,27 +254,6 @@ export default function PatientRegistration() {
     } finally {
       setLoading(false);
     }
-
-    // try {
-    //   const res = await updatePatient({
-    //     patientData,
-    //     contactData,
-    //     medicalData,
-    //     healthcareChoices,
-    //     codeStatus,
-    //   });
-    //   if (res.status === StatusCodes.OK) {
-    //     showSuccessNotification('Successfully registered patient.');
-    //     navigate('/dashboard', { replace: true });
-    //   } else {
-    //     throw new Error('Failed to update patient.');
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   showErrorNotification(err.message);
-    // } finally {
-    //   setLoading(false);
-    // }
   }
 
   /**
@@ -306,7 +262,7 @@ export default function PatientRegistration() {
    */
   async function registerOrUpdatePatient(data) {
     try {
-      const res = await registerPatient(data);
+      const res = await LifelineAPI.registerPatient(data, patientId);
       if (res.status === StatusCodes.CREATED) {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
@@ -315,7 +271,10 @@ export default function PatientRegistration() {
       }
 
       if (res.status === StatusCodes.CONFLICT) {
-        const updateRes = await updatePatient({ patientData: data });
+        const updateRes = await LifelineAPI.updatePatient(
+          { patientData: data },
+          patientId,
+        );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
@@ -342,18 +301,21 @@ export default function PatientRegistration() {
    */
   async function updatePatientRecord(data) {
     try {
-      const res = await updatePatient(data);
+      const res = await LifelineAPI.updatePatient(data, patientId);
       if (res.status === StatusCodes.OK) {
         showSuccessNotification(
           'Patient information has been successfully updated.',
         );
-      } else if (res.status === StatusCodes.BAD_REQUEST) {
-        throw new Error('Invalid data provided.');
-      } else if (res.status === StatusCodes.NOT_FOUND) {
-        throw new Error('Patient ID not found.');
-      } else {
-        throw new Error('Failed to update patient.');
+        return;
       }
+      if (res.status === StatusCodes.BAD_REQUEST) {
+        throw new Error('Invalid data provided.');
+      }
+      if (res.status === StatusCodes.NOT_FOUND) {
+        throw new Error('Patient ID not found.');
+      }
+
+      throw new Error('Failed to update patient.');
     } catch (err) {
       console.error(err);
       showErrorNotification(err.message);
