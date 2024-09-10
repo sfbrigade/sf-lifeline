@@ -102,8 +102,14 @@ export default async function (fastify, _opts) {
               type: 'object',
               required: ['hospitalId', 'physicianId'],
               properties: {
-                hospitalId: { type: 'string', format: 'uuid' },
-                physicianId: { type: 'string', format: 'uuid' },
+                hospitalId: {
+                  type: 'string',
+                  anyOf: [{ format: 'uuid' }, { pattern: '^$' }],
+                },
+                physicianId: {
+                  type: 'string',
+                  anyOf: [{ format: 'uuid' }, { pattern: '^$' }],
+                },
               },
             },
             codeStatus: {
@@ -334,32 +340,41 @@ export default async function (fastify, _opts) {
 
         if (healthcareChoices) {
           // Validate hospital and physician IDs
-          const hospital = await tx.hospital.findUnique({
-            where: { id: healthcareChoices.hospitalId },
-          });
-          if (!hospital)
-            // Use throw instead of return to make sure transaction is rolled back
-            throw reply.status(StatusCodes.NOT_FOUND).send({
-              message: `Hospital with ID ${healthcareChoices.hospitalId} does not exist in database.`,
-            });
+          const { hospitalId, physicianId } = healthcareChoices;
 
-          const physician = await tx.physician.findUnique({
-            where: { id: healthcareChoices.physicianId },
-          });
-          if (!physician)
-            throw reply.status(StatusCodes.NOT_FOUND).send({
-              message: `Physician with ID ${healthcareChoices.physicianId} does not exist in database.`,
+          if (hospitalId) {
+            const hospital = await tx.hospital.findUnique({
+              where: { id: hospitalId },
             });
+            if (!hospital)
+              // Use throw instead of return to make sure transaction is rolled back
+              throw reply.status(StatusCodes.NOT_FOUND).send({
+                message: `Hospital with ID ${hospitalId} does not exist in database.`,
+              });
+          }
+
+          if (physicianId) {
+            const physician = await tx.physician.findUnique({
+              where: { id: physicianId },
+            });
+            if (!physician)
+              throw reply.status(StatusCodes.NOT_FOUND).send({
+                message: `Physician with ID ${physicianId} does not exist in database.`,
+              });
+          }
+
+          const hospitalData = hospitalId
+            ? { hospital: { connect: { id: hospitalId } } }
+            : { hospital: {} };
+          const physicianData = physicianId
+            ? { physician: { connect: { id: physicianId } } }
+            : { physician: {} };
 
           await tx.patient.update({
             where: { id },
             data: {
-              hospital: {
-                connect: { id: healthcareChoices.hospitalId },
-              },
-              physician: {
-                connect: { id: healthcareChoices.physicianId },
-              },
+              ...hospitalData,
+              ...physicianData,
               updatedBy: {
                 connect: { id: userId },
               },
