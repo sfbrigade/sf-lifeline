@@ -33,11 +33,25 @@ export default async function (fastify) {
     async (request, reply) => {
       const { page = '1', perPage = '25', physician } = request.query;
 
-      const options = {
-        page,
-        perPage,
-        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: {
+      const splitQuery = physician.trim().split(' ');
+
+      let whereClase = {};
+      if (splitQuery.length > 1) {
+        whereClase = {
+          AND: [
+            {
+              firstName: {
+                contains: splitQuery[0].trim(),
+                mode: 'insensitive',
+              },
+            },
+            {
+              lastName: { contains: splitQuery[1].trim(), mode: 'insensitive' },
+            },
+          ],
+        };
+      } else {
+        whereClase = {
           OR: [
             { firstName: { contains: physician.trim(), mode: 'insensitive' } },
             { lastName: { contains: physician.trim(), mode: 'insensitive' } },
@@ -55,7 +69,14 @@ export default async function (fastify) {
               ],
             },
           ],
-        },
+        };
+      }
+
+      const options = {
+        page,
+        perPage,
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        where: whereClase,
       };
 
       const { records, total } =

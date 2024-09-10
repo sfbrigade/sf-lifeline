@@ -61,7 +61,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
     });
 
-    it('should return a physicians for ADMIN user', async (t) => {
+    it('should return a physician for ADMIN user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
@@ -74,6 +74,30 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 2);
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'Bob');
       assert.deepStrictEqual(JSON.parse(reply.payload)[1].firstName, 'John');
+    });
+
+    it('should return a physician from querying for their first, last, and full name', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/physicians?physician=john')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'John');
+
+      const reply2 = await app
+        .inject()
+        .get('/api/v1/physicians?physician=john smith')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply2.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply2.payload).length, 1);
+      assert.deepStrictEqual(JSON.parse(reply2.payload)[0].firstName, 'John');
+      assert.deepStrictEqual(JSON.parse(reply2.payload)[0].lastName, 'Smith');
     });
   });
 });
