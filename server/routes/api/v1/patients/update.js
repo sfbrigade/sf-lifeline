@@ -365,10 +365,10 @@ export default async function (fastify, _opts) {
 
           const hospitalData = hospitalId
             ? { hospital: { connect: { id: hospitalId } } }
-            : { hospital: {} };
+            : { hospital: { disconnect: true } };
           const physicianData = physicianId
             ? { physician: { connect: { id: physicianId } } }
-            : { physician: {} };
+            : { physician: { disconnect: true } };
 
           await tx.patient.update({
             where: { id },
