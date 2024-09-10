@@ -28,7 +28,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const abortController = useRef();
 
   useEffect(() => {
-    if (initialData !== undefined) {
+    if (Object.keys(initialData).length > 0) {
       setValue(initialData);
       setSearch(initialData.name);
     }

@@ -123,19 +123,15 @@ export default function PatientRegistration() {
         }),
       });
 
-      if (hospital) {
-        setInitialHospitalData({
-          id: hospital.id,
-          name: hospital.name,
-        });
-      }
+      setInitialHospitalData({
+        id: hospital ? hospital.id : '',
+        name: hospital ? hospital.name : '',
+      });
 
-      if (physician) {
-        setInitialPhysicianData({
-          id: physician.id,
-          name: `${physician.firstName} ${physician.lastName}`,
-        });
-      }
+      setInitialPhysicianData({
+        id: physician ? physician.id : '',
+        name: `${physician.firstName} ${physician.lastName}`,
+      });
 
       const patientData = {
         firstName,
