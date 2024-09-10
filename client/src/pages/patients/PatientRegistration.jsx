@@ -145,7 +145,6 @@ export default function PatientRegistration() {
         language,
         dateOfBirth: new Date(dateOfBirth),
       };
-      console.log('emrgency contact', emergencyContact);
       const contactData = {
         ...emergencyContact,
         phone: emergencyContact?.phone || '',
@@ -160,7 +159,6 @@ export default function PatientRegistration() {
         physicianId: physician?.id,
       };
       const codeStatusData = { codeStatus };
-      console.log('form', patientData);
       form.initialize({
         patientData,
         contactData,

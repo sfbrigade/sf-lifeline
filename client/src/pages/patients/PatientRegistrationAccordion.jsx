@@ -29,7 +29,6 @@ export default function PatientRegistrationAccordion({
   openedSection,
   handleAccordionChange,
 }) {
-  console.log(initialMedicalData);
   return (
     <>
       <Accordion

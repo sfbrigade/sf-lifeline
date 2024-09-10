@@ -40,6 +40,7 @@ export default function SearchDatabaseInputField({
     selectValue(id, key);
     combobox.closeDropdown();
   };
+
   return (
     <Combobox
       onOptionSubmit={handleSelectValue}
@@ -63,7 +64,7 @@ export default function SearchDatabaseInputField({
               }
             }}
             onBlur={() => combobox.closeDropdown()}
-            value={inputValue}
+            value={search}
             placeholder={`Search ${label}`}
             onChange={(event) => {
               combobox.updateSelectedOptionIndex();
@@ -73,7 +74,7 @@ export default function SearchDatabaseInputField({
               combobox.openDropdown();
             }}
             onKeyDown={(event) => {
-              if (event.key === 'Backspace' && search.length === 0) {
+              if (event.key === 'Backspace' && search?.length <= 1) {
                 event.preventDefault();
                 removeValue();
               }

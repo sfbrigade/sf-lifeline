@@ -30,6 +30,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   useEffect(() => {
     if (initialData !== undefined) {
       setValue(initialData);
+      setSearch(initialData.name);
     }
   }, [initialData]);
 
@@ -63,7 +64,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const selectValue = (id, key) => {
     const name = key.children;
     setValue({ id, name });
-    setSearch('');
+    setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
   };
 
