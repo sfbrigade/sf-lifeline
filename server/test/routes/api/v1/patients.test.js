@@ -553,6 +553,56 @@ describe('/api/v1/patients', () => {
       });
     });
 
+    it('optional fields should be null if not provided or sent as empty string', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          patientData: {
+            firstName: '  Jane  ',
+            middleName: '  ',
+            lastName: '  Doe  ',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+          contactData: {
+            firstName: '  Smith  ',
+            lastName: 'Doe  ',
+            relationship: 'PARENT',
+          },
+        })
+        .headers(headers);
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
+        reply.body,
+      );
+
+      assert.deepStrictEqual(firstName, 'Jane');
+      assert.deepStrictEqual(middleName, null);
+      assert.deepStrictEqual(lastName, 'Doe');
+
+      assert.deepStrictEqual(emergencyContact, {
+        ...emergencyContact,
+        id: emergencyContact.id,
+        firstName: 'Smith',
+        middleName: null,
+        lastName: 'Doe',
+        email: null,
+        phone: null,
+        relationship: 'PARENT',
+      });
+    });
+
     it('should allow ADMIN to update a patient with medical data', async (t) => {
       const app = await build(t);
       await t.loadFixtures();

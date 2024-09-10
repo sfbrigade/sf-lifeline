@@ -206,7 +206,7 @@ export default async function (fastify, _opts) {
           // Only update the patient data if the value is truthy
           for (const [key, value] of Object.entries(patientData)) {
             if (value) newPatientData[key] = value.trim();
-            if (key === 'middleName' && value?.length === 0) {
+            if (key === 'middleName' && value?.trim().length === 0) {
               newPatientData[key] = null;
             }
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
