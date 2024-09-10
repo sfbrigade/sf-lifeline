@@ -856,6 +856,57 @@ describe('/api/v1/patients', () => {
       );
     });
 
+    it('should allow hospital and PCP of a patient be removed', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+            physicianId: '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      let { id, hospital, physician } = JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(
+        hospital.id,
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+      );
+      assert.deepStrictEqual(
+        physician.id,
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+      );
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: '',
+            physicianId: '',
+          },
+        })
+        .headers(headers);
+
+      reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      hospital = JSON.parse(reply.body).hospital;
+      physician = JSON.parse(reply.body).physician;
+
+      assert.deepStrictEqual(hospital, null);
+      assert.deepStrictEqual(physician, null);
+    });
+
     it('should throw an error if a healthcare choices item does not exist in the database', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
