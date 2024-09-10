@@ -264,23 +264,25 @@ export default function PatientRegistration() {
    */
   async function registerOrUpdatePatient(data) {
     try {
-      const res = await registerPatient(data);
-
-      if (res.status === StatusCodes.CREATED) {
-        showSuccessNotification(
-          'Patient basic information has been successfully registered.',
-        );
-      } else if (res.status === StatusCodes.CONFLICT) {
+      if (isSuccess) {
         const updateRes = await updatePatient({ patientData: data });
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
         }
-      } else if (res.status === StatusCodes.BAD_REQUEST) {
-        throw new Error('Invalid patient ID URL.');
       } else {
-        throw new Error('Failed to register patient.');
+        const res = await registerPatient(data);
+
+        if (res.status === StatusCodes.CREATED) {
+          showSuccessNotification(
+            'Patient basic information has been successfully registered.',
+          );
+        } else if (res.status === StatusCodes.BAD_REQUEST) {
+          throw new Error('Invalid patient ID URL.');
+        } else {
+          throw new Error('Failed to register patient.');
+        }
       }
     } catch (err) {
       console.error(err);
