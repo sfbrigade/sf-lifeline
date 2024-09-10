@@ -41,10 +41,10 @@ export default function PatientRegistration() {
         throw new Error('Failed to fetch patient.');
       }
     },
-    // disable retry and refetch on window focus to prevent data loss 
+    // disable retry and refetch on window focus to prevent data loss
     // from triggering form.initialize()
     retry: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 
   const form = useForm({
@@ -134,7 +134,7 @@ export default function PatientRegistration() {
 
       setInitialPhysicianData({
         id: physician ? physician.id : '',
-        name: physician ? `${physician.firstName} ${physician.lastName}`: '',
+        name: physician ? `${physician.firstName} ${physician.lastName}` : '',
       });
 
       const patientData = {
