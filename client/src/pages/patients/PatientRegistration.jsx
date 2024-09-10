@@ -79,9 +79,9 @@ export default function PatientRegistration() {
     },
 
     transformValues: (values) => ({
-      
+      ...values,
       patientData: {
-        
+        ...values.patientData,
         dateOfBirth: values.patientData.dateOfBirth.toISOString().split('T')[0],
       },
     }),
