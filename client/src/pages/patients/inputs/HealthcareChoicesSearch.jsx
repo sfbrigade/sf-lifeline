@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, ScrollArea } from '@mantine/core';
+import { Combobox, useCombobox, ScrollArea } from '@mantine/core';
 
 import { notifications } from '@mantine/notifications';
 import SearchDatabaseInputField from './SearchDatabaseInputField';
@@ -61,22 +61,31 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       });
   };
 
-  const selectValue = (id, key) => {
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
+  });
+
+  const handleSearch = (query) => {
+    setSearch(query);
+  };
+
+  const handleSelectValue = (id, key) => {
     const name = key.children;
     setValue({ id, name });
     setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
+    combobox.closeDropdown();
   };
 
-  const removeValue = () => {
-    setValue({ name: '', id: '' });
-    setSearch('');
-    fetchOptions('');
-    form.setFieldValue(`healthcareChoices.${choice}Id`, '');
-  };
-
-  const handleSearch = (query) => {
-    setSearch(query);
+  const handleKeyDown = (event) => {
+    if (event.key === 'Backspace' && search?.length <= 1) {
+      event.preventDefault();
+      setValue({ name: '', id: '' });
+      setSearch('');
+      fetchOptions('');
+      form.setFieldValue(`healthcareChoices.${choice}Id`, '');
+    }
   };
 
   const options = (data || []).map((item) => (
@@ -109,14 +118,15 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     <SearchDatabaseInputField
       data={data}
       loading={loading}
-      search={search}
-      inputValue={value.name ? value.name : search}
+      combobox={combobox}
       label={choice === 'hospital' ? 'Hospital' : 'Preferred Care Provider'}
-      selectValue={selectValue}
+      inputValue={value.name ? value.name : search}
+      searchQuery={search}
+      handleSelectValue={handleSelectValue}
       fetchOptions={fetchOptions}
-      removeValue={removeValue}
       comboboxOptions={renderComboxContent}
       handleSearch={handleSearch}
+      handleKeyDown={handleKeyDown}
     />
   );
 }

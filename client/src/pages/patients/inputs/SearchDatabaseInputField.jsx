@@ -1,18 +1,20 @@
 import PropTypes from 'prop-types';
 
-import { Combobox, useCombobox, Loader, TextInput } from '@mantine/core';
+import { Combobox, Loader, TextInput } from '@mantine/core';
 
 const searchDatabaseInputFieldProps = {
   data: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  search: PropTypes.string.isRequired,
-  inputValue: PropTypes.string.isRequired,
+  combobox: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
-  selectValue: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+  handleSelectValue: PropTypes.func.isRequired,
   fetchOptions: PropTypes.func.isRequired,
-  removeValue: PropTypes.func.isRequired,
   comboboxOptions: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
+  handleKeyDown: PropTypes.func.isRequired,
+  children: PropTypes.object,
 };
 
 /**
@@ -22,25 +24,17 @@ const searchDatabaseInputFieldProps = {
 export default function SearchDatabaseInputField({
   data,
   loading,
-  search,
   inputValue,
+  searchQuery,
   label,
-  selectValue,
+  combobox,
+  handleSelectValue,
   fetchOptions,
-  removeValue,
   comboboxOptions,
   handleSearch,
+  handleKeyDown,
+  children = undefined,
 }) {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
-  });
-
-  const handleSelectValue = (id, key) => {
-    selectValue(id, key);
-    combobox.closeDropdown();
-  };
-
   return (
     <Combobox
       onOptionSubmit={handleSelectValue}
@@ -54,17 +48,17 @@ export default function SearchDatabaseInputField({
             onFocus={() => {
               combobox.openDropdown();
               if (data === null) {
-                fetchOptions(inputValue);
+                fetchOptions(searchQuery);
               }
             }}
             onClick={() => {
               combobox.openDropdown();
               if (data === null) {
-                fetchOptions(inputValue);
+                fetchOptions(searchQuery);
               }
             }}
             onBlur={() => combobox.closeDropdown()}
-            value={search}
+            value={inputValue}
             placeholder={`Search ${label}`}
             onChange={(event) => {
               combobox.updateSelectedOptionIndex();
@@ -73,16 +67,12 @@ export default function SearchDatabaseInputField({
               combobox.resetSelectedOption();
               combobox.openDropdown();
             }}
-            onKeyDown={(event) => {
-              if (event.key === 'Backspace' && search?.length <= 1) {
-                event.preventDefault();
-                removeValue();
-              }
-            }}
+            onKeyDown={(event) => handleKeyDown(event)}
             rightSection={loading ? <Loader size="xs" /> : null}
           />
         </Combobox.EventsTarget>
       </Combobox.DropdownTarget>
+      {children}
       <Combobox.Dropdown>
         <Combobox.Options>{comboboxOptions()}</Combobox.Options>
       </Combobox.Dropdown>
