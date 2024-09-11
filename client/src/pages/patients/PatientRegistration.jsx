@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
-import { Flex, Button } from '@mantine/core';
+import { Flex, Button, Modal, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -36,6 +37,17 @@ export default function PatientRegistration() {
   const [initialHospitalData, setInitialHospitalData] = useState({});
   const [initialPhysicianData, setInitialPhysicianData] = useState({});
   const [openedSection, setOpenedSection] = useState('patientData');
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const [visitedSections, setVisitedSections] = useState({
+    patientData: true,
+    contactData: false,
+    medicalData: false,
+    healthcareChoices: false,
+    codeStatus: false,
+  });
+  const [unvisitedSections, setUnvisitedSections] = useState([]);
+
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -223,6 +235,17 @@ export default function PatientRegistration() {
       codeStatus,
     } = values;
 
+    const unvisited = Object.entries(visitedSections)
+      .filter(([_, visited]) => !visited)
+      .map(([section]) => ERROR_SECTION_MAP[section]);
+
+    if (unvisited.length > 0) {
+      setUnvisitedSections(unvisited);
+      open();
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await LifelineAPI.registerPatient(patientData, patientId);
 
@@ -373,6 +396,11 @@ export default function PatientRegistration() {
       ? navigate('', { replace: true })
       : navigate(`#${value}`, { replace: true });
 
+    setVisitedSections((prevVisitedSections) => ({
+      ...prevVisitedSections,
+      [value]: true,
+    }));
+
     if (!openedSection) {
       setOpenedSection(value);
       setActive(TABS.indexOf(value));
@@ -420,6 +448,19 @@ export default function PatientRegistration() {
       <h1>Register Patient</h1>
       <Flex direction="column" gap="md">
         <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
+          <Modal
+            opened={opened}
+            onClose={close}
+            title="Some Sections Haven't Been Viewed"
+            size="lg"
+          >
+            <Text>Please verify the sections below:</Text>
+            <ul>
+              {unvisitedSections.map((section) => (
+                <li key={section}>{section}</li>
+              ))}
+            </ul>
+          </Modal>
           <PatientRegistrationAccordion
             form={form}
             initialMedicalData={initialMedicalData}
