@@ -82,7 +82,7 @@ export default async function (fastify, _opts) {
 
         for (const [key, value] of Object.entries(request.body)) {
           if (value) newPatientData[key] = value.trim();
-          if (key === 'middleName' && value?.length === 0) {
+          if (key === 'middleName' && value.length === 0) {
             newPatientData[key] = null;
           }
           if (key === 'dateOfBirth') newPatientData[key] = new Date(value);

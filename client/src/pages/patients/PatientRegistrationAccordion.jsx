@@ -111,7 +111,6 @@ export default function PatientRegistrationAccordion({
             <TextInput
               label="First Name"
               placeholder="First Name"
-              withAsterisk
               key={form.key('contactData.firstName')}
               {...form.getInputProps('contactData.firstName')}
             />
@@ -124,7 +123,6 @@ export default function PatientRegistrationAccordion({
             <TextInput
               label="Last Name"
               placeholder="Last Name"
-              withAsterisk
               key={form.key('contactData.lastName')}
               {...form.getInputProps('contactData.lastName')}
             />
@@ -145,7 +143,6 @@ export default function PatientRegistrationAccordion({
             <Select
               label="Relationship"
               placeholder="Select Relationship"
-              withAsterisk
               data={[
                 'SPOUSE',
                 'PARENT',
@@ -199,7 +196,6 @@ export default function PatientRegistrationAccordion({
             <Select
               label="Code Status"
               placeholder="Select Code Status"
-              withAsterisk
               data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
               searchable
               key={form.key('codeStatus')}

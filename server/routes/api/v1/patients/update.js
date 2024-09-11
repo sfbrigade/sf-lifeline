@@ -43,7 +43,7 @@ export default async function (fastify, _opts) {
             },
             contactData: {
               type: 'object',
-              required: ['firstName', 'lastName', 'relationship'],
+              // required: ['firstName', 'lastName', 'relationship'],
               properties: {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
@@ -60,7 +60,7 @@ export default async function (fastify, _opts) {
                   ],
                 },
                 relationship: {
-                  type: 'string',
+                  type: ['string', 'null'],
                   enum: [
                     'SPOUSE',
                     'PARENT',
@@ -68,6 +68,7 @@ export default async function (fastify, _opts) {
                     'SIBLING',
                     'OTHER',
                     'UNKNOWN',
+                    null,
                   ],
                 },
               },
@@ -113,8 +114,8 @@ export default async function (fastify, _opts) {
               },
             },
             codeStatus: {
-              type: 'string',
-              enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
+              type: ['string', 'null'],
+              enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL', null],
             },
           },
         },
@@ -206,7 +207,7 @@ export default async function (fastify, _opts) {
           // Only update the patient data if the value is truthy
           for (const [key, value] of Object.entries(patientData)) {
             if (value) newPatientData[key] = value.trim();
-            if (key === 'middleName' && value?.trim().length === 0) {
+            if (key === 'middleName' && value.trim().length === 0) {
               newPatientData[key] = null;
             }
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
@@ -227,13 +228,11 @@ export default async function (fastify, _opts) {
 
           for (const [key, value] of Object.entries(contactData)) {
             if (value) newContactData[key] = value.trim();
-            if (key === 'middleName' && value?.length === 0) {
-              newContactData[key] = null;
-            }
-            if (key === 'email' && value?.length === 0) {
-              newContactData[key] = null;
-            }
-            if (key === 'phone' && value?.length === 0) {
+            if (
+              (key === 'middleName' && value.length === 0) ||
+              (key === 'email' && value.length === 0) ||
+              (key === 'phone' && value.length === 0)
+            ) {
               newContactData[key] = null;
             }
           }
