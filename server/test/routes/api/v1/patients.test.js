@@ -603,6 +603,30 @@ describe('/api/v1/patients', () => {
       });
     });
 
+    it('should not create a contact if all fields are empty strings and relationship is null', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          contactData: {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            relationship: null,
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { emergencyContact } = JSON.parse(reply.body);
+      assert.deepStrictEqual(emergencyContact, {});
+    });
+
     it('should allow ADMIN to update a patient with medical data', async (t) => {
       const app = await build(t);
       await t.loadFixtures();

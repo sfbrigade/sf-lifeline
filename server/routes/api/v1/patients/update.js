@@ -228,13 +228,9 @@ export default async function (fastify, _opts) {
 
           for (const [key, value] of Object.entries(contactData)) {
             if (value) newContactData[key] = value.trim();
-            if (
-              (key === 'middleName' && value.length === 0) ||
-              (key === 'email' && value.length === 0) ||
-              (key === 'phone' && value.length === 0)
-            ) {
-              newContactData[key] = null;
-            }
+            if (value?.trim()?.length === 0) newContactData[key] = null;
+            if (key === 'relationship' && value === null)
+              newContactData[key] = value;
           }
 
           const existingContact = await tx.patient.findUnique({
@@ -250,21 +246,26 @@ export default async function (fastify, _opts) {
               data: newContactData,
             });
           } else {
-            let contact = await tx.contact.create({
-              data: newContactData,
-            });
+            const nullFields = Object.entries(newContactData).filter(
+              ([_, value]) => value === null,
+            );
+            if (nullFields.length !== Object.keys(newContactData).length) {
+              let contact = await tx.contact.create({
+                data: newContactData,
+              });
 
-            await tx.patient.update({
-              where: { id },
-              data: {
-                emergencyContact: {
-                  connect: { id: contact.id },
+              await tx.patient.update({
+                where: { id },
+                data: {
+                  emergencyContact: {
+                    connect: { id: contact.id },
+                  },
+                  updatedBy: {
+                    connect: { id: userId },
+                  },
                 },
-                updatedBy: {
-                  connect: { id: userId },
-                },
-              },
-            });
+              });
+            }
           }
         }
 
