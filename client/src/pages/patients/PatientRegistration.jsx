@@ -55,9 +55,9 @@ export default function PatientRegistration() {
   const { data, isSuccess } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
-      const res = await fetch(`/api/v1/patients/${patientId}`);
+      const res = await LifelineAPI.getPatient(patientId);
       if (res.status === StatusCodes.OK) {
-        return res.json();
+        return await res.json();
       } else {
         throw new Error('Failed to fetch patient.');
       }
@@ -201,8 +201,6 @@ export default function PatientRegistration() {
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
     // eslint-disable-next-line
   }, [data]);
-
-  console.log(form.getValues());
 
   const showSuccessNotification = (message) => {
     notifications.show({
@@ -389,9 +387,6 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    console.log(value, openedSection, active, TABS.indexOf(value));
-
-    console.log(value);
     value === null
       ? navigate('', { replace: true })
       : navigate(`#${value}`, { replace: true });

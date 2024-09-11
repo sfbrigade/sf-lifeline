@@ -40,27 +40,31 @@ export default function MedicalDataSearch({
     }
   }, [initialMedicalData]);
 
-  const fetchOptions = (query) => {
+  const fetchOptions = async (query) => {
     abortController.current?.abort();
     abortController.current = new AbortController();
     setLoading(true);
 
-    LifelineAPI.getMedicalData(category, API_PATHS[category], query)
-      .then((result) => {
-        setData(result);
-        setLoading(false);
-        setEmpty(result.length === 0);
-        abortController.current = undefined;
-      })
-      .catch((error) => {
-        console.error(error);
-        notifications.show({
-          title: 'Error',
-          message: 'Issue with fetching data from server',
-          color: 'red',
-        });
-        abortController.current = undefined;
+    try {
+      const result = await LifelineAPI.getMedicalData(
+        category,
+        API_PATHS[category],
+        query,
+      );
+      setData(result);
+      setLoading(false);
+      setEmpty(result.length === 0);
+      abortController.current = undefined;
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: 'Error',
+        message: 'Issue with fetching data from server',
+        color: 'red',
       });
+      abortController.current = undefined;
+      setLoading(false);
+    }
   };
 
   const combobox = useCombobox({
