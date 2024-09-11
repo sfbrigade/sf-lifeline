@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Flex, Button } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
@@ -30,6 +30,7 @@ export default function PatientRegistration() {
   const [openedSection, setOpenedSection] = useState('patientData');
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { data, isSuccess } = useQuery({
     queryKey: ['patient'],
@@ -108,6 +109,16 @@ export default function PatientRegistration() {
     validateInputOnBlur: true,
   });
 
+  // Opens the section based on the hash in the URL
+  useEffect(() => {
+    let section = location.hash.replace('#', '');
+    if (section === '') section = 'patientData';
+    setOpenedSection(section);
+    // NOTE: Only want this useEffect to run once on mount to set the opened section
+    // eslint-disable-next-line
+  }, []);
+
+  // Sets the initial values of the form based on the data from an existing patient
   useEffect(() => {
     if (data && isSuccess) {
       const { firstName, middleName, lastName, gender, language, dateOfBirth } =
@@ -170,7 +181,7 @@ export default function PatientRegistration() {
       });
     }
 
-    // below is necessary to avoid infinite loop when adding form to depedency arrays
+    // NOTE: below is necessary to avoid infinite loop when adding form to depedency arrays
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
     // eslint-disable-next-line
   }, [data]);
@@ -328,10 +339,13 @@ export default function PatientRegistration() {
    */
   async function handleAccordionChange(value) {
     console.log(value, openedSection, active, TABS.indexOf(value));
+
+    console.log(value);
+    value === null ? navigate('') : navigate(`#${value}`);
+
     if (!openedSection) {
       setOpenedSection(value);
       setActive(TABS.indexOf(value));
-
       return;
     }
 
