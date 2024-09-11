@@ -17,6 +17,14 @@ const TABS = [
   'codeStatus',
 ];
 
+const ERROR_SECTION_MAP = {
+  patientData: 'Patient Data',
+  contactData: 'Emergency Contact',
+  medicalData: 'Medical Information',
+  healthcareChoices: 'Healthcare Choices',
+  codeStatus: 'Advanced Directive',
+};
+
 /**
  *  Patients page component
  *
@@ -269,6 +277,30 @@ export default function PatientRegistration() {
 
   /**
    *
+   * @param {object} errors
+   */
+  function handleErrors(errors) {
+    // Set focus to the first error field
+    const firstErrorPath = Object.keys(errors)[0];
+    form.getInputNode(firstErrorPath)?.focus();
+    setOpenedSection(firstErrorPath.split('.')[0]);
+
+    // Create a message for which sections have errors
+    const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
+    const errorSets = new Set(errorKeys);
+
+    let errorSections = [];
+    errorSets.forEach((key) => {
+      errorSections.push(ERROR_SECTION_MAP[key]);
+    });
+
+    showErrorNotification(
+      `Please fix the following sections: ${errorSections.join(', ')}`,
+    );
+  }
+
+  /**
+   *
    * @param {object} data
    */
   async function registerOrUpdatePatient(data) {
@@ -341,7 +373,9 @@ export default function PatientRegistration() {
     console.log(value, openedSection, active, TABS.indexOf(value));
 
     console.log(value);
-    value === null ? navigate('') : navigate(`#${value}`);
+    value === null
+      ? navigate('', { replace: true })
+      : navigate(`#${value}`, { replace: true });
 
     if (!openedSection) {
       setOpenedSection(value);
@@ -383,38 +417,6 @@ export default function PatientRegistration() {
     } else {
       setOpenedSection(openedSection);
     }
-  }
-
-  /**
-   *
-   * @param {object} errors
-   */
-  function handleErrors(errors) {
-    // Set focus to the first error field
-    const firstErrorPath = Object.keys(errors)[0];
-    form.getInputNode(firstErrorPath)?.focus();
-    setOpenedSection(firstErrorPath.split('.')[0]);
-
-    // Create a message for which sections have errors
-    const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
-    const errorSets = new Set(errorKeys);
-
-    const errorSectionMap = {
-      patientData: 'Patient Data',
-      contactData: 'Emergency Contact',
-      medicalData: 'Medical Information',
-      healthcareChoices: 'Healthcare Choices',
-      codeStatus: 'Advanced Directive',
-    };
-
-    let errorSections = [];
-    errorSets.forEach((key) => {
-      errorSections.push(errorSectionMap[key]);
-    });
-
-    showErrorNotification(
-      `Please fix the following sections: ${errorSections.join(', ')}`,
-    );
   }
 
   return (
