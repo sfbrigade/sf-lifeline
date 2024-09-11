@@ -52,4 +52,12 @@ export default class LifelineAPI {
     });
     return response;
   }
+
+  static async getMedicalData(path, pathInfo, query) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/${path}?${pathInfo}=${query}`,
+    );
+    const data = await response.json();
+    return data;
+  }
 }

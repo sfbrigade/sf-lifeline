@@ -10,6 +10,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import LifelineAPI from './LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',
@@ -44,28 +45,6 @@ export default function MedicalDataSearch({
       setValue(initialMedicalData);
     }
   }, [initialMedicalData]);
-
-  /**
-   *
-   * @param {string} query
-   */
-  async function getMedicalData(query) {
-    try {
-      const response = await fetch(
-        `/api/v1/${category}?${API_PATHS[category]}=${query}`,
-      );
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error(err);
-      notifications.show({
-        title: 'Error',
-        message: 'Issue with reaching server',
-        color: 'red',
-      });
-      return [];
-    }
-  }
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -111,7 +90,7 @@ export default function MedicalDataSearch({
     abortController.current = new AbortController();
     setLoading(true);
 
-    getMedicalData(query, abortController.current.signal)
+    LifelineAPI.getMedicalData(category, API_PATHS[category], query)
       .then((result) => {
         setData(result);
         setLoading(false);
