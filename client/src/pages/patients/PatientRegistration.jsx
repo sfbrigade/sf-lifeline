@@ -128,7 +128,19 @@ export default function PatientRegistration() {
   // Opens the section based on the hash in the URL
   useEffect(() => {
     let section = location.hash.replace('#', '');
-    if (section === '') section = 'patientData';
+
+    if (section === '') {
+      section = 'patientData';
+    }
+
+    if (section !== 'patientData') {
+      setVisitedSections((prevVisitedSections) => ({
+        ...prevVisitedSections,
+        [section]: true,
+        patientData: false,
+      }));
+    }
+
     setOpenedSection(section);
     // NOTE: Only want this useEffect to run once on mount to set the opened section
     // eslint-disable-next-line
