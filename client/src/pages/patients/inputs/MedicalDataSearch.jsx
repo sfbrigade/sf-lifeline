@@ -10,7 +10,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import LifelineAPI from './LifelineAPI';
+import LifelineAPI from '../LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',

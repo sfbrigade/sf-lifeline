@@ -6,7 +6,7 @@ import { Combobox, ScrollArea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 
-import LifelineAPI from './LifelineAPI.js';
+import LifelineAPI from '../LifelineAPI.js';
 
 const healthcareChoicesSearchProps = {
   form: PropTypes.object.isRequired,

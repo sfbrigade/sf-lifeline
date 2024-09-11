@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { IMaskInput } from 'react-imask';
-import MedicalDataSearch from './MedicalDataSearch';
-import HealthcareChoicesSearch from './HealthcareChoicesSearch';
+import MedicalDataSearch from './inputs/MedicalDataSearch';
+import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
 
 import classes from './PatientRegistationAccordion.module.css';
 
