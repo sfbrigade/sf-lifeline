@@ -187,7 +187,11 @@ export default function PatientRegistration() {
         dateOfBirth: new Date(dateOfBirth),
       };
       const contactData = {
-        ...emergencyContact,
+        firstName: emergencyContact?.firstName || '',
+        middleName: emergencyContact?.middleName || '',
+        lastName: emergencyContact?.lastName || '',
+        email: emergencyContact?.email || '',
+        relationship: emergencyContact?.relationship || null,
         phone: emergencyContact?.phone || '',
       };
       const medicalData = {
@@ -213,6 +217,8 @@ export default function PatientRegistration() {
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
     // eslint-disable-next-line
   }, [data]);
+
+  console.log(form.getValues());
 
   const showSuccessNotification = (message) => {
     notifications.show({
