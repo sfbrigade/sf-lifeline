@@ -218,8 +218,6 @@ export default function PatientRegistration() {
     // eslint-disable-next-line
   }, [data]);
 
-  console.log(form.getValues());
-
   const showSuccessNotification = (message) => {
     notifications.show({
       title: 'Success',
