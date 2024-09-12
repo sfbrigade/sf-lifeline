@@ -4,7 +4,7 @@
   width: 100vw;
 
   display: grid;
-  grid-template-rows: 100% 1fr;
+  grid-template-rows: auto 1fr;
   grid-template-areas:
     'head'
     'main';
