@@ -233,6 +233,10 @@ export default async function (fastify, _opts) {
               newContactData[key] = value;
           }
 
+          const nullFields = Object.entries(newContactData).filter(
+            ([_, value]) => value === null,
+          );
+          
           const existingContact = await tx.patient.findUnique({
             where: { id },
             include: {
@@ -241,14 +245,25 @@ export default async function (fastify, _opts) {
           });
 
           if (existingContact.emergencyContact) {
-            await tx.contact.update({
-              where: { id: existingContact.emergencyContact.id },
-              data: newContactData,
-            });
+            if (nullFields.length !== Object.keys(newContactData).length) {
+              await tx.contact.update({
+                where: { id: existingContact.emergencyContact.id },
+                data: newContactData,
+              });
+            } else {
+              await tx.patient.update({
+                where: { id },
+                data: {
+                  emergencyContact: {
+                    disconnect: true,
+                  },
+                  updatedBy: {
+                    connect: { id: userId },
+                  },
+                },
+              });
+            }
           } else {
-            const nullFields = Object.entries(newContactData).filter(
-              ([_, value]) => value === null,
-            );
             if (nullFields.length !== Object.keys(newContactData).length) {
               let contact = await tx.contact.create({
                 data: newContactData,

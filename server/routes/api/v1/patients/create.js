@@ -1,8 +1,6 @@
 import { Role } from '../../../../models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
-
-
 export default async function (fastify, _opts) {
   fastify.post(
     '/',
@@ -77,7 +75,6 @@ export default async function (fastify, _opts) {
           });
           if (exists) {
             throw new Error(
-              
               `Patient with ID ${id} already exists in database.`,
             );
           }
