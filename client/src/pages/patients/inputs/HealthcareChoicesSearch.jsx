@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
 import { Combobox, useCombobox, ScrollArea } from '@mantine/core';
-
 import { notifications } from '@mantine/notifications';
+import { useDebouncedCallback } from '@mantine/hooks';
+
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 
 import LifelineAPI from '../LifelineAPI.js';
@@ -34,7 +35,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     }
   }, [initialData]);
 
-  const fetchOptions = async (query) => {
+  const fetchOptions = useDebouncedCallback(async (query) => {
     abortController.current?.abort();
     abortController.current = new AbortController();
     setLoading(true);
@@ -59,7 +60,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       abortController.current = undefined;
       setLoading(false);
     }
-  };
+  }, 500);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
