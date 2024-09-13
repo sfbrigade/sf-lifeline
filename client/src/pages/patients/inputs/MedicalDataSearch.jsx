@@ -107,6 +107,8 @@ export default function MedicalDataSearch({
       <Pill
         key={item?.id}
         withRemoveButton
+        radius="md"
+        size="md"
         onRemove={() => handleValueRemove(item?.id)}
       >
         {item?.name}
@@ -139,7 +141,7 @@ export default function MedicalDataSearch({
       return <Combobox.Empty>Start typing to search</Combobox.Empty>;
     }
 
-    if (options.length === 0 && search.length !== 0) {
+    if (options.length === 0) {
       return <Combobox.Empty>All options selected</Combobox.Empty>;
     }
 
@@ -164,7 +166,7 @@ export default function MedicalDataSearch({
       handleSearch={setSearch}
       handleKeyDown={handleKeyDown}
     >
-      <Pill.Group style={{ marginTop: '2px' }}>{values}</Pill.Group>
+      <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
     </SearchDatabaseInputField>
   );
 }
