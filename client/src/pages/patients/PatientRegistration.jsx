@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
-import { Flex, Button, Modal, Text } from '@mantine/core';
+import { Flex, Button, Modal, Text, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -456,43 +456,45 @@ export default function PatientRegistration() {
 
   return (
     <main>
-      <h1>Register Patient</h1>
-      <Flex direction="column" gap="md">
-        <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
-          <Modal
-            opened={opened}
-            onClose={close}
-            title="Some Sections Haven't Been Viewed"
-            size="lg"
-          >
-            <Text>Please verify the sections below:</Text>
-            <ul>
-              {unvisitedSections.map((section) => (
-                <li key={section}>{section}</li>
-              ))}
-            </ul>
-          </Modal>
-          <PatientRegistrationAccordion
-            form={form}
-            initialMedicalData={initialMedicalData}
-            initialHospitalData={initialHospitalData}
-            initialPhysicianData={initialPhysicianData}
-            openedSection={openedSection}
-            handleAccordionChange={handleAccordionChange}
-          />
-          <Flex justify="center" mt="md">
-            <Button
-              onClick={form.onSubmit(submitPatient, handleErrors)}
-              color="gray"
-              fullWidth
-              loading={loading}
-              loaderProps={{ type: 'dots' }}
+      <Container style={{ marginBottom: '1rem' }}>
+        <h1>Register Patient</h1>
+        <Flex direction="column" gap="md">
+          <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
+            <Modal
+              opened={opened}
+              onClose={close}
+              title="Some Sections Haven't Been Viewed"
+              size="lg"
             >
-              Register Patient
-            </Button>
-          </Flex>
-        </form>
-      </Flex>
+              <Text>Please verify the sections below:</Text>
+              <ul>
+                {unvisitedSections.map((section) => (
+                  <li key={section}>{section}</li>
+                ))}
+              </ul>
+            </Modal>
+            <PatientRegistrationAccordion
+              form={form}
+              initialMedicalData={initialMedicalData}
+              initialHospitalData={initialHospitalData}
+              initialPhysicianData={initialPhysicianData}
+              openedSection={openedSection}
+              handleAccordionChange={handleAccordionChange}
+            />
+            <Flex justify="center" mt="md">
+              <Button
+                onClick={form.onSubmit(submitPatient, handleErrors)}
+                color="gray"
+                fullWidth
+                loading={loading}
+                loaderProps={{ type: 'dots' }}
+              >
+                Register Patient
+              </Button>
+            </Flex>
+          </form>
+        </Flex>
+      </Container>
     </main>
   );
 }
