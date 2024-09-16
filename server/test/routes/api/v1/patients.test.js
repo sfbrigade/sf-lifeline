@@ -19,7 +19,7 @@ describe('/api/v1/patients', () => {
   });
 
   describe('GET /:id', () => {
-    it('should return a 403 error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
+    it('should return UNAUTHORIZED if the user is not logged in', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
@@ -27,14 +27,6 @@ describe('/api/v1/patients', () => {
         .inject()
         .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
-
-      let headers = await t.authenticate('first.responder@test.com', 'test');
-      reply = await app
-        .inject()
-        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
-        .headers(headers);
-
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
     });
 
     it('should allow ADMIN to retrieve a patient', async (t) => {

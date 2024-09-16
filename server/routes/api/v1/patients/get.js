@@ -70,7 +70,12 @@ export default async function (fastify, _opts) {
           },
         },
       },
-      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
+      onRequest: fastify.requireUser([
+        Role.ADMIN,
+        Role.STAFF,
+        Role.VOLUNTEER,
+        Role.FIRST_RESPONDER,
+      ]),
     },
     async (request, reply) => {
       const { id } = request.params;
