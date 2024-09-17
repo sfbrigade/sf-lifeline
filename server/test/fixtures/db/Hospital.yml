@@ -3,15 +3,22 @@ connectedFields: ['physicians', 'patients']
 items:
   hospital1:
     id: a50538cd-1e10-42a3-8d6b-f9ae1e48a025
-    name: Hospital 1
+    name: Chinese Hospital
     address: 123 Main Street
     phone: 123-456-7890
-    email: hospital1@test.com
+    email: chinese.hospital@test.com
     physicians: ['@physician1', '@physician2']
   hospital2:
     id: b50538cd-1e10-42a3-8d6b-f9ae1e48a025
-    name: Hospital 2
+    name: Kaiser SF
     address: 456 Main Street
     phone: 123-456-9999
-    email: hospital2@test.com
+    email: kaiser.sf@test.com
+    physicians: ['@physician3']
+  hospital3:
+    id: c50538cd-1e10-42a3-8d6b-f9ae1e48a025
+    name: SF General
+    address: 999 Main Street
+    phone: 123-456-0010
+    email: sf.general@test.com
     physicians: ['@physician3']

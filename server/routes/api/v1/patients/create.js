@@ -17,7 +17,7 @@ export default async function (fastify, _opts) {
             'dateOfBirth',
           ],
           properties: {
-            id: { type: 'string' },
+            id: { type: 'string', format: 'uuid' },
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
@@ -64,37 +64,51 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const {
-        id,
-        firstName,
-        middleName,
-        lastName,
-        gender,
-        language,
-        dateOfBirth,
-      } = request.body;
+      const { id } = request.body;
 
       const userId = request.user.id;
+      try {
+        const newPatient = await fastify.prisma.$transaction(async (tx) => {
+          // Check if the patient already exists
+          const exists = await tx.patient.findUnique({
+            where: { id },
+          });
+          if (exists) {
+            throw new Error(
+              `Patient with ID ${id} already exists in database.`,
+            );
+          }
 
-      const newPatient = await fastify.prisma.$transaction(async (tx) => {
-        let patient = await tx.patient.create({
-          data: {
-            id,
-            firstName,
-            middleName,
-            lastName,
-            gender,
-            language,
-            dateOfBirth: new Date(dateOfBirth),
-            createdById: userId,
-            updatedById: userId,
-          },
+          const newPatientData = {};
+
+          for (const [key, value] of Object.entries(request.body)) {
+            if (value) newPatientData[key] = value.trim();
+            if (key === 'middleName' && value.length === 0) {
+              newPatientData[key] = null;
+            }
+            if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
+          }
+
+          let patient = await tx.patient.create({
+            data: {
+              ...newPatientData,
+              createdById: userId,
+              updatedById: userId,
+            },
+          });
+
+          return patient;
         });
 
-        return patient;
-      });
-
-      reply.code(StatusCodes.CREATED).send(newPatient);
+        reply.code(StatusCodes.CREATED).send(newPatient);
+      } catch (error) {
+        if (error.message.includes('already exists')) {
+          return reply.status(StatusCodes.CONFLICT).send({
+            message: error.message,
+          });
+        }
+        throw error;
+      }
     },
   );
 }

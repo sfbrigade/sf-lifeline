@@ -37,25 +37,40 @@ export default async function (fastify, _opts) {
                     'TAGALOG',
                   ],
                 },
-                codeStatus: {
-                  type: 'string',
-                  enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
-                },
+
                 dateOfBirth: { type: 'string', format: 'date' },
               },
             },
             contactData: {
               type: 'object',
-              required: ['firstName', 'lastName', 'phone', 'relationship'],
+              // required: ['firstName', 'lastName', 'relationship'],
               properties: {
                 firstName: { type: 'string' },
                 middleName: { type: 'string' },
                 lastName: { type: 'string' },
+                email: {
+                  type: 'string',
+                  anyOf: [{ format: 'email' }, { pattern: '^$' }],
+                },
                 phone: {
                   type: 'string',
-                  pattern: '^[0-9]{3}-[0-9]{3}-[0-9]{4}$',
+                  anyOf: [
+                    { pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$' },
+                    { pattern: '^$' },
+                  ],
                 },
-                relationship: { type: 'string' },
+                relationship: {
+                  type: ['string', 'null'],
+                  enum: [
+                    'SPOUSE',
+                    'PARENT',
+                    'CHILD',
+                    'SIBLING',
+                    'OTHER',
+                    'UNKNOWN',
+                    null,
+                  ],
+                },
               },
             },
             medicalData: {
@@ -65,18 +80,21 @@ export default async function (fastify, _opts) {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
                 medications: {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
                 conditions: {
                   type: 'array',
                   items: {
                     type: 'string',
+                    format: 'uuid',
                   },
                 },
               },
@@ -85,9 +103,19 @@ export default async function (fastify, _opts) {
               type: 'object',
               required: ['hospitalId', 'physicianId'],
               properties: {
-                hospitalId: { type: 'string' },
-                physicianId: { type: 'string' },
+                hospitalId: {
+                  type: 'string',
+                  anyOf: [{ format: 'uuid' }, { pattern: '^$' }],
+                },
+                physicianId: {
+                  type: 'string',
+                  anyOf: [{ format: 'uuid' }, { pattern: '^$' }],
+                },
               },
+            },
+            codeStatus: {
+              type: ['string', 'null'],
+              enum: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL', null],
             },
           },
         },
@@ -110,6 +138,7 @@ export default async function (fastify, _opts) {
                   firstName: { type: 'string' },
                   middleName: { type: 'string' },
                   lastName: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
                   phone: { type: 'string' },
                   relationship: { type: 'string' },
                 },
@@ -148,10 +177,28 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       const { id } = request.params;
-      const { patientData, contactData, medicalData, healthcareChoices } =
-        request.body;
+      const {
+        patientData,
+        contactData,
+        medicalData,
+        healthcareChoices,
+        codeStatus,
+      } = request.body;
 
       const userId = request.user.id;
+
+      try {
+        const patient = await fastify.prisma.patient.findUnique({
+          where: { id },
+        });
+        if (!patient) {
+          throw new Error('Patient not found');
+        }
+      } catch (error) {
+        return reply.status(StatusCodes.NOT_FOUND).send({
+          message: `Patient with ID ${id} does not exist in database.`,
+        });
+      }
 
       const updatedPatient = await fastify.prisma.$transaction(async (tx) => {
         if (patientData) {
@@ -159,39 +206,82 @@ export default async function (fastify, _opts) {
 
           // Only update the patient data if the value is truthy
           for (const [key, value] of Object.entries(patientData)) {
-            if (value) newPatientData[key] = value;
+            if (value) newPatientData[key] = value.trim();
+            if (key === 'middleName' && value.trim().length === 0) {
+              newPatientData[key] = null;
+            }
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
           }
 
           await tx.patient.update({
             where: { id },
-            data: newPatientData,
-          });
-        }
-        if (contactData) {
-          const { firstName, middleName, lastName, phone, relationship } =
-            contactData;
-
-          let contact = await tx.contact.create({
             data: {
-              firstName,
-              middleName,
-              lastName,
-              phone,
-              relationship,
-            },
-          });
-          await tx.patient.update({
-            where: { id },
-            data: {
-              emergencyContact: {
-                connect: { id: contact.id },
-              },
+              ...newPatientData,
               updatedBy: {
                 connect: { id: userId },
               },
             },
           });
+        }
+        if (contactData) {
+          const newContactData = {};
+
+          for (const [key, value] of Object.entries(contactData)) {
+            if (value) newContactData[key] = value.trim();
+            if (value?.trim()?.length === 0) newContactData[key] = null;
+            if (key === 'relationship' && value === null)
+              newContactData[key] = value;
+          }
+
+          const nullFields = Object.entries(newContactData).filter(
+            ([_, value]) => value === null,
+          );
+
+          const existingContact = await tx.patient.findUnique({
+            where: { id },
+            include: {
+              emergencyContact: true,
+            },
+          });
+
+          if (existingContact.emergencyContact) {
+            if (nullFields.length !== Object.keys(newContactData).length) {
+              await tx.contact.update({
+                where: { id: existingContact.emergencyContact.id },
+                data: newContactData,
+              });
+            } else {
+              await tx.patient.update({
+                where: { id },
+                data: {
+                  emergencyContact: {
+                    disconnect: true,
+                  },
+                  updatedBy: {
+                    connect: { id: userId },
+                  },
+                },
+              });
+            }
+          } else {
+            if (nullFields.length !== Object.keys(newContactData).length) {
+              let contact = await tx.contact.create({
+                data: newContactData,
+              });
+
+              await tx.patient.update({
+                where: { id },
+                data: {
+                  emergencyContact: {
+                    connect: { id: contact.id },
+                  },
+                  updatedBy: {
+                    connect: { id: userId },
+                  },
+                },
+              });
+            }
+          }
         }
 
         if (medicalData) {
@@ -265,32 +355,53 @@ export default async function (fastify, _opts) {
 
         if (healthcareChoices) {
           // Validate hospital and physician IDs
-          const hospital = await tx.hospital.findUnique({
-            where: { id: healthcareChoices.hospitalId },
-          });
-          if (!hospital)
-            // Use throw instead of return to make sure transaction is rolled back
-            throw reply.status(StatusCodes.NOT_FOUND).send({
-              message: `Hospital with ID ${healthcareChoices.hospitalId} does not exist in database.`,
-            });
+          const { hospitalId, physicianId } = healthcareChoices;
 
-          const physician = await tx.physician.findUnique({
-            where: { id: healthcareChoices.physicianId },
-          });
-          if (!physician)
-            throw reply.status(StatusCodes.NOT_FOUND).send({
-              message: `Physician with ID ${healthcareChoices.physicianId} does not exist in database.`,
+          if (hospitalId) {
+            const hospital = await tx.hospital.findUnique({
+              where: { id: hospitalId },
             });
+            if (!hospital)
+              // Use throw instead of return to make sure transaction is rolled back
+              throw reply.status(StatusCodes.NOT_FOUND).send({
+                message: `Hospital with ID ${hospitalId} does not exist in database.`,
+              });
+          }
+
+          if (physicianId) {
+            const physician = await tx.physician.findUnique({
+              where: { id: physicianId },
+            });
+            if (!physician)
+              throw reply.status(StatusCodes.NOT_FOUND).send({
+                message: `Physician with ID ${physicianId} does not exist in database.`,
+              });
+          }
+
+          const hospitalData = hospitalId
+            ? { hospital: { connect: { id: hospitalId } } }
+            : { hospital: { disconnect: true } };
+          const physicianData = physicianId
+            ? { physician: { connect: { id: physicianId } } }
+            : { physician: { disconnect: true } };
 
           await tx.patient.update({
             where: { id },
             data: {
-              hospital: {
-                connect: { id: healthcareChoices.hospitalId },
+              ...hospitalData,
+              ...physicianData,
+              updatedBy: {
+                connect: { id: userId },
               },
-              physician: {
-                connect: { id: healthcareChoices.physicianId },
-              },
+            },
+          });
+        }
+
+        if (codeStatus) {
+          await tx.patient.update({
+            where: { id },
+            data: {
+              codeStatus,
               updatedBy: {
                 connect: { id: userId },
               },

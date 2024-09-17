@@ -18,6 +18,56 @@ describe('/api/v1/patients', () => {
     });
   });
 
+  describe('GET /:id', () => {
+    it('should return UNAUTHORIZED if the user is not logged in', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+    });
+
+    it('should allow ADMIN to retrieve a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const response = JSON.parse(reply.body);
+      const { id, firstName, middleName, lastName, dateOfBirth } = response;
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(firstName, 'John');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(dateOfBirth, '2000-10-05');
+      assert.deepStrictEqual(Object.keys(response).length, 22);
+    });
+
+    it('should throw a 404 error if a patient id does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe5467106a')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+      );
+    });
+  });
+
   describe('POST /', () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
@@ -144,6 +194,32 @@ describe('/api/v1/patients', () => {
       });
     });
 
+    it('errors if creating a patient with an existing ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: '27963f68-ebc1-408a-8bb5-8fbe54671064',
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CONFLICT);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe54671064 already exists in database.',
+      );
+    });
+
     it('errors if missing required fields', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -189,6 +265,32 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(
         result.message,
         'body/language must be equal to one of the allowed values',
+      );
+    });
+
+    it('errors if providing a non-UUID ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: 'not-a-uuid',
+          firstName: 'John',
+          middleName: 'A',
+          lastName: 'Doe',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'body/id must match format "uuid"',
       );
     });
   });
@@ -344,6 +446,31 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(dateOfBirth, '1990-03-01');
     });
 
+    it('should throw an error if a patient does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/not-a-uuid')
+        .payload({
+          patientData: {
+            firstName: 'Jane',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID not-a-uuid does not exist in database.',
+      );
+    });
+
     it('should allow ADMIN to update a patient with contact data', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -355,8 +482,8 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: 'Jane',
             lastName: 'Doe',
-            phone: '123-456-7890',
-            relationship: 'Mother',
+            phone: '(123)-456-7890',
+            relationship: 'PARENT',
           },
         })
         .headers(headers);
@@ -368,9 +495,180 @@ describe('/api/v1/patients', () => {
         firstName: 'Jane',
         middleName: '',
         lastName: 'Doe',
-        phone: '123-456-7890',
-        relationship: 'Mother',
+        email: '',
+        phone: '(123)-456-7890',
+        relationship: 'PARENT',
       });
+    });
+
+    it('should trim user inputted text', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          patientData: {
+            firstName: '  Jane  ',
+            middleName: '  A  ',
+            lastName: '  Doe  ',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+          contactData: {
+            firstName: '  Smith  ',
+            lastName: 'Doe  ',
+            phone: '(123)-456-7890',
+            relationship: 'PARENT',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
+        reply.body,
+      );
+      assert.deepStrictEqual(firstName, 'Jane');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+
+      assert.deepStrictEqual(emergencyContact, {
+        id: emergencyContact.id,
+        firstName: 'Smith',
+        middleName: '',
+        lastName: 'Doe',
+        email: '',
+        phone: '(123)-456-7890',
+        relationship: 'PARENT',
+      });
+    });
+
+    it('optional fields should be null if not provided or sent as empty string', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          patientData: {
+            firstName: '  Jane  ',
+            middleName: '  ',
+            lastName: '  Doe  ',
+            dateOfBirth: '1990-01-01',
+            language: 'RUSSIAN',
+            codeStatus: 'COMFORT',
+          },
+          contactData: {
+            firstName: '  Smith  ',
+            lastName: 'Doe  ',
+            relationship: 'PARENT',
+          },
+        })
+        .headers(headers);
+
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
+        reply.body,
+      );
+
+      assert.deepStrictEqual(firstName, 'Jane');
+      assert.deepStrictEqual(middleName, null);
+      assert.deepStrictEqual(lastName, 'Doe');
+
+      assert.deepStrictEqual(emergencyContact, {
+        ...emergencyContact,
+        id: emergencyContact.id,
+        firstName: 'Smith',
+        middleName: null,
+        lastName: 'Doe',
+        email: null,
+        phone: null,
+        relationship: 'PARENT',
+      });
+    });
+
+    it('should not create a contact if all fields are empty strings and relationship is null', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          contactData: {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            relationship: null,
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { emergencyContact } = JSON.parse(reply.body);
+      assert.deepStrictEqual(emergencyContact, {});
+    });
+
+    it('should disconnect an existing contact if all fields are empty strings and relationship is null', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          contactData: {
+            firstName: 'newName',
+            middleName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            relationship: null,
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { emergencyContact } = JSON.parse(reply.body);
+      assert.deepStrictEqual(emergencyContact, {
+        ...emergencyContact,
+        id: emergencyContact.id,
+        firstName: 'newName',
+        middleName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        relationship: '',
+      });
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          contactData: {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            relationship: null,
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { emergencyContact: updatedContact } = JSON.parse(reply.body);
+      assert.deepStrictEqual(updatedContact, {});
     });
 
     it('should allow ADMIN to update a patient with medical data', async (t) => {
@@ -626,6 +924,57 @@ describe('/api/v1/patients', () => {
       );
     });
 
+    it('should allow hospital and PCP of a patient be removed', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: 'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+            physicianId: '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+          },
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      let { id, hospital, physician } = JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(
+        hospital.id,
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+      );
+      assert.deepStrictEqual(
+        physician.id,
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+      );
+
+      reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          healthcareChoices: {
+            hospitalId: '',
+            physicianId: '',
+          },
+        })
+        .headers(headers);
+
+      reply = await app
+        .inject()
+        .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      hospital = JSON.parse(reply.body).hospital;
+      physician = JSON.parse(reply.body).physician;
+
+      assert.deepStrictEqual(hospital, null);
+      assert.deepStrictEqual(physician, null);
+    });
+
     it('should throw an error if a healthcare choices item does not exist in the database', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -647,6 +996,30 @@ describe('/api/v1/patients', () => {
         result.message,
         'Hospital with ID a50538cd-1e10-42a3-8d6b-f9ae1e48a022 does not exist in database.',
       );
+    });
+
+    it('should allow ADMIN to update a patient with code status', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .payload({
+          codeStatus: 'DNR',
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const { id, firstName, middleName, lastName, dateOfBirth, codeStatus } =
+        JSON.parse(reply.body);
+
+      assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(firstName, 'John');
+      assert.deepStrictEqual(middleName, 'A');
+      assert.deepStrictEqual(lastName, 'Doe');
+      assert.deepStrictEqual(dateOfBirth, '2000-10-05');
+      assert.deepStrictEqual(codeStatus, 'DNR');
     });
   });
 });
