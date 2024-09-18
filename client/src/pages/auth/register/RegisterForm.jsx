@@ -124,6 +124,7 @@ export function RegisterForm({
               <TextInput
                 disabled={isLoading}
                 name="email"
+                type="email"
                 label="Email"
                 placeholder="Email"
                 value={user.email}
