@@ -10,7 +10,6 @@ import {
   IconNotification,
   IconSpeakerphone,
   IconSquareArrowRight,
-  IconClipboardPlus,
 } from '@tabler/icons-react';
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
@@ -25,11 +24,6 @@ const sections = [
     icon: null,
     links: [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
-      {
-        label: 'New Patient',
-        href: '/',
-        icon: <IconClipboardPlus stroke={2} />,
-      },
       {
         label: 'Team Member',
         href: '/admin/users',
