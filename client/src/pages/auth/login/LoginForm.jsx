@@ -52,6 +52,7 @@ export function LoginForm({
         <Container size="25rem">
           <TextInput
             className={classes.email}
+            type="email"
             label="Email"
             placeholder="user@email.com"
             value={email}

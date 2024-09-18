@@ -34,6 +34,7 @@ export function PasswordForgotForm({
         <TextInput
           disabled={isLoading || formState == 2}
           name="email"
+          type="email"
           label="Email"
           placeholder="user@email.com"
           value={email}
