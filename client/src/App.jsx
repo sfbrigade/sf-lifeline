@@ -24,7 +24,7 @@ import PasswordForgot from './pages/auth/password-forgot/passwordForgot';
 import PasswordReset from './pages/auth/password-reset/passwordReset';
 import AuthLayout from './stories/AuthLayout/AuthLayout';
 import Verify from './pages/verify/verify';
-import PatientRegistration from './pages/patients/PatientRegistration';
+import PatientRegistration from './pages/patients/register/PatientRegistration';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
