@@ -39,6 +39,15 @@ export default function PatientRegistration() {
   const [openedSection, setOpenedSection] = useState('patientData');
   const [opened, { open, close }] = useDisclosure(false);
 
+  const [showCheck, setShowCheck] = useState({
+    patientData: false,
+    contactData: false,
+    medicalData: false,
+    healthcareChoices: false,
+    codeStatus: false,
+  });
+
+
   const [visitedSections, setVisitedSections] = useState({
     patientData: true,
     contactData: false,
@@ -343,6 +352,10 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
         );
+        setVisitedSections((prevVisitedSections) => ({
+          ...prevVisitedSections,
+          patientData: true,
+        }));
         return;
       }
 
@@ -403,13 +416,21 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    value === null
-      ? navigate('', { replace: true })
-      : navigate(`#${value}`, { replace: true });
+    if (value === null) {
+      navigate('', { replace: true });
+      return;
+    } else {
+      navigate(`#${value}`, { replace: true });
+    }
 
     setVisitedSections((prevVisitedSections) => ({
       ...prevVisitedSections,
       [value]: true,
+    }));
+
+    setShowCheck((prevShowCheck) => ({
+      ...prevShowCheck,
+      [openedSection]: true,
     }));
 
     if (!openedSection) {
@@ -479,6 +500,7 @@ export default function PatientRegistration() {
               initialHospitalData={initialHospitalData}
               initialPhysicianData={initialPhysicianData}
               openedSection={openedSection}
+              showCheck={showCheck}
               handleAccordionChange={handleAccordionChange}
             />
             <Flex justify="center" mt="md">
