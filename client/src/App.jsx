@@ -25,6 +25,7 @@ import PasswordReset from './pages/auth/password-reset/passwordReset';
 import AuthLayout from './stories/AuthLayout/AuthLayout';
 import Verify from './pages/verify/verify';
 import PatientRegistration from './pages/patients/register/PatientRegistration';
+import Patient from './pages/patients/Patient';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -97,6 +98,7 @@ function App() {
               path="/admin/patients/generate"
               element={<AdminPatientsGenerate />}
             />
+            <Route path="/patients/:patientId" element={<Patient />} />
             <Route
               path="/admin/patients/register/:patientId"
               element={<PatientRegistration />}
