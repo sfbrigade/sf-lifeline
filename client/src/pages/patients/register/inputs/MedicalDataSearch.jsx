@@ -6,7 +6,7 @@ import { useDebouncedCallback } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
-import LifelineAPI from '../LifelineAPI';
+import LifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',

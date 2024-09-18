@@ -7,7 +7,7 @@ import { useDebouncedCallback } from '@mantine/hooks';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 
-import LifelineAPI from '../LifelineAPI.js';
+import LifelineAPI from '../../LifelineAPI.js';
 
 const healthcareChoicesSearchProps = {
   form: PropTypes.object.isRequired,
