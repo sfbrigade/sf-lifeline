@@ -1,12 +1,10 @@
 .control {
-  background-color: var(--mantine-color-gray-6);
   font-weight: 600;
-
-  &[data-active] {
-    background-color: white;
-  }
 }
 
 .label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 1.5rem;
 }
