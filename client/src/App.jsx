@@ -100,7 +100,7 @@ function App() {
             />
             <Route path="/patients/:patientId" element={<Patient />} />
             <Route
-              path="/admin/patients/register/:patientId"
+              path="/patients/register/:patientId"
               element={<PatientRegistration />}
             />
             <Route path="/admin/users" element={<AdminUsers />} />

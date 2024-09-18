@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 import { useEffect } from 'react';
+import { Loader } from '@mantine/core';
 
 /**
  *
@@ -12,7 +13,7 @@ export default function Patient() {
   const { patientId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isSuccess, isError } = useQuery({
+  const { data, isSuccess, isError, isLoading } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await LifelineAPI.getPatient(patientId);
@@ -26,16 +27,22 @@ export default function Patient() {
     retry: false,
     refetchOnWindowFocus: false,
   });
-  console.log(data, isSuccess, isError);
+  console.log(data, isSuccess, isError, isLoading);
+
+  
 
   useEffect(() => {
     if (isError) {
-      navigate('/admin/patients/register/' + patientId, {
+      navigate('/patients/register/' + patientId, {
         replace: true,
         state: { existingPatient: false },
       });
     }
   }, [isError, navigate, patientId]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <main>
