@@ -10,15 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
-const TABS = [
-  'patientData',
-  'contactData',
-  'medicalData',
-  'healthcareChoices',
-  'codeStatus',
-];
-
-const ERROR_SECTION_MAP = {
+const FORM_TABS = {
   patientData: 'Patient Data',
   contactData: 'Emergency Contact',
   medicalData: 'Medical Information',
@@ -32,7 +24,6 @@ const ERROR_SECTION_MAP = {
  */
 export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(0);
   const [initialMedicalData, setInitialMedicalData] = useState({});
   const [initialHospitalData, setInitialHospitalData] = useState({});
   const [initialPhysicianData, setInitialPhysicianData] = useState({});
@@ -46,7 +37,6 @@ export default function PatientRegistration() {
     healthcareChoices: false,
     codeStatus: false,
   });
-
 
   const [visitedSections, setVisitedSections] = useState({
     patientData: true,
@@ -260,7 +250,7 @@ export default function PatientRegistration() {
 
     const unvisited = Object.entries(visitedSections)
       .filter(([_, visited]) => !visited)
-      .map(([section]) => ERROR_SECTION_MAP[section]);
+      .map(([section]) => FORM_TABS[section]);
 
     if (unvisited.length > 0) {
       setUnvisitedSections(unvisited);
@@ -333,7 +323,7 @@ export default function PatientRegistration() {
 
     let errorSections = [];
     errorSets.forEach((key) => {
-      errorSections.push(ERROR_SECTION_MAP[key]);
+      errorSections.push(FORM_TABS[key]);
     });
 
     showErrorNotification(
@@ -423,28 +413,6 @@ export default function PatientRegistration() {
       navigate(`#${value}`, { replace: true });
     }
 
-    setVisitedSections((prevVisitedSections) => ({
-      ...prevVisitedSections,
-      [value]: true,
-    }));
-
-    setShowCheck((prevShowCheck) => ({
-      ...prevShowCheck,
-      [openedSection]: true,
-    }));
-
-    if (!openedSection) {
-      setOpenedSection(value);
-      setActive(TABS.indexOf(value));
-      return;
-    }
-
-    if (TABS.indexOf(value) < active) {
-      setOpenedSection(value);
-      setActive(TABS.indexOf(value));
-      return;
-    }
-
     let errorFieldCount = 0;
 
     if (openedSection === 'codeStatus') {
@@ -458,7 +426,16 @@ export default function PatientRegistration() {
 
     if (errorFieldCount === 0) {
       setOpenedSection(value);
-      setActive(TABS.indexOf(value));
+
+      setVisitedSections((prevVisitedSections) => ({
+        ...prevVisitedSections,
+        [value]: true,
+      }));
+
+      setShowCheck((prevShowCheck) => ({
+        ...prevShowCheck,
+        [openedSection]: true,
+      }));
 
       if (openedSection === 'patientData') {
         const patientData = {
