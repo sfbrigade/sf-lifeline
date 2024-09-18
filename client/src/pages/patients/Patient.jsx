@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { useEffect } from 'react';
 
 /**
- * 
+ *
  * Patient page component
  */
 export default function Patient() {
@@ -22,12 +22,18 @@ export default function Patient() {
         throw new Error('Failed to fetch patient.');
       }
     },
+
+    retry: false,
+    refetchOnWindowFocus: false,
   });
   console.log(data, isSuccess, isError);
 
   useEffect(() => {
     if (isError) {
-      navigate('/admin/patients/register/' + patientId, { replace: true });
+      navigate('/admin/patients/register/' + patientId, {
+        replace: true,
+        state: { existingPatient: false },
+      });
     }
   }, [isError, navigate, patientId]);
 
@@ -35,6 +41,9 @@ export default function Patient() {
     <main>
       <h1>Patient</h1>
       <p>This is the patient page</p>
+      <p>Patient ID: {data?.id}</p>
+      <p>Patient First Name: {data?.firstName}</p>
+      <p>Patient Last Name: {data?.lastName}</p>
     </main>
   );
 }
