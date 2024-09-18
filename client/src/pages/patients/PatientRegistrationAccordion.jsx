@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { IconCircleCheck } from '@tabler/icons-react';
 import { IMaskInput } from 'react-imask';
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
@@ -10,11 +11,12 @@ import classes from './PatientRegistationAccordion.module.css';
 
 const PatientRegistrationAccordionProps = {
   form: PropTypes.object.isRequired,
-  openedSection: PropTypes.string,
-  handleAccordionChange: PropTypes.func.isRequired,
   initialMedicalData: PropTypes.object,
   initialHospitalData: PropTypes.object,
   initialPhysicianData: PropTypes.object,
+  openedSection: PropTypes.string,
+  showCheck: PropTypes.object.isRequired,
+  handleAccordionChange: PropTypes.func.isRequired,
 };
 
 /**
@@ -27,6 +29,7 @@ export default function PatientRegistrationAccordion({
   initialHospitalData,
   initialPhysicianData,
   openedSection,
+  showCheck,
   handleAccordionChange,
 }) {
   return (
@@ -38,7 +41,12 @@ export default function PatientRegistrationAccordion({
         classNames={classes}
       >
         <Accordion.Item value="patientData">
-          <Accordion.Control>&#9312; Basic Information</Accordion.Control>
+          <Accordion.Control chevron={false}>
+            &#9312; Basic Information{' '}
+            {showCheck['patientData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <TextInput
               label="First Name"
@@ -106,7 +114,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="contactData">
-          <Accordion.Control>&#9313; Emergency Contact</Accordion.Control>
+          <Accordion.Control>
+            &#9313; Emergency Contact{' '}
+            {showCheck['contactData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <TextInput
               label="First Name"
@@ -159,7 +172,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="medicalData">
-          <Accordion.Control>&#9314; Medical Information</Accordion.Control>
+          <Accordion.Control>
+            &#9314; Medical Information{' '}
+            {showCheck['medicalData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             {Object.keys(form.getValues().medicalData).map((category) => {
               return (
@@ -175,7 +193,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="healthcareChoices">
-          <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
+          <Accordion.Control>
+            &#9315; Healthcare Choices{' '}
+            {showCheck['healthcareChoices'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <HealthcareChoicesSearch
               form={form}
@@ -191,7 +214,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="codeStatus">
-          <Accordion.Control>&#9316; Advanced Directive</Accordion.Control>
+          <Accordion.Control>
+            &#9316; Advanced Directive{' '}
+            {showCheck['codeStatus'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <Select
               label="Code Status"
