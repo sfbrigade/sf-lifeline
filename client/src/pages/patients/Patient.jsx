@@ -29,8 +29,6 @@ export default function Patient() {
   });
   console.log(data, isSuccess, isError, isLoading);
 
-  
-
   useEffect(() => {
     if (isError) {
       navigate('/patients/register/' + patientId, {

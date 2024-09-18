@@ -62,6 +62,34 @@ function Redirect({ isLoading, isLoggedIn, isLoggedInRequired }) {
 
 Redirect.propTypes = RedirectProps;
 
+const ProtectedRouteProps = {
+  role: PropTypes.string.isRequired,
+  children: PropTypes.element.isRequired,
+};
+
+/**
+ * Protect route elements that don't allow for FIRST_RESPONDER role
+ * @param {PropTypes.InferProps<typeof ProtectedRouteProps>} props
+ * @returns {React.ReactElement}
+ */
+function ProtectedRoute({ role, children }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (role === 'FIRST_RESPONDER') {
+      navigate('/login', { replace: true });
+      return;
+    }
+  }, [role, navigate]);
+
+  if (role === 'FIRST_RESPONDER' || !role) {
+    return <Loader />;
+  } else {
+    return children;
+  }
+}
+
+ProtectedRoute.propTypes = ProtectedRouteProps;
+
 /**
  * Top-level application component.  *
  * @returns {React.ReactElement}
@@ -101,7 +129,11 @@ function App() {
             <Route path="/patients/:patientId" element={<Patient />} />
             <Route
               path="/patients/register/:patientId"
-              element={<PatientRegistration />}
+              element={
+                <ProtectedRoute role={user?.role}>
+                  <PatientRegistration />
+                </ProtectedRoute>
+              }
             />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
