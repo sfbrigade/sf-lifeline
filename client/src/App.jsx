@@ -16,6 +16,7 @@ import Login from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
+import PatientNotFound from './pages/patients/notFound/PatientNotFound';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
@@ -76,16 +77,14 @@ function ProtectedRoute({ role, children }) {
   const navigate = useNavigate();
   useEffect(() => {
     if (role === 'FIRST_RESPONDER') {
-      navigate('/login', { replace: true });
-      return;
+      navigate('/patients/not-found', {
+        replace: true,
+        state: { fromRedirect: true },
+      });
     }
   }, [role, navigate]);
 
-  if (role === 'FIRST_RESPONDER' || !role) {
-    return <Loader />;
-  } else {
-    return children;
-  }
+  return role === 'FIRST_RESPONDER' ? <Loader /> : children;
 }
 
 ProtectedRoute.propTypes = ProtectedRouteProps;
@@ -135,6 +134,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/patients/not-found" element={<PatientNotFound />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
               path="/admin/pending-users"
