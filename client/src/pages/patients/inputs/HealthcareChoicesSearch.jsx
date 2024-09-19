@@ -120,7 +120,9 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       data={data}
       loading={loading}
       combobox={combobox}
-      label={choice === 'hospital' ? 'Hospital' : 'Preferred Care Provider'}
+      label={
+        choice === 'hospital' ? 'Hospital of Choice' : 'Preferred Care Provider'
+      }
       inputValue={value.name ? value.name : search}
       searchQuery={search}
       handleSelectValue={handleSelectValue}
