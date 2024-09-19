@@ -158,7 +158,6 @@ export default function MedicalDataSearch({
       loading={loading}
       combobox={combobox}
       label={category.charAt(0).toUpperCase() + category.slice(1)}
-      inputValue={search}
       searchQuery={search}
       handleSelectValue={handleSelectValue}
       fetchOptions={fetchOptions}
