@@ -342,8 +342,8 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
         );
-        setVisitedSections((prevVisitedSections) => ({
-          ...prevVisitedSections,
+        setShowCheck((prevShowCheck) => ({
+          ...prevShowCheck,
           patientData: true,
         }));
         return;
@@ -358,6 +358,10 @@ export default function PatientRegistration() {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
+          setShowCheck((prevShowCheck) => ({
+            ...prevShowCheck,
+            patientData: true,
+          }));
           return;
         }
         throw new Error('Failed to update patient.');
@@ -385,6 +389,10 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient information has been successfully updated.',
         );
+        setShowCheck((prevShowCheck) => ({
+          ...prevShowCheck,
+          [Object.keys(data)[0]]: true,
+        }));
         return;
       }
       if (res.status === StatusCodes.BAD_REQUEST) {
@@ -430,11 +438,6 @@ export default function PatientRegistration() {
       setVisitedSections((prevVisitedSections) => ({
         ...prevVisitedSections,
         [value]: true,
-      }));
-
-      setShowCheck((prevShowCheck) => ({
-        ...prevShowCheck,
-        [openedSection]: true,
       }));
 
       if (openedSection === 'patientData') {
