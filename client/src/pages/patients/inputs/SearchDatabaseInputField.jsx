@@ -13,7 +13,6 @@ const searchDatabaseInputFieldProps = {
   fetchOptions: PropTypes.func.isRequired,
   comboboxOptions: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  handleKeyDown: PropTypes.func.isRequired,
   children: PropTypes.object,
 };
 
@@ -24,7 +23,6 @@ const searchDatabaseInputFieldProps = {
 export default function SearchDatabaseInputField({
   data,
   loading,
-  inputValue,
   searchQuery,
   label,
   combobox,
@@ -32,7 +30,6 @@ export default function SearchDatabaseInputField({
   fetchOptions,
   comboboxOptions,
   handleSearch,
-  handleKeyDown,
   children = undefined,
 }) {
   return (
@@ -58,16 +55,15 @@ export default function SearchDatabaseInputField({
               }
             }}
             onBlur={() => combobox.closeDropdown()}
-            value={inputValue}
+            value={searchQuery}
             placeholder={`Search ${label}`}
             onChange={(event) => {
               combobox.updateSelectedOptionIndex();
               handleSearch(event.currentTarget.value);
               fetchOptions(event.currentTarget.value);
-              combobox.resetSelectedOption();
+              combobox.updateSelectedOptionIndex();
               combobox.openDropdown();
             }}
-            onKeyDown={(event) => handleKeyDown(event)}
             rightSection={loading ? <Loader size="xs" /> : null}
           />
         </Combobox.EventsTarget>

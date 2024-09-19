@@ -22,16 +22,14 @@ const healthcareChoicesSearchProps = {
 export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [value, setValue] = useState({ name: '', id: '' });
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
 
   const abortController = useRef();
 
   useEffect(() => {
-    if (Object.keys(initialData).length > 0) {
-      setValue(initialData);
-      setSearch(initialData.name);
+    if (initialData.length > 0) {
+      setSearch(initialData);
     }
   }, [initialData]);
 
@@ -73,20 +71,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
 
   const handleSelectValue = (id, key) => {
     const name = key.children;
-    setValue({ id, name });
+    // setValue({ id, name });
     setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
     combobox.closeDropdown();
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Backspace' && search?.length <= 1) {
-      event.preventDefault();
-      setValue({ name: '', id: '' });
-      setSearch('');
-      fetchOptions('');
-      form.setFieldValue(`healthcareChoices.${choice}Id`, '');
-    }
   };
 
   const options = (data || []).map((item) => (
@@ -123,13 +111,11 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       label={
         choice === 'hospital' ? 'Hospital of Choice' : 'Preferred Care Provider'
       }
-      inputValue={value.name ? value.name : search}
       searchQuery={search}
       handleSelectValue={handleSelectValue}
       fetchOptions={fetchOptions}
       comboboxOptions={renderComboxContent}
       handleSearch={handleSearch}
-      handleKeyDown={handleKeyDown}
     />
   );
 }

@@ -25,8 +25,8 @@ const FORM_TABS = {
 export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
   const [initialMedicalData, setInitialMedicalData] = useState({});
-  const [initialHospitalData, setInitialHospitalData] = useState({});
-  const [initialPhysicianData, setInitialPhysicianData] = useState({});
+  const [initialHospitalData, setInitialHospitalData] = useState('');
+  const [initialPhysicianData, setInitialPhysicianData] = useState('');
   const [openedSection, setOpenedSection] = useState('patientData');
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -167,15 +167,11 @@ export default function PatientRegistration() {
         }),
       });
 
-      setInitialHospitalData({
-        id: hospital ? hospital.id : '',
-        name: hospital ? hospital.name : '',
-      });
+      setInitialHospitalData(hospital ? hospital.name : '');
 
-      setInitialPhysicianData({
-        id: physician ? physician.id : '',
-        name: physician ? `${physician.firstName} ${physician.lastName}` : '',
-      });
+      setInitialPhysicianData(
+        physician ? `${physician.firstName} ${physician.lastName}` : '',
+      );
 
       const patientData = {
         firstName,
