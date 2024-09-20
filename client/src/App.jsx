@@ -16,7 +16,7 @@ import Login from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
-import PatientNotFound from './pages/patients/notFound/PatientNotFound';
+import NotFound from './pages/notFound/NotFound';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
@@ -65,6 +65,9 @@ Redirect.propTypes = RedirectProps;
 
 const ProtectedRouteProps = {
   role: PropTypes.string.isRequired,
+  restrictedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  destination: PropTypes.string,
+  message: PropTypes.string,
   children: PropTypes.element.isRequired,
 };
 
@@ -73,18 +76,30 @@ const ProtectedRouteProps = {
  * @param {PropTypes.InferProps<typeof ProtectedRouteProps>} props
  * @returns {React.ReactElement}
  */
-function ProtectedRoute({ role, children }) {
+function ProtectedRoute({
+  restrictedRoles,
+  role,
+  destination = 'notFound',
+  message,
+  children,
+}) {
   const navigate = useNavigate();
   useEffect(() => {
-    if (role === 'FIRST_RESPONDER') {
-      navigate('/patients/not-found', {
-        replace: true,
-        state: { fromRedirect: true },
-      });
+    if (restrictedRoles.includes(role)) {
+      if (destination === 'forbidden') {
+        navigate('/forbidden', {
+          replace: true,
+        });
+      } else {
+        navigate('/not-found', {
+          replace: true,
+          state: { message },
+        });
+      }
     }
-  }, [role, navigate]);
+  }, [restrictedRoles, role, navigate, destination, message]);
 
-  return role === 'FIRST_RESPONDER' ? <Loader /> : children;
+  return restrictedRoles.includes(role) ? <Loader /> : children;
 }
 
 ProtectedRoute.propTypes = ProtectedRouteProps;
@@ -129,18 +144,23 @@ function App() {
             <Route
               path="/patients/register/:patientId"
               element={
-                <ProtectedRoute role={user?.role}>
+                <ProtectedRoute
+                  role={user?.role}
+                  restrictedRoles={['FIRST_RESPONDER']}
+                  message={'Patient does not exist.'}
+                >
                   <PatientRegistration />
                 </ProtectedRoute>
               }
             />
-            <Route path="/patients/not-found" element={<PatientNotFound />} />
+
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
               path="/admin/pending-users"
               element={<AdminPendingUsers />}
             />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
         <Route
