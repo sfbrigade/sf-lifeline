@@ -35,7 +35,7 @@ const FORM_SELECT_ENUM_VALUES = {
 
 /**
  * Converts a string to title case
- * @param {string} string 
+ * @param {string} string
  * @returns {string}
  */
 function toTitleCase(string) {
