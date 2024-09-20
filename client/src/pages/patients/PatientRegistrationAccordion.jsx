@@ -19,6 +19,29 @@ const PatientRegistrationAccordionProps = {
   handleAccordionChange: PropTypes.func.isRequired,
 };
 
+const FORM_SELECT_ENUM_VALUES = {
+  language: [
+    'CANTONESE',
+    'ENGLISH',
+    'MANDARIN',
+    'RUSSIAN',
+    'SPANISH',
+    'TAGALOG',
+  ],
+  gender: ['FEMALE', 'MALE', 'TRANS_MALE', 'TRANS_FEMALE', 'OTHER', 'UNKNOWN'],
+  relationship: ['SPOUSE', 'PARENT', 'CHILD', 'SIBLING', 'OTHER', 'UNKNOWN'],
+  codeStatus: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
+};
+
+/**
+ * Converts a string to title case
+ * @param {string} string 
+ * @returns {string}
+ */
+function toTitleCase(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 /**
  *  Patient Registration Accordion component
  * @param {PropTypes.InferProps<typeof PatientRegistrationAccordionProps>} props
@@ -72,14 +95,10 @@ export default function PatientRegistrationAccordion({
               label="Gender"
               placeholder="Select Gender"
               withAsterisk
-              data={[
-                'FEMALE',
-                'MALE',
-                'TRANS_MALE',
-                'TRANS_FEMALE',
-                'OTHER',
-                'UNKNOWN',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
+                value,
+                label: toTitleCase(value),
+              }))}
               searchable
               key={form.key('patientData.gender')}
               {...form.getInputProps('patientData.gender')}
@@ -88,14 +107,10 @@ export default function PatientRegistrationAccordion({
               label="Language"
               placeholder="Select Language"
               withAsterisk
-              data={[
-                'CANTONESE',
-                'ENGLISH',
-                'MANDARIN',
-                'RUSSIAN',
-                'SPANISH',
-                'TAGALOG',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
+                value,
+                label: toTitleCase(value),
+              }))}
               searchable
               key={form.key('patientData.language')}
               {...form.getInputProps('patientData.language')}
@@ -156,14 +171,10 @@ export default function PatientRegistrationAccordion({
             <Select
               label="Relationship"
               placeholder="Select Relationship"
-              data={[
-                'SPOUSE',
-                'PARENT',
-                'CHILD',
-                'SIBLING',
-                'OTHER',
-                'UNKNOWN',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
+                value,
+                label: toTitleCase(value),
+              }))}
               searchable
               key={form.key('contactData.relationship')}
               {...form.getInputProps('contactData.relationship')}
@@ -224,7 +235,10 @@ export default function PatientRegistrationAccordion({
             <Select
               label="Code Status"
               placeholder="Select Code Status"
-              data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
+              data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
+                value,
+                label: toTitleCase(value),
+              }))}
               searchable
               key={form.key('codeStatus')}
               {...form.getInputProps('codeStatus')}
