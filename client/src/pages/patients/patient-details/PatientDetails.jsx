@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI.js';
+import LifelineAPI from '../LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 import { useEffect } from 'react';
 import { Loader } from '@mantine/core';
@@ -9,7 +9,7 @@ import { Loader } from '@mantine/core';
  *
  * Patient page component
  */
-export default function Patient() {
+export default function PatientDetails() {
   const { patientId } = useParams();
   const navigate = useNavigate();
 
