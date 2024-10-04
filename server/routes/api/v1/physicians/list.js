@@ -23,6 +23,16 @@ export default async function (fastify) {
                 phone: { type: 'string' },
                 firstName: { type: 'string' },
                 lastName: { type: 'string' },
+                hospitals: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      name: { type: 'string'}
+                    }
+                  }
+                }
               },
             },
           },
@@ -72,16 +82,20 @@ export default async function (fastify) {
         };
       }
 
-      const options = {
-        page,
-        perPage,
-        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: whereClase,
-      };
+      const options = await fastify.prisma.$transaction(async (tx) => {
+        const exists = await tx.physician.findMany({
+          skip: (Number(page) - 1) * Number(perPage),
+          take: Number(perPage),
+          orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+          where: whereClase,
+          include: {
+            hospitals: true
+          }
+        })
+        return exists
+      })
 
-      const { records, total } =
-        await fastify.prisma.physician.paginate(options);
-      reply.setPaginationHeaders(page, perPage, total).send(records);
+      reply.setPaginationHeaders(page, perPage, options.length).send(options);
     },
   );
 }
