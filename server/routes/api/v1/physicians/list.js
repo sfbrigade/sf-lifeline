@@ -29,10 +29,10 @@ export default async function (fastify) {
                     type: 'object',
                     properties: {
                       id: { type: 'string' },
-                      name: { type: 'string'}
-                    }
-                  }
-                }
+                      name: { type: 'string' },
+                    },
+                  },
+                },
               },
             },
           },
@@ -89,11 +89,11 @@ export default async function (fastify) {
           orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
           where: whereClase,
           include: {
-            hospitals: true
-          }
-        })
-        return exists
-      })
+            hospitals: true,
+          },
+        });
+        return exists;
+      });
 
       reply.setPaginationHeaders(page, perPage, options.length).send(options);
     },
