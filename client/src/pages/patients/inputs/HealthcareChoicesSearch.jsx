@@ -91,7 +91,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
 
   const options = (data || []).map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
-      {item.name} - {item.hospitals[0]?.name}
+      {item.name} {item.hospitals?.length && `- ${item.hospitals[0].name}`}
     </Combobox.Option>
   ));
 
