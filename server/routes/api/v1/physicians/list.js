@@ -87,19 +87,26 @@ export default async function (fastify) {
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
         where: whereClase,
-        include: { hospitals: true }, 
-    };
-    
-    const { page: currentPage, perPage: currentPerPage, include, ...paginationOptions } = options;
+        include: { hospitals: true },
+      };
 
-       const total =  await fastify.prisma.physician.count(paginationOptions)
-       const records = await fastify.prisma.physician.findMany({
-            ...paginationOptions,
-            include,
-            skip: Number((currentPage - 1) * currentPerPage),
-            take: Number(currentPerPage),
-        })
-    reply.setPaginationHeaders(currentPage, currentPerPage, total).send(records);
+      const {
+        page: currentPage,
+        perPage: currentPerPage,
+        include,
+        ...paginationOptions
+      } = options;
+
+      const total = await fastify.prisma.physician.count(paginationOptions);
+      const records = await fastify.prisma.physician.findMany({
+        ...paginationOptions,
+        include,
+        skip: Number((currentPage - 1) * currentPerPage),
+        take: Number(currentPerPage),
+      });
+      reply
+        .setPaginationHeaders(currentPage, currentPerPage, total)
+        .send(records);
     },
   );
 }
