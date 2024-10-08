@@ -82,20 +82,24 @@ export default async function (fastify) {
         };
       }
 
-      const options = await fastify.prisma.$transaction(async (tx) => {
-        const exists = await tx.physician.findMany({
-          skip: (Number(page) - 1) * Number(perPage),
-          take: Number(perPage),
-          orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-          where: whereClase,
-          include: {
-            hospitals: true,
-          },
-        });
-        return exists;
-      });
+      const options = {
+        page,
+        perPage,
+        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        where: whereClase,
+        include: { hospitals: true }, 
+    };
+    
+    const { page: currentPage, perPage: currentPerPage, include, ...paginationOptions } = options;
 
-      reply.setPaginationHeaders(page, perPage, options.length).send(options);
+       const total =  await fastify.prisma.physician.count(paginationOptions)
+       const records = await fastify.prisma.physician.findMany({
+            ...paginationOptions,
+            include,
+            skip: Number((currentPage - 1) * currentPerPage),
+            take: Number(currentPerPage),
+        })
+    reply.setPaginationHeaders(currentPage, currentPerPage, total).send(records);
     },
   );
 }
