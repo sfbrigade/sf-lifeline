@@ -7,7 +7,7 @@ import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI.js';
+import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
 const FORM_TABS = {
@@ -50,6 +50,7 @@ export default function PatientRegistration() {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { existingPatient } = location.state ?? true;
 
   const { data, isSuccess } = useQuery({
     queryKey: ['patient'],
@@ -61,6 +62,8 @@ export default function PatientRegistration() {
         throw new Error('Failed to fetch patient.');
       }
     },
+    enabled: existingPatient,
+
     // disable retry and refetch on window focus to prevent data loss
     // from triggering form.initialize()
     retry: false,

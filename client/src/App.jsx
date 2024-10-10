@@ -16,6 +16,7 @@ import Login from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
 import Dashboard from './pages/dashboard/dashboard';
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
+import NotFound from './pages/notFound/NotFound';
 import { AdminUsers } from './pages/admin/users/AdminUsers';
 
 import Context from './Context';
@@ -24,7 +25,8 @@ import PasswordForgot from './pages/auth/password-forgot/passwordForgot';
 import PasswordReset from './pages/auth/password-reset/passwordReset';
 import AuthLayout from './stories/AuthLayout/AuthLayout';
 import Verify from './pages/verify/verify';
-import PatientRegistration from './pages/patients/PatientRegistration';
+import PatientRegistration from './pages/patients/register/PatientRegistration';
+import PatientDetails from './pages/patients/patient-details/PatientDetails';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -60,6 +62,47 @@ function Redirect({ isLoading, isLoggedIn, isLoggedInRequired }) {
 }
 
 Redirect.propTypes = RedirectProps;
+
+const ProtectedRouteProps = {
+  role: PropTypes.string.isRequired,
+  restrictedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  destination: PropTypes.string,
+  message: PropTypes.string,
+  children: PropTypes.element.isRequired,
+};
+
+/**
+ * Protect route elements that don't allow for FIRST_RESPONDER role
+ * @param {PropTypes.InferProps<typeof ProtectedRouteProps>} props
+ * @returns {React.ReactElement}
+ */
+function ProtectedRoute({
+  restrictedRoles,
+  role,
+  destination = 'notFound',
+  message,
+  children,
+}) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (restrictedRoles.includes(role)) {
+      if (destination === 'forbidden') {
+        navigate('/forbidden', {
+          replace: true,
+        });
+      } else {
+        navigate('/not-found', {
+          replace: true,
+          state: { message },
+        });
+      }
+    }
+  }, [restrictedRoles, role, navigate, destination, message]);
+
+  return restrictedRoles.includes(role) ? <Loader /> : children;
+}
+
+ProtectedRoute.propTypes = ProtectedRouteProps;
 
 /**
  * Top-level application component.  *
@@ -97,16 +140,27 @@ function App() {
               path="/admin/patients/generate"
               element={<AdminPatientsGenerate />}
             />
+            <Route path="/patients/:patientId" element={<PatientDetails />} />
             <Route
-              path="/admin/patients/register/:patientId"
-              element={<PatientRegistration />}
+              path="/patients/register/:patientId"
+              element={
+                <ProtectedRoute
+                  role={user?.role}
+                  restrictedRoles={['FIRST_RESPONDER']}
+                  message={'Patient does not exist.'}
+                >
+                  <PatientRegistration />
+                </ProtectedRoute>
+              }
             />
+
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route
               path="/admin/pending-users"
               element={<AdminPendingUsers />}
             />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
         <Route
