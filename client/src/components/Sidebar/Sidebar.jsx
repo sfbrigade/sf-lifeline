@@ -62,9 +62,14 @@ const sections = [
 export function Sidebar() {
   return (
     <nav className={classes.navbar}>
-      <Group>
-        <div>Icon</div>
-        <h3 className={classes.title}>SF Life Line</h3>
+      <Group align="center" className={classes.title}>
+        <img
+          src="/logo.svg"
+          alt="SF Lifeline Logo"
+          width={'30rem'}
+          height={'30rem'}
+        />
+        <p>SF Life Line</p>
       </Group>
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>
