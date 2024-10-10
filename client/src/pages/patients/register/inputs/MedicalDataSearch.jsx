@@ -6,7 +6,7 @@ import { useDebouncedCallback } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
-import LifelineAPI from '../LifelineAPI';
+import LifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',
@@ -158,7 +158,6 @@ export default function MedicalDataSearch({
       loading={loading}
       combobox={combobox}
       label={category.charAt(0).toUpperCase() + category.slice(1)}
-      inputValue={search}
       searchQuery={search}
       handleSelectValue={handleSelectValue}
       fetchOptions={fetchOptions}
