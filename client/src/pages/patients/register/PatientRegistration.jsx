@@ -10,15 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
-const TABS = [
-  'patientData',
-  'contactData',
-  'medicalData',
-  'healthcareChoices',
-  'codeStatus',
-];
-
-const ERROR_SECTION_MAP = {
+const FORM_TABS = {
   patientData: 'Patient Data',
   contactData: 'Emergency Contact',
   medicalData: 'Medical Information',
@@ -32,12 +24,19 @@ const ERROR_SECTION_MAP = {
  */
 export default function PatientRegistration() {
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(0);
   const [initialMedicalData, setInitialMedicalData] = useState({});
-  const [initialHospitalData, setInitialHospitalData] = useState({});
-  const [initialPhysicianData, setInitialPhysicianData] = useState({});
+  const [initialHospitalData, setInitialHospitalData] = useState('');
+  const [initialPhysicianData, setInitialPhysicianData] = useState('');
   const [openedSection, setOpenedSection] = useState('patientData');
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [showCheck, setShowCheck] = useState({
+    patientData: false,
+    contactData: false,
+    medicalData: false,
+    healthcareChoices: false,
+    codeStatus: false,
+  });
 
   const [visitedSections, setVisitedSections] = useState({
     patientData: true,
@@ -171,15 +170,11 @@ export default function PatientRegistration() {
         }),
       });
 
-      setInitialHospitalData({
-        id: hospital ? hospital.id : '',
-        name: hospital ? hospital.name : '',
-      });
+      setInitialHospitalData(hospital ? hospital.name : '');
 
-      setInitialPhysicianData({
-        id: physician ? physician.id : '',
-        name: physician ? `${physician.firstName} ${physician.lastName}` : '',
-      });
+      setInitialPhysicianData(
+        physician ? `${physician.firstName} ${physician.lastName}` : '',
+      );
 
       const patientData = {
         firstName,
@@ -254,7 +249,7 @@ export default function PatientRegistration() {
 
     const unvisited = Object.entries(visitedSections)
       .filter(([_, visited]) => !visited)
-      .map(([section]) => ERROR_SECTION_MAP[section]);
+      .map(([section]) => FORM_TABS[section]);
 
     if (unvisited.length > 0) {
       setUnvisitedSections(unvisited);
@@ -327,7 +322,7 @@ export default function PatientRegistration() {
 
     let errorSections = [];
     errorSets.forEach((key) => {
-      errorSections.push(ERROR_SECTION_MAP[key]);
+      errorSections.push(FORM_TABS[key]);
     });
 
     showErrorNotification(
@@ -346,6 +341,10 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient basic information has been successfully registered.',
         );
+        setShowCheck((prevShowCheck) => ({
+          ...prevShowCheck,
+          patientData: true,
+        }));
         return;
       }
 
@@ -358,6 +357,10 @@ export default function PatientRegistration() {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
+          setShowCheck((prevShowCheck) => ({
+            ...prevShowCheck,
+            patientData: true,
+          }));
           return;
         }
         throw new Error('Failed to update patient.');
@@ -385,6 +388,10 @@ export default function PatientRegistration() {
         showSuccessNotification(
           'Patient information has been successfully updated.',
         );
+        setShowCheck((prevShowCheck) => ({
+          ...prevShowCheck,
+          [Object.keys(data)[0]]: true,
+        }));
         return;
       }
       if (res.status === StatusCodes.BAD_REQUEST) {
@@ -406,25 +413,11 @@ export default function PatientRegistration() {
    * @param {string} value
    */
   async function handleAccordionChange(value) {
-    value === null
-      ? navigate('', { replace: true })
-      : navigate(`#${value}`, { replace: true });
-
-    setVisitedSections((prevVisitedSections) => ({
-      ...prevVisitedSections,
-      [value]: true,
-    }));
-
-    if (!openedSection) {
-      setOpenedSection(value);
-      setActive(TABS.indexOf(value));
+    if (value === null) {
+      navigate('', { replace: true });
       return;
-    }
-
-    if (TABS.indexOf(value) < active) {
-      setOpenedSection(value);
-      setActive(TABS.indexOf(value));
-      return;
+    } else {
+      navigate(`#${value}`, { replace: true });
     }
 
     let errorFieldCount = 0;
@@ -440,7 +433,11 @@ export default function PatientRegistration() {
 
     if (errorFieldCount === 0) {
       setOpenedSection(value);
-      setActive(TABS.indexOf(value));
+
+      setVisitedSections((prevVisitedSections) => ({
+        ...prevVisitedSections,
+        [value]: true,
+      }));
 
       if (openedSection === 'patientData') {
         const patientData = {
@@ -482,6 +479,7 @@ export default function PatientRegistration() {
               initialHospitalData={initialHospitalData}
               initialPhysicianData={initialPhysicianData}
               openedSection={openedSection}
+              showCheck={showCheck}
               handleAccordionChange={handleAccordionChange}
             />
             <Flex justify="center" mt="md">
