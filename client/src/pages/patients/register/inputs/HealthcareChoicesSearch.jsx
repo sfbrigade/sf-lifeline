@@ -12,7 +12,7 @@ import LifelineAPI from '../../LifelineAPI.js';
 const healthcareChoicesSearchProps = {
   form: PropTypes.object.isRequired,
   choice: PropTypes.string.isRequired,
-  initialData: PropTypes.object,
+  initialData: PropTypes.string,
 };
 
 /**
