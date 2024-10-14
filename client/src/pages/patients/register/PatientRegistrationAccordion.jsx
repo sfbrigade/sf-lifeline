@@ -34,12 +34,15 @@ const FORM_SELECT_ENUM_VALUES = {
 };
 
 /**
- * Converts a string to title case
+ * Converts a string to title case and removes underscores
  * @param {string} string
  * @returns {string}
  */
-function toTitleCase(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+function formatEnum(string) {
+  return string
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 }
 
 /**
@@ -97,7 +100,7 @@ export default function PatientRegistrationAccordion({
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: formatEnum(value),
               }))}
               searchable
               key={form.key('patientData.gender')}
@@ -109,7 +112,7 @@ export default function PatientRegistrationAccordion({
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: formatEnum(value),
               }))}
               searchable
               key={form.key('patientData.language')}
@@ -173,7 +176,7 @@ export default function PatientRegistrationAccordion({
               placeholder="Select Relationship"
               data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: formatEnum(value),
               }))}
               searchable
               key={form.key('contactData.relationship')}
@@ -237,7 +240,7 @@ export default function PatientRegistrationAccordion({
               placeholder="Select Code Status"
               data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: formatEnum(value),
               }))}
               searchable
               key={form.key('codeStatus')}
