@@ -48,7 +48,7 @@ export function SidebarNavSection({
       <Collapse in={opened} className={classes.section}>
         {links.map((link) => (
           <div className={classes.sublink} key={link.label}>
-            <SidebarLink icon={link.icon} label={link.label} href={link.href} />
+            <SidebarLink {...link} />
           </div>
         ))}
       </Collapse>
@@ -62,17 +62,18 @@ const SidebarLinkProps = {
   icon: PropTypes.node,
   href: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  target: PropTypes.string,
 };
 
 /**
  * Navigation link for sidebar
  * @param {PropTypes.InferProps<typeof SidebarLinkProps>} props
  */
-export function SidebarLink({ icon, href, label }) {
+export function SidebarLink({ icon, href, label, target = '_self' }) {
   return (
     <div className={classes.sublink}>
       <div>{icon}</div>
-      <Text component={Link} className={classes.link} to={href}>
+      <Text component={Link} className={classes.link} to={href} target={target}>
         {label}
       </Text>
     </div>
