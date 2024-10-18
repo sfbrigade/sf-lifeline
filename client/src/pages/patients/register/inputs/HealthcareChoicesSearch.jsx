@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, useCombobox, ScrollArea } from '@mantine/core';
+import { Combobox, useCombobox, ScrollArea, Modal, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useDebouncedCallback } from '@mantine/hooks';
+import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
+import RegisterPhysician from './RegisterPhysician';
 
 import LifelineAPI from '../../LifelineAPI.js';
 
@@ -24,6 +25,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const [data, setData] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
+  const [opened, { open, close }] = useDisclosure(false);
 
   const abortController = useRef();
 
@@ -104,19 +106,31 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   }
 
   return (
-    <SearchDatabaseInputField
-      data={data}
-      loading={loading}
-      combobox={combobox}
-      label={
-        choice === 'hospital' ? 'Hospital of Choice' : 'Preferred Care Provider'
-      }
-      searchQuery={search}
-      handleSelectValue={handleSelectValue}
-      fetchOptions={fetchOptions}
-      comboboxOptions={renderComboxContent}
-      handleSearch={handleSearch}
-    />
+    <>
+      <SearchDatabaseInputField
+        data={data}
+        loading={loading}
+        combobox={combobox}
+        label={
+          choice === 'hospital'
+            ? 'Hospital of Choice'
+            : 'Preferred Care Provider'
+        }
+        searchQuery={search}
+        handleSelectValue={handleSelectValue}
+        fetchOptions={fetchOptions}
+        comboboxOptions={renderComboxContent}
+        handleSearch={handleSearch}
+      />
+      {choice === 'physician' && (
+        <>
+          <Button onClick={open}>Register Physician</Button>
+          <Modal opened={opened} onClose={close} title="Register Physician">
+            <RegisterPhysician />
+          </Modal>
+        </>
+      )}
+    </>
   );
 }
 
