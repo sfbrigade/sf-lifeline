@@ -97,12 +97,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
    */
   function renderComboxContent() {
     if (empty) {
+      // return <Combobox.Empty>No results found</Combobox.Empty>;
       return choice === 'physician' ? (
         <Combobox.Empty>
           <Button onClick={open}>Register New Physician</Button>
-          <Modal opened={opened} onClose={close} title="Register Physician">
-            <RegisterPhysician />
-          </Modal>
         </Combobox.Empty>
       ) : (
         <Combobox.Empty>No results found</Combobox.Empty>
@@ -137,6 +135,11 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
         comboboxOptions={renderComboxContent}
         handleSearch={handleSearch}
       />
+      {choice === 'physician' && (
+        <Modal opened={opened} onClose={close} title="Register Physician">
+          <RegisterPhysician />
+        </Modal>
+      )}
     </>
   );
 }
