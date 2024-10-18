@@ -8,8 +8,10 @@ export default async function (fastify) {
       schema: {
         body: {
           type: 'object',
+          required: ['firstName', 'lastName', 'phone'],
           properties: {
             firstName: { type: 'string' },
+            middleName: { type: 'string' },
             lastName: { type: 'string' },
             email: { type: 'string' },
             phone: { type: 'string' },
@@ -21,6 +23,7 @@ export default async function (fastify) {
             properties: {
               id: { type: 'string' },
               firstName: { type: 'string' },
+              middleName: { type: 'string' },
               lastName: { type: 'string' },
               email: { type: 'string' },
               phone: { type: 'string' },
@@ -31,25 +34,31 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { firstName, lastName, email, phone } = request.body;
+      const { phone } = request.body;
 
       try {
         // Check if the physician already exists
         const exists = await fastify.prisma.physician.findFirst({
-          where: { email },
+          where: { phone },
         });
         if (exists) {
           throw new Error(
-            `Physician with email ${email} already exists in database.`,
+            `Physician with phone ${phone} already exists in database.`,
           );
+        }
+
+        const newPhysicianData = {};
+
+        for (const [key, value] of Object.entries(request.body)) {
+          if (value) newPhysicianData[key] = value.trim();
+          if (key === 'middleName' && value.length === 0) {
+            newPhysicianData[key] = null;
+          }
         }
 
         const newPhysician = await fastify.prisma.physician.create({
           data: {
-            firstName,
-            lastName,
-            email,
-            phone,
+            ...newPhysicianData,
           },
         });
 
