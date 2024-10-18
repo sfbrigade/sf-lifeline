@@ -22,6 +22,18 @@ export default class LifelineAPI {
     });
   }
 
+  static async registerPhysician(data) {
+    const response = await fetch(`${SERVER_BASE_URL}/physicians`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return response;
+  }
+
   static async getHospitals(query) {
     const response = await fetch(
       `${SERVER_BASE_URL}/hospitals?hospital=${query}`,
