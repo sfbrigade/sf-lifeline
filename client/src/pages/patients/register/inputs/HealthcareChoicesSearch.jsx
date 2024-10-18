@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, useCombobox, ScrollArea, Modal, Button } from '@mantine/core';
+import {
+  Combobox,
+  useCombobox,
+  ScrollArea,
+  Modal,
+  Button,
+} from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
@@ -91,7 +97,16 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
    */
   function renderComboxContent() {
     if (empty) {
-      return <Combobox.Empty>No results found</Combobox.Empty>;
+      return choice === 'physician' ? (
+        <Combobox.Empty>
+          <Button onClick={open}>Register New Physician</Button>
+          <Modal opened={opened} onClose={close} title="Register Physician">
+            <RegisterPhysician />
+          </Modal>
+        </Combobox.Empty>
+      ) : (
+        <Combobox.Empty>No results found</Combobox.Empty>
+      );
     }
 
     if (data.length === 0) {
@@ -122,14 +137,6 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
         comboboxOptions={renderComboxContent}
         handleSearch={handleSearch}
       />
-      {choice === 'physician' && (
-        <>
-          <Button onClick={open}>Register Physician</Button>
-          <Modal opened={opened} onClose={close} title="Register Physician">
-            <RegisterPhysician />
-          </Modal>
-        </>
-      )}
     </>
   );
 }
