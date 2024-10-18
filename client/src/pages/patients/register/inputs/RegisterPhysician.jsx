@@ -1,9 +1,13 @@
 import { TextInput, InputBase, Button } from '@mantine/core';
 import { IMaskInput } from 'react-imask';
 import { useForm, isNotEmpty } from '@mantine/form';
+import { useMutation } from '@tanstack/react-query';
+import LifelineAPI from '../../LifelineAPI.js';
+import { StatusCodes } from 'http-status-codes';
 
-export default function RegisterPhysician() {
+export default function RegisterPhysician({ setPhysician }) {
   const form = useForm({
+    mode: 'uncontrolled',
     initialValues: {
       firstName: '',
       middleName: '',
@@ -26,9 +30,25 @@ export default function RegisterPhysician() {
     },
   });
 
-  const handleSubmit = (values) => {
+  const { isSuccess, data, error, mutate } = useMutation({
+    mutationKey: ['physician'],
+    mutationFn: async (data) => {
+      const res = await LifelineAPI.registerPhysician(data);
+      if (res.status === StatusCodes.CREATED) {
+        return await res.json();
+      } else {
+        throw new Error('Failed to register physician.');
+      }
+    },
+  });
+
+  const handleSubmit = async (values) => {
     console.log(values);
+    const result = mutate(values);
+    console.log(result);
   };
+
+  console.log(data, isSuccess, error);
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
