@@ -135,7 +135,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
         handleSearch={handleSearch}
       />
       {choice === 'physician' && (
-        <Modal opened={opened} onClose={close} title="Register Physician">
+        <Modal opened={opened} onClose={close} title="Register a new physician">
           <RegisterPhysician
             setPhysician={handleSelectValue}
             close={close}
