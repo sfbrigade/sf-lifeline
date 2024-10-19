@@ -118,9 +118,11 @@ export default function RegisterPhysician({
       />
       <Button
         style={{ marginTop: '1rem' }}
+        color="gray"
+        fullWidth
         onClick={form.onSubmit(handleSubmit)}
       >
-        Submit
+        Register Physician
       </Button>
     </form>
   );
