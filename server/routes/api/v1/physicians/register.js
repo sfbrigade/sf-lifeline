@@ -13,8 +13,17 @@ export default async function (fastify) {
             firstName: { type: 'string' },
             middleName: { type: 'string' },
             lastName: { type: 'string' },
-            email: { type: 'string' },
-            phone: { type: 'string' },
+            email: {
+              type: 'string',
+              anyOf: [{ format: 'email' }, { pattern: '^$' }],
+            },
+            phone: {
+              type: 'string',
+              anyOf: [
+                { pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$' },
+                { pattern: '^$' },
+              ],
+            },
           },
         },
         response: {
@@ -34,16 +43,27 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { phone } = request.body;
+      const { phone, email } = request.body;
 
       try {
         // Check if the physician already exists
         const exists = await fastify.prisma.physician.findFirst({
-          where: { phone },
+          where: {
+            OR: [{ phone }, { email }],
+          },
         });
         if (exists) {
+          let duplicateFields = [];
+          if (exists.phone === phone) {
+            duplicateFields.push(`phone ${phone}`);
+          }
+
+          if (exists.email === email) {
+            duplicateFields.push(`email ${email}`);
+          }
+
           throw new Error(
-            `Physician with phone ${phone} already exists in database.`,
+            `Physician with ${duplicateFields.join(' and ')} already exists.`,
           );
         }
 
