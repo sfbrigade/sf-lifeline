@@ -63,7 +63,7 @@ export default function RegisterPhysician({
     try {
       const result = await mutateAsync(values);
       const { firstName, middleName, lastName } = result;
-      const fullName = `${firstName} ${middleName + ' '}${lastName}`;
+      const fullName = `${firstName}${middleName ? ' ' + middleName + ' ' : ' '}${lastName}`;
       setPhysician(result.id, fullName);
       close();
       fetchOptions('');
