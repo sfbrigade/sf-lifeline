@@ -1,13 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import {
-  Combobox,
-  useCombobox,
-  ScrollArea,
-  Modal,
-  Button,
-} from '@mantine/core';
+import { Combobox, useCombobox, ScrollArea, Modal } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
@@ -103,9 +97,13 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       return choice === 'physician' ? (
         <>
           <Combobox.Empty> No results found</Combobox.Empty>
-
-          <Combobox.Option value="$register" onClick={open}>
-            {' '}
+          <Combobox.Option
+            style={{
+              backgroundColor: 'var(--mantine-color-blue-1)',
+            }}
+            value="$register"
+            onClick={open}
+          >
             + Register New Physician
           </Combobox.Option>
         </>
@@ -121,7 +119,11 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
-        <Combobox.Option value="$register" onClick={open}>
+        <Combobox.Option
+          style={{ backgroundColor: 'var(--mantine-color-blue-1)' }}
+          value="$register"
+          onClick={open}
+        >
           {' '}
           + Register New Physician
         </Combobox.Option>
