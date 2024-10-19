@@ -53,7 +53,8 @@ export default function RegisterPhysician({
       if (res.status === StatusCodes.CREATED) {
         return await res.json();
       } else {
-        throw new Error('Failed to register physician.');
+        const { message } = await res.json();
+        throw new Error(message);
       }
     },
   });
@@ -75,7 +76,7 @@ export default function RegisterPhysician({
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       {error && (
-        <Alert title="Error" color="red">
+        <Alert title="Failed to register physician." color="red">
           {error.message}
         </Alert>
       )}
