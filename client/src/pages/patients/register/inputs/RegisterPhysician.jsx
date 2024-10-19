@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { TextInput, InputBase, Button, Alert } from '@mantine/core';
 import { IMaskInput } from 'react-imask';
 import { useForm, isNotEmpty } from '@mantine/form';
@@ -5,6 +7,16 @@ import { useMutation } from '@tanstack/react-query';
 import LifelineAPI from '../../LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 
+const registerPhysicianProps = {
+  setPhysician: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  fetchOptions: PropTypes.func.isRequired,
+};
+
+/**
+ *
+ * @param {PropTypes.InferProps<typeof registerPhysicianProps>} props
+ */
 export default function RegisterPhysician({
   setPhysician,
   close,
@@ -28,13 +40,13 @@ export default function RegisterPhysician({
           : 'Phone number is not in XXX-XXX-XXXX format',
       email: (value) =>
         value.length === 0 ||
-        value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+        value.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)
           ? null
           : 'Email is not in valid format',
     },
   });
 
-  const { isSuccess, data, error, mutateAsync } = useMutation({
+  const { error, mutateAsync } = useMutation({
     mutationKey: ['physician'],
     mutationFn: async (data) => {
       const res = await LifelineAPI.registerPhysician(data);
@@ -62,7 +74,6 @@ export default function RegisterPhysician({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <p>Register a new physician</p>
       {error && (
         <Alert title="Error" color="red">
           {error.message}
@@ -104,7 +115,14 @@ export default function RegisterPhysician({
         key={form.key('email')}
         {...form.getInputProps('email')}
       />
-      <Button onClick={form.onSubmit(handleSubmit)}>Submit</Button>
+      <Button
+        style={{ marginTop: '1rem' }}
+        onClick={form.onSubmit(handleSubmit)}
+      >
+        Submit
+      </Button>
     </form>
   );
 }
+
+RegisterPhysician.propTypes = registerPhysicianProps;
