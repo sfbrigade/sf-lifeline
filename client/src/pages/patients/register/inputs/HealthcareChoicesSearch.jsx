@@ -78,6 +78,9 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   };
 
   const handleSelectValue = (id, key) => {
+    if (id === '$register') {
+      return;
+    }
     const name = key?.children ?? key;
     setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
@@ -98,9 +101,14 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     if (empty) {
       // return <Combobox.Empty>No results found</Combobox.Empty>;
       return choice === 'physician' ? (
-        <Combobox.Empty>
-          <Button onClick={open}>Register New Physician</Button>
-        </Combobox.Empty>
+        <>
+          <Combobox.Empty> No results found</Combobox.Empty>
+
+          <Combobox.Option value="$register" onClick={open}>
+            {' '}
+            + Register New Physician
+          </Combobox.Option>
+        </>
       ) : (
         <Combobox.Empty>No results found</Combobox.Empty>
       );
@@ -113,6 +121,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
+        <Combobox.Option value="$register" onClick={open}>
+          {' '}
+          + Register New Physician
+        </Combobox.Option>
       </ScrollArea.Autosize>
     );
   }
