@@ -1,11 +1,15 @@
-import { TextInput, InputBase, Button } from '@mantine/core';
+import { TextInput, InputBase, Button, Alert } from '@mantine/core';
 import { IMaskInput } from 'react-imask';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
 import LifelineAPI from '../../LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 
-export default function RegisterPhysician({ setPhysician }) {
+export default function RegisterPhysician({
+  setPhysician,
+  close,
+  fetchOptions,
+}) {
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -30,7 +34,7 @@ export default function RegisterPhysician({ setPhysician }) {
     },
   });
 
-  const { isSuccess, data, error, mutate } = useMutation({
+  const { isSuccess, data, error, mutateAsync } = useMutation({
     mutationKey: ['physician'],
     mutationFn: async (data) => {
       const res = await LifelineAPI.registerPhysician(data);
@@ -44,15 +48,26 @@ export default function RegisterPhysician({ setPhysician }) {
 
   const handleSubmit = async (values) => {
     console.log(values);
-    const result = mutate(values);
-    console.log(result);
+    try {
+      const result = await mutateAsync(values);
+      const { firstName, middleName, lastName } = result;
+      const fullName = `${firstName} ${middleName + ' '}${lastName}`;
+      setPhysician(result.id, fullName);
+      close();
+      fetchOptions('');
+    } catch (error) {
+      console.error(error.message);
+    }
   };
-
-  console.log(data, isSuccess, error);
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <p>Register a new physician</p>
+      {error && (
+        <Alert title="Error" color="red">
+          {error.message}
+        </Alert>
+      )}
       <TextInput
         label="First Name"
         placeholder="First Name"

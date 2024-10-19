@@ -78,8 +78,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   };
 
   const handleSelectValue = (id, key) => {
-    const name = key.children;
-    // setValue({ id, name });
+    const name = key?.children ?? key;
     setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
     combobox.closeDropdown();
@@ -137,7 +136,11 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       />
       {choice === 'physician' && (
         <Modal opened={opened} onClose={close} title="Register Physician">
-          <RegisterPhysician />
+          <RegisterPhysician
+            setPhysician={handleSelectValue}
+            close={close}
+            fetchOptions={fetchOptions}
+          />
         </Modal>
       )}
     </>
