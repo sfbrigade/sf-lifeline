@@ -63,6 +63,20 @@ export default function SearchDatabaseInputField({
               combobox.updateSelectedOptionIndex();
               combobox.openDropdown();
             }}
+            onKeyDown={(event) => {
+              const { key, target } = event;
+              const { value, selectionStart, selectionEnd } = target;
+              // Check if the entire input is selected or if there is one or fewer characters
+              if (
+                key === 'Backspace' &&
+                (value.length <= 1 ||
+                  (selectionStart === 0 && selectionEnd === value.length))
+              ) {
+                event.preventDefault();
+                fetchOptions('');
+                handleSelectValue('', '');
+              }
+            }}
             rightSection={loading ? <Loader size="xs" /> : null}
           />
         </Combobox.EventsTarget>
