@@ -33,6 +33,7 @@ const sections = [
       {
         label: 'QR Code',
         href: '/admin/patients/generate',
+        target: '_blank',
         icon: <IconQrcode stroke={2} />,
       },
     ],

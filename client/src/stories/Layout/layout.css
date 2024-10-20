@@ -38,3 +38,13 @@
     max-width: 18rem;
   }
 }
+
+@media print {
+  .layout {
+    min-height: none;
+  }
+
+  .layout-sidebar {
+    display: none;
+  }
+}

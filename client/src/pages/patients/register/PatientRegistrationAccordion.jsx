@@ -4,6 +4,8 @@ import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { IconCircleCheck } from '@tabler/icons-react';
 import { IMaskInput } from 'react-imask';
+import { humanize } from 'inflection';
+
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
 
@@ -32,15 +34,6 @@ const FORM_SELECT_ENUM_VALUES = {
   relationship: ['SPOUSE', 'PARENT', 'CHILD', 'SIBLING', 'OTHER', 'UNKNOWN'],
   codeStatus: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
 };
-
-/**
- * Converts a string to title case
- * @param {string} string
- * @returns {string}
- */
-function toTitleCase(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
 
 /**
  *  Patient Registration Accordion component
@@ -97,7 +90,7 @@ export default function PatientRegistrationAccordion({
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: humanize(value),
               }))}
               searchable
               key={form.key('patientData.gender')}
@@ -109,7 +102,7 @@ export default function PatientRegistrationAccordion({
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: humanize(value),
               }))}
               searchable
               key={form.key('patientData.language')}
@@ -173,7 +166,7 @@ export default function PatientRegistrationAccordion({
               placeholder="Select Relationship"
               data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: humanize(value),
               }))}
               searchable
               key={form.key('contactData.relationship')}
@@ -237,7 +230,7 @@ export default function PatientRegistrationAccordion({
               placeholder="Select Code Status"
               data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
                 value,
-                label: toTitleCase(value),
+                label: humanize(value),
               }))}
               searchable
               key={form.key('codeStatus')}

@@ -135,11 +135,11 @@ function App() {
             />
           }
         >
+          <Route
+            path="/admin/patients/generate"
+            element={<AdminPatientsGenerate />}
+          />
           <Route element={<Layout />}>
-            <Route
-              path="/admin/patients/generate"
-              element={<AdminPatientsGenerate />}
-            />
             <Route path="/patients/:patientId" element={<PatientDetails />} />
             <Route
               path="/patients/register/:patientId"

@@ -1,0 +1,70 @@
+.controls {
+  margin-bottom: 1rem;
+}
+
+.break {
+  flex-shrink: 0;
+  width: 100%;
+  height: 0;
+}
+
+[id^='qrcode-'] {
+  display: block;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.codes {
+  gap: 0;
+  break-after: page;
+}
+
+.code {
+  flex-shrink: 0;
+}
+
+.codes--12 {
+  width: 8.5in;
+  margin: 0;
+  padding: 0.3in 0.3125in;
+
+  .code {
+    width: 2in;
+    height: 2in;
+    margin: 0.3in 0.3125in;
+  }
+}
+
+.codes--20 {
+  width: 8.5in;
+  margin: 0 0 0.5in;
+  padding: 0.5in 0.25in 0;
+
+  .code {
+    width: 2in;
+    height: 2in;
+    margin: 0;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0in;
+  }
+
+  .controls {
+    display: none;
+  }
+
+  .container {
+    margin: 0;
+    margin-inline: 0;
+    max-width: none;
+    padding: 0;
+    padding-inline: 0;
+    width: 8.5in;
+  }
+}
