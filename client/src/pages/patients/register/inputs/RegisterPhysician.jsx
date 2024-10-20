@@ -76,7 +76,6 @@ export default function RegisterPhysician({
   });
 
   const handleSubmit = async (values) => {
-    console.log(values);
     try {
       const result = await mutateAsync(values);
       const { firstName, middleName, lastName } = result;
@@ -101,8 +100,6 @@ export default function RegisterPhysician({
       close();
     }
   };
-
-  console.log(form.getValues());
 
   return (
     <>
