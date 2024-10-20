@@ -105,7 +105,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
               backgroundColor: 'var(--mantine-color-blue-1)',
             }}
             value="$register"
-            onClick={open}
+            onClick={openRegisterPhysician}
           >
             + Register New Physician
           </Combobox.Option>
