@@ -62,7 +62,7 @@ export default function RegisterPhysician({
     },
   });
 
-  const { error, mutateAsync } = useMutation({
+  const { error, reset, mutateAsync } = useMutation({
     mutationKey: ['physician'],
     mutationFn: async (data) => {
       const res = await LifelineAPI.registerPhysician(data);
@@ -92,7 +92,8 @@ export default function RegisterPhysician({
   const confirmClose = (confirmed) => {
     if (form.isDirty() && confirmed) {
       closeConfirmationModal();
-      form.resetDirty();
+      form.reset();
+      reset();
     }
     if (form.isDirty()) {
       openConfirmationModal();
@@ -100,6 +101,8 @@ export default function RegisterPhysician({
       close();
     }
   };
+
+  console.log(form.getValues());
 
   return (
     <>
