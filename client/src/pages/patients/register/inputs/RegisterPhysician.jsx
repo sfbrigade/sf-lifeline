@@ -156,12 +156,19 @@ export default function RegisterPhysician({
       <Modal
         opened={confirmationModalOpened}
         onClose={closeConfirmationModal}
-        title="This form has unsaved changes"
+        styles={{
+          title: {
+            fontSize: '1.2rem',
+            fontWeight: 600,
+          },
+        }}
+        title="This form has unsaved changes."
+        yOffset="16vh"
       >
         <p>Are you sure you want to close this form without submitting?</p>
         <Button
           style={{ marginTop: '1rem' }}
-          color="gray"
+          color="red"
           fullWidth
           onClick={() => confirmClose(true)}
         >
@@ -169,7 +176,7 @@ export default function RegisterPhysician({
         </Button>
         <Button
           style={{ marginTop: '1rem' }}
-          color="gray"
+          color="blue"
           fullWidth
           onClick={closeConfirmationModal}
         >
