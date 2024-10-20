@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
 
-import { TextInput, InputBase, Button, Alert } from '@mantine/core';
-import { IMaskInput } from 'react-imask';
+import { TextInput, InputBase, Button, Alert, Modal } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+
+import { IMaskInput } from 'react-imask';
 import { useMutation } from '@tanstack/react-query';
 import LifelineAPI from '../../LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 
 const registerPhysicianProps = {
   setPhysician: PropTypes.func.isRequired,
+  opened: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   fetchOptions: PropTypes.func.isRequired,
 };
@@ -19,9 +22,15 @@ const registerPhysicianProps = {
  */
 export default function RegisterPhysician({
   setPhysician,
+  opened,
   close,
   fetchOptions,
 }) {
+  const [
+    confirmationModalOpened,
+    { open: openConfirmationModal, close: closeConfirmationModal },
+  ] = useDisclosure(false);
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -73,58 +82,101 @@ export default function RegisterPhysician({
     }
   };
 
+  const confirmClose = (confirmed) => {
+    if (form.isDirty() && confirmed) {
+      closeConfirmationModal();
+      form.resetDirty();
+    }
+    if (form.isDirty()) {
+      openConfirmationModal();
+    } else {
+      close();
+    }
+  };
+
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      {error && (
-        <Alert title="Failed to register physician." color="red">
-          {error.message}
-        </Alert>
-      )}
-      <TextInput
-        label="First Name"
-        placeholder="First Name"
-        withAsterisk
-        key={form.key('firstName')}
-        {...form.getInputProps('firstName')}
-      />
-      <TextInput
-        label="Middle Name"
-        placeholder="Middle Name"
-        key={form.key('middleName')}
-        {...form.getInputProps('middleName')}
-      />
-      <TextInput
-        label="Last Name"
-        placeholder="Last Name"
-        withAsterisk
-        key={form.key('lastName')}
-        {...form.getInputProps('lastName')}
-      />
-      <InputBase
-        label="Phone Number"
-        component={IMaskInput}
-        mask="(000)-000-0000"
-        placeholder="(000)-000-0000"
-        withAsterisk
-        key={form.key('phone')}
-        {...form.getInputProps('phone')}
-      />
-      <TextInput
-        label="Email"
-        placeholder="Email"
-        format="email"
-        key={form.key('email')}
-        {...form.getInputProps('email')}
-      />
-      <Button
-        style={{ marginTop: '1rem' }}
-        color="gray"
-        fullWidth
-        onClick={form.onSubmit(handleSubmit)}
+    <>
+      <Modal
+        opened={opened}
+        onClose={confirmClose}
+        title="Register a new physician"
       >
-        Register Physician
-      </Button>
-    </form>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          {error && (
+            <Alert title="Failed to register physician." color="red">
+              {error.message}
+            </Alert>
+          )}
+          <TextInput
+            label="First Name"
+            placeholder="First Name"
+            withAsterisk
+            key={form.key('firstName')}
+            {...form.getInputProps('firstName')}
+          />
+          <TextInput
+            label="Middle Name"
+            placeholder="Middle Name"
+            key={form.key('middleName')}
+            {...form.getInputProps('middleName')}
+          />
+          <TextInput
+            label="Last Name"
+            placeholder="Last Name"
+            withAsterisk
+            key={form.key('lastName')}
+            {...form.getInputProps('lastName')}
+          />
+          <InputBase
+            label="Phone Number"
+            component={IMaskInput}
+            mask="(000)-000-0000"
+            placeholder="(000)-000-0000"
+            withAsterisk
+            key={form.key('phone')}
+            {...form.getInputProps('phone')}
+          />
+          <TextInput
+            label="Email"
+            placeholder="Email"
+            format="email"
+            key={form.key('email')}
+            {...form.getInputProps('email')}
+          />
+          <Button
+            style={{ marginTop: '1rem' }}
+            color="gray"
+            fullWidth
+            onClick={form.onSubmit(handleSubmit)}
+          >
+            Register Physician
+          </Button>
+        </form>
+      </Modal>
+      <Modal
+        opened={confirmationModalOpened}
+        onClose={closeConfirmationModal}
+        title="This form has unsaved changes"
+      >
+        <p>Are you sure you want to close this form without submitting?</p>
+        <Button
+          style={{ marginTop: '1rem' }}
+          color="gray"
+          fullWidth
+          onClick={() => confirmClose(true)}
+        >
+          Yes
+        </Button>
+        <Button
+          style={{ marginTop: '1rem' }}
+          color="gray"
+          fullWidth
+          onClick={closeConfirmationModal}
+        >
+          No
+        </Button>
+      </Modal>
+    </>
   );
 }
 

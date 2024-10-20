@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, useCombobox, ScrollArea, Modal } from '@mantine/core';
+import { Combobox, useCombobox, ScrollArea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
@@ -25,7 +25,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const [data, setData] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
-  const [opened, { open, close }] = useDisclosure(false);
+  const [
+    registerPhysicianOpened,
+    { open: openRegisterPhysician, close: closeRegisterPhysician },
+  ] = useDisclosure(false);
 
   const abortController = useRef();
 
@@ -122,7 +125,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
         <Combobox.Option
           style={{ backgroundColor: 'var(--mantine-color-blue-1)' }}
           value="$register"
-          onClick={open}
+          onClick={openRegisterPhysician}
         >
           {' '}
           + Register New Physician
@@ -149,13 +152,12 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
         handleSearch={handleSearch}
       />
       {choice === 'physician' && (
-        <Modal opened={opened} onClose={close} title="Register a new physician">
-          <RegisterPhysician
-            setPhysician={handleSelectValue}
-            close={close}
-            fetchOptions={fetchOptions}
-          />
-        </Modal>
+        <RegisterPhysician
+          setPhysician={handleSelectValue}
+          opened={registerPhysicianOpened}
+          close={closeRegisterPhysician}
+          fetchOptions={fetchOptions}
+        />
       )}
     </>
   );
