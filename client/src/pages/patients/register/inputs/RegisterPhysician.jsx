@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 
-import { TextInput, InputBase, Button, Alert, Modal } from '@mantine/core';
+import {
+  TextInput,
+  InputBase,
+  Button,
+  Alert,
+  Modal,
+  Transition,
+} from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -102,11 +109,22 @@ export default function RegisterPhysician({
         title="Register a new physician"
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          {error && (
-            <Alert title="Failed to register physician." color="red">
-              {error.message}
-            </Alert>
-          )}
+          <Transition
+            mounted={error}
+            transition="slide-right"
+            duration={400}
+            timingFunction="ease"
+          >
+            {(transitionStyle) => (
+              <Alert
+                title="Failed to register physician."
+                color="red"
+                style={{ ...transitionStyle }}
+              >
+                {error?.message}
+              </Alert>
+            )}
+          </Transition>
           <TextInput
             label="First Name"
             placeholder="First Name"
