@@ -96,7 +96,6 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
    */
   function renderComboxContent() {
     if (empty) {
-      // return <Combobox.Empty>No results found</Combobox.Empty>;
       return choice === 'physician' ? (
         <>
           <Combobox.Empty> No results found</Combobox.Empty>
@@ -127,7 +126,6 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
           value="$register"
           onClick={openRegisterPhysician}
         >
-          {' '}
           + Register New Physician
         </Combobox.Option>
       </ScrollArea.Autosize>
