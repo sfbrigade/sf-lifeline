@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, useCombobox, ScrollArea } from '@mantine/core';
+import { Combobox, useCombobox, ScrollArea, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
@@ -99,14 +99,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       return choice === 'physician' ? (
         <>
           <Combobox.Empty> No results found</Combobox.Empty>
-          <Combobox.Option
-            style={{
-              backgroundColor: 'var(--mantine-color-blue-1)',
-            }}
-            value="$register"
-            onClick={openRegisterPhysician}
-          >
-            + Register New Physician
+          <Combobox.Option value="$register" onClick={openRegisterPhysician}>
+            <Text fw={700} size="sm">
+              + Register new physician
+            </Text>
           </Combobox.Option>
         </>
       ) : (
@@ -121,12 +117,10 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
-        <Combobox.Option
-          style={{ backgroundColor: 'var(--mantine-color-blue-1)' }}
-          value="$register"
-          onClick={openRegisterPhysician}
-        >
-          + Register New Physician
+        <Combobox.Option value="$register" onClick={openRegisterPhysician}>
+          <Text fw={700} size="sm">
+            + Register new physician
+          </Text>
         </Combobox.Option>
       </ScrollArea.Autosize>
     );
