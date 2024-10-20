@@ -146,8 +146,8 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       {choice === 'physician' && (
         <RegisterPhysician
           setPhysician={handleSelectValue}
-          opened={registerPhysicianOpened}
-          close={closeRegisterPhysician}
+          registerPhysicianOpened={registerPhysicianOpened}
+          closeRegisterPhysician={closeRegisterPhysician}
           fetchOptions={fetchOptions}
         />
       )}

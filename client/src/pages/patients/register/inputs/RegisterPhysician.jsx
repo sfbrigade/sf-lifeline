@@ -18,8 +18,8 @@ import { StatusCodes } from 'http-status-codes';
 
 const registerPhysicianProps = {
   setPhysician: PropTypes.func.isRequired,
-  opened: PropTypes.bool.isRequired,
-  close: PropTypes.func.isRequired,
+  registerPhysicianOpened: PropTypes.bool.isRequired,
+  closeRegisterPhysician: PropTypes.func.isRequired,
   fetchOptions: PropTypes.func.isRequired,
 };
 
@@ -29,8 +29,8 @@ const registerPhysicianProps = {
  */
 export default function RegisterPhysician({
   setPhysician,
-  opened,
-  close,
+  registerPhysicianOpened,
+  closeRegisterPhysician,
   fetchOptions,
 }) {
   const [
@@ -62,7 +62,11 @@ export default function RegisterPhysician({
     },
   });
 
-  const { error, reset, mutateAsync } = useMutation({
+  const {
+    error,
+    reset: mutationReset,
+    mutateAsync,
+  } = useMutation({
     mutationKey: ['physician'],
     mutationFn: async (data) => {
       const res = await LifelineAPI.registerPhysician(data);
@@ -81,10 +85,10 @@ export default function RegisterPhysician({
       const { firstName, middleName, lastName } = result;
       const fullName = `${firstName}${middleName ? ' ' + middleName + ' ' : ' '}${lastName}`;
       setPhysician(result.id, fullName);
-      form.reset();
-      reset();
-      close();
       fetchOptions(fullName);
+      form.reset();
+      mutationReset();
+      closeRegisterPhysician();
     } catch (error) {
       console.error(error.message);
     }
@@ -94,19 +98,19 @@ export default function RegisterPhysician({
     if (form.isDirty() && confirmed) {
       closeConfirmationModal();
       form.reset();
-      reset();
+      mutationReset();
     }
     if (form.isDirty()) {
       openConfirmationModal();
     } else {
-      close();
+      closeRegisterPhysician();
     }
   };
 
   return (
     <>
       <Modal
-        opened={opened}
+        opened={registerPhysicianOpened}
         onClose={confirmClose}
         title="Register a new physician"
       >
