@@ -81,6 +81,8 @@ export default function RegisterPhysician({
       const { firstName, middleName, lastName } = result;
       const fullName = `${firstName}${middleName ? ' ' + middleName + ' ' : ' '}${lastName}`;
       setPhysician(result.id, fullName);
+      form.reset();
+      reset();
       close();
       fetchOptions(fullName);
     } catch (error) {
