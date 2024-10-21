@@ -1,4 +1,4 @@
-import { Table } from '@mantine/core';
+import { Table, Container, LoadingOverlay } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
@@ -13,7 +13,7 @@ export default function Patients() {
   const [search] = useState('');
   const [page] = useState(1);
 
-  const { data: patients } = useQuery({
+  const { data: patients, isFetching } = useQuery({
     queryKey: ['patients', search, page],
     queryFn: async () => {
       const res = await LifelineAPI.getPatients(search, page);
@@ -26,16 +26,21 @@ export default function Patients() {
   });
 
   return (
-    <div>
+    <Container>
       <h1>Patients</h1>
 
-      <Table stickyHeader>
+      <LoadingOverlay
+        visible={isFetching}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+      />
+      <Table stickyHeader highlightOnHover verticalSpacing="lg" withTableBorder>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Name</Table.Th>
             <Table.Th>Created by</Table.Th>
             <Table.Th>Date created</Table.Th>
-            <Table.Th>Updated By</Table.Th>
+            <Table.Th>Updated by</Table.Th>
             <Table.Th>Last updated</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -79,6 +84,6 @@ export default function Patients() {
           ))}
         </Table.Tbody>
       </Table>
-    </div>
+    </Container>
   );
 }
