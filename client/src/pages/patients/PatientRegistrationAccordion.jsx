@@ -186,6 +186,7 @@ export default function PatientRegistrationAccordion({
               form={form}
               choice="physician"
               initialData={initialPhysicianData}
+              initialHospitalData={initialHospitalData}
             />
           </Accordion.Panel>
         </Accordion.Item>
