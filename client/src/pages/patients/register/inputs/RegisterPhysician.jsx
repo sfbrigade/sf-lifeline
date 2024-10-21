@@ -16,6 +16,8 @@ import { useMutation } from '@tanstack/react-query';
 import LifelineAPI from '../../LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 
+import classes from './RegisterPhysician.module.css';
+
 const registerPhysicianProps = {
   setPhysician: PropTypes.func.isRequired,
   registerPhysicianOpened: PropTypes.bool.isRequired,
@@ -180,18 +182,15 @@ export default function RegisterPhysician({
       <Modal
         opened={confirmationModalOpened}
         onClose={closeConfirmationModal}
-        styles={{
-          title: {
-            fontSize: '1.2rem',
-            fontWeight: 600,
-          },
+        classNames={{
+          title: classes.title,
         }}
         title="This form has unsaved changes."
         yOffset="16vh"
       >
         <p>Are you sure you want to close this form without submitting?</p>
         <Button
-          style={{ marginTop: '1rem' }}
+          classNames={{ root: classes.button }}
           color="red"
           fullWidth
           onClick={() => confirmClose(true)}
@@ -199,7 +198,7 @@ export default function RegisterPhysician({
           Yes
         </Button>
         <Button
-          style={{ marginTop: '1rem' }}
+          classNames={{ root: classes.button }}
           color="blue"
           fullWidth
           onClick={closeConfirmationModal}
