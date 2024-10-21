@@ -61,7 +61,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
     });
 
-    it('should return a patient for ADMIN user', async (t) => {
+    it('should return patients for ADMIN user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
@@ -76,7 +76,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload)[1].firstName, 'John');
     });
 
-    it('should return a patient from querying for their first, last, and full name', async (t) => {
+    it('should return patients from querying for their first, last, and full name', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
@@ -98,6 +98,48 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply2.payload).length, 1);
       assert.deepStrictEqual(JSON.parse(reply2.payload)[0].firstName, 'John');
       assert.deepStrictEqual(JSON.parse(reply2.payload)[0].lastName, 'Doe');
+    });
+
+    it('should return patients with all the fields expected', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=john doe')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].id,
+        '27963f68-ebc1-408a-8bb5-8fbe54671064',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'John');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].middleName, 'A');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].lastName, 'Doe');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].gender, 'MALE');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].language, 'ENGLISH');
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].dateOfBirth,
+        '2000-10-05T00:00:00.000Z',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].createdBy.id,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].updatedBy.id,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].createdAt,
+        '2022-10-05T00:00:00.000Z',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].updatedAt,
+        '2022-10-05T00:00:00.000Z',
+      );
     });
   });
 
