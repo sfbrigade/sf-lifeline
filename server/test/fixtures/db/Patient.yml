@@ -11,3 +11,22 @@ items:
     dateOfBirth: '2000-10-05T00:00:00.000Z'
     createdBy: '@user1'
     updatedBy: '@user1'
+  patient2:
+    id: 27963f68-ebc1-408a-8bb5-8fbe54671065
+    firstName: Jackson
+    middleName: A
+    lastName: Doe
+    gender: MALE
+    language: SPANISH
+    dateOfBirth: '2001-11-05T00:00:00.000Z'
+    createdBy: '@user1'
+    updatedBy: '@user1'
+  patient3:
+    id: 27963f68-ebc1-408a-8bb5-8fbe54671066
+    firstName: George
+    lastName: Washington
+    gender: MALE
+    language: TAGALOG
+    dateOfBirth: '2002-12-05T00:00:00.000Z'
+    createdBy: '@user1'
+    updatedBy: '@user1'
