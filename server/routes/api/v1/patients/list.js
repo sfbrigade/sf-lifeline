@@ -79,8 +79,7 @@ export default async function (fastify) {
         where: whereClase,
       };
 
-      const { records, total } =
-        await fastify.prisma.patient.paginate(options);
+      const { records, total } = await fastify.prisma.patient.paginate(options);
       reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
