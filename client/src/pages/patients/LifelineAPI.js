@@ -18,6 +18,7 @@ export default class LifelineAPI {
       return {
         ...item,
         name: `${item.firstName} ${item.lastName}`,
+        hospital: item.hospitals[0].name,
       };
     });
   }
