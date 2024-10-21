@@ -73,7 +73,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
 
   const handleSelectValue = (id, key) => {
     const name = key.children
-      .filter((el) => el !== undefined)
+      .filter((el) => el !== undefined && el)
       .join('')
       .trim();
     setValue({ id, name });
@@ -94,7 +94,8 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
 
   const options = (data || []).map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
-      {item.name} {item.hospitals?.length && `- ${item.hospitals[0].name}`}
+      {item.name} {item.phone}{' '}
+      {item.hospitals?.length && `- ${item.hospitals[0].name}`}
     </Combobox.Option>
   ));
 
