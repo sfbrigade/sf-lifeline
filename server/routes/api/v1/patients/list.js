@@ -18,11 +18,34 @@ export default async function (fastify) {
               type: 'object',
               properties: {
                 id: { type: 'string' },
-                name: { type: 'string' },
-                email: { type: 'string' },
-                phone: { type: 'string' },
                 firstName: { type: 'string' },
+                middleName: { type: 'string' },
                 lastName: { type: 'string' },
+                dateOfBirth: { type: 'string' },
+                gender: { type: 'string' },
+                language: { type: 'string' },
+                createdBy: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    firstName: { type: 'string' },
+                    middleName: { type: 'string' },
+                    lastName: { type: 'string' },
+                    role: { type: 'string' },
+                  },
+                },
+                updatedBy: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    firstName: { type: 'string' },
+                    middleName: { type: 'string' },
+                    lastName: { type: 'string' },
+                    role: { type: 'string' },
+                  },
+                },
+                createdAt: { type: 'string' },
+                updatedAt: { type: 'string' },
               },
             },
           },
@@ -77,6 +100,10 @@ export default async function (fastify) {
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
         where: whereClase,
+        include: {
+          createdBy: true,
+          updatedBy: true,
+        },
       };
 
       const { records, total } = await fastify.prisma.patient.paginate(options);
