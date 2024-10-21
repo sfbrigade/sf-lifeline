@@ -175,7 +175,9 @@ export default function PatientRegistration() {
       if (physician) {
         const fullName = `${physician.firstName}${physician.middleName ? ` ${physician.middleName}` : ''} ${physician.lastName}`;
         const hospital = physician.hospitals[0] ? physician.hospitals[0].name : '';
-        setInitialPhysicianData(`${fullName}${hospital ? ` - ${hospital}` : ''}`);
+        const phone = physician.phone ? `${physician.phone} ` : '';
+        const physicianDetails = `${fullName}${hospital ? ` (${hospital})` : ''}${phone ? ` - ${phone}` : ''}`;
+        setInitialPhysicianData(physicianDetails);
       }
 
       const patientData = {
