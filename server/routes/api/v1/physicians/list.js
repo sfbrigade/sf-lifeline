@@ -81,7 +81,6 @@ export default async function (fastify) {
           ],
         };
       }
-
       const options = {
         page,
         perPage,
@@ -90,23 +89,9 @@ export default async function (fastify) {
         include: { hospitals: true },
       };
 
-      const {
-        page: currentPage,
-        perPage: currentPerPage,
-        include,
-        ...paginationOptions
-      } = options;
-
-      const total = await fastify.prisma.physician.count(paginationOptions);
-      const records = await fastify.prisma.physician.findMany({
-        ...paginationOptions,
-        include,
-        skip: Number((currentPage - 1) * currentPerPage),
-        take: Number(currentPerPage),
-      });
-      reply
-        .setPaginationHeaders(currentPage, currentPerPage, total)
-        .send(records);
+      const { records, total } =
+        await fastify.prisma.physician.paginate(options);
+      reply.setPaginationHeaders(page, perPage, total).send(records);
     },
   );
 }
