@@ -31,7 +31,7 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', patient } = request.query;
+      const { page = '1', perPage = '25', patient = '' } = request.query;
 
       const splitQuery = patient.trim().split(' ');
 
