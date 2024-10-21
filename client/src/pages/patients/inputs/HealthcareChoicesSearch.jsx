@@ -72,10 +72,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   };
 
   const handleSelectValue = (id, key) => {
-    const name = key.children
-      .filter((el) => el !== undefined && el)
-      .join('')
-      .trim();
+    const name = key.children.filter((el) => el.trim() !== '').join(' ');
     setValue({ id, name });
     setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
