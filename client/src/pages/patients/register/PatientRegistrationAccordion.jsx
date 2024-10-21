@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { IconCircleCheck } from '@tabler/icons-react';
 import { IMaskInput } from 'react-imask';
+import { humanize } from 'inflection';
+
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
 
@@ -10,11 +13,26 @@ import classes from './PatientRegistationAccordion.module.css';
 
 const PatientRegistrationAccordionProps = {
   form: PropTypes.object.isRequired,
-  openedSection: PropTypes.string,
-  handleAccordionChange: PropTypes.func.isRequired,
   initialMedicalData: PropTypes.object,
-  initialHospitalData: PropTypes.object,
-  initialPhysicianData: PropTypes.object,
+  initialHospitalData: PropTypes.string,
+  initialPhysicianData: PropTypes.string,
+  openedSection: PropTypes.string,
+  showCheck: PropTypes.object.isRequired,
+  handleAccordionChange: PropTypes.func.isRequired,
+};
+
+const FORM_SELECT_ENUM_VALUES = {
+  language: [
+    'CANTONESE',
+    'ENGLISH',
+    'MANDARIN',
+    'RUSSIAN',
+    'SPANISH',
+    'TAGALOG',
+  ],
+  gender: ['FEMALE', 'MALE', 'TRANS_MALE', 'TRANS_FEMALE', 'OTHER', 'UNKNOWN'],
+  relationship: ['SPOUSE', 'PARENT', 'CHILD', 'SIBLING', 'OTHER', 'UNKNOWN'],
+  codeStatus: ['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL'],
 };
 
 /**
@@ -27,6 +45,7 @@ export default function PatientRegistrationAccordion({
   initialHospitalData,
   initialPhysicianData,
   openedSection,
+  showCheck,
   handleAccordionChange,
 }) {
   return (
@@ -38,7 +57,12 @@ export default function PatientRegistrationAccordion({
         classNames={classes}
       >
         <Accordion.Item value="patientData">
-          <Accordion.Control>&#9312; Basic Information</Accordion.Control>
+          <Accordion.Control chevron={false}>
+            &#9312; Basic Information{' '}
+            {showCheck['patientData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <TextInput
               label="First Name"
@@ -64,14 +88,10 @@ export default function PatientRegistrationAccordion({
               label="Gender"
               placeholder="Select Gender"
               withAsterisk
-              data={[
-                'FEMALE',
-                'MALE',
-                'TRANS_MALE',
-                'TRANS_FEMALE',
-                'OTHER',
-                'UNKNOWN',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
+                value,
+                label: humanize(value),
+              }))}
               searchable
               key={form.key('patientData.gender')}
               {...form.getInputProps('patientData.gender')}
@@ -80,14 +100,10 @@ export default function PatientRegistrationAccordion({
               label="Language"
               placeholder="Select Language"
               withAsterisk
-              data={[
-                'CANTONESE',
-                'ENGLISH',
-                'MANDARIN',
-                'RUSSIAN',
-                'SPANISH',
-                'TAGALOG',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
+                value,
+                label: humanize(value),
+              }))}
               searchable
               key={form.key('patientData.language')}
               {...form.getInputProps('patientData.language')}
@@ -106,7 +122,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="contactData">
-          <Accordion.Control>&#9313; Emergency Contact</Accordion.Control>
+          <Accordion.Control>
+            &#9313; Emergency Contact{' '}
+            {showCheck['contactData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <TextInput
               label="First Name"
@@ -143,14 +164,10 @@ export default function PatientRegistrationAccordion({
             <Select
               label="Relationship"
               placeholder="Select Relationship"
-              data={[
-                'SPOUSE',
-                'PARENT',
-                'CHILD',
-                'SIBLING',
-                'OTHER',
-                'UNKNOWN',
-              ]}
+              data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
+                value,
+                label: humanize(value),
+              }))}
               searchable
               key={form.key('contactData.relationship')}
               {...form.getInputProps('contactData.relationship')}
@@ -159,7 +176,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="medicalData">
-          <Accordion.Control>&#9314; Medical Information</Accordion.Control>
+          <Accordion.Control>
+            &#9314; Medical Information{' '}
+            {showCheck['medicalData'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             {Object.keys(form.getValues().medicalData).map((category) => {
               return (
@@ -175,7 +197,12 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="healthcareChoices">
-          <Accordion.Control>&#9315; Healthcare Choices</Accordion.Control>
+          <Accordion.Control>
+            &#9315; Healthcare Choices{' '}
+            {showCheck['healthcareChoices'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <HealthcareChoicesSearch
               form={form}
@@ -192,12 +219,20 @@ export default function PatientRegistrationAccordion({
         </Accordion.Item>
 
         <Accordion.Item value="codeStatus">
-          <Accordion.Control>&#9316; Advanced Directive</Accordion.Control>
+          <Accordion.Control>
+            &#9316; Advanced Directive{' '}
+            {showCheck['codeStatus'] ? (
+              <IconCircleCheck color="green" size={30} />
+            ) : null}
+          </Accordion.Control>
           <Accordion.Panel>
             <Select
               label="Code Status"
               placeholder="Select Code Status"
-              data={['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']}
+              data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
+                value,
+                label: humanize(value),
+              }))}
               searchable
               key={form.key('codeStatus')}
               {...form.getInputProps('codeStatus')}

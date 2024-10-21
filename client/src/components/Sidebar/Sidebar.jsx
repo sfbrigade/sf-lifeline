@@ -10,7 +10,6 @@ import {
   IconNotification,
   IconSpeakerphone,
   IconSquareArrowRight,
-  IconClipboardPlus,
 } from '@tabler/icons-react';
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
@@ -26,11 +25,6 @@ const sections = [
     links: [
       { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
       {
-        label: 'New Patient',
-        href: '/',
-        icon: <IconClipboardPlus stroke={2} />,
-      },
-      {
         label: 'Team Member',
         href: '/admin/users',
         icon: <IconUsersGroup stroke={2} />,
@@ -39,6 +33,7 @@ const sections = [
       {
         label: 'QR Code',
         href: '/admin/patients/generate',
+        target: '_blank',
         icon: <IconQrcode stroke={2} />,
       },
     ],
@@ -68,9 +63,14 @@ const sections = [
 export function Sidebar() {
   return (
     <nav className={classes.navbar}>
-      <Group>
-        <div>Icon</div>
-        <h3 className={classes.title}>SF Life Line</h3>
+      <Group align="center" className={classes.title}>
+        <img
+          src="/logo.svg"
+          alt="SF Lifeline Logo"
+          width={'30rem'}
+          height={'30rem'}
+        />
+        <p>SF Life Line</p>
       </Group>
       <ScrollArea className={classes.links}>
         <div className={classes.linksInner}>

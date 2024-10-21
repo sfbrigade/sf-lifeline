@@ -8,15 +8,17 @@ SF Life Line (https://www.sanfranciscolifeline.com/) creates and distributes fre
 
 2. Clone the repo to a directory on your computer.
 
-3. In a command-line shell, navigate to the repo directory. Inside the root directory of this project, run `docker compose up`. It may take a few minutes to download and/or build the necessary images to run the codebase.
+3. Create a `.env` file in the `/server` directory with the values from the `.env.example` file.
 
-4. To run commands related to the codebase, you should first "log in" to the running server to execute them in the container so that you have access to installed dependencies. To do so, leave the server running in one shell, open another in the same repo directory, then run `docker compose exec server bash -l`. You can then execute commands like `npm install`, etc.
+4. In a command-line shell, navigate to the repo directory. Inside the root directory of this project, run `docker compose up`. It may take a few minutes to download and/or build the necessary images to run the codebase.
+
+5. To run commands related to the codebase, you should first "log in" to the running server to execute them in the container so that you have access to installed dependencies. To do so, leave the server running in one shell, open another in the same repo directory, then run `docker compose exec server bash -l`. You can then execute commands like `npm install`, etc.
 
    Note that the configuration _does not share_ dependencies like `node_modules` between your host OS file system and the container to prevent mismatches (i.e. dependencies with native binaries that won't be the same inside the Linux-based container vs a Windows/Mac host).
 
-5. If you're using VSCode as an editor, you can improve auto-completion and syntax highlighting by using the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to connect to the running container so it has access to installed dependencies. Once you attach to the running container, you can open the "remote folder" `/opt/node/app` which is where the code is located inside the container.
+6. If you're using VSCode as an editor, you can improve auto-completion and syntax highlighting by using the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to connect to the running container so it has access to installed dependencies. Once you attach to the running container, you can open the "remote folder" `/opt/node/app` which is where the code is located inside the container.
 
-6. To stop the application, you can press CONTROL-C inside the shell where you ran `docker compose up`.
+7. To stop the application, you can press CONTROL-C inside the shell where you ran `docker compose up`.
 
    If you've "logged in" to the server container using `docker compose exec server bash -l`, press CONTROL-D or type `exit` or `logout` to exit the container back to your host OS shell.
 
