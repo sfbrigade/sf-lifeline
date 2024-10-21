@@ -1,8 +1,9 @@
-import { Table, Container, LoadingOverlay } from '@mantine/core';
+import { Table, Container, LoadingOverlay, Paper } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
 
+import classes from './Patients.module.css';
 import LifelineAPI from './LifelineAPI';
 
 /**
@@ -34,56 +35,63 @@ export default function Patients() {
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <Table stickyHeader highlightOnHover verticalSpacing="lg" withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Created by</Table.Th>
-            <Table.Th>Date created</Table.Th>
-            <Table.Th>Updated by</Table.Th>
-            <Table.Th>Last updated</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {patients?.map((patient) => (
-            <Table.Tr key={patient.id}>
-              <Table.Td>
-                {patient.firstName}{' '}
-                {patient.middleName ? patient.middleName + ' ' : ''}
-                {patient.lastName}
-              </Table.Td>
-              <Table.Td>
-                {patient.createdBy.firstName}{' '}
-                {patient.createdBy.middleName
-                  ? patient.createdBy.middleName + ' '
-                  : ''}
-                {patient.createdBy.lastName}
-              </Table.Td>
-              <Table.Td>
-                {new Date(patient.createdAt).toLocaleDateString(undefined, {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Table.Td>
-              <Table.Td>
-                {patient.createdBy.firstName}{' '}
-                {patient.createdBy.middleName
-                  ? patient.createdBy.middleName + ' '
-                  : ''}
-                {patient.createdBy.lastName}
-              </Table.Td>
-              <Table.Td>
-                {new Date(patient.updatedAt).toLocaleDateString(undefined, {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Table.Td>
+      <Paper withBorder>
+        <Table
+          stickyHeader
+          highlightOnHover
+          verticalSpacing="lg"
+          classNames={{ table: classes.table }}
+        >
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Name</Table.Th>
+              <Table.Th>Created by</Table.Th>
+              <Table.Th>Date created</Table.Th>
+              <Table.Th>Updated by</Table.Th>
+              <Table.Th>Last updated</Table.Th>
             </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
+          </Table.Thead>
+          <Table.Tbody>
+            {patients?.map((patient) => (
+              <Table.Tr key={patient.id}>
+                <Table.Td>
+                  {patient.firstName}{' '}
+                  {patient.middleName ? patient.middleName + ' ' : ''}
+                  {patient.lastName}
+                </Table.Td>
+                <Table.Td>
+                  {patient.createdBy.firstName}{' '}
+                  {patient.createdBy.middleName
+                    ? patient.createdBy.middleName + ' '
+                    : ''}
+                  {patient.createdBy.lastName}
+                </Table.Td>
+                <Table.Td>
+                  {new Date(patient.createdAt).toLocaleDateString(undefined, {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Table.Td>
+                <Table.Td>
+                  {patient.createdBy.firstName}{' '}
+                  {patient.createdBy.middleName
+                    ? patient.createdBy.middleName + ' '
+                    : ''}
+                  {patient.createdBy.lastName}
+                </Table.Td>
+                <Table.Td>
+                  {new Date(patient.updatedAt).toLocaleDateString(undefined, {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </Paper>
     </Container>
   );
 }
