@@ -47,7 +47,6 @@ export default function PatientRegistration() {
     codeStatus: false,
   });
   const [unvisitedSections, setUnvisitedSections] = useState([]);
-
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -175,7 +174,9 @@ export default function PatientRegistration() {
 
       setInitialPhysicianData({
         id: physician ? physician.id : '',
-        name: physician ? `${physician.firstName} ${physician.lastName}` : '',
+        name: physician
+          ? `${physician.firstName} ${physician.lastName} ${physician.phone ? `${physician.phone} ` : ''}- ${physician.hospitals[0]?.name || ''}`
+          : '',
       });
 
       const patientData = {
