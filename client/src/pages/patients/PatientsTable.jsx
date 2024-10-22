@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { Paper, Table, ActionIcon, Menu } from '@mantine/core';
 import {
   IconDotsVertical,
@@ -8,6 +10,29 @@ import {
 import { Link } from 'react-router-dom';
 import classes from './Patients.module.css';
 
+const patientTableProps = {
+  headers: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      text: PropTypes.node,
+    }),
+  ),
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      createdBy: PropTypes.string.isRequired,
+      createdAt: PropTypes.string.isRequired,
+      updatedBy: PropTypes.string.isRequired,
+      updatedAt: PropTypes.string.isRequired,
+    }),
+  ),
+};
+
+/**
+ * Patients table component
+ * @param {PropTypes.InferProps<typeof patientTableProps>} props
+ */
 export default function PatientsTable({ headers, data }) {
   return (
     <Paper withBorder>
@@ -66,3 +91,5 @@ export default function PatientsTable({ headers, data }) {
     </Paper>
   );
 }
+
+PatientsTable.propTypes = patientTableProps;
