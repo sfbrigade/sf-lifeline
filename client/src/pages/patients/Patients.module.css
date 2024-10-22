@@ -2,3 +2,15 @@
   border-radius: 12px;
   overflow: hidden;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 1rem;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0 0.5rem 0 0;
+}

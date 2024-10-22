@@ -1,8 +1,20 @@
-import { Table, Container, LoadingOverlay, Paper, Menu, ActionIcon, rem } from '@mantine/core';
+import {
+  Table,
+  Container,
+  LoadingOverlay,
+  Paper,
+  Menu,
+  ActionIcon,
+  rem,
+  Button,
+  Group,
+  TextInput,
+  Divider,
+} from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
-import {IconDotsVertical} from '@tabler/icons-react';
+import { IconDotsVertical, IconSearch } from '@tabler/icons-react';
 
 import classes from './Patients.module.css';
 import LifelineAPI from './LifelineAPI';
@@ -29,8 +41,19 @@ export default function Patients() {
 
   return (
     <Container>
-      <h1>Patients</h1>
-
+      <div className={classes.header}>
+        <p className={classes.title}>Patients</p>
+        <Group>
+          <TextInput
+            leftSectionPointerEvents="none"
+            leftSection={<IconSearch stroke={2} />}
+            placeholder="Search"
+          />
+          <Button variant="default">Renewal Required</Button>
+          <Button variant="filled">Create Profile</Button>
+        </Group>
+      </div>
+      <Divider mb="xl" />
       <LoadingOverlay
         visible={isFetching}
         zIndex={1000}
@@ -93,7 +116,9 @@ export default function Patients() {
                   <Menu>
                     <Menu.Target>
                       <ActionIcon variant="subtle" color="gray">
-                        <IconDotsVertical style={{ width: rem(14), height: rem(14) }} />
+                        <IconDotsVertical
+                          style={{ width: rem(18), height: rem(18) }}
+                        />
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
