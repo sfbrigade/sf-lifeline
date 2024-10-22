@@ -44,6 +44,28 @@ export default function Patients() {
     },
   });
 
+  let formattedData = [];
+  if (patients) {
+    formattedData = patients.map((patient) => {
+      return {
+        id: patient.id,
+        name: `${patient.firstName}${patient.middleName ? ` ${patient.middleName}` : ''} ${patient.lastName}`,
+        createdBy: `${patient.createdBy.firstName}${patient.createdBy.middleName ? patient.createdBy.middleName + ' ' : ''}${patient.createdBy.lastName}`,
+        createdAt: new Date(patient.createdAt).toLocaleDateString(undefined, {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+        updatedBy: `${patient.createdBy.firstName}${patient.createdBy.middleName ? patient.createdBy.middleName + ' ' : ''}${patient.createdBy.lastName}`,
+        updatedAt: new Date(patient.updatedAt).toLocaleDateString(undefined, {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+      };
+    });
+  }
+
   return (
     <Container>
       <div className={classes.header}>
@@ -64,7 +86,7 @@ export default function Patients() {
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <PatientsTable headers={HEADERS} data={patients} />
+      <PatientsTable headers={HEADERS} data={formattedData} />
     </Container>
   );
 }

@@ -27,39 +27,11 @@ export default function PatientsTable({ headers, data }) {
         <Table.Tbody>
           {data?.map((patient) => (
             <Table.Tr key={patient.id}>
-              <Table.Td>
-                {patient.firstName}{' '}
-                {patient.middleName ? patient.middleName + ' ' : ''}
-                {patient.lastName}
-              </Table.Td>
-              <Table.Td>
-                {patient.createdBy.firstName}{' '}
-                {patient.createdBy.middleName
-                  ? patient.createdBy.middleName + ' '
-                  : ''}
-                {patient.createdBy.lastName}
-              </Table.Td>
-              <Table.Td>
-                {new Date(patient.createdAt).toLocaleDateString(undefined, {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Table.Td>
-              <Table.Td>
-                {patient.createdBy.firstName}{' '}
-                {patient.createdBy.middleName
-                  ? patient.createdBy.middleName + ' '
-                  : ''}
-                {patient.createdBy.lastName}
-              </Table.Td>
-              <Table.Td>
-                {new Date(patient.updatedAt).toLocaleDateString(undefined, {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Table.Td>
+              {headers.map((header) => (
+                <Table.Td key={patient[header.key]}>
+                  {patient[header.key]}
+                </Table.Td>
+              ))}
               <Table.Td>
                 <Menu>
                   <Menu.Target>
