@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
 import { IconDotsVertical, IconSearch } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
 
 import classes from './Patients.module.css';
 import LifelineAPI from './LifelineAPI';
@@ -122,7 +123,13 @@ export default function Patients() {
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      <Menu.Item>Edit</Menu.Item>
+                      <Menu.Item
+                        component={Link}
+                        to={`/patients/${patient.id}`}
+                      >
+                        View/Edit
+                      </Menu.Item>
+                      <Menu.Item>Reprint QR Code</Menu.Item>
                       <Menu.Item color="red">Delete</Menu.Item>
                     </Menu.Dropdown>
                   </Menu>
