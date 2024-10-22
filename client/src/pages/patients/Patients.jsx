@@ -14,7 +14,13 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
-import { IconDotsVertical, IconSearch } from '@tabler/icons-react';
+import {
+  IconDotsVertical,
+  IconSearch,
+  IconUser,
+  IconQrcode,
+  IconTrash,
+} from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 import classes from './Patients.module.css';
@@ -124,13 +130,35 @@ export default function Patients() {
                     </Menu.Target>
                     <Menu.Dropdown>
                       <Menu.Item
+                        leftSection={
+                          <IconUser
+                            style={{ width: rem(18), height: rem(18) }}
+                          />
+                        }
                         component={Link}
                         to={`/patients/${patient.id}`}
                       >
                         View/Edit
                       </Menu.Item>
-                      <Menu.Item>Reprint QR Code</Menu.Item>
-                      <Menu.Item color="red">Delete</Menu.Item>
+                      <Menu.Item
+                        leftSection={
+                          <IconQrcode
+                            style={{ width: rem(18), height: rem(18) }}
+                          />
+                        }
+                      >
+                        Reprint QR Code
+                      </Menu.Item>
+                      <Menu.Item
+                        leftSection={
+                          <IconTrash
+                            style={{ width: rem(18), height: rem(18) }}
+                          />
+                        }
+                        color="red"
+                      >
+                        Delete
+                      </Menu.Item>
                     </Menu.Dropdown>
                   </Menu>
                 </Table.Td>
