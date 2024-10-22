@@ -5,7 +5,6 @@ import {
   Paper,
   Menu,
   ActionIcon,
-  rem,
   Button,
   Group,
   TextInput,
@@ -123,38 +122,22 @@ export default function Patients() {
                   <Menu>
                     <Menu.Target>
                       <ActionIcon variant="subtle" color="gray">
-                        <IconDotsVertical
-                          style={{ width: rem(18), height: rem(18) }}
-                        />
+                        <IconDotsVertical size={18} />
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
                       <Menu.Item
-                        leftSection={
-                          <IconUser
-                            style={{ width: rem(18), height: rem(18) }}
-                          />
-                        }
+                        leftSection={<IconUser size={18} />}
                         component={Link}
                         to={`/patients/${patient.id}`}
                       >
                         View/Edit
                       </Menu.Item>
-                      <Menu.Item
-                        leftSection={
-                          <IconQrcode
-                            style={{ width: rem(18), height: rem(18) }}
-                          />
-                        }
-                      >
+                      <Menu.Item leftSection={<IconQrcode size={18} />}>
                         Reprint QR Code
                       </Menu.Item>
                       <Menu.Item
-                        leftSection={
-                          <IconTrash
-                            style={{ width: rem(18), height: rem(18) }}
-                          />
-                        }
+                        leftSection={<IconTrash size={18} />}
                         color="red"
                       >
                         Delete
