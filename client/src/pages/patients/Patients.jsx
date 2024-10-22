@@ -1,7 +1,8 @@
-import { Table, Container, LoadingOverlay, Paper } from '@mantine/core';
+import { Table, Container, LoadingOverlay, Paper, Menu, ActionIcon, rem } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { StatusCodes } from 'http-status-codes';
+import {IconDotsVertical} from '@tabler/icons-react';
 
 import classes from './Patients.module.css';
 import LifelineAPI from './LifelineAPI';
@@ -49,6 +50,7 @@ export default function Patients() {
               <Table.Th>Date created</Table.Th>
               <Table.Th>Updated by</Table.Th>
               <Table.Th>Last updated</Table.Th>
+              <Table.Th></Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -86,6 +88,19 @@ export default function Patients() {
                     day: 'numeric',
                     year: 'numeric',
                   })}
+                </Table.Td>
+                <Table.Td>
+                  <Menu>
+                    <Menu.Target>
+                      <ActionIcon variant="subtle" color="gray">
+                        <IconDotsVertical style={{ width: rem(14), height: rem(14) }} />
+                      </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item>Edit</Menu.Item>
+                      <Menu.Item color="red">Delete</Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
                 </Table.Td>
               </Table.Tr>
             ))}
