@@ -28,12 +28,12 @@ export default function PatientsTable({ headers, data }) {
           {data?.map((patient) => (
             <Table.Tr key={patient.id}>
               {headers.map((header) => (
-                <Table.Td key={patient[header.key]}>
+                <Table.Td key={patient[header.key] + header.key}>
                   {patient[header.key]}
                 </Table.Td>
               ))}
               <Table.Td>
-                <Menu>
+                <Menu shadow="md">
                   <Menu.Target>
                     <ActionIcon variant="subtle" color="gray">
                       <IconDotsVertical size={18} />
