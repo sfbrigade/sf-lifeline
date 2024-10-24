@@ -5,6 +5,7 @@ import {
   Group,
   TextInput,
   Divider,
+  Pagination,
 } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
@@ -20,9 +21,9 @@ import { usePatients } from './usePatients';
  *
  */
 export default function Patients() {
-  const { patients, headers, isFetching, setSearch } = usePatients();
-
   const [inputValue, setInputValue] = useState('');
+  const { patients, headers, isFetching, page, pages, setPage, setSearch } =
+    usePatients();
 
   const handleSearch = useDebouncedCallback((query) => {
     setSearch(query);
@@ -54,6 +55,7 @@ export default function Patients() {
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
       <PatientsTable headers={headers} data={patients} />
+      <Pagination total={pages} value={page} onChange={setPage} />
     </Container>
   );
 }
