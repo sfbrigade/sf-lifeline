@@ -6,6 +6,9 @@ import {
   TextInput,
   Divider,
 } from '@mantine/core';
+import { useDebouncedCallback } from '@mantine/hooks';
+import { useState } from 'react';
+
 import { IconSearch } from '@tabler/icons-react';
 
 import classes from './Patients.module.css';
@@ -17,7 +20,13 @@ import { usePatients } from './usePatients';
  *
  */
 export default function Patients() {
-  const { patients, headers, isFetching } = usePatients();
+  const { patients, headers, isFetching, setSearch } = usePatients();
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = useDebouncedCallback((query) => {
+    setSearch(query);
+  }, 500);
 
   return (
     <Container>
@@ -28,6 +37,11 @@ export default function Patients() {
             leftSectionPointerEvents="none"
             leftSection={<IconSearch stroke={2} />}
             placeholder="Search"
+            onChange={(event) => {
+              setInputValue(event.currentTarget.value);
+              handleSearch(event.currentTarget.value);
+            }}
+            value={inputValue}
           />
           <Button variant="default">Renewal Required</Button>
           <Button variant="filled">Create Profile</Button>
