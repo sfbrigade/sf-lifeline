@@ -1,11 +1,11 @@
 import {
   Container,
-  LoadingOverlay,
   Button,
   Group,
   TextInput,
   Divider,
   Pagination,
+  LoadingOverlay,
 } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
@@ -49,13 +49,15 @@ export default function Patients() {
         </Group>
       </div>
       <Divider mb="xl" />
-      <LoadingOverlay
-        visible={isFetching}
-        zIndex={1000}
-        overlayProps={{ radius: 'sm', blur: 2 }}
-      />
-      <PatientsTable headers={headers} data={patients} />
-      <Pagination total={pages} value={page} onChange={setPage} />
+      <Container className={classes.relative}>
+        <LoadingOverlay
+          visible={isFetching}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
+        <PatientsTable headers={headers} data={patients} />
+        <Pagination total={pages} value={page} onChange={setPage} />
+      </Container>
     </Container>
   );
 }
