@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { StatusCodes } from 'http-status-codes';
 import LifelineAPI from './LifelineAPI';
 
 /**
@@ -30,22 +29,29 @@ import LifelineAPI from './LifelineAPI';
  *  setSearch: (search: string) => void,
  *  page: number,
  *  setPage: (page: number) => void,
+ *  pages: number,
  *  isFetching: boolean,
  * }}
  */
 export function usePatients() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const { data: patients, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['patients', search, page],
     queryFn: async () => {
       const res = await LifelineAPI.getPatients(search, page);
-      if (res.status === StatusCodes.OK) {
-        return await res.json();
-      } else {
+
+      if (!res.status) {
         throw new Error('Failed to fetch patients.');
       }
+      const data = await res.json();
+      const pages = +res.headers.get('X-Total-Pages');
+      return { data, pages };
     },
+    select: (res) => ({
+      patients: res.data,
+      pages: res.pages,
+    }),
   });
 
   const PATIENT_TABLE_HEADERS = [
@@ -58,7 +64,8 @@ export function usePatients() {
   ];
 
   let formattedData = [];
-  if (patients) {
+  if (data?.patients) {
+    const patients = data.patients;
     formattedData = patients.map((patient) => {
       return {
         id: patient.id,
@@ -78,6 +85,7 @@ export function usePatients() {
       };
     });
   }
+
   return {
     patients: formattedData,
     headers: PATIENT_TABLE_HEADERS,
@@ -85,6 +93,7 @@ export function usePatients() {
     setSearch,
     page,
     setPage,
+    pages: data?.pages,
     isFetching,
   };
 }
