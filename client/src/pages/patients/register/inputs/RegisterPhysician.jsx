@@ -105,6 +105,7 @@ export default function RegisterPhysician({
     if (form.isDirty()) {
       openConfirmationModal();
     } else {
+      form.reset();
       closeRegisterPhysician();
     }
   };
