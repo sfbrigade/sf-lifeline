@@ -53,7 +53,7 @@ export default function RegisterPhysician({
       firstName: isNotEmpty('First Name is required'),
       lastName: isNotEmpty('Last Name is required'),
       phone: (value) =>
-        value.length === 0 || value.match(/^\(\d{3}\) \d{3}-\d{4}$/)
+        value.length > 0 || value.match(/^\(\d{3}\) \d{3}-\d{4}$/)
           ? null
           : 'Phone number is not in (XXX) XXX-XXXX format',
       email: (value) =>
