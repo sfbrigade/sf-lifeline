@@ -119,11 +119,13 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
-        <Combobox.Option value="$register" onClick={openRegisterPhysician}>
-          <Text fw={700} size="sm">
-            + Register new physician
-          </Text>
-        </Combobox.Option>
+        {choice === 'physician' && (
+          <Combobox.Option value="$register" onClick={openRegisterPhysician}>
+            <Text fw={700} size="sm">
+              + Register new physician
+            </Text>
+          </Combobox.Option>
+        )}
       </ScrollArea.Autosize>
     );
   }
