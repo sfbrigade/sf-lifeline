@@ -53,9 +53,9 @@ export default function RegisterPhysician({
       firstName: isNotEmpty('First Name is required'),
       lastName: isNotEmpty('Last Name is required'),
       phone: (value) =>
-        value.length === 0 || value.match(/^\(\d{3}\)-\d{3}-\d{4}$/)
+        value.length === 0 || value.match(/^\(\d{3}\) \d{3}-\d{4}$/)
           ? null
-          : 'Phone number is not in XXX-XXX-XXXX format',
+          : 'Phone number is not in (XXX) XXX-XXXX format',
       email: (value) =>
         value.length === 0 ||
         value.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)
@@ -156,8 +156,8 @@ export default function RegisterPhysician({
           <InputBase
             label="Phone Number"
             component={IMaskInput}
-            mask="(000)-000-0000"
-            placeholder="(000)-000-0000"
+            mask="(000) 000-0000"
+            placeholder="(000) 000-0000"
             withAsterisk
             key={form.key('phone')}
             {...form.getInputProps('phone')}

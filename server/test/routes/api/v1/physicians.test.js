@@ -112,7 +112,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jane',
           lastName: 'Doe',
-          phone: '(555)-555-5555',
+          phone: '(555) 555-5555',
           email: 'jane.doe@test.com',
         })
         .headers(headers);
@@ -121,7 +121,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload).firstName, 'Jane');
       assert.deepStrictEqual(JSON.parse(reply.payload).middleName, '');
       assert.deepStrictEqual(JSON.parse(reply.payload).lastName, 'Doe');
-      assert.deepStrictEqual(JSON.parse(reply.payload).phone, '(555)-555-5555');
+      assert.deepStrictEqual(JSON.parse(reply.payload).phone, '(555) 555-5555');
       assert.deepStrictEqual(
         JSON.parse(reply.payload).email,
         'jane.doe@test.com',
@@ -138,7 +138,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jane',
           lastName: 'Doe',
-          phone: '(555) 555-5555',
+          phone: '(555)-555-5555',
           email: 'jane.doe@test.com',
         })
         .headers(headers);
@@ -151,7 +151,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jane',
           lastName: 'Doe',
-          phone: '(555)-555-5555',
+          phone: '(555) 555-5555',
           email: 'jane.doe@',
         })
         .headers(headers);
@@ -169,7 +169,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jane',
           lastName: 'Doe',
-          phone: '(555)-555-5555',
+          phone: '(555) 555-5555',
           email: 'jane.doe@test.com',
         })
         .headers(headers);
@@ -182,7 +182,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jackson',
           lastName: 'Washington',
-          phone: '(555)-555-1111',
+          phone: '(555) 555-1111',
           email: 'jane.doe@test.com',
         })
         .headers(headers);
@@ -199,7 +199,7 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jackson',
           lastName: 'Washington',
-          phone: '(555)-555-5555',
+          phone: '(555) 555-5555',
           email: 'jane.doe@test.com',
         })
         .headers(headers);
@@ -207,7 +207,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
-        'Physician with phone (555)-555-5555 and email jane.doe@test.com already exists.',
+        'Physician with phone (555) 555-5555 and email jane.doe@test.com already exists.',
       );
 
       reply = await app

@@ -20,7 +20,7 @@ export default async function (fastify) {
             phone: {
               type: 'string',
               anyOf: [
-                { pattern: '^(\\([0-9]{3}\\))-[0-9]{3}-[0-9]{4}$' },
+                { pattern: '^(\\([0-9]{3}\\)) [0-9]{3}-[0-9]{4}$' },
                 { pattern: '^$' },
               ],
             },
