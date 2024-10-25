@@ -19,6 +19,7 @@
   margin: 0 0.5rem 0 0;
 }
 
-.relative {
+.patientsContainer {
   position: relative;
+  margin-bottom: var(--mantine-spacing-lg);
 }

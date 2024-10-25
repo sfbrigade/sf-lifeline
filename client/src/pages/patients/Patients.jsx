@@ -46,7 +46,7 @@ export default function Patients() {
         </Group>
       </div>
       <Divider mb="xl" />
-      <Container className={classes.relative}>
+      <Container className={classes.patientsContainer}>
         <LoadingOverlay
           visible={isFetching}
           zIndex={1000}
