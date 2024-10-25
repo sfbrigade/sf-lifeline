@@ -78,8 +78,8 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     if (id === '$register') {
       return;
     }
-    const name = key?.children ?? key;
-    setSearch(name.join(''));
+    const name = key?.children?.join('') ?? key;
+    setSearch(name);
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
     combobox.closeDropdown();
   };
