@@ -1,6 +1,5 @@
 import {
   Container,
-  Button,
   Group,
   TextInput,
   Divider,
@@ -44,8 +43,6 @@ export default function Patients() {
             }}
             value={inputValue}
           />
-          <Button variant="default">Renewal Required</Button>
-          <Button variant="filled">Create Profile</Button>
         </Group>
       </div>
       <Divider mb="xl" />
