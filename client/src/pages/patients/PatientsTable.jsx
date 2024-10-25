@@ -35,7 +35,7 @@ const patientTableProps = {
  */
 export default function PatientsTable({ headers, data }) {
   return (
-    <Paper withBorder>
+    <Paper withBorder className={classes.tableWrapper}>
       <Table
         stickyHeader
         highlightOnHover
