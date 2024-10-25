@@ -23,7 +23,11 @@ const sections = [
     label: 'Management',
     icon: null,
     links: [
-      { label: 'Patient', href: '/', icon: <IconEmergencyBed stroke={2} /> },
+      {
+        label: 'Patients',
+        href: '/patients',
+        icon: <IconEmergencyBed stroke={2} />,
+      },
       {
         label: 'Team Member',
         href: '/admin/users',

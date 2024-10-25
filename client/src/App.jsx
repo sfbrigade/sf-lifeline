@@ -27,6 +27,7 @@ import AuthLayout from './stories/AuthLayout/AuthLayout';
 import Verify from './pages/verify/verify';
 import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
+import Patients from './pages/patients/Patients';
 
 const RedirectProps = {
   isLoading: PropTypes.bool.isRequired,
@@ -140,6 +141,7 @@ function App() {
             element={<AdminPatientsGenerate />}
           />
           <Route element={<Layout />}>
+            <Route path="/patients" element={<Patients />} />
             <Route path="/patients/:patientId" element={<PatientDetails />} />
             <Route
               path="/patients/register/:patientId"
