@@ -41,12 +41,6 @@ export default function SearchDatabaseInputField({
         <Combobox.EventsTarget>
           <TextInput
             label={label}
-            onFocus={() => {
-              combobox.openDropdown();
-              if (data === null) {
-                fetchOptions(searchQuery);
-              }
-            }}
             onClick={() => {
               combobox.openDropdown();
               if (data === null) {
