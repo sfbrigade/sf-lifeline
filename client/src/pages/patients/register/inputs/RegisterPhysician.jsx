@@ -84,9 +84,9 @@ export default function RegisterPhysician({
   const handleSubmit = async (values) => {
     try {
       const result = await mutateAsync(values);
-      const { firstName, middleName, lastName } = result;
+      const { firstName, middleName, lastName, phone } = result;
       const fullName = `${firstName}${middleName ? ' ' + middleName + ' ' : ' '}${lastName}`;
-      setPhysician(result.id, fullName);
+      setPhysician(result.id, `${fullName}${phone ? ` - ${phone}` : ''}`);
       fetchOptions(fullName);
       form.reset();
       mutationReset();
