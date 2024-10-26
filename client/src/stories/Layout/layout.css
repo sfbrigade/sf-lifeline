@@ -4,7 +4,7 @@
 
   display: grid;
   grid-template-rows: auto 1fr;
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-template-areas:
     'head'
     'main';
