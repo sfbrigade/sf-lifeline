@@ -36,7 +36,7 @@ const patientTableProps = {
 export default function PatientsTable({ headers, data }) {
   return (
     <Paper withBorder className={classes.tableWrapper}>
-      <Table.ScrollContainer minWidth={500}>
+      <Table.ScrollContainer minWidth={500} type="native">
         <Table
           stickyHeader
           highlightOnHover
