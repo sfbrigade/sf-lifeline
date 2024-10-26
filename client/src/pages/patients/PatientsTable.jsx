@@ -36,64 +36,66 @@ const patientTableProps = {
 export default function PatientsTable({ headers, data }) {
   return (
     <Paper withBorder className={classes.tableWrapper}>
-      <Table
-        stickyHeader
-        highlightOnHover
-        verticalSpacing="lg"
-        classNames={{ table: classes.table }}
-      >
-        <Table.Thead>
-          <Table.Tr>
-            {headers.map((header) => (
-              <Table.Th key={header.key}>{header.text}</Table.Th>
-            ))}
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data.length > 0 ? (
-            data?.map((patient) => (
-              <Table.Tr key={patient.id}>
-                {headers.map((header) => (
-                  <Table.Td key={patient[header.key] + header.key}>
-                    {patient[header.key]}
-                  </Table.Td>
-                ))}
-                <Table.Td>
-                  <Menu shadow="md">
-                    <Menu.Target>
-                      <ActionIcon variant="subtle" color="gray">
-                        <IconDotsVertical size={18} />
-                      </ActionIcon>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                      <Menu.Item
-                        leftSection={<IconUser size={18} />}
-                        component={Link}
-                        to={`/patients/${patient.id}`}
-                      >
-                        View/Edit
-                      </Menu.Item>
-                      <Menu.Item leftSection={<IconQrcode size={18} />}>
-                        Reprint QR Code
-                      </Menu.Item>
-                      <Menu.Item
-                        leftSection={<IconTrash size={18} />}
-                        color="red"
-                      >
-                        Delete
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                </Table.Td>
-              </Table.Tr>
-            ))
-          ) : (
+      <Table.ScrollContainer minWidth={500}>
+        <Table
+          stickyHeader
+          highlightOnHover
+          verticalSpacing="lg"
+          classNames={{ table: classes.table }}
+        >
+          <Table.Thead>
             <Table.Tr>
-              <Table.Td colSpan={headers.length}>No patients found.</Table.Td>
+              {headers.map((header) => (
+                <Table.Th key={header.key}>{header.text}</Table.Th>
+              ))}
             </Table.Tr>
-          )}
-        </Table.Tbody>
-      </Table>
+          </Table.Thead>
+          <Table.Tbody>
+            {data.length > 0 ? (
+              data?.map((patient) => (
+                <Table.Tr key={patient.id}>
+                  {headers.map((header) => (
+                    <Table.Td key={patient[header.key] + header.key}>
+                      {patient[header.key]}
+                    </Table.Td>
+                  ))}
+                  <Table.Td>
+                    <Menu shadow="md">
+                      <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray">
+                          <IconDotsVertical size={18} />
+                        </ActionIcon>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          leftSection={<IconUser size={18} />}
+                          component={Link}
+                          to={`/patients/${patient.id}`}
+                        >
+                          View/Edit
+                        </Menu.Item>
+                        <Menu.Item leftSection={<IconQrcode size={18} />}>
+                          Reprint QR Code
+                        </Menu.Item>
+                        <Menu.Item
+                          leftSection={<IconTrash size={18} />}
+                          color="red"
+                        >
+                          Delete
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
+                  </Table.Td>
+                </Table.Tr>
+              ))
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={headers.length}>No patients found.</Table.Td>
+              </Table.Tr>
+            )}
+          </Table.Tbody>
+        </Table>
+      </Table.ScrollContainer>
     </Paper>
   );
 }
