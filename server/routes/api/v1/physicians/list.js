@@ -85,7 +85,7 @@ export default async function (fastify) {
         page,
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: whereClase,
+        where: whereClause,
         include: { hospitals: true },
       };
 
