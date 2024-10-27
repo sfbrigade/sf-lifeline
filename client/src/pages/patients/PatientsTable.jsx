@@ -120,6 +120,7 @@ export default function PatientsTable({ headers, data }) {
       <Modal opened={opened} onClose={close} title="Delete Patient">
         <p>Are you sure you want to delete this patient record?</p>
         <Button
+          classNames={{ root: classes.button }}
           color="red"
           fullWidth
           onClick={confirmPatientDeletion}
@@ -128,6 +129,7 @@ export default function PatientsTable({ headers, data }) {
           Yes
         </Button>
         <Button
+        classNames={{ root: classes.button }}
           color="blue"
           fullWidth
           onClick={cancelPatientDeletion}
