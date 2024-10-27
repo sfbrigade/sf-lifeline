@@ -21,7 +21,7 @@ export default async function (fastify, _opts) {
           },
         },
       },
-      onRequest: fastify.requireUser([Role.ADMIN]),
+      onRequest: fastify.requireUser(Role.ADMIN),
     },
     async (request, reply) => {
       const { id } = request.params;
