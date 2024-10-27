@@ -129,7 +129,7 @@ export default function PatientsTable({ headers, data }) {
           Yes
         </Button>
         <Button
-        classNames={{ root: classes.button }}
+          classNames={{ root: classes.button }}
           color="blue"
           fullWidth
           onClick={cancelPatientDeletion}
