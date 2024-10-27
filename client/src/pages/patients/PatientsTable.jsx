@@ -4,6 +4,8 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Paper, Table, ActionIcon, Menu, Modal, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useDeletePatient } from './useDeletePatient';
+import { notifications } from '@mantine/notifications';
 import {
   IconDotsVertical,
   IconUser,
@@ -39,6 +41,7 @@ const patientTableProps = {
 export default function PatientsTable({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const { mutate: deletePatient } = useDeletePatient();
   const { user } = useContext(Context);
 
   const showDeleteConfirmation = (patient) => {
@@ -46,8 +49,22 @@ export default function PatientsTable({ headers, data }) {
     open();
   };
 
-  const confirmPatientDeletion = () => {
-    console.log('Delete Patient', selectedPatient.id);
+  const confirmPatientDeletion = async () => {
+    try {
+      await deletePatient(selectedPatient.id);
+      notifications.show({
+        title: 'Success',
+        message: 'Patient deleted successfully.',
+        color: 'green',
+      });
+    } catch (error) {
+      console.error('Failed to delete patient:', error);
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to delete patient.',
+        color: 'red',
+      });
+    }
     close();
   };
 
