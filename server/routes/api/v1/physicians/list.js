@@ -35,9 +35,9 @@ export default async function (fastify) {
 
       const splitQuery = physician.trim().split(' ');
 
-      let whereClase = {};
+      let whereClause = {};
       if (splitQuery.length > 1) {
-        whereClase = {
+        whereClause = {
           AND: [
             {
               firstName: {
@@ -51,7 +51,7 @@ export default async function (fastify) {
           ],
         };
       } else {
-        whereClase = {
+        whereClause = {
           OR: [
             { firstName: { contains: physician.trim(), mode: 'insensitive' } },
             { lastName: { contains: physician.trim(), mode: 'insensitive' } },
@@ -76,7 +76,7 @@ export default async function (fastify) {
         page,
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: whereClase,
+        where: whereClause,
       };
 
       const { records, total } =
