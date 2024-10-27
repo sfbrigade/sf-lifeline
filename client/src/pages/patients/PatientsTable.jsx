@@ -69,7 +69,7 @@ export default function PatientsTable({ headers, data }) {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {data.length > 0 ? (
+              {data?.length > 0 ? (
                 data?.map((patient) => (
                   <Table.Tr key={patient.id}>
                     {headers.map((header) => (

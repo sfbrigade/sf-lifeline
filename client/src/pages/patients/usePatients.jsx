@@ -2,6 +2,27 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI';
 
+const PATIENT_TABLE_HEADERS = [
+  { key: 'name', text: 'Name' },
+  { key: 'createdBy', text: 'Created by' },
+  { key: 'createdAt', text: 'Date created' },
+  { key: 'updatedBy', text: 'Updated by' },
+  { key: 'updatedAt', text: 'Last updated' },
+  { key: 'more', text: '' },
+];
+
+const formatName = (entry) => {
+  return `${entry.firstName}${entry.middleName ? ` ${entry.middleName}` : ''} ${entry.lastName}`;
+};
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString(undefined, {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 /**
  * Patient data
  * @typedef {object} Patient
@@ -49,45 +70,20 @@ export function usePatients() {
       return { data, pages };
     },
     select: (res) => ({
-      patients: res.data,
+      patients: res.data.map((patient) => ({
+        id: patient.id,
+        name: formatName(patient),
+        createdBy: formatName(patient.createdBy),
+        createdAt: formatDate(patient.createdAt),
+        updatedBy: formatName(patient.createdBy),
+        updatedAt: formatDate(patient.updatedAt),
+      })),
       pages: res.pages,
     }),
   });
 
-  const PATIENT_TABLE_HEADERS = [
-    { key: 'name', text: 'Name' },
-    { key: 'createdBy', text: 'Created by' },
-    { key: 'createdAt', text: 'Date created' },
-    { key: 'updatedBy', text: 'Updated by' },
-    { key: 'updatedAt', text: 'Last updated' },
-    { key: 'more', text: '' },
-  ];
-
-  let formattedData = [];
-  if (data?.patients) {
-    const patients = data.patients;
-    formattedData = patients.map((patient) => {
-      return {
-        id: patient.id,
-        name: `${patient.firstName}${patient.middleName ? ` ${patient.middleName}` : ''} ${patient.lastName}`,
-        createdBy: `${patient.createdBy.firstName}${patient.createdBy.middleName ? patient.createdBy.middleName + ' ' : ''} ${patient.createdBy.lastName}`,
-        createdAt: new Date(patient.createdAt).toLocaleDateString(undefined, {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        }),
-        updatedBy: `${patient.createdBy.firstName}${patient.createdBy.middleName ? patient.createdBy.middleName + ' ' : ''} ${patient.createdBy.lastName}`,
-        updatedAt: new Date(patient.updatedAt).toLocaleDateString(undefined, {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        }),
-      };
-    });
-  }
-
   return {
-    patients: formattedData,
+    patients: data?.patients,
     headers: PATIENT_TABLE_HEADERS,
     search,
     setSearch,
