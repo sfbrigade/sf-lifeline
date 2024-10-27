@@ -23,6 +23,16 @@ export default async function (fastify) {
                 phone: { type: 'string' },
                 firstName: { type: 'string' },
                 lastName: { type: 'string' },
+                hospitals: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      name: { type: 'string' },
+                    },
+                  },
+                },
               },
             },
           },
@@ -71,12 +81,12 @@ export default async function (fastify) {
           ],
         };
       }
-
       const options = {
         page,
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: whereClause,
+        where: whereClase,
+        include: { hospitals: true },
       };
 
       const { records, total } =

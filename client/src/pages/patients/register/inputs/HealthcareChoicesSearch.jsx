@@ -71,8 +71,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
 
   const handleSelectValue = (id, key) => {
     const name = key.children;
-    // setValue({ id, name });
-    setSearch(name);
+    setSearch(name.join(''));
     form.setFieldValue(`healthcareChoices.${choice}Id`, id);
     combobox.closeDropdown();
   };
@@ -80,6 +79,8 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
   const options = (data || []).map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
       {item.name}
+      {item.hospital ? ` (${item.hospital})` : ''}
+      {item.phone ? ` - ${item.phone}` : ''}
     </Combobox.Option>
   ));
 
