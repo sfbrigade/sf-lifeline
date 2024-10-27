@@ -40,7 +40,6 @@ export default function PatientTableRow({
   onDelete,
   showDeleteMenu,
 }) {
-  console.log('Patient rowd');
   return (
     <Table.Tr key={patient.id}>
       {headers.map((header) => (

@@ -82,8 +82,6 @@ export default function PatientsTable({ headers, data }) {
     [headers.length],
   );
 
-  const headersMemo = useMemo(() => headers, [headers]);
-
   const patientRows = useMemo(() => {
     return data?.map((patient) => (
       <PatientTableRow
@@ -108,7 +106,7 @@ export default function PatientsTable({ headers, data }) {
           >
             <Table.Thead>
               <Table.Tr>
-                {headersMemo.map((header) => (
+                {headers.map((header) => (
                   <Table.Th key={header.key}>{header.text}</Table.Th>
                 ))}
               </Table.Tr>
