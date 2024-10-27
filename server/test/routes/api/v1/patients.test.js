@@ -1160,4 +1160,70 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(codeStatus, 'DNR');
     });
   });
+
+  describe('DELETE /:id', () => {
+    it('should return an error if not an ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('staff.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to delete a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(result, {
+        message: 'Patient deleted successfully',
+      });
+    });
+
+    it('should throw an error if a patient does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe5467106a')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+      );
+    });
+  });
 });
