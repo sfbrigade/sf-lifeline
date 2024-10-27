@@ -12,7 +12,8 @@ const PATIENT_TABLE_HEADERS = [
 ];
 
 const formatName = (entry) => {
-  return `${entry.firstName}${entry.middleName ? ` ${entry.middleName}` : ''} ${entry.lastName}`;
+  const formattedName = `${entry.firstName}${entry.middleName ? ` ${entry.middleName}` : ''} ${entry.lastName}`;
+  return formattedName.trim() ? formattedName : '-';
 };
 
 const formatDate = (date) => {
