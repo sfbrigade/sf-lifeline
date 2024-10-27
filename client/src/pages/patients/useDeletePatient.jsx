@@ -5,12 +5,13 @@ import LifelineAPI from './LifelineAPI';
  *
  * @returns {{
  *  mutate: (patientId: string) => Promise<void>
+ *  isPending: boolean
  * }}
  */
 export function useDeletePatient() {
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['deletePatient'],
     mutationFn: async (patientId) => {
       const res = await LifelineAPI.deletePatient(patientId);
@@ -28,5 +29,5 @@ export function useDeletePatient() {
     },
   });
 
-  return { mutate };
+  return { mutateAsync, isPending };
 }
