@@ -58,36 +58,62 @@ export default async function (fastify) {
 
       const splitQuery = patient.trim().split(' ');
 
-      let whereClase = {};
+      let whereClause = {};
       if (splitQuery.length > 1) {
-        whereClase = {
+        whereClause = {
           AND: [
             {
-              firstName: {
-                contains: splitQuery[0].trim(),
-                mode: 'insensitive',
-              },
+              OR: [
+                {
+                  firstName: {
+                    contains: splitQuery[0].trim(),
+                    mode: 'insensitive',
+                  },
+                },
+                { firstName: null },
+              ],
             },
             {
-              lastName: { contains: splitQuery[1].trim(), mode: 'insensitive' },
+              OR: [
+                {
+                  lastName: {
+                    contains: splitQuery[1].trim(),
+                    mode: 'insensitive',
+                  },
+                },
+                { lastName: null },
+              ],
             },
           ],
         };
       } else {
-        whereClase = {
+        whereClause = {
           OR: [
             { firstName: { contains: patient.trim(), mode: 'insensitive' } },
             { lastName: { contains: patient.trim(), mode: 'insensitive' } },
             {
               AND: [
                 {
-                  firstName: {
-                    contains: patient.trim(),
-                    mode: 'insensitive',
-                  },
+                  OR: [
+                    {
+                      firstName: {
+                        contains: patient.trim(),
+                        mode: 'insensitive',
+                      },
+                    },
+                    { firstName: null },
+                  ],
                 },
                 {
-                  lastName: { contains: patient.trim(), mode: 'insensitive' },
+                  OR: [
+                    {
+                      lastName: {
+                        contains: patient.trim(),
+                        mode: 'insensitive',
+                      },
+                    },
+                    { lastName: null },
+                  ],
                 },
               ],
             },
@@ -99,7 +125,7 @@ export default async function (fastify) {
         page,
         perPage,
         orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-        where: whereClase,
+        where: whereClause,
         include: {
           createdBy: true,
           updatedBy: true,

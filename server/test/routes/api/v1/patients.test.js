@@ -141,6 +141,33 @@ describe('/api/v1/patients', () => {
         '2022-10-05T00:00:00.000Z',
       );
     });
+
+    it('should return a patient even if it has null values', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 4);
+    });
   });
 
   describe('GET /generate', () => {
