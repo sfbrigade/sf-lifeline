@@ -65,6 +65,13 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async deletePatient(patientId) {
+    const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
+      method: 'DELETE',
+    });
+    return response;
+  }
+
   static async getMedicalData(path, pathInfo, query) {
     const response = await fetch(
       `${SERVER_BASE_URL}/${path}?${pathInfo}=${query}`,
