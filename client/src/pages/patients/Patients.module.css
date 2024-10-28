@@ -13,12 +13,6 @@
   margin: 1rem 1rem;
 }
 
-.title {
-  font-weight: 600;
-  font-size: 1.25rem;
-  margin: 0 0.5rem 0 0;
-}
-
 .patientsContainer {
   position: relative;
   margin-bottom: var(--mantine-spacing-lg);

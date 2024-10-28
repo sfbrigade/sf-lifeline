@@ -5,6 +5,7 @@ import {
   Divider,
   Pagination,
   LoadingOverlay,
+  Text,
 } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
@@ -31,7 +32,9 @@ export default function Patients() {
   return (
     <Container>
       <div className={classes.header}>
-        <p className={classes.title}>Patients</p>
+      <Text fw={600} size="xl" mr="md">
+          Patients
+        </Text>
         <Group>
           <TextInput
             leftSectionPointerEvents="none"
