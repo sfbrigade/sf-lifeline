@@ -15,6 +15,13 @@
   margin-top: 0;
 }
 
+.sectionTitle {
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 600;
+  margin-top: var(--mantine-spacing-md);
+  margin-bottom: var(--mantine-spacing-md);
+}
+
 @media (min-width: 768px) {
   .patientInfoContainer {
     text-align: left;

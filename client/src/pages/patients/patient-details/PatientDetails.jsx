@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, Container, Paper, Group } from '@mantine/core';
+import { Loader, Container, Paper, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { StatusCodes } from 'http-status-codes';
@@ -49,16 +49,16 @@ export default function PatientDetails() {
           {data?.firstName} {data?.lastName}
         </h1>
         <section className={classes.patientInfoContainer}>
-          <p>Date of birth</p>
-          <p>Gender</p>
-          <p>Preferred language</p>
-          <p>{data?.dateOfBirth}</p>
-          <p>{humanize(data?.gender)}</p>
-          <p>{humanize(data?.language)}</p>
+          <Text>Date of birth</Text>
+          <Text>Gender</Text>
+          <Text>Preferred language</Text>
+          <Text>{data?.dateOfBirth}</Text>
+          <Text>{humanize(data?.gender)}</Text>
+          <Text>{humanize(data?.language)}</Text>
         </section>
 
         <section>
-          <p> Contact Information</p>
+          <Text className={classes.sectionTitle}> Contact Information</Text>
           <Paper shadow="xs" p="md" radius="md">
             <section>
               <p>Emergency contact</p>
@@ -85,7 +85,7 @@ export default function PatientDetails() {
         </section>
 
         <section>
-          <p>Medical Information</p>
+          <Text className={classes.sectionTitle}>Medical Information</Text>
           <Paper shadow="xs" p="md" radius="md">
             <section>
               <p>Allergies</p>
@@ -115,7 +115,7 @@ export default function PatientDetails() {
         </section>
 
         <section>
-          <p>Preferences</p>
+          <Text className={classes.sectionTitle}>Preferences</Text>
           <Paper shadow="xs" p="md" radius="md">
             <section>
               <p>Code status</p>
