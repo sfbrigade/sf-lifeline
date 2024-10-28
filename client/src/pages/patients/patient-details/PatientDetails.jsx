@@ -59,34 +59,39 @@ export default function PatientDetails() {
 
         <section>
           <Text className={classes.sectionTitle}> Contact Information</Text>
-          <Paper shadow="xs" p="md" radius="md">
+          <Paper shadow="xs" p="md" radius="md" withBorder className={classes.contactInfo}>
             <section>
-              <p>Emergency contact</p>
-              <p>
+              <Text>Emergency contact</Text>
+              <Text>Name</Text>
+              <Text>
                 {data?.emergencyContact?.firstName}{' '}
                 {data?.emergencyContact?.lastName}
-              </p>
-              <p>{data?.emergencyContact?.phone}</p>
-              <p>
-                Relationship:{' '}
+              </Text>
+              <Text>Phone</Text>
+              <Text>{data?.emergencyContact?.phone}</Text>
+              <Text>Relationship</Text>
+              <Text>
                 {data.emergencyContact &&
                   humanize(data?.emergencyContact?.relationship)}
-              </p>
+              </Text>
             </section>
             <section>
-              <p>Primary care physician (PCP) contact</p>
-              <p>
+              <Text>Primary care physician (PCP) contact</Text>
+              <Text>Name</Text>
+              <Text>
                 {data?.physician?.firstName} {data?.physician?.lastName}
-              </p>
-              <p>{data?.physician?.phone}</p>
-              <p>{data?.hospital?.name}</p>
+              </Text>
+              <Text>Phone</Text>
+              <Text>{data?.physician?.phone}</Text>
+              <Text>Hospital</Text>
+              <Text>{data?.physician?.hospitals[0]?.name}</Text>
             </section>
           </Paper>
         </section>
 
         <section>
           <Text className={classes.sectionTitle}>Medical Information</Text>
-          <Paper shadow="xs" p="md" radius="md">
+          <Paper shadow="xs" p="md" radius="md" withBorder>
             <section>
               <p>Allergies</p>
               <ul>
@@ -116,10 +121,12 @@ export default function PatientDetails() {
 
         <section>
           <Text className={classes.sectionTitle}>Preferences</Text>
-          <Paper shadow="xs" p="md" radius="md">
+          <Paper shadow="xs" p="md" radius="md" withBorder>
             <section>
               <p>Code status</p>
               <p>{data?.codeStatus}</p>
+              <Text>Hospital</Text>
+              <Text>{data?.hospital?.name}</Text>
             </section>
           </Paper>
         </section>
