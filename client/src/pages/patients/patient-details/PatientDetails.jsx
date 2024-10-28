@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, Container, Paper, Text } from '@mantine/core';
+import { Loader, Container, Paper, Text, Pill } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { StatusCodes } from 'http-status-codes';
@@ -42,6 +42,8 @@ export default function PatientDetails() {
     return <Loader />;
   }
 
+  console.log(data?.allergies);
+
   return (
     <main className={classes.details}>
       <Container style={{ marginBottom: '2rem' }}>
@@ -59,7 +61,13 @@ export default function PatientDetails() {
 
         <section>
           <Text className={classes.sectionTitle}> Contact Information</Text>
-          <Paper shadow="xs" p="md" radius="md" withBorder className={classes.contactInfo}>
+          <Paper
+            shadow="xs"
+            p="md"
+            radius="md"
+            withBorder
+            className={classes.contactInfo}
+          >
             <section>
               <Text>Emergency contact</Text>
               <Text>Name</Text>
@@ -93,26 +101,28 @@ export default function PatientDetails() {
           <Text className={classes.sectionTitle}>Medical Information</Text>
           <Paper shadow="xs" p="md" radius="md" withBorder>
             <section>
-              <p>Allergies</p>
-              <ul>
-                {data?.medicalData?.allergies?.map((allergy) => (
-                  <li>{allergy}</li>
-                ))}
-              </ul>
+              <Text className={classes.medicalInfoText}>Allergies</Text>
+
+              {data?.allergies?.map((entry) => (
+                <Pill size="md" className={classes.medicalInfoPills}>
+                  {entry.allergy.name}
+                </Pill>
+              ))}
             </section>
             <section>
-              <p>Medication</p>
-              <ul>
-                {data?.medicalData?.medications?.map((medication) => (
-                  <li>{medication}</li>
-                ))}
-              </ul>
+              <Text className={classes.medicalInfoText}>Medications</Text>
+
+              {data?.medications?.map((entry) => (
+                <Pill size="md" className={classes.medicalInfoPills}>
+                  {entry.medication.name}
+                </Pill>
+              ))}
             </section>
             <section>
-              <p>Medical history</p>
+              <Text className={classes.medicalInfoText}>Conditions</Text>
               <ul>
-                {data?.medicalData?.conditions?.map((condition) => (
-                  <li>{condition}</li>
+                {data?.conditions?.map((entry) => (
+                  <li>{entry.condition.name}</li>
                 ))}
               </ul>
             </section>

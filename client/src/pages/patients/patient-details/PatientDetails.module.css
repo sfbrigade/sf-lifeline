@@ -39,6 +39,16 @@
   margin-bottom: var(--mantine-spacing-sm);
 }
 
+.medicalInfoText {
+  font-weight: bold;
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.medicalInfoPills {
+  margin-right: var(--mantine-spacing-sm);
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
 @media (min-width: 768px) {
   .patientInfoContainer {
     text-align: left;
