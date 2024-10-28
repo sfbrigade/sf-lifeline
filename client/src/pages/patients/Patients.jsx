@@ -32,7 +32,7 @@ export default function Patients() {
   return (
     <Container>
       <div className={classes.header}>
-      <Text fw={600} size="xl" mr="md">
+        <Text fw={600} size="xl" mr="md">
           Patients
         </Text>
         <Group>

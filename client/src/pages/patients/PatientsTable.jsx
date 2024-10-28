@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useContext, useMemo, useCallback } from 'react';
-import { Paper, Table, Modal, Button } from '@mantine/core';
+import { Paper, Table, Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useDeletePatient } from './useDeletePatient';
 import { notifications } from '@mantine/notifications';
@@ -117,8 +117,15 @@ export default function PatientsTable({ headers, data }) {
           </Table>
         </Table.ScrollContainer>
       </Paper>
-      <Modal opened={opened} onClose={close} title="Delete Patient">
-        <p>Are you sure you want to delete this patient record?</p>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Delete Patient"
+        classNames={{ title: classes.title }}
+      >
+        <Text fw={600}>
+          Are you sure you want to delete this patient record?
+        </Text>
         <Button
           classNames={{ root: classes.button }}
           color="red"
