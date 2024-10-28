@@ -1,10 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, Container, Paper } from '@mantine/core';
+import { Loader, Container, Paper, Group } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { StatusCodes } from 'http-status-codes';
 import { humanize } from 'inflection';
 import LifelineAPI from '../LifelineAPI.js';
+
+import classes from './PatientDetails.module.css';
 
 /**
  *
@@ -41,14 +43,19 @@ export default function PatientDetails() {
   }
 
   return (
-    <main>
+    <main className={classes.details}>
       <Container style={{ marginBottom: '2rem' }}>
         <h1>
           {data?.firstName} {data?.lastName}
         </h1>
-        <p>Date of birth: {data?.dateOfBirth}</p>
-        <p>Gender: {humanize(data?.gender)}</p>
-        <p>Preferred language: {humanize(data?.language)}</p>
+        <section className={classes.patientInfoContainer}>
+          <p>Date of birth</p>
+          <p>Gender</p>
+          <p>Preferred language</p>
+          <p>{data?.dateOfBirth}</p>
+          <p>{humanize(data?.gender)}</p>
+          <p>{humanize(data?.language)}</p>
+        </section>
 
         <section>
           <p> Contact Information</p>

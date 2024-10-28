@@ -1,0 +1,29 @@
+.patientInfoContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  text-align: center;
+  gap: 8px;
+}
+
+.patientInfoContainer p:nth-child(-n + 3) {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.patientInfoContainer p:nth-child(n + 4) {
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .patientInfoContainer {
+    text-align: left;
+    width: 70%;
+  }
+
+  .details {
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
+}
