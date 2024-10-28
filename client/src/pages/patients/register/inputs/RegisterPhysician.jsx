@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Transition,
+  Text,
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
@@ -189,7 +190,9 @@ export default function RegisterPhysician({
         title="This form has unsaved changes."
         yOffset="16vh"
       >
-        <p>Are you sure you want to close this form without submitting?</p>
+        <Text fw={600}>
+          Are you sure you want to close this form without submitting?
+        </Text>
         <Button
           classNames={{ root: classes.button }}
           color="red"

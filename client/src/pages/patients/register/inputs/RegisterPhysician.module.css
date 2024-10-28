@@ -1,6 +1,7 @@
 .title {
-  font-size: 1.2rem;
+  font-size: var(--mantine-font-size-xl);
   font-weight: 600;
+  color: var(--mantine-color-red-6);
 }
 
 .button {
