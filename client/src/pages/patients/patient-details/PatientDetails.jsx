@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { Loader, Container, Paper } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../LifelineAPI.js';
-import { StatusCodes } from 'http-status-codes';
 import { useEffect } from 'react';
-import { Loader } from '@mantine/core';
+import { StatusCodes } from 'http-status-codes';
+import { humanize } from 'inflection';
+import LifelineAPI from '../LifelineAPI.js';
 
 /**
  *
@@ -23,9 +24,6 @@ export default function PatientDetails() {
         throw new Error('Failed to fetch patient.');
       }
     },
-
-    retry: false,
-    refetchOnWindowFocus: false,
   });
   console.log(data, isSuccess, isError, isLoading);
 
@@ -44,11 +42,81 @@ export default function PatientDetails() {
 
   return (
     <main>
-      <h1>Patient</h1>
-      <p>This is the patient page</p>
-      <p>Patient ID: {data?.id}</p>
-      <p>Patient First Name: {data?.firstName}</p>
-      <p>Patient Last Name: {data?.lastName}</p>
+      <Container style={{ marginBottom: '2rem' }}>
+        <h1>
+          {data?.firstName} {data?.lastName}
+        </h1>
+        <p>Date of birth: {data?.dateOfBirth}</p>
+        <p>Gender: {humanize(data?.gender)}</p>
+        <p>Preferred language: {humanize(data?.language)}</p>
+
+        <section>
+          <p> Contact Information</p>
+          <Paper shadow="xs" p="md" radius="md">
+            <section>
+              <p>Emergency contact</p>
+              <p>
+                {data?.emergencyContact?.firstName}{' '}
+                {data?.emergencyContact?.lastName}
+              </p>
+              <p>{data?.emergencyContact?.phone}</p>
+              <p>
+                Relationship:{' '}
+                {data.emergencyContact &&
+                  humanize(data?.emergencyContact?.relationship)}
+              </p>
+            </section>
+            <section>
+              <p>Primary care physician (PCP) contact</p>
+              <p>
+                {data?.physician?.firstName} {data?.physician?.lastName}
+              </p>
+              <p>{data?.physician?.phone}</p>
+              <p>{data?.hospital?.name}</p>
+            </section>
+          </Paper>
+        </section>
+
+        <section>
+          <p>Medical Information</p>
+          <Paper shadow="xs" p="md" radius="md">
+            <section>
+              <p>Allergies</p>
+              <ul>
+                {data?.medicalData?.allergies?.map((allergy) => (
+                  <li>{allergy}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <p>Medication</p>
+              <ul>
+                {data?.medicalData?.medications?.map((medication) => (
+                  <li>{medication}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <p>Medical history</p>
+              <ul>
+                {data?.medicalData?.conditions?.map((condition) => (
+                  <li>{condition}</li>
+                ))}
+              </ul>
+            </section>
+          </Paper>
+        </section>
+
+        <section>
+          <p>Preferences</p>
+          <Paper shadow="xs" p="md" radius="md">
+            <section>
+              <p>Code status</p>
+              <p>{data?.codeStatus}</p>
+            </section>
+          </Paper>
+        </section>
+      </Container>
     </main>
   );
 }
