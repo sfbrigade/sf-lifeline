@@ -23,17 +23,33 @@
 }
 
 .contactInfo {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: auto auto;
+  width: 100%;
 }
 
-.contactInfo p:nth-child(1) {
+.titleRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantine-spacing-xl);
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantine-spacing-xl);
+}
+
+.contactRow {
+  gap: var(--mantine-spacing-md);
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.contactInfoColumnTitle {
   font-weight: bold;
   font-size: var(--mantine-font-size-lg);
 }
 
-.contactInfo p:nth-child(2n + 2) {
+.contactInfoTitle {
   font-weight: bold;
   margin-top: var(--mantine-spacing-sm);
   margin-bottom: var(--mantine-spacing-sm);

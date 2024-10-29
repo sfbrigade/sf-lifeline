@@ -68,32 +68,53 @@ export default function PatientDetails() {
             withBorder
             className={classes.contactInfo}
           >
-            <section>
-              <Text>Emergency contact</Text>
-              <Text>Name</Text>
-              <Text>
-                {data?.emergencyContact?.firstName}{' '}
-                {data?.emergencyContact?.lastName}
+            <div className={classes.titleRow}>
+              <Text className={classes.contactInfoColumnTitle}>
+                Emergency Contact
               </Text>
-              <Text>Phone</Text>
-              <Text>{data?.emergencyContact?.phone}</Text>
-              <Text>Relationship</Text>
-              <Text>
-                {data.emergencyContact &&
-                  humanize(data?.emergencyContact?.relationship)}
+              <Text className={classes.contactInfoColumnTitle}>
+                Primary care physician (PCP) contact
               </Text>
-            </section>
-            <section>
-              <Text>Primary care physician (PCP) contact</Text>
-              <Text>Name</Text>
-              <Text>
-                {data?.physician?.firstName} {data?.physician?.lastName}
-              </Text>
-              <Text>Phone</Text>
-              <Text>{data?.physician?.phone}</Text>
-              <Text>Hospital</Text>
-              <Text>{data?.physician?.hospitals[0]?.name}</Text>
-            </section>
+            </div>
+            <div className={classes.twoColumnGrid}>
+              <section>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Name</Text>
+                  <Text>
+                    {data?.emergencyContact?.firstName}{' '}
+                    {data?.emergencyContact?.lastName}
+                  </Text>
+                </div>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Phone</Text>
+                  <Text>{data?.emergencyContact?.phone}</Text>
+                </div>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Relationship</Text>
+                  <Text>
+                    {data.emergencyContact &&
+                      humanize(data?.emergencyContact?.relationship)}
+                  </Text>
+                </div>
+              </section>
+
+              <section>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Name</Text>
+                  <Text>
+                    {data?.physician?.firstName} {data?.physician?.lastName}
+                  </Text>
+                </div>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Phone</Text>
+                  <Text>{data?.physician?.phone}</Text>
+                </div>
+                <div className={classes.contactRow}>
+                  <Text className={classes.contactInfoTitle}>Hospital</Text>
+                  <Text>{data?.physician?.hospitals[0]?.name}</Text>
+                </div>
+              </section>
+            </div>
           </Paper>
         </section>
 
