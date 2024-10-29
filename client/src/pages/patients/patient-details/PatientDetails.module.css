@@ -41,7 +41,8 @@
 
 .medicalInfoText {
   font-weight: bold;
-  margin-bottom: var(--mantine-spacing-sm);
+  margin-top: var(--mantine-spacing-xs);
+  margin-bottom: var(--mantine-spacing-xs);
 }
 
 .medicalInfoPills {

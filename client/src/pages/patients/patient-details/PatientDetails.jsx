@@ -102,8 +102,8 @@ export default function PatientDetails() {
           <Paper shadow="xs" p="md" radius="md" withBorder>
             <section>
               <Text className={classes.medicalInfoText}>Allergies</Text>
-
-              {data?.allergies?.map((entry) => (
+              {data?.allergies.length === 0 && <Text>None</Text>}
+              {data?.allergies.map((entry) => (
                 <Pill size="md" className={classes.medicalInfoPills}>
                   {entry.allergy.name}
                 </Pill>
@@ -111,8 +111,8 @@ export default function PatientDetails() {
             </section>
             <section>
               <Text className={classes.medicalInfoText}>Medications</Text>
-
-              {data?.medications?.map((entry) => (
+              {data?.medications.length === 0 && <Text>None</Text>}
+              {data?.medications.map((entry) => (
                 <Pill size="md" className={classes.medicalInfoPills}>
                   {entry.medication.name}
                 </Pill>
@@ -120,11 +120,15 @@ export default function PatientDetails() {
             </section>
             <section>
               <Text className={classes.medicalInfoText}>Conditions</Text>
-              <ul>
-                {data?.conditions?.map((entry) => (
-                  <li>{entry.condition.name}</li>
-                ))}
-              </ul>
+              {data?.conditions?.length === 0 ? (
+                <Text>None</Text>
+              ) : (
+                <ul>
+                  {data?.conditions.map((entry) => (
+                    <li>{entry.condition.name}</li>
+                  ))}
+                </ul>
+              )}
             </section>
           </Paper>
         </section>
@@ -133,8 +137,8 @@ export default function PatientDetails() {
           <Text className={classes.sectionTitle}>Preferences</Text>
           <Paper shadow="xs" p="md" radius="md" withBorder>
             <section>
-              <p>Code status</p>
-              <p>{data?.codeStatus}</p>
+              <Text>Code status</Text>
+              <Text>{data?.codeStatus || 'Not provided'}</Text>
               <Text>Hospital</Text>
               <Text>{data?.hospital?.name}</Text>
             </section>
