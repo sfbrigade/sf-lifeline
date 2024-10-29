@@ -16,7 +16,7 @@ export default function PatientDetails() {
   const { patientId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isSuccess, isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await LifelineAPI.getPatient(patientId);
