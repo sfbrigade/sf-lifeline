@@ -125,7 +125,11 @@ export default function PatientDetails() {
               <Text className={classes.medicalInfoText}>Allergies</Text>
               {data?.allergies.length === 0 && <Text>None</Text>}
               {data?.allergies.map((entry) => (
-                <Pill size="md" className={classes.medicalInfoPills}>
+                <Pill
+                  size="md"
+                  key={entry.id}
+                  className={classes.medicalInfoPills}
+                >
                   {entry.allergy.name}
                 </Pill>
               ))}
@@ -134,7 +138,11 @@ export default function PatientDetails() {
               <Text className={classes.medicalInfoText}>Medications</Text>
               {data?.medications.length === 0 && <Text>None</Text>}
               {data?.medications.map((entry) => (
-                <Pill size="md" className={classes.medicalInfoPills}>
+                <Pill
+                  size="md"
+                  key={entry.id}
+                  className={classes.medicalInfoPills}
+                >
                   {entry.medication.name}
                 </Pill>
               ))}
@@ -146,7 +154,7 @@ export default function PatientDetails() {
               ) : (
                 <ul>
                   {data?.conditions.map((entry) => (
-                    <li>{entry.condition.name}</li>
+                    <li key={entry.id}>{entry.condition.name}</li>
                   ))}
                 </ul>
               )}
