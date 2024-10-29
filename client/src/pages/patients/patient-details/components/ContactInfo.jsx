@@ -1,7 +1,20 @@
+import PropTypes from 'prop-types';
+
 import { Paper, Text } from '@mantine/core';
 import { humanize } from 'inflection';
 import classes from '../PatientDetails.module.css';
 
+const contactInfoProps = {
+  emergencyContact: PropTypes.object,
+  physician: PropTypes.object,
+};
+
+ContactInfo.propTypes = contactInfoProps;
+
+/**
+ *
+ * @param {PropTypes.InferProps<typeof contactInfoProps>} props
+ */
 export default function ContactInfo({ emergencyContact, physician }) {
   return (
     <section>

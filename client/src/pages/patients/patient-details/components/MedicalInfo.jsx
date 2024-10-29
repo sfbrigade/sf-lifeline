@@ -1,6 +1,20 @@
+import PropTypes from 'prop-types';
+
 import { Paper, Text, Pill } from '@mantine/core';
 import classes from '../PatientDetails.module.css';
 
+const medicalInfoProps = {
+  allergies: PropTypes.array,
+  medications: PropTypes.array,
+  conditions: PropTypes.array,
+};
+
+MedicalInfo.propTypes = medicalInfoProps;
+
+/**
+ *
+ * @param {PropTypes.InferProps<typeof medicalInfoProps>} props
+ */
 export default function MedicalInfo({ allergies, medications, conditions }) {
   return (
     <section>

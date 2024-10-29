@@ -1,6 +1,18 @@
+import PropTypes from 'prop-types';
 import { Paper, Text } from '@mantine/core';
 import classes from '../PatientDetails.module.css';
 
+const preferencesProps = {
+  codeStatus: PropTypes.string,
+  hospital: PropTypes.object,
+};
+
+Preferences.propTypes = preferencesProps;
+
+/**
+ * Preferences section of patient details
+ * @param {PropTypes.InferProps<typeof preferencesProps>} props
+ */
 export default function Preferences({ codeStatus, hospital }) {
   return (
     <section>
