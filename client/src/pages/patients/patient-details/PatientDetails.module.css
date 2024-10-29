@@ -1,13 +1,19 @@
+.boldText {
+  font-weight: 600;
+  margin-top: var(--mantine-spacing-sm);
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
 .patientInfoContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto auto;
   text-align: center;
-  gap: 8px;
+  gap: var(--mantine-spacing-sm);
 }
 
 .patientInfoContainer p:nth-child(-n + 3) {
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 0;
 }
 
@@ -20,10 +26,6 @@
   font-weight: 600;
   margin-top: var(--mantine-spacing-md);
   margin-bottom: var(--mantine-spacing-md);
-}
-
-.contactInfo {
-  width: 100%;
 }
 
 .titleRow {
@@ -45,20 +47,8 @@
 }
 
 .contactInfoColumnTitle {
-  font-weight: bold;
+  font-weight: 600;
   font-size: var(--mantine-font-size-lg);
-}
-
-.contactInfoTitle {
-  font-weight: bold;
-  margin-top: var(--mantine-spacing-sm);
-  margin-bottom: var(--mantine-spacing-sm);
-}
-
-.medicalInfoText {
-  font-weight: bold;
-  margin-top: var(--mantine-spacing-xs);
-  margin-bottom: var(--mantine-spacing-xs);
 }
 
 .medicalInfoPills {
