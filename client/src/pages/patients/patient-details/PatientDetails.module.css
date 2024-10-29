@@ -54,6 +54,7 @@
 .medicalInfoPills {
   margin-right: var(--mantine-spacing-sm);
   margin-bottom: var(--mantine-spacing-sm);
+  user-select: text;
 }
 
 @media (min-width: 768px) {
