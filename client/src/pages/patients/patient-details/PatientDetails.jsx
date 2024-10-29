@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, Container, Paper, Text, Pill } from '@mantine/core';
+import { Loader, Container, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { StatusCodes } from 'http-status-codes';
@@ -59,18 +59,15 @@ export default function PatientDetails() {
           <Text>{humanize(data?.gender)}</Text>
           <Text>{humanize(data?.language)}</Text>
         </section>
-
         <ContactInfo
           emergencyContact={data?.emergencyContact}
           physician={data?.physician}
         />
-
         <MedicalInfo
           allergies={data?.allergies}
           medications={data?.medications}
           conditions={data?.conditions}
         />
-
         <Preferences codeStatus={data?.codeStatus} hospital={data?.hospital} />
       </Container>
     </main>
