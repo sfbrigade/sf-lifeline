@@ -27,8 +27,7 @@ export default function PatientDetails() {
       }
     },
   });
-  console.log(data, isSuccess, isError, isLoading);
-
+  
   useEffect(() => {
     if (isError) {
       navigate('/patients/register/' + patientId, {
@@ -41,8 +40,6 @@ export default function PatientDetails() {
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log(data?.allergies);
 
   return (
     <main className={classes.details}>
