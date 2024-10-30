@@ -33,18 +33,23 @@ export default function ContactInfo({ emergencyContact, physician }) {
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Name</Text>
               <Text>
-                {emergencyContact?.firstName}
-                {emergencyContact?.lastName}
+                {emergencyContact
+                  ? `${emergencyContact?.firstName} ${emergencyContact?.lastName}`
+                  : '-'}
               </Text>
             </div>
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Phone</Text>
-              <Text>{emergencyContact?.phone}</Text>
+              <Text>
+                {emergencyContact?.phone ? emergencyContact?.phone : '-'}
+              </Text>
             </div>
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Relationship</Text>
               <Text>
-                {emergencyContact && humanize(emergencyContact?.relationship)}
+                {emergencyContact?.relationship
+                  ? humanize(emergencyContact?.relationship)
+                  : '-'}
               </Text>
             </div>
           </section>
@@ -52,16 +57,22 @@ export default function ContactInfo({ emergencyContact, physician }) {
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Name</Text>
               <Text>
-                {physician?.firstName} {physician?.lastName}
+                {physician
+                  ? `${physician?.firstName} ${physician?.lastName}`
+                  : '-'}
               </Text>
             </div>
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Phone</Text>
-              <Text>{physician?.phone}</Text>
+              <Text>{physician?.phone ? physician?.phone : '-'}</Text>
             </div>
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Hospital</Text>
-              <Text>{physician?.hospitals[0]?.name}</Text>
+              <Text>
+                {physician?.hospitals[0]?.name
+                  ? physician?.hospitals[0]?.name
+                  : '-'}
+              </Text>
             </div>
           </section>
         </div>
