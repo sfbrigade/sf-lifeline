@@ -22,29 +22,35 @@ export default function MedicalInfo({ allergies, medications, conditions }) {
       <Paper shadow="xs" p="md" radius="md" withBorder>
         <section>
           <Text className={classes.boldText}>Allergies</Text>
-          {allergies.length === 0 && <Text>None</Text>}
-          {allergies.map((entry) => (
-            <Pill
-              size="md"
-              key={entry.allergy.id}
-              className={classes.medicalInfoPills}
-            >
-              {entry.allergy.name}
-            </Pill>
-          ))}
+          {allergies.length === 0 ? (
+            <Text>None</Text>
+          ) : (
+            allergies.map((entry) => (
+              <Pill
+                size="md"
+                key={entry.allergy.id}
+                className={classes.medicalInfoPills}
+              >
+                {entry.allergy.name}
+              </Pill>
+            ))
+          )}
         </section>
         <section>
           <Text className={classes.boldText}>Medications</Text>
-          {medications.length === 0 && <Text>None</Text>}
-          {medications.map((entry) => (
-            <Pill
-              size="md"
-              key={entry.medication.id}
-              className={classes.medicalInfoPills}
-            >
-              {entry.medication.name}
-            </Pill>
-          ))}
+          {medications.length === 0 ? (
+            <Text>None</Text>
+          ) : (
+            medications.map((entry) => (
+              <Pill
+                size="md"
+                key={entry.medication.id}
+                className={classes.medicalInfoPills}
+              >
+                {entry.medication.name}
+              </Pill>
+            ))
+          )}
         </section>
         <section>
           <Text className={classes.boldText}>Conditions</Text>
