@@ -344,9 +344,6 @@ export default function PatientRegistration() {
     try {
       const res = await LifelineAPI.registerPatient(data, patientId);
       if (res.status === StatusCodes.CREATED) {
-        showSuccessNotification(
-          'Patient basic information has been successfully registered.',
-        );
         setShowCheck((prevShowCheck) => ({
           ...prevShowCheck,
           patientData: true,
@@ -360,9 +357,6 @@ export default function PatientRegistration() {
           patientId,
         );
         if (updateRes.status === StatusCodes.OK) {
-          showSuccessNotification(
-            'Patient basic information has been successfully updated.',
-          );
           setShowCheck((prevShowCheck) => ({
             ...prevShowCheck,
             patientData: true,
@@ -391,9 +385,6 @@ export default function PatientRegistration() {
     try {
       const res = await LifelineAPI.updatePatient(data, patientId);
       if (res.status === StatusCodes.OK) {
-        showSuccessNotification(
-          'Patient information has been successfully updated.',
-        );
         setShowCheck((prevShowCheck) => ({
           ...prevShowCheck,
           [Object.keys(data)[0]]: true,
@@ -404,7 +395,9 @@ export default function PatientRegistration() {
         throw new Error('Invalid data provided.');
       }
       if (res.status === StatusCodes.NOT_FOUND) {
-        throw new Error('Patient ID not found.');
+        throw new Error(
+          'Patient ID not found. Please ensure the Basic Information section is filled out correctly.',
+        );
       }
 
       throw new Error('Failed to update patient.');
