@@ -58,6 +58,19 @@ export default async function (fastify, _opts) {
                 lastName: { type: 'string' },
                 phone: { type: 'string' },
                 email: { type: 'string' },
+                hospitals: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      name: { type: 'string' },
+                      address: { type: 'string' },
+                      phone: { type: 'string' },
+                      email: { type: 'string' },
+                    },
+                  },
+                },
               },
             },
             updatedById: { type: 'string' },
@@ -98,7 +111,11 @@ export default async function (fastify, _opts) {
               orderBy: { sortOrder: 'asc' },
             },
             hospital: true,
-            physician: true,
+            physician: {
+              include: {
+                hospitals: true,
+              },
+            },
           },
         });
         if (!patient) throw new Error('Patient not found');
