@@ -23,6 +23,18 @@ export default class LifelineAPI {
     });
   }
 
+  static async registerPhysician(data) {
+    const response = await fetch(`${SERVER_BASE_URL}/physicians`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return response;
+  }
+
   static async getHospitals(query) {
     const response = await fetch(
       `${SERVER_BASE_URL}/hospitals?hospital=${query}`,
@@ -33,6 +45,13 @@ export default class LifelineAPI {
 
   static async getPatient(patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`);
+    return response;
+  }
+
+  static async getPatients(query, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/patients?patient=${query}&page=${page}`,
+    );
     return response;
   }
 
@@ -55,6 +74,13 @@ export default class LifelineAPI {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    });
+    return response;
+  }
+
+  static async deletePatient(patientId) {
+    const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
+      method: 'DELETE',
     });
     return response;
   }

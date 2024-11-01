@@ -5,6 +5,171 @@ import { StatusCodes } from 'http-status-codes';
 import { build } from '../../../helper.js';
 
 describe('/api/v1/patients', () => {
+  describe('GET /', () => {
+    it('should return all patients for ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=&perPage=1')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(
+        reply.headers['link'],
+        '<http://localhost/api/v1/patients?patient=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/patients?patient=&perPage=1&page=3>; rel="last"',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
+    });
+
+    it('should return patients for STAFF user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('staff.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 3);
+    });
+
+    it('should return patients for VOLUNTEER user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('volunteer.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 3);
+    });
+
+    it('should return no patients for FIRST_RESPONDER user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('first.responder@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should return patients for ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=doe')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 2);
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'Jackson');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[1].firstName, 'John');
+    });
+
+    it('should return patients from querying for their first, last, and full name', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=john')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'John');
+
+      const reply2 = await app
+        .inject()
+        .get('/api/v1/patients?patient=john doe')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply2.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply2.payload).length, 1);
+      assert.deepStrictEqual(JSON.parse(reply2.payload)[0].firstName, 'John');
+      assert.deepStrictEqual(JSON.parse(reply2.payload)[0].lastName, 'Doe');
+    });
+
+    it('should return patients with all the fields expected', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=john doe')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].id,
+        '27963f68-ebc1-408a-8bb5-8fbe54671064',
+      );
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'John');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].middleName, 'A');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].lastName, 'Doe');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].gender, 'MALE');
+      assert.deepStrictEqual(JSON.parse(reply.payload)[0].language, 'ENGLISH');
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].dateOfBirth,
+        '2000-10-05T00:00:00.000Z',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].createdBy.id,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].updatedBy.id,
+        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].createdAt,
+        '2022-10-05T00:00:00.000Z',
+      );
+      assert.deepStrictEqual(
+        JSON.parse(reply.payload)[0].updatedAt,
+        '2022-10-05T00:00:00.000Z',
+      );
+    });
+
+    it('should return a patient even if it has null values', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      let reply = await app
+        .inject()
+        .post('/api/v1/patients')
+        .payload({
+          id: '0849219e-e2c6-409b-bea4-1a229c3df805',
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          gender: 'MALE',
+          language: 'ENGLISH',
+          dateOfBirth: '1990-01-01',
+        })
+        .headers(headers);
+
+      reply = await app
+        .inject()
+        .get('/api/v1/patients?patient=')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      assert.deepStrictEqual(JSON.parse(reply.payload).length, 4);
+    });
+  });
+
   describe('GET /generate', () => {
     it('returns a list of new patient URLs', async (t) => {
       const app = await build(t);
@@ -482,7 +647,7 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: 'Jane',
             lastName: 'Doe',
-            phone: '(123)-456-7890',
+            phone: '(123) 456-7890',
             relationship: 'PARENT',
           },
         })
@@ -496,7 +661,7 @@ describe('/api/v1/patients', () => {
         middleName: '',
         lastName: 'Doe',
         email: '',
-        phone: '(123)-456-7890',
+        phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
     });
@@ -520,7 +685,7 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: '  Smith  ',
             lastName: 'Doe  ',
-            phone: '(123)-456-7890',
+            phone: '(123) 456-7890',
             relationship: 'PARENT',
           },
         })
@@ -540,7 +705,7 @@ describe('/api/v1/patients', () => {
         middleName: '',
         lastName: 'Doe',
         email: '',
-        phone: '(123)-456-7890',
+        phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
     });
@@ -1020,6 +1185,72 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
       assert.deepStrictEqual(codeStatus, 'DNR');
+    });
+  });
+
+  describe('DELETE /:id', () => {
+    it('should return an error if not an ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      let reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+
+      let headers = await t.authenticate('first.responder@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('staff.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+
+      headers = await t.authenticate('volunteer.user@test.com', 'test');
+      reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+    });
+
+    it('should allow ADMIN to delete a patient', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(result, {
+        message: 'Patient deleted successfully',
+      });
+    });
+
+    it('should throw an error if a patient does not exist', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .delete('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe5467106a')
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+      const result = JSON.parse(reply.body);
+      assert.deepStrictEqual(
+        result.message,
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+      );
     });
   });
 });
