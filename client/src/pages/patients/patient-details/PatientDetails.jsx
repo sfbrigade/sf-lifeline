@@ -1,16 +1,17 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, Container, Text } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { humanize } from 'inflection';
+import { QRCode } from 'react-qrcode-logo';
+import { Loader, Container, Text, Flex, Title } from '@mantine/core';
+
 import LifelineAPI from '../LifelineAPI.js';
-
 import ContactInfo from './components/ContactInfo.jsx';
-
-import classes from './PatientDetails.module.css';
 import MedicalInfo from './components/MedicalInfo.jsx';
 import Preferences from './components/Preferences.jsx';
+
+import classes from './PatientDetails.module.css';
 
 /**
  *
@@ -19,6 +20,7 @@ import Preferences from './components/Preferences.jsx';
 export default function PatientDetails() {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ['patient'],
@@ -48,9 +50,15 @@ export default function PatientDetails() {
   return (
     <main className={classes.details}>
       <Container style={{ marginBottom: '2rem' }}>
-        <h1>
-          {data?.firstName} {data?.lastName}
-        </h1>
+        <Flex align="center">
+          <Title mr="1rem">
+            {data?.firstName} {data?.lastName}
+          </Title>
+          <QRCode
+            value={`${window.location.origin}${location.pathname}`}
+            size={50}
+          />
+        </Flex>
         <section className={classes.patientInfoContainer}>
           <Text>Date of birth</Text>
           <Text>Gender</Text>
