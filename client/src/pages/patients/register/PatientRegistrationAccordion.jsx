@@ -150,8 +150,8 @@ export default function PatientRegistrationAccordion({
             <InputBase
               label="Phone Number"
               component={IMaskInput}
-              mask="(000)-000-0000"
-              placeholder="(000)-000-0000"
+              mask="(000) 000-0000"
+              placeholder="(000) 000-0000"
               key={form.key('contactData.phone')}
               {...form.getInputProps('contactData.phone')}
             />
