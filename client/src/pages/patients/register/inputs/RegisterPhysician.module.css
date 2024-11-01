@@ -1,0 +1,9 @@
+.title {
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 600;
+  color: var(--mantine-color-red-6);
+}
+
+.button {
+  margin-top: 1rem;
+}

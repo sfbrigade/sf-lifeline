@@ -647,7 +647,7 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: 'Jane',
             lastName: 'Doe',
-            phone: '(123)-456-7890',
+            phone: '(123) 456-7890',
             relationship: 'PARENT',
           },
         })
@@ -661,7 +661,7 @@ describe('/api/v1/patients', () => {
         middleName: '',
         lastName: 'Doe',
         email: '',
-        phone: '(123)-456-7890',
+        phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
     });
@@ -685,7 +685,7 @@ describe('/api/v1/patients', () => {
           contactData: {
             firstName: '  Smith  ',
             lastName: 'Doe  ',
-            phone: '(123)-456-7890',
+            phone: '(123) 456-7890',
             relationship: 'PARENT',
           },
         })
@@ -705,7 +705,7 @@ describe('/api/v1/patients', () => {
         middleName: '',
         lastName: 'Doe',
         email: '',
-        phone: '(123)-456-7890',
+        phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
     });
