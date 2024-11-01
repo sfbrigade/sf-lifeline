@@ -48,6 +48,13 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async getPatients(query, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/patients?patient=${query}&page=${page}`,
+    );
+    return response;
+  }
+
   static async registerPatient(data, patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients`, {
       method: 'POST',
@@ -67,6 +74,13 @@ export default class LifelineAPI {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    });
+    return response;
+  }
+
+  static async deletePatient(patientId) {
+    const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
+      method: 'DELETE',
     });
     return response;
   }
