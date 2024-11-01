@@ -1,5 +1,12 @@
 name: CI
-on: [push]
+on: 
+  push:
+    branches:
+      - "dev"
+      - "main"
+  pull_request:
+    types: [opened, reopened, synchronize]
+  
 jobs:
   ci:
     name: CI
