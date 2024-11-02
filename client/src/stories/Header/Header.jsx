@@ -18,7 +18,7 @@ import { Sidebar } from '../../components/Sidebar/Sidebar';
  * Buttons for logged out buttons
  * @param {PropTypes.InferProps<typeof headerProps>} props
  */
-export function Header({ user }) {
+export function Header({ user = null }) {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
@@ -74,9 +74,6 @@ const headerProps = {
 };
 
 Header.propTypes = headerProps;
-Header.defaultProps = {
-  user: null,
-};
 
 const loggedOutButtonsProps = {};
 
