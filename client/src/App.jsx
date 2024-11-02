@@ -148,12 +148,12 @@ function App() {
               element={
                 user ? (
                   <ProtectedRoute
-                  role={user?.role}
-                  restrictedRoles={['FIRST_RESPONDER']}
-                  message={'Patient does not exist.'}
+                    role={user?.role}
+                    restrictedRoles={['FIRST_RESPONDER']}
+                    message={'Patient does not exist.'}
                   >
-                  <PatientRegistration />
-                </ProtectedRoute>
+                    <PatientRegistration />
+                  </ProtectedRoute>
                 ) : (
                   <Loader />
                 )
