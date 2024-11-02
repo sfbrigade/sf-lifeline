@@ -56,7 +56,7 @@ export default function PatientDetails() {
           </Title>
           <QRCode
             value={`${window.location.origin}${location.pathname}`}
-            size={50}
+            size={100}
           />
         </Flex>
         <section className={classes.patientInfoContainer}>
