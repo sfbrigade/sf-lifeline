@@ -146,13 +146,17 @@ function App() {
             <Route
               path="/patients/register/:patientId"
               element={
-                <ProtectedRoute
+                user ? (
+                  <ProtectedRoute
                   role={user?.role}
                   restrictedRoles={['FIRST_RESPONDER']}
                   message={'Patient does not exist.'}
-                >
+                  >
                   <PatientRegistration />
                 </ProtectedRoute>
+                ) : (
+                  <Loader />
+                )
               }
             />
 
