@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { humanize } from 'inflection';
 import { QRCode } from 'react-qrcode-logo';
-import { Loader, Container, Text, Flex, Title } from '@mantine/core';
+import { Container, Grid, Loader, Text, Title } from '@mantine/core';
 
 import LifelineAPI from '../LifelineAPI.js';
 import ContactInfo from './components/ContactInfo.jsx';
@@ -50,23 +50,24 @@ export default function PatientDetails() {
   return (
     <main className={classes.details}>
       <Container style={{ marginBottom: '2rem' }}>
-        <Flex align="center">
-          <Title mr="1rem">
-            {data?.firstName} {data?.lastName}
-          </Title>
-          <QRCode
-            value={`${window.location.origin}${location.pathname}`}
-            size={100}
-          />
-        </Flex>
-        <section className={classes.patientInfoContainer}>
-          <Text>Date of birth</Text>
-          <Text>Gender</Text>
-          <Text>Preferred language</Text>
-          <Text>{data?.dateOfBirth}</Text>
-          <Text>{humanize(data?.gender)}</Text>
-          <Text>{humanize(data?.language)}</Text>
-        </section>
+        <Grid my="2rem">
+          <Grid.Col span={{ base: 12, md: 8 }}>
+            <Title mb="1rem">
+              {data?.firstName} {data?.lastName}
+            </Title>
+            <section className={classes.patientInfoContainer}>
+              <Text>Date of birth</Text>
+              <Text>Gender</Text>
+              <Text>Preferred language</Text>
+              <Text>{data?.dateOfBirth}</Text>
+              <Text>{humanize(data?.gender)}</Text>
+              <Text>{humanize(data?.language)}</Text>
+            </section>
+          </Grid.Col>
+          <Grid.Col display={{ base: 'none', md: 'block' }} span={4} ta="right">
+            <QRCode value={`${window.location.origin}${location.pathname}`} />
+          </Grid.Col>
+        </Grid>
         <ContactInfo
           emergencyContact={data?.emergencyContact}
           physician={data?.physician}
