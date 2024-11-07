@@ -279,7 +279,7 @@ export default function PatientRegistration() {
         );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification('Successfully registered patient.');
-          navigate('/dashboard', { replace: true });
+          navigate(`/patients/${patientId}`, { replace: true });
           return;
         }
       }
@@ -299,7 +299,7 @@ export default function PatientRegistration() {
           showSuccessNotification(
             'Patient basic information has been successfully updated.',
           );
-          navigate('/dashboard', { replace: true });
+          navigate(`/patients/${patientId}`, { replace: true });
           return;
         }
       }

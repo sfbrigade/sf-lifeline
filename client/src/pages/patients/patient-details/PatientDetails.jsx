@@ -1,9 +1,17 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../LifelineAPI.js';
-import { StatusCodes } from 'http-status-codes';
 import { useEffect } from 'react';
-import { Loader } from '@mantine/core';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { StatusCodes } from 'http-status-codes';
+import { humanize } from 'inflection';
+import { QRCode } from 'react-qrcode-logo';
+import { Container, Grid, Loader, Text, Title } from '@mantine/core';
+
+import LifelineAPI from '../LifelineAPI.js';
+import ContactInfo from './components/ContactInfo.jsx';
+import MedicalInfo from './components/MedicalInfo.jsx';
+import Preferences from './components/Preferences.jsx';
+
+import classes from './PatientDetails.module.css';
 
 /**
  *
@@ -12,8 +20,9 @@ import { Loader } from '@mantine/core';
 export default function PatientDetails() {
   const { patientId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { data, isSuccess, isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await LifelineAPI.getPatient(patientId);
@@ -23,11 +32,7 @@ export default function PatientDetails() {
         throw new Error('Failed to fetch patient.');
       }
     },
-
-    retry: false,
-    refetchOnWindowFocus: false,
   });
-  console.log(data, isSuccess, isError, isLoading);
 
   useEffect(() => {
     if (isError) {
@@ -43,12 +48,37 @@ export default function PatientDetails() {
   }
 
   return (
-    <main>
-      <h1>Patient</h1>
-      <p>This is the patient page</p>
-      <p>Patient ID: {data?.id}</p>
-      <p>Patient First Name: {data?.firstName}</p>
-      <p>Patient Last Name: {data?.lastName}</p>
+    <main className={classes.details}>
+      <Container style={{ marginBottom: '2rem' }}>
+        <Grid my="2rem">
+          <Grid.Col span={{ base: 12, md: 8 }}>
+            <Title mb="1rem">
+              {data?.firstName} {data?.lastName}
+            </Title>
+            <section className={classes.patientInfoContainer}>
+              <Text>Date of birth</Text>
+              <Text>Gender</Text>
+              <Text>Preferred language</Text>
+              <Text>{data?.dateOfBirth}</Text>
+              <Text>{humanize(data?.gender)}</Text>
+              <Text>{humanize(data?.language)}</Text>
+            </section>
+          </Grid.Col>
+          <Grid.Col display={{ base: 'none', md: 'block' }} span={4} ta="right">
+            <QRCode value={`${window.location.origin}${location.pathname}`} />
+          </Grid.Col>
+        </Grid>
+        <ContactInfo
+          emergencyContact={data?.emergencyContact}
+          physician={data?.physician}
+        />
+        <MedicalInfo
+          allergies={data?.allergies}
+          medications={data?.medications}
+          conditions={data?.conditions}
+        />
+        <Preferences codeStatus={data?.codeStatus} hospital={data?.hospital} />
+      </Container>
     </main>
   );
 }
