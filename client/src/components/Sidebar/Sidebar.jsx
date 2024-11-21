@@ -11,6 +11,8 @@ import {
   IconSpeakerphone,
   IconSquareArrowRight,
 } from '@tabler/icons-react';
+import PropTypes from 'prop-types';
+
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
@@ -61,10 +63,14 @@ const sections = [
   },
 ];
 
+const SidebarProps = {
+  toggleSidebar: PropTypes.func,
+};
+
 /**
  * Collapsible sidebar
  */
-export function Sidebar() {
+export function Sidebar({toggleSidebar}) {
   return (
     <nav className={classes.navbar}>
       <Group align="center" className={classes.title}>
@@ -84,9 +90,10 @@ export function Sidebar() {
                 {...item}
                 key={`section_${item.label}`}
                 initiallyOpened
+                toggleSidebar={toggleSidebar}
               />
             ) : (
-              <SidebarLink {...item} key={`header_${item.label}`} />
+              <SidebarLink toggleSidebar={toggleSidebar} {...item} key={`header_${item.label}`} />
             );
           })}
         </div>
@@ -95,6 +102,8 @@ export function Sidebar() {
     </nav>
   );
 }
+
+Sidebar.propTypes = SidebarProps;
 
 /**
  *

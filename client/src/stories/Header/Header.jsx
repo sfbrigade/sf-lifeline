@@ -9,7 +9,7 @@ import {
   Drawer,
   rem,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDidUpdate, useDisclosure } from '@mantine/hooks';
 
 import classes from './header.module.css';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
@@ -59,7 +59,7 @@ export function Header({ user = null }) {
           mx="-md"
           scrollbars="y"
         >
-          <Sidebar />
+          <Sidebar toggleSidebar={toggleDrawer}/>
         </ScrollArea>
       </Drawer>
     </Box>
