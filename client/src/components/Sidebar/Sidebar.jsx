@@ -68,6 +68,7 @@ const SidebarProps = {
 
 /**
  * Collapsible sidebar
+ * @param {PropTypes.InferProps<typeof SidebarProps>} props
  */
 export function Sidebar({ toggleSidebar }) {
   return (

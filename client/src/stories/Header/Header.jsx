@@ -9,7 +9,7 @@ import {
   Drawer,
   rem,
 } from '@mantine/core';
-import { useDidUpdate, useDisclosure } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 
 import classes from './header.module.css';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
