@@ -59,7 +59,7 @@ export function Header({ user = null }) {
           mx="-md"
           scrollbars="y"
         >
-          <Sidebar toggleSidebar={toggleDrawer}/>
+          <Sidebar toggleSidebar={toggleDrawer} />
         </ScrollArea>
       </Drawer>
     </Box>

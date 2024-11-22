@@ -13,7 +13,6 @@ import {
 } from '@tabler/icons-react';
 import PropTypes from 'prop-types';
 
-
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
 import classes from './sidebar.module.css';
@@ -70,7 +69,7 @@ const SidebarProps = {
 /**
  * Collapsible sidebar
  */
-export function Sidebar({toggleSidebar}) {
+export function Sidebar({ toggleSidebar }) {
   return (
     <nav className={classes.navbar}>
       <Group align="center" className={classes.title}>
@@ -93,7 +92,11 @@ export function Sidebar({toggleSidebar}) {
                 toggleSidebar={toggleSidebar}
               />
             ) : (
-              <SidebarLink toggleSidebar={toggleSidebar} {...item} key={`header_${item.label}`} />
+              <SidebarLink
+                toggleSidebar={toggleSidebar}
+                {...item}
+                key={`header_${item.label}`}
+              />
             );
           })}
         </div>
