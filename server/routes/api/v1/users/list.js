@@ -7,11 +7,14 @@ export default async function (fastify, _opts) {
     {
       schema: {
         querystring: {
-          page: { type: 'integer' },
-          perPage: { type: 'integer' },
-          status: {
-            type: 'string',
-            enum: ['unapproved', 'approved', 'rejected', 'disabled'],
+          type: 'object',
+          properties: {
+            page: { type: 'integer' },
+            perPage: { type: 'integer' },
+            status: {
+              type: 'string',
+              enum: ['unapproved', 'approved', 'rejected', 'disabled'],
+            },
           },
         },
         response: {

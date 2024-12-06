@@ -7,7 +7,10 @@ export default async function (fastify) {
     {
       schema: {
         querystring: {
-          license: { type: 'string' },
+          type: 'object',
+          properties: {
+            license: { type: 'string' },
+          },
         },
       },
     },
