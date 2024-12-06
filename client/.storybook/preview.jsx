@@ -4,7 +4,10 @@ import { useEffect } from 'react';
 import { addons } from '@storybook/preview-api';
 import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 import { MantineProvider, useMantineColorScheme } from '@mantine/core';
+import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { theme } from '../src/theme';
+import { ContextProvider } from '../src/Context';
 
 const channel = addons.getChannel();
 
@@ -19,16 +22,26 @@ const ColorSchemeWrapper = ({ children }) => {
   return <>{children}</>;
 };
 
+const queryClient = new QueryClient({});
+
 export const decorators = [
   (renderStory) => <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>,
   (renderStory) => (
     <MantineProvider theme={theme}>{renderStory()}</MantineProvider>
   ),
+  (renderStory) => <ContextProvider>{renderStory()}</ContextProvider>,
+  (renderStory) => (
+    <MemoryRouter initialEntries={['/']}>{renderStory()}</MemoryRouter>
+  ),
+  (renderStory) => (
+    <QueryClientProvider client={queryClient}>
+      {renderStory()}
+    </QueryClientProvider>
+  ),
 ];
 
 const preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
