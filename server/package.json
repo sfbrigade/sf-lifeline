@@ -8,7 +8,7 @@
     "test": "test"
   },
   "prisma": {
-    "seed": "npx prisma/seed"
+    "seed": "node prisma/seed"
   },
   "scripts": {
     "db:preview": "npx prisma studio",
