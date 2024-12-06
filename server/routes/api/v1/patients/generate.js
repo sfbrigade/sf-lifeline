@@ -7,7 +7,10 @@ export default async function (fastify, _opts) {
     {
       schema: {
         querystring: {
-          count: { type: 'integer' },
+          type: 'object',
+          properties: {
+            count: { type: 'integer' },
+          },
         },
         response: {
           [StatusCodes.OK]: {

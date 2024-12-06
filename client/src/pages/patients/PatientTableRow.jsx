@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Table, Menu, ActionIcon } from '@mantine/core';
 import {

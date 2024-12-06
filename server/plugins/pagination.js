@@ -17,7 +17,7 @@ export default fp(async function (fastify) {
         },
       } = reply;
       const [host, port] = hostname.split(':');
-      const baseUrl = `${protocol}://${host}${port !== '80' && port !== '443' ? `:${port}` : ''}${url}?`;
+      const baseUrl = `${protocol}://${host}${!!port && port !== '80' && port !== '443' ? `:${port}` : ''}${url}?`;
       let Link = '';
       if (pageNum < pages) {
         Link += `<${baseUrl}${new URLSearchParams({ ...query, page: pageNum + 1 }).toString()}>; rel="next"`;

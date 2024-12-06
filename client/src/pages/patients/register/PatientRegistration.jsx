@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 import { Flex, Button, Modal, Text, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';

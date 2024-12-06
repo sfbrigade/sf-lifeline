@@ -49,5 +49,13 @@ export const Default = {
     },
     openedSection: 'patientData',
     handleAccordionChange: () => {},
+    showCheck: false,
+    initialMedicalData: {
+      allergies: [],
+      medications: [],
+      conditions: [],
+    },
+    initialHospitalData: '',
+    initialPhysicianData: '',
   },
 };

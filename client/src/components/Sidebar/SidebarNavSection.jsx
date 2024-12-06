@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import { Group, Box, Text, UnstyledButton, Collapse } from '@mantine/core';
 

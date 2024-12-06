@@ -7,9 +7,12 @@ export default async function (fastify) {
     {
       schema: {
         querystring: {
-          page: { type: 'integer' },
-          limit: { type: 'integer' },
-          hospital: { type: 'string' },
+          type: 'object',
+          properties: {
+            page: { type: 'integer' },
+            limit: { type: 'integer' },
+            hospital: { type: 'string' },
+          },
         },
         response: {
           [StatusCodes.OK]: {
