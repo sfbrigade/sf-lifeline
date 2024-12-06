@@ -9,7 +9,7 @@ import {
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import classes from './adminPendingUsers.module.css';
 import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';

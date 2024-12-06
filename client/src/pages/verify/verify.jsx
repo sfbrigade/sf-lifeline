@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingOverlay } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { notifications } from '@mantine/notifications';
 /**
  * Email Verification

@@ -1,11 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  Outlet,
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Outlet, Routes, Route, useLocation, useNavigate } from 'react-router';
 import { Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
