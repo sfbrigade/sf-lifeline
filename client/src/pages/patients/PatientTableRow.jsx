@@ -6,7 +6,7 @@ import { Table, Menu, ActionIcon } from '@mantine/core';
 import {
   TbDotsVertical as IconDotsVertical,
   TbUser as IconUser,
-  TbQrCode as IconQrcode,
+  TbQrcode as IconQrcode,
   TbTrash as IconTrash,
 } from 'react-icons/tb';
 
