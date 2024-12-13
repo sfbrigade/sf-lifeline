@@ -2,12 +2,12 @@ import React from 'react';
 import { NavLink as RouterNavLink } from 'react-router';
 import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
 import {
-  TbHealthRecognition,
+  // TbHealthRecognition,
   TbHeartHandshake,
-  TbMessageReport,
-  TbNotebook,
+  // TbMessageReport,
+  // TbNotebook,
   TbQrcode,
-  TbSettings,
+  // TbSettings,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -21,12 +21,16 @@ const sections = [
     label: 'Admin panel',
     icon: null,
     links: [
-      { label: 'Dashboard', icon: <LuLayoutDashboard />, href: '/' },
+      {
+        label: 'Dashboard',
+        icon: <LuLayoutDashboard className={classes.navbar__icon} />,
+        href: '/',
+      },
       {
         label: 'QR Code',
         href: '/admin/patients/generate',
         target: '_blank',
-        icon: <TbQrcode />,
+        icon: <TbQrcode className={classes.navbar__icon} />,
       },
     ],
   },
@@ -34,40 +38,40 @@ const sections = [
     label: 'Management',
     icon: null,
     links: [
-      {
-        label: 'Events',
-        href: '/',
-        icon: <TbHealthRecognition />,
-      },
+      // {
+      //   label: 'Events',
+      //   href: '/',
+      //   icon: <TbHealthRecognition className={classes.navbar__icon} />,
+      // },
       {
         label: 'Members',
         href: '/admin/users',
-        icon: <FiUsers />,
+        icon: <FiUsers className={classes.navbar__icon} />,
       },
       {
         label: 'Patients',
         href: '/patients',
-        icon: <TbHeartHandshake />,
+        icon: <TbHeartHandshake className={classes.navbar__icon} />,
       },
     ],
   },
-  {
-    label: 'Settings',
-    icon: null,
-    links: [
-      { label: 'Resources', href: '/', icon: <TbNotebook /> },
-      {
-        label: 'Settings',
-        href: '/',
-        icon: <TbSettings />,
-      },
-      {
-        label: 'Report Issue',
-        href: '/',
-        icon: <TbMessageReport />,
-      },
-    ],
-  },
+  // {
+  //   label: 'Settings',
+  //   icon: null,
+  //   links: [
+  //     { label: 'Resources', href: '/', icon: <TbNotebook className={classes.navbar__icon} /> },
+  //     {
+  //       label: 'Settings',
+  //       href: '/',
+  //       icon: <TbSettings className={classes.navbar__icon} />,
+  //     },
+  //     {
+  //       label: 'Report Issue',
+  //       href: '/',
+  //       icon: <TbMessageReport className={classes.navbar__icon} />,
+  //     },
+  //   ],
+  // },
 ];
 
 const SidebarProps = {
@@ -113,7 +117,7 @@ export function Sidebar({ toggleSidebar }) {
                   component={RouterNavLink}
                   to={link.href}
                   label={
-                    <Text fz="md" fw="bold">
+                    <Text fz="md" fw="600">
                       {link.label}
                     </Text>
                   }
@@ -129,7 +133,7 @@ export function Sidebar({ toggleSidebar }) {
           <Box fz="sm">
             {user && (
               <>
-                <Box fw="bold">{`${user?.firstName} ${user?.lastName}`}</Box>
+                <Box fw="600">{`${user?.firstName} ${user?.lastName}`}</Box>
                 <Box c="gray.7">{user?.email}</Box>
               </>
             )}

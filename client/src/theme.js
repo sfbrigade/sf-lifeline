@@ -1,8 +1,6 @@
 import { createTheme } from '@mantine/core';
 
 export const theme = createTheme({
-  //themes here
-  fontFamily: 'sans-serif',
   defaultRadius: 'md',
   breakpoints: {
     xs: '30em',
