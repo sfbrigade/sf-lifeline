@@ -6,7 +6,6 @@ import {
   TbHeartHandshake,
   // TbMessageReport,
   // TbNotebook,
-  TbQrcode,
   // TbSettings,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
@@ -25,12 +24,6 @@ const sections = [
         label: 'Dashboard',
         icon: <LuLayoutDashboard className={classes.navbar__icon} />,
         href: '/',
-      },
-      {
-        label: 'QR Code',
-        href: '/admin/patients/generate',
-        target: '_blank',
-        icon: <TbQrcode className={classes.navbar__icon} />,
       },
     ],
   },
