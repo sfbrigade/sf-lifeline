@@ -1,45 +1,53 @@
 import React from 'react';
-import { Box, Group, ScrollArea } from '@mantine/core';
+import { NavLink as RouterNavLink } from 'react-router';
+import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
 import {
-  TbDashboard as IconDashboard,
-  TbEmergencyBed as IconEmergencyBed,
-  TbUsersGroup as IconUsersGroup,
-  TbZoomCheck as IconZoomCheck,
-  TbQrcode as IconQrcode,
-  TbUserCircle as IconUserCircle,
-  TbNotification as IconNotification,
-  TbSpeakerphone as IconSpeakerphone,
+  TbHealthRecognition,
+  TbHeartHandshake,
+  TbMessageReport,
+  TbNotebook,
+  TbQrcode,
+  TbSettings,
 } from 'react-icons/tb';
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut, FiUsers } from 'react-icons/fi';
+import { LuLayoutDashboard } from 'react-icons/lu';
 import PropTypes from 'prop-types';
-
-import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
 import classes from './Sidebar.module.css';
 import { useAuthorization } from '../../hooks/useAuthorization';
 
 const sections = [
-  { label: 'Dashboard', icon: <IconDashboard />, href: '/' },
+  {
+    label: 'Admin panel',
+    icon: null,
+    links: [
+      { label: 'Dashboard', icon: <LuLayoutDashboard />, href: '/' },
+      {
+        label: 'QR Code',
+        href: '/admin/patients/generate',
+        target: '_blank',
+        icon: <TbQrcode />,
+      },
+    ],
+  },
   {
     label: 'Management',
     icon: null,
     links: [
       {
+        label: 'Events',
+        href: '/',
+        icon: <TbHealthRecognition />,
+      },
+      {
+        label: 'Members',
+        href: '/admin/users',
+        icon: <FiUsers />,
+      },
+      {
         label: 'Patients',
         href: '/patients',
-        icon: <IconEmergencyBed />,
-      },
-      {
-        label: 'Team Member',
-        href: '/admin/users',
-        icon: <IconUsersGroup />,
-      },
-      { label: 'Verification', href: '/', icon: <IconZoomCheck /> },
-      {
-        label: 'QR Code',
-        href: '/admin/patients/generate',
-        target: '_blank',
-        icon: <IconQrcode />,
+        icon: <TbHeartHandshake />,
       },
     ],
   },
@@ -47,16 +55,16 @@ const sections = [
     label: 'Settings',
     icon: null,
     links: [
-      { label: 'Account', href: '/', icon: <IconUserCircle /> },
+      { label: 'Resources', href: '/', icon: <TbNotebook /> },
       {
-        label: 'Notification',
+        label: 'Settings',
         href: '/',
-        icon: <IconNotification />,
+        icon: <TbSettings />,
       },
       {
         label: 'Report Issue',
         href: '/',
-        icon: <IconSpeakerphone />,
+        icon: <TbMessageReport />,
       },
     ],
   },
@@ -71,48 +79,6 @@ const SidebarProps = {
  * @param {PropTypes.InferProps<typeof SidebarProps>} props
  */
 export function Sidebar({ toggleSidebar }) {
-  return (
-    <nav className={classes.navbar}>
-      <Group align="center" className={classes.title}>
-        <img
-          src="/logo.svg"
-          alt="SF Lifeline Logo"
-          width={'30rem'}
-          height={'30rem'}
-        />
-        <p>SF Life Line</p>
-      </Group>
-      <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>
-          {sections.map((item) => {
-            return item.links?.length > 0 ? (
-              <SidebarNavSection
-                {...item}
-                key={`section_${item.label}`}
-                initiallyOpened
-                toggleSidebar={toggleSidebar}
-              />
-            ) : (
-              <SidebarLink
-                toggleSidebar={toggleSidebar}
-                {...item}
-                key={`header_${item.label}`}
-              />
-            );
-          })}
-        </div>
-      </ScrollArea>
-      <AccountFooter />
-    </nav>
-  );
-}
-
-Sidebar.propTypes = SidebarProps;
-
-/**
- *
- */
-export function AccountFooter() {
   const { user, handleLogout } = useAuthorization();
 
   /**
@@ -124,20 +90,61 @@ export function AccountFooter() {
   }
 
   return (
-    <footer className={classes.footer}>
-      <Group justify="space-between" align="top">
-        <Box fz="sm">
-          {user && (
-            <>
-              <Box fw="bold">{`${user?.firstName} ${user?.lastName}`}</Box>
-              <Box c="gray.7">{user?.email}</Box>
-            </>
-          )}
+    <>
+      <Stack justify="space-between" px="md" py="xl" w="100%" h="100%">
+        <Box>
+          <Group align="center" gap="sm" mb="lg">
+            <img
+              src="/logo.svg"
+              alt="SF Lifeline Logo"
+              width={'32rem'}
+              height={'32rem'}
+            />
+            <Title order={4}>SF Life Line</Title>
+          </Group>
+          {sections.map((section) => (
+            <Box key={section.label} mb="lg">
+              <Title fw="normal" pl="sm" order={6}>
+                {section.label}
+              </Title>
+              {section.links?.map((link) => (
+                <NavLink
+                  key={link.label}
+                  component={RouterNavLink}
+                  to={link.href}
+                  label={
+                    <Text fz="md" fw="bold">
+                      {link.label}
+                    </Text>
+                  }
+                  leftSection={link.icon}
+                  target={link.target}
+                  onClick={toggleSidebar}
+                />
+              ))}
+            </Box>
+          ))}
         </Box>
-        <a className={classes.footer__logout} href="/logout" onClick={onLogout}>
-          <FiLogOut />
-        </a>
-      </Group>
-    </footer>
+        <Group className={classes.footer} justify="space-between" align="top">
+          <Box fz="sm">
+            {user && (
+              <>
+                <Box fw="bold">{`${user?.firstName} ${user?.lastName}`}</Box>
+                <Box c="gray.7">{user?.email}</Box>
+              </>
+            )}
+          </Box>
+          <a
+            className={classes.footer__logout}
+            href="/logout"
+            onClick={onLogout}
+          >
+            <FiLogOut />
+          </a>
+        </Group>
+      </Stack>
+    </>
   );
 }
+
+Sidebar.propTypes = SidebarProps;
