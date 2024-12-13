@@ -10,7 +10,7 @@ import {
 import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
 
-import { IconSearch } from '@tabler/icons-react';
+import { TbSearch as IconSearch } from 'react-icons/tb';
 
 import classes from './Patients.module.css';
 import PatientsTable from './PatientsTable';

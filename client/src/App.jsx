@@ -8,7 +8,7 @@ import { Layout } from './stories/Layout/Layout';
 import Home from './pages/home';
 import Login from './pages/auth/login/login';
 import Register from './pages/auth/register/register';
-import Dashboard from './pages/dashboard/dashboard';
+import Dashboard from './pages/dashboard/Dashboard';
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
 import NotFound from './pages/notFound/NotFound';
 import { AdminUsers } from './pages/admin/users/AdminUsers';

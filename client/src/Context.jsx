@@ -21,14 +21,15 @@ const contextProviderProps = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  initialUser: PropTypes.object,
 };
 
 /**
  *
  * @param {PropTypes.InferProps<typeof contextProviderProps>} props
  */
-function ContextProvider({ children }) {
-  const [user, setUser] = useState(null);
+function ContextProvider({ children, initialUser }) {
+  const [user, setUser] = useState(initialUser);
 
   const contextValue = {
     user,

@@ -6,7 +6,7 @@ import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
 
-import './layout.css';
+import classes from './layout.module.css';
 
 /**
  * Main layout
@@ -14,14 +14,14 @@ import './layout.css';
 export const Layout = () => {
   const { user } = useAuthorization();
   return (
-    <div className="layout">
-      <div className="layout-sidebar">
+    <div className={classes.layout}>
+      <div className={classes.layout__sidebar}>
         <Sidebar />
       </div>
-      <div className="layout-header">
+      <div className={classes.layout__header}>
         <Header user={user} />
       </div>
-      <div className="layout-content">
+      <div className={classes.layout__content}>
         <Outlet />
       </div>
     </div>

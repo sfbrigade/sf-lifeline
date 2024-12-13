@@ -4,11 +4,11 @@ import { Link } from 'react-router';
 
 import { Table, Menu, ActionIcon } from '@mantine/core';
 import {
-  IconDotsVertical,
-  IconUser,
-  IconQrcode,
-  IconTrash,
-} from '@tabler/icons-react';
+  TbDotsVertical as IconDotsVertical,
+  TbUser as IconUser,
+  TbQrcode as IconQrcode,
+  TbTrash as IconTrash,
+} from 'react-icons/tb';
 
 const patientTableRowProps = {
   headers: PropTypes.arrayOf(

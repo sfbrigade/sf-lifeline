@@ -1,12 +1,12 @@
 import React from 'react';
 import { Menu, rem, ActionIcon } from '@mantine/core';
 import {
-  IconSettings,
-  IconMessageCircle,
-  IconTrash,
-  IconArrowsLeftRight,
-  IconDotsVertical,
-} from '@tabler/icons-react';
+  TbSettings as IconSettings,
+  TbMessageCircle as IconMessageCircle,
+  TbTrash as IconTrash,
+  TbArrowsLeftRight as IconArrowsLeftRight,
+  TbDotsVertical as IconDotsVertical,
+} from 'react-icons/tb';
 
 /**
  *
