@@ -89,7 +89,7 @@ const preview = {
     },
   },
   initialGlobals: {
-    user: 'none',
+    user: 'NONE',
   },
   parameters: {
     controls: {
