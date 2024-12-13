@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { IconSearch } from '@tabler/icons-react';
+import { TbSearch as IconSearch } from 'react-icons/tb';
 import {
   Badge,
   Box,

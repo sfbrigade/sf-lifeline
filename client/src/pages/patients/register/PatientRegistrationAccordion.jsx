@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { IconCircleCheck } from '@tabler/icons-react';
+import { TbCircleCheck as IconCircleCheck } from 'react-icons/tb';
 import { IMaskInput } from 'react-imask';
 import { humanize } from 'inflection';
 

@@ -8,7 +8,7 @@ import {
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { TbChevronLeft as IconChevronLeft } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
 import classes from './adminPendingUsers.module.css';
