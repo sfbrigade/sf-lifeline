@@ -127,10 +127,14 @@ export function AccountFooter() {
     <footer className={classes.footer}>
       <Group justify="space-between" py="md" px="md">
         <Container px="0">
-          <div>
-            <strong>{`${user?.firstName} ${user?.lastName}`}</strong>
-          </div>
-          <div>{user?.email}</div>
+          {user && (
+            <>
+              <div>
+                <strong>{`${user?.firstName} ${user?.lastName}`}</strong>
+              </div>
+              <div>{user?.email}</div>
+            </>
+          )}
         </Container>
         <ActionIcon
           component="a"

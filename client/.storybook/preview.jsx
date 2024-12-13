@@ -24,12 +24,48 @@ const ColorSchemeWrapper = ({ children }) => {
 
 const queryClient = new QueryClient({});
 
+const USERS = {
+  NONE: null,
+  ADMIN: {
+    id: 'b3dedbd4-5092-4303-a487-98d3d010b4eb',
+    role: 'ADMIN',
+    firstName: 'Admin',
+    lastName: 'User',
+    email: 'admin.user@sflifeline.app',
+  },
+  STAFF: {
+    id: 'b3dedbd4-5092-4303-a487-98d3d010b4eb',
+    role: 'STAFF',
+    firstName: 'Staff',
+    lastName: 'User',
+    email: 'staff.user@sflifeline.app',
+  },
+  VOLUNTEER: {
+    id: 'b3dedbd4-5092-4303-a487-98d3d010b4eb',
+    role: 'VOLUNTEER',
+    firstName: 'Volunteer',
+    lastName: 'User',
+    email: 'volunteer.user@sflifeline.app',
+  },
+  FIRST_RESPONDER: {
+    id: 'b3dedbd4-5092-4303-a487-98d3d010b4eb',
+    role: 'FIRST_RESPONDER',
+    firstName: 'First',
+    lastName: 'Responder',
+    email: 'first.responder@sflifeline.app',
+  },
+};
+
 export const decorators = [
   (renderStory) => <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>,
   (renderStory) => (
     <MantineProvider theme={theme}>{renderStory()}</MantineProvider>
   ),
-  (renderStory) => <ContextProvider>{renderStory()}</ContextProvider>,
+  (renderStory, context) => (
+    <ContextProvider initialUser={USERS[context.globals.user]}>
+      {renderStory()}
+    </ContextProvider>
+  ),
   (renderStory) => (
     <MemoryRouter initialEntries={['/']}>{renderStory()}</MemoryRouter>
   ),
@@ -41,6 +77,20 @@ export const decorators = [
 ];
 
 const preview = {
+  globalTypes: {
+    user: {
+      description: 'Global user type',
+      toolbar: {
+        title: 'User',
+        icon: 'user',
+        items: ['NONE', 'ADMIN', 'STAFF', 'VOLUNTEER', 'FIRST_RESPONDER'],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    user: 'none',
+  },
   parameters: {
     controls: {
       matchers: {
