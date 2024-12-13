@@ -6,7 +6,7 @@ import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
 
 import { useAuthorization } from '../../hooks/useAuthorization';
 
-import classes from './layout.module.css';
+import classes from './Layout.module.css';
 
 /**
  * Main layout
