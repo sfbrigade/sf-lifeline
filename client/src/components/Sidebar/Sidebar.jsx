@@ -1,25 +1,25 @@
 import React from 'react';
-import { ActionIcon, Container, Group, ScrollArea } from '@mantine/core';
+import { Box, Group, ScrollArea } from '@mantine/core';
 import {
-  IconDashboard,
-  IconEmergencyBed,
-  IconUsersGroup,
-  IconZoomCheck,
-  IconQrcode,
-  IconUserCircle,
-  IconNotification,
-  IconSpeakerphone,
-  IconSquareArrowRight,
-} from '@tabler/icons-react';
+  TbDashboard as IconDashboard,
+  TbEmergencyBed as IconEmergencyBed,
+  TbUsersGroup as IconUsersGroup,
+  TbZoomCheck as IconZoomCheck,
+  TbQrcode as IconQrcode,
+  TbUserCircle as IconUserCircle,
+  TbNotification as IconNotification,
+  TbSpeakerphone as IconSpeakerphone,
+} from 'react-icons/tb';
+import { FiLogOut } from 'react-icons/fi';
 import PropTypes from 'prop-types';
 
 import { SidebarNavSection, SidebarLink } from './SidebarNavSection';
 
-import classes from './sidebar.module.css';
+import classes from './Sidebar.module.css';
 import { useAuthorization } from '../../hooks/useAuthorization';
 
 const sections = [
-  { label: 'Dashboard', icon: <IconDashboard stroke={2} />, href: '/' },
+  { label: 'Dashboard', icon: <IconDashboard />, href: '/' },
   {
     label: 'Management',
     icon: null,
@@ -27,19 +27,19 @@ const sections = [
       {
         label: 'Patients',
         href: '/patients',
-        icon: <IconEmergencyBed stroke={2} />,
+        icon: <IconEmergencyBed />,
       },
       {
         label: 'Team Member',
         href: '/admin/users',
-        icon: <IconUsersGroup stroke={2} />,
+        icon: <IconUsersGroup />,
       },
-      { label: 'Verification', href: '/', icon: <IconZoomCheck stroke={2} /> },
+      { label: 'Verification', href: '/', icon: <IconZoomCheck /> },
       {
         label: 'QR Code',
         href: '/admin/patients/generate',
         target: '_blank',
-        icon: <IconQrcode stroke={2} />,
+        icon: <IconQrcode />,
       },
     ],
   },
@@ -47,16 +47,16 @@ const sections = [
     label: 'Settings',
     icon: null,
     links: [
-      { label: 'Account', href: '/', icon: <IconUserCircle stroke={2} /> },
+      { label: 'Account', href: '/', icon: <IconUserCircle /> },
       {
         label: 'Notification',
         href: '/',
-        icon: <IconNotification stroke={2} />,
+        icon: <IconNotification />,
       },
       {
         label: 'Report Issue',
         href: '/',
-        icon: <IconSpeakerphone stroke={2} />,
+        icon: <IconSpeakerphone />,
       },
     ],
   },
@@ -125,26 +125,18 @@ export function AccountFooter() {
 
   return (
     <footer className={classes.footer}>
-      <Group justify="space-between" py="md" px="md">
-        <Container px="0">
+      <Group justify="space-between" align="top">
+        <Box fz="sm">
           {user && (
             <>
-              <div>
-                <strong>{`${user?.firstName} ${user?.lastName}`}</strong>
-              </div>
-              <div>{user?.email}</div>
+              <Box fw="bold">{`${user?.firstName} ${user?.lastName}`}</Box>
+              <Box c="gray.7">{user?.email}</Box>
             </>
           )}
-        </Container>
-        <ActionIcon
-          component="a"
-          href="/logout"
-          onClick={onLogout}
-          variant="default"
-          aria-label="account"
-        >
-          <IconSquareArrowRight />
-        </ActionIcon>
+        </Box>
+        <a className={classes.footer__logout} href="/logout" onClick={onLogout}>
+          <FiLogOut />
+        </a>
       </Group>
     </footer>
   );
