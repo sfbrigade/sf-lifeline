@@ -6,7 +6,7 @@
     "server"
   ],
   "scripts": {
-    "heroku-postbuild": "npm run -w client build; cd server; npx prisma generate",
+    "heroku-postbuild": "npm run -w client build && cd server && npx prisma generate",
     "start": "npm run -w server start",
     "start:dev": "nf start -j Procfile.dev",
     "test": "npm run test --workspaces",
