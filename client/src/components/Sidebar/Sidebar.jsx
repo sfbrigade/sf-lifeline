@@ -88,7 +88,14 @@ export function Sidebar({ toggleSidebar }) {
 
   return (
     <>
-      <Stack justify="space-between" px="md" py="xl" w="100%" h="100%">
+      <Stack
+        className={classes.navbar}
+        justify="space-between"
+        px="md"
+        py="xl"
+        w="100%"
+        h="100%"
+      >
         <Box>
           <Group align="center" gap="sm" mb="lg">
             <img
@@ -122,7 +129,12 @@ export function Sidebar({ toggleSidebar }) {
             </Box>
           ))}
         </Box>
-        <Group className={classes.footer} justify="space-between" align="top">
+        <Group
+          className={classes.footer}
+          justify="space-between"
+          align="top"
+          wrap="nowrap"
+        >
           <Box fz="sm">
             {user && (
               <>

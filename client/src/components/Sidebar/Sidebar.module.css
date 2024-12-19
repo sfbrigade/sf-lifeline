@@ -1,5 +1,5 @@
 .navbar {
-  border-right: 1px solid var(--mantine-color-gray-3);
+  min-width: 19.5rem;
 }
 
 .navbar__icon {
@@ -10,6 +10,7 @@
 .footer {
   border-top: 1px solid var(--mantine-color-gray-3);
   padding: 1.25rem 0 0;
+  min-height: 4rem;
 }
 
 .footer__logout {
