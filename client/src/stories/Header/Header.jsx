@@ -47,7 +47,6 @@ export function Header({ user = null }) {
         opened={drawerOpened}
         onClose={closeDrawer}
         size="100%"
-        title="Navigation"
         hiddenFrom="sm"
         zIndex={1}
         position="left"
