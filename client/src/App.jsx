@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { Outlet, Routes, Route, useLocation, useNavigate } from 'react-router';
+import React, { useContext } from 'react';
+import { Routes, Route } from 'react-router';
 import { Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import PropTypes from 'prop-types';
 
+import ProtectedRoute from './components/ProtectedRoute';
 import Redirect from './components/Redirect';
 
 import { Layout } from './stories/Layout/Layout';
@@ -24,47 +24,6 @@ import Verify from './pages/verify/verify';
 import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
 import Patients from './pages/patients/Patients';
-
-const ProtectedRouteProps = {
-  role: PropTypes.string.isRequired,
-  restrictedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  destination: PropTypes.string,
-  message: PropTypes.string,
-  children: PropTypes.element.isRequired,
-};
-
-/**
- * Protect route elements that don't allow for FIRST_RESPONDER role
- * @param {PropTypes.InferProps<typeof ProtectedRouteProps>} props
- * @returns {React.ReactElement}
- */
-function ProtectedRoute({
-  restrictedRoles,
-  role,
-  destination = 'notFound',
-  message,
-  children,
-}) {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (restrictedRoles.includes(role)) {
-      if (destination === 'forbidden') {
-        navigate('/forbidden', {
-          replace: true,
-        });
-      } else {
-        navigate('/not-found', {
-          replace: true,
-          state: { message },
-        });
-      }
-    }
-  }, [restrictedRoles, role, navigate, destination, message]);
-
-  return restrictedRoles.includes(role) ? <Loader /> : children;
-}
-
-ProtectedRoute.propTypes = ProtectedRouteProps;
 
 /**
  * Top-level application component.  *
