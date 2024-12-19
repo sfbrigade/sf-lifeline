@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 import { Loader } from '@mantine/core';
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ const ProtectedRouteProps = {
 /**
  * Protect route elements that don't allow for FIRST_RESPONDER role
  * @param {PropTypes.InferProps<typeof ProtectedRouteProps>} props
- * @returns {React.ReactElement}
+ * @returns {ReactElement}
  */
 function ProtectedRoute({
   restrictedRoles,

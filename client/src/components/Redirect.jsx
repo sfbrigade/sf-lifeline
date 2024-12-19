@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, ReactElement } from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router';
 import { Loader } from '@mantine/core';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ const RedirectProps = {
 /**
  * Redirects browser based on props
  * @param {PropTypes.InferProps<typeof RedirectProps>} props
- * @returns {React.ReactElement}
+ * @returns {ReactElement}
  */
 function Redirect({ isLoading, isLoggedIn, isLoggedInRequired }) {
   const location = useLocation();
