@@ -4,6 +4,8 @@ import { Loader } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 
+import Redirect from './components/Redirect';
+
 import { Layout } from './stories/Layout/Layout';
 import Home from './pages/home';
 import Login from './pages/auth/login/login';
@@ -22,41 +24,6 @@ import Verify from './pages/verify/verify';
 import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
 import Patients from './pages/patients/Patients';
-
-const RedirectProps = {
-  isLoading: PropTypes.bool.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-  isLoggedInRequired: PropTypes.bool,
-};
-
-/**
- * Redirects browser based on props
- * @param {PropTypes.InferProps<typeof RedirectProps>} props
- * @returns {React.ReactElement}
- */
-function Redirect({ isLoading, isLoggedIn, isLoggedInRequired }) {
-  const location = useLocation();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!isLoading) {
-      if (isLoggedInRequired && !isLoggedIn) {
-        let redirectTo = `${location.pathname}`;
-        if (location.search) {
-          redirectTo = `${redirectTo}?${location.search}`;
-        }
-        navigate('/login', { state: { redirectTo } });
-      } else if (!isLoggedInRequired && isLoggedIn) {
-        navigate('/dashboard');
-      }
-    }
-  }, [isLoading, isLoggedIn, isLoggedInRequired, location, navigate]);
-  if (isLoading) {
-    return <Loader />;
-  }
-  return <Outlet />;
-}
-
-Redirect.propTypes = RedirectProps;
 
 const ProtectedRouteProps = {
   role: PropTypes.string.isRequired,
