@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Outlet } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 
+import { Center, Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import Context from './Context';
@@ -20,7 +21,7 @@ function App({ handleRedirects }) {
   const { user, setUser } = useContext(Context);
   const { handleLogout } = useAuthorization();
 
-  useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => {
       return fetch('/api/v1/users/me', { credentials: 'include' })
@@ -42,7 +43,11 @@ function App({ handleRedirects }) {
     }
   }, [handleRedirects, handleLogout, user, location, navigate]);
 
-  return (
+  return isLoading ? (
+    <Center w="100vw" h="100vh">
+      <Loader />
+    </Center>
+  ) : (
     <>
       <Outlet />
       <Notifications position="bottom-right" />
