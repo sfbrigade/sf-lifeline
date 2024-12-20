@@ -32,6 +32,7 @@ export default function PatientDetails() {
         throw new Error('Failed to fetch patient.');
       }
     },
+    retry: false,
   });
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function PatientDetails() {
     }
   }, [isError, navigate, patientId]);
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <Loader />;
   }
 
