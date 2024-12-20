@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import { useContext, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router';
 import {
   Box,
   Button,
@@ -10,10 +10,21 @@ import {
   Title,
 } from '@mantine/core';
 
+import Context from '../Context';
+
 /**
  * Home page component.
  */
 function Home() {
+  const { user } = useContext(Context);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
+
   return (
     <>
       <header>

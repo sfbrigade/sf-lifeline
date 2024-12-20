@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
 
 import Context from '../Context';
 
@@ -19,7 +18,6 @@ import Context from '../Context';
 export function useAuthorization() {
   const { user, setUser } = useContext(Context);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: async (credentials) => {
@@ -37,10 +35,9 @@ export function useAuthorization() {
         return response;
       });
     },
-    onSuccess: async (data, { redirectTo }) => {
+    onSuccess: async (data) => {
       const result = await data.json();
       setUser(result);
-      navigate(redirectTo ?? '/');
     },
     onError: async (error) => {
       const errorBody = await error.json();
@@ -54,17 +51,12 @@ export function useAuthorization() {
     },
     onSuccess: () => {
       setUser(null);
-      navigate('/');
     },
   });
 
-  const handleLogin = async (credentials) => {
-    loginMutation.mutate(credentials);
-  };
+  const handleLogin = (credentials) => loginMutation.mutateAsync(credentials);
 
-  const handleLogout = async () => {
-    logoutMutation.mutate();
-  };
+  const handleLogout = () => logoutMutation.mutateAsync();
 
   return {
     user,

@@ -83,7 +83,7 @@ export function Sidebar({ toggleSidebar }) {
    */
   async function onLogout(event) {
     event.preventDefault();
-    handleLogout();
+    await handleLogout();
   }
 
   return (
