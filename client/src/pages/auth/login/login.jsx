@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 
 import { useAuthorization } from '../../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from '../form.module.css';
+import Context from '../../../Context';
 
 /**
  * Login page component.
@@ -15,15 +16,24 @@ function Login() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const { user } = useContext(Context);
   const { handleLogin, error } = useAuthorization();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { from: redirectTo } = location.state ?? {};
 
   const login = async () => {
     setEmailError(null);
     setPasswordError(null);
-    const { redirectTo } = location.state ?? {};
-    await handleLogin({ email, password, redirectTo });
+    await handleLogin({ email, password });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirectTo ?? '/', { replace: true });
+    }
+  }, [user, redirectTo, navigate]);
 
   useEffect(() => {
     if (error && error.status != StatusCodes.OK) {
