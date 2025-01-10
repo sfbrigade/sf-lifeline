@@ -35,7 +35,7 @@ function Register() {
         return response.json();
       })
       .then((data) => {
-        if (data.acceptedById.length != 0) {
+        if (data.acceptedById.length !== 0) {
           throw Error();
         }
 
@@ -49,7 +49,7 @@ function Register() {
           inviteId,
         }));
 
-        if (data.role != 'FIRST_RESPONDER') {
+        if (data.role !== 'FIRST_RESPONDER') {
           setFormState(2);
         }
       })
@@ -141,7 +141,7 @@ function Register() {
       })
       .catch((error) => {
         error.json().then(({ message }) => {
-          const updatedErrors = new Object();
+          const updatedErrors = {};
           message.forEach((m) => {
             if (updatedErrors[m.path]) {
               updatedErrors[m.path] += `. ${m.message}`;
