@@ -38,7 +38,7 @@ const sections = [
       // },
       {
         label: 'Members',
-        href: '/admin/users',
+        href: '/users',
         icon: <FiUsers className={classes.navbar__icon} />,
       },
       {

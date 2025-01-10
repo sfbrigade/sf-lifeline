@@ -11,13 +11,13 @@ import { useQuery } from '@tanstack/react-query';
 import { TbChevronLeft as IconChevronLeft } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
-import classes from './adminPendingUsers.module.css';
-import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
+import classes from './PendingUsers.module.css';
+import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
 
 /**
  * Page for admin to view pending users
  */
-function AdminPendingUsers() {
+function PendingUsers() {
   const navigate = useNavigate();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -154,4 +154,4 @@ function AdminPendingUsers() {
   );
 }
 
-export default AdminPendingUsers;
+export default PendingUsers;

@@ -3,7 +3,7 @@ import { Modal, Select, TextInput, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import PropTypes from 'prop-types';
-import classes from './admin.module.css';
+import classes from './Users.module.css';
 
 /**
  * Invite Modal
