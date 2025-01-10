@@ -12,13 +12,13 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { QRCode } from 'react-qrcode-logo';
 
-import classes from './AdminPatientsGenerate.module.css';
+import classes from './PatientsGenerate.module.css';
 
 /**
  *
  * @returns {React.ReactElement}
  */
-function AdminPatientsGenerate() {
+function PatientsGenerate() {
   const [numPages, setNumPages] = useState(1);
   const [layout, setLayout] = useState(12);
   const { isLoading, data } = useQuery({
@@ -82,4 +82,4 @@ function AdminPatientsGenerate() {
     </Container>
   );
 }
-export default AdminPatientsGenerate;
+export default PatientsGenerate;

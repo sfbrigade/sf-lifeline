@@ -22,26 +22,22 @@ export default async function (fastify, _opts) {
             },
           },
           [StatusCodes.NOT_FOUND]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
+            type: 'null',
           },
         },
       },
     },
     async (request, reply) => {
       const { id } = request.params;
-      const user = await fastify.prisma.user.findUnique({
-        where: { id: Number(id) },
+      const data = await fastify.prisma.user.findUnique({
+        where: { id },
       });
 
-      if (!user) {
-        reply.code(StatusCodes.NOT_FOUND).send({ message: 'User not found' });
-        return;
+      if (!data) {
+        return reply.notFound();
       }
 
-      reply.send(user);
+      reply.send(data);
     },
   );
 }

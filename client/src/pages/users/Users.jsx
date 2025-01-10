@@ -14,8 +14,8 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 
-import classes from './admin.module.css';
-import { UserDataTable } from '../../../components/UsersDataTable/UsersDataTable';
+import classes from './Users.module.css';
+import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
 import { InviteModal } from './InviteModal';
 
 const headers = [
@@ -28,7 +28,10 @@ const headers = [
   { key: 'more', text: '' },
 ];
 
-export const AdminUsers = () => {
+/**
+ * Users list.
+ */
+function Users() {
   const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
   const [opened, { open, close }] = useDisclosure(false);
@@ -76,7 +79,7 @@ export const AdminUsers = () => {
           <div className={classes.relative}>
             <Button
               variant="default"
-              onClick={() => navigate('/admin/pending-users')}
+              onClick={() => navigate('/users/pending')}
             >
               Pending Members
             </Button>
@@ -109,4 +112,6 @@ export const AdminUsers = () => {
       </Container>
     </Container>
   );
-};
+}
+
+export default Users;
