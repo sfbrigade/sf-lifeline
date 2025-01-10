@@ -69,7 +69,7 @@ function Register() {
    */
   function onFormChange(event) {
     const newUserChange = {};
-      const newErrorsChange = {};
+    const newErrorsChange = {};
     newUserChange[event.target.name] = event.target.value;
     newErrorsChange[event.target.name] = '';
     setUser({ ...user, ...newUserChange });

@@ -1,5 +1,5 @@
 import { Container } from '@mantine/core';
-import { useLocation, Link  } from 'react-router';
+import { useLocation, Link } from 'react-router';
 
 /**
  * Patient not found page component

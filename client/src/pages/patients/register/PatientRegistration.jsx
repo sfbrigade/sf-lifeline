@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation  } from 'react-router';
+import { useParams, useNavigate, useLocation } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 import { Flex, Button, Modal, Text, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -144,7 +144,6 @@ export default function PatientRegistration() {
 
     setOpenedSection(section);
     // NOTE: Only want this useEffect to run once on mount to set the opened section
-     
   }, []);
 
   // Sets the initial values of the form based on the data from an existing patient
@@ -218,7 +217,6 @@ export default function PatientRegistration() {
 
     // NOTE: below is necessary to avoid infinite loop when adding form to depedency arrays
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
-     
   }, [data]);
 
   const showSuccessNotification = (message) => {

@@ -3,11 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 
 import Context from '../Context';
 
-
-
 /**
- * Global user and login/logout logic 
- * 
+ * Global user and login/logout logic
+ *
  * @returns {{
  *  user: user,
  *  error: object,

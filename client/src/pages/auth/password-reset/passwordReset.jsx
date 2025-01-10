@@ -49,7 +49,7 @@ function PasswordReset() {
    */
   function onFormChange(event) {
     const newFormChange = {};
-      const newErrorsChange = {};
+    const newErrorsChange = {};
     newFormChange[event.target.name] = event.target.value;
     newErrorsChange[event.target.name] = '';
     setForm({ ...form, ...newFormChange });
