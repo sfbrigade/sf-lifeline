@@ -44,8 +44,8 @@ export const UserDataTableCell = ({ type, value }) => {
         <Table.Td>
           <Checkbox
             checked={value.selected}
-            // onChange is a Mantine prop for the Checkbox component, linter doesn't recognize it
-            // eslint-disable-next-line
+            // onChange is a Mantine prop for the Checkbox component, improperly considers it a react event handler
+            // eslint-disable-next-line react/jsx-handler-names
             onChange={value.select}
           />
         </Table.Td>
