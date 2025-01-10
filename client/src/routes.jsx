@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
 import App from './App';
@@ -50,9 +49,9 @@ export const UNAUTH_ROUTES = [
  * and checks the user role as appropriate. It invokes the callback if
  * a redirect is needed, and throws an error if the user is already logged in
  * but visits an unauthenticated route.
- * @param {PropTypes.object} user
- * @param {PropTypes.object} location
- * @param {PropTypes.func} callback
+ * @param {Object} user
+ * @param {Object} location
+ * @param {Function} callback
  */
 export function handleRedirects(user, location, callback) {
   const { pathname, search } = location;
