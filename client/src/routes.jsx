@@ -18,9 +18,9 @@ import Verify from './pages/verify/verify';
 import Dashboard from './pages/dashboard/Dashboard';
 
 import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
-import { AdminUsers } from './pages/admin/users/AdminUsers';
+import { Users } from './pages/users/Users';
 
-import AdminPendingUsers from './pages/admin/pending-users/AdminPendingUsers';
+import PendingUsers from './pages/users/PendingUsers';
 import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
 import Patients from './pages/patients/Patients';
@@ -30,7 +30,7 @@ export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
 
 // these are routes that require authentication and authorization by role
 export const AUTH_ROUTES = [
-  ['ADMIN', ['admin/users', 'admin/pending-users']],
+  ['ADMIN', ['users', 'users/pending']],
   ['STAFF', ['admin/patients/generate', 'patients']],
   ['VOLUNTEER', ['patients/register/:patientId']],
   ['FIRST_RESPONDER', ['dashboard', 'patients/:patientId']],
@@ -147,12 +147,12 @@ export default [
             ],
           },
           {
-            path: 'admin/users',
-            element: <AdminUsers />,
+            path: 'users',
+            element: <Users />,
           },
           {
-            path: 'admin/pending-users',
-            element: <AdminPendingUsers />,
+            path: 'users/pending',
+            element: <PendingUsers />,
           },
         ],
       },
