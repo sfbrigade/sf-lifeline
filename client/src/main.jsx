@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ContextProvider>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme}>
-          <RouterProvider router={router}></RouterProvider>
+          <RouterProvider router={router} />
         </MantineProvider>
       </QueryClientProvider>
     </ContextProvider>

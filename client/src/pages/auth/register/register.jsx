@@ -46,7 +46,7 @@ function Register() {
           lastName: data.lastName,
           email: data.email,
           role: data.role,
-          inviteId: inviteId,
+          inviteId,
         }));
 
         if (data.role != 'FIRST_RESPONDER') {
@@ -68,8 +68,8 @@ function Register() {
    * @param {*} event text field events
    */
   function onFormChange(event) {
-    const newUserChange = {},
-      newErrorsChange = {};
+    const newUserChange = {};
+      const newErrorsChange = {};
     newUserChange[event.target.name] = event.target.value;
     newErrorsChange[event.target.name] = '';
     setUser({ ...user, ...newUserChange });
