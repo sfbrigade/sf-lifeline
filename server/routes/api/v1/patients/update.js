@@ -230,7 +230,7 @@ export default async function (fastify, _opts) {
             if (value) newContactData[key] = value.trim();
             if (value?.trim()?.length === 0) newContactData[key] = null;
             if (key === 'relationship' && value === null)
-              newContactData[key] = value;
+              {newContactData[key] = value;}
           }
 
           const nullFields = Object.entries(newContactData).filter(
@@ -265,7 +265,7 @@ export default async function (fastify, _opts) {
             }
           } else {
             if (nullFields.length !== Object.keys(newContactData).length) {
-              let contact = await tx.contact.create({
+              const contact = await tx.contact.create({
                 data: newContactData,
               });
 
@@ -322,9 +322,9 @@ export default async function (fastify, _opts) {
                 });
                 if (!exists)
                   // Use throw instead of return to make sure transaction is rolled back
-                  throw reply.status(StatusCodes.NOT_FOUND).send({
+                  {throw reply.status(StatusCodes.NOT_FOUND).send({
                     message: `${key} with ID ${item} does not exist in database.`,
-                  });
+                  });}
 
                 await tx[model].upsert({
                   where: {
@@ -363,9 +363,9 @@ export default async function (fastify, _opts) {
             });
             if (!hospital)
               // Use throw instead of return to make sure transaction is rolled back
-              throw reply.status(StatusCodes.NOT_FOUND).send({
+              {throw reply.status(StatusCodes.NOT_FOUND).send({
                 message: `Hospital with ID ${hospitalId} does not exist in database.`,
-              });
+              });}
           }
 
           if (physicianId) {
@@ -373,9 +373,9 @@ export default async function (fastify, _opts) {
               where: { id: physicianId },
             });
             if (!physician)
-              throw reply.status(StatusCodes.NOT_FOUND).send({
+              {throw reply.status(StatusCodes.NOT_FOUND).send({
                 message: `Physician with ID ${physicianId} does not exist in database.`,
-              });
+              });}
           }
 
           const hospitalData = hospitalId

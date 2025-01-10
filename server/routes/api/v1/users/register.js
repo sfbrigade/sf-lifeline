@@ -66,7 +66,7 @@ export default async function (fastify, _opts) {
 
       // Check email is not duplicated
       const userFromEmail = await fastify.prisma.user.findUnique({
-        where: { email: email },
+        where: { email },
       });
 
       if (userFromEmail) {
@@ -109,7 +109,7 @@ export default async function (fastify, _opts) {
           const licenseResponse = await verifyLicense(licenseNumber);
           if (licenseResponse && licenseResponse.status !== 'Expired') {
             const userFromLicense = await fastify.prisma.user.findUnique({
-              where: { licenseNumber: licenseNumber },
+              where: { licenseNumber },
             });
 
             if (userFromLicense) {

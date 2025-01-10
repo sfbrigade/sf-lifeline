@@ -50,7 +50,7 @@ export default async function (fastify) {
           },
         });
         if (exists) {
-          let duplicateFields = [];
+          const duplicateFields = [];
           if (exists.phone === phone) {
             duplicateFields.push(`phone ${phone}`);
           }

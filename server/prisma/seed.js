@@ -141,7 +141,7 @@ async function seedMedications() {
       }
 
       return {
-        name: name,
+        name,
         altNames: alt,
         system: CodingSystemEnum.RXNORM,
         code: code.rxcui,

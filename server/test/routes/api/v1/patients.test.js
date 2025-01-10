@@ -188,7 +188,7 @@ describe('/api/v1/patients', () => {
       const app = await build(t);
       await t.loadFixtures();
 
-      let reply = await app
+      const reply = await app
         .inject()
         .get('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
@@ -249,7 +249,7 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
 
-      let headers = await t.authenticate('first.responder@test.com', 'test');
+      const headers = await t.authenticate('first.responder@test.com', 'test');
       reply = await app
         .inject()
         .post('/api/v1/patients')
@@ -479,7 +479,7 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
 
-      let headers = await t.authenticate('first.responder@test.com', 'test');
+      const headers = await t.authenticate('first.responder@test.com', 'test');
       reply = await app
         .inject()
         .patch('/api/v1/patients/27963f68-ebc1-408a-8bb5-8fbe54671064')
