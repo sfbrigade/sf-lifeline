@@ -53,7 +53,7 @@ export default async function (fastify, _opts) {
         inviteId,
       } = request.body;
 
-      const errorList = new Array();
+      const errorList = [];
 
       // Validate request body
       try {
