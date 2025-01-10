@@ -103,7 +103,7 @@ export default async function (fastify, _opts) {
       // Validate License Numbers
       if (
         (!invite && licenseNumber) ||
-        invite.role == User.Role.FIRST_RESPONDER
+        invite.role === User.Role.FIRST_RESPONDER
       ) {
         try {
           const licenseResponse = await verifyLicense(licenseNumber);

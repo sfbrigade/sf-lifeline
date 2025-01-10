@@ -13,7 +13,7 @@ describe('/api/v1/licenses', () => {
       let isLive;
       try {
         const res = await fetch(EMS_VERIFICATION_WEBSITE);
-        isLive = res.status == 200;
+        isLive = res.status === 200;
       } catch {
         isLive = false;
       }
