@@ -183,7 +183,7 @@ function Register() {
           }}
           formState={formState}
           showLicenseField={
-            !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
+            !inviteId || (inviteId && user.role === 'FIRST_RESPONDER')
           }
         />
       </Flex>

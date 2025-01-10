@@ -145,7 +145,7 @@ export function RegisterForm({
                   <Progress
                     value={strength}
                     color={
-                      strength == 100
+                      strength === 100
                         ? 'teal'
                         : strength > 50
                           ? 'yellow'
