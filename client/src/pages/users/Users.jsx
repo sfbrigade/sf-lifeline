@@ -28,7 +28,10 @@ const headers = [
   { key: 'more', text: '' },
 ];
 
-export const Users = () => {
+/**
+ * Users list.
+ */
+function Users() {
   const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
   const [opened, { open, close }] = useDisclosure(false);
@@ -109,4 +112,6 @@ export const Users = () => {
       </Container>
     </Container>
   );
-};
+}
+
+export default Users;

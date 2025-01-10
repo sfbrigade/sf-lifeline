@@ -17,7 +17,7 @@ import Verify from './pages/verify/verify';
 
 import Dashboard from './pages/dashboard/Dashboard';
 
-import { Users } from './pages/users/Users';
+import Users from './pages/users/Users';
 import PendingUsers from './pages/users/PendingUsers';
 
 import PatientRegistration from './pages/patients/register/PatientRegistration';
