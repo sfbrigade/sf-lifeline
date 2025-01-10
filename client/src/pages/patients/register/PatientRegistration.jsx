@@ -420,13 +420,15 @@ export default function PatientRegistration() {
 
     let errorFieldCount = 0;
 
-    if (openedSection === 'codeStatus') {
-      form.isValid(`${openedSection}`) ? null : errorFieldCount++;
+    if (openedSection === 'codeStatus' && !form.isValid(`${openedSection}`)) {
+      errorFieldCount++;
     }
 
     for (const field in form.getValues()[openedSection]) {
       form.validateField(`${openedSection}.${field}`);
-      form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
+      if (!form.isValid(`${openedSection}.${field}`)) {
+        errorFieldCount++;
+      }
     }
 
     if (errorFieldCount === 0) {
