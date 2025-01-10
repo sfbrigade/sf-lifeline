@@ -199,6 +199,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(record.licenseData, validLicense);
 
       bcrypt.compare('Test123!', record.hashedPassword, function (err, result) {
+        assert.ifError(err);
         assert.deepStrictEqual(result, true);
       });
 

@@ -237,6 +237,7 @@ describe('/api/v1/auth', () => {
           'NewPassword123!',
           user.hashedPassword,
           function (err, result) {
+            assert.ifError(err);
             assert.deepStrictEqual(result, true);
           },
         );
@@ -307,6 +308,7 @@ describe('/api/v1/auth', () => {
           'NewPassword123!',
           user.hashedPassword,
           function (err, result) {
+            assert.ifError(err);
             assert.deepStrictEqual(result, true);
           },
         );
