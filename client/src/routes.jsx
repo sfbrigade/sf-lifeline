@@ -57,6 +57,8 @@ export const UNAUTH_ROUTES = [
 export function handleRedirects(user, location, callback) {
   const { pathname, search } = location;
   const from = `${pathname}${search}`;
+  const LOGIN_PATH = '/login';
+  const FORBIDDEN_PATH = '/forbidden';
   let match;
   // check authenticated routes
   for (const [role, routes] of AUTH_ROUTES) {
@@ -64,9 +66,9 @@ export function handleRedirects(user, location, callback) {
       match = matchPath(route, pathname);
       if (match) {
         if (!user) {
-          return callback('/login', { state: { from } });
+          return callback(LOGIN_PATH, { state: { from } });
         } else if (ROLES.indexOf(user.role) < ROLES.indexOf(role)) {
-          return callback('/forbidden', { state: { from } });
+          return callback(FORBIDDEN_PATH, { state: { from } });
         }
         break;
       }
