@@ -28,7 +28,7 @@ function Dashboard() {
                 </Title>
                 <Button
                   component={Link}
-                  to="/admin/patients/generate"
+                  to="/patients/generate"
                   target="_blank"
                 >
                   Print QR Codes

@@ -17,13 +17,13 @@ import Verify from './pages/verify/verify';
 
 import Dashboard from './pages/dashboard/Dashboard';
 
-import AdminPatientsGenerate from './pages/admin/patients/AdminPatientsGenerate';
 import { Users } from './pages/users/Users';
-
 import PendingUsers from './pages/users/PendingUsers';
+
 import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
 import Patients from './pages/patients/Patients';
+import PatientsGenerate from './pages/patients/PatientsGenerate';
 
 // roles in order of least to most privileged
 export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
@@ -31,7 +31,7 @@ export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
 // these are routes that require authentication and authorization by role
 export const AUTH_ROUTES = [
   ['ADMIN', ['users', 'users/pending']],
-  ['STAFF', ['admin/patients/generate', 'patients']],
+  ['STAFF', ['patients/generate', 'patients']],
   ['VOLUNTEER', ['patients/register/:patientId']],
   ['FIRST_RESPONDER', ['dashboard', 'patients/:patientId']],
 ];
@@ -157,8 +157,8 @@ export default [
         ],
       },
       {
-        path: 'admin/patients/generate',
-        element: <AdminPatientsGenerate />,
+        path: 'patients/generate',
+        element: <PatientsGenerate />,
       },
     ],
   },
