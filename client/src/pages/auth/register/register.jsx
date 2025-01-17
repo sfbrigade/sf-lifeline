@@ -35,7 +35,7 @@ function Register() {
         return response.json();
       })
       .then((data) => {
-        if (data.acceptedById.length != 0) {
+        if (data.acceptedById.length !== 0) {
           throw Error();
         }
 
@@ -46,10 +46,10 @@ function Register() {
           lastName: data.lastName,
           email: data.email,
           role: data.role,
-          inviteId: inviteId,
+          inviteId,
         }));
 
-        if (data.role != 'FIRST_RESPONDER') {
+        if (data.role !== 'FIRST_RESPONDER') {
           setFormState(2);
         }
       })
@@ -68,8 +68,8 @@ function Register() {
    * @param {*} event text field events
    */
   function onFormChange(event) {
-    const newUserChange = {},
-      newErrorsChange = {};
+    const newUserChange = {};
+    const newErrorsChange = {};
     newUserChange[event.target.name] = event.target.value;
     newErrorsChange[event.target.name] = '';
     setUser({ ...user, ...newUserChange });
@@ -141,7 +141,7 @@ function Register() {
       })
       .catch((error) => {
         error.json().then(({ message }) => {
-          const updatedErrors = new Object();
+          const updatedErrors = {};
           message.forEach((m) => {
             if (updatedErrors[m.path]) {
               updatedErrors[m.path] += `. ${m.message}`;
@@ -183,7 +183,7 @@ function Register() {
           }}
           formState={formState}
           showLicenseField={
-            !inviteId || (inviteId && user.role == 'FIRST_RESPONDER')
+            !inviteId || (inviteId && user.role === 'FIRST_RESPONDER')
           }
         />
       </Flex>

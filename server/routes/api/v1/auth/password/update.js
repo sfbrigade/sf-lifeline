@@ -48,7 +48,7 @@ export default async function (fastify, _opts) {
 
       const passwordSchema = User.schema.pick({ password: true });
       try {
-        passwordSchema.parse({ password: password });
+        passwordSchema.parse({ password });
       } catch (error) {
         let message = '';
         error.errors.forEach((e) => {

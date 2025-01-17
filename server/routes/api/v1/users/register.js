@@ -53,7 +53,7 @@ export default async function (fastify, _opts) {
         inviteId,
       } = request.body;
 
-      const errorList = new Array();
+      const errorList = [];
 
       // Validate request body
       try {
@@ -66,7 +66,7 @@ export default async function (fastify, _opts) {
 
       // Check email is not duplicated
       const userFromEmail = await fastify.prisma.user.findUnique({
-        where: { email: email },
+        where: { email },
       });
 
       if (userFromEmail) {
@@ -103,13 +103,13 @@ export default async function (fastify, _opts) {
       // Validate License Numbers
       if (
         (!invite && licenseNumber) ||
-        invite.role == User.Role.FIRST_RESPONDER
+        invite.role === User.Role.FIRST_RESPONDER
       ) {
         try {
           const licenseResponse = await verifyLicense(licenseNumber);
           if (licenseResponse && licenseResponse.status !== 'Expired') {
             const userFromLicense = await fastify.prisma.user.findUnique({
-              where: { licenseNumber: licenseNumber },
+              where: { licenseNumber },
             });
 
             if (userFromLicense) {

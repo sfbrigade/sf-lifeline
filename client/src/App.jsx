@@ -1,4 +1,4 @@
-import { useContext, useEffect, ReactElement } from 'react';
+import { useContext, useEffect } from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import { useAuthorization } from './hooks/useAuthorization';
 /**
  * Top-level application component.  *
  * @param  {PropTypes.func} handleRedirects
- * @returns {ReactElement}
+ * @returns {React.ReactElement}
  */
 function App({ handleRedirects }) {
   const location = useLocation();

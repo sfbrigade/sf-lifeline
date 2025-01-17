@@ -32,7 +32,7 @@ export function PasswordForgotForm({
     >
       <Container size="25rem" className={classes.form}>
         <TextInput
-          disabled={isLoading || formState == 2}
+          disabled={isLoading || formState === 2}
           name="email"
           type="email"
           label="Email"
@@ -41,12 +41,12 @@ export function PasswordForgotForm({
           onChange={onEmailChange}
           error={emailError}
         />
-        {formState == 1 && (
+        {formState === 1 && (
           <Button type="submit" disabled={!email.length}>
             {isLoading ? <Loader size={20} /> : 'Send Password Reset'}
           </Button>
         )}
-        {formState == 2 && (
+        {formState === 2 && (
           <Container size="25rem" styles={{ root: { padding: 0 } }}>
             <div className={classes.formCompletion}>
               <p>

@@ -66,7 +66,7 @@ export function PasswordResetForm({
         <Group grow>
           <Flex direction="column" gap="xs">
             <PasswordInput
-              disabled={isLoading || formState == 2}
+              disabled={isLoading || formState === 2}
               name="password"
               label="New Password"
               placeholder="New password"
@@ -77,7 +77,7 @@ export function PasswordResetForm({
             <Progress
               value={strength}
               color={
-                strength == 100
+                strength === 100
                   ? 'teal'
                   : strength > 50
                     ? 'yellow'
@@ -90,7 +90,7 @@ export function PasswordResetForm({
         </Group>
 
         <PasswordInput
-          disabled={isLoading || formState == 2}
+          disabled={isLoading || formState === 2}
           name="confirmPassword"
           label="Confirm Password"
           placeholder="Confirm new password"
@@ -98,7 +98,7 @@ export function PasswordResetForm({
           onChange={onFormChange}
           error={errors.confirmPassword}
         />
-        {formState == 1 && (
+        {formState === 1 && (
           <Button
             type="submit"
             disabled={!form.password.length || !form.confirmPassword.length}
@@ -106,7 +106,7 @@ export function PasswordResetForm({
             {isLoading ? <Loader size={20} /> : 'Send Password Reset'}
           </Button>
         )}
-        {formState == 2 && (
+        {formState === 2 && (
           <>
             <Container size="25rem" styles={{ root: { padding: 0 } }}>
               <div className={classes.formCompletion}>

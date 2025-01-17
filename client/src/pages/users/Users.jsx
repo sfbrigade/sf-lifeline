@@ -46,7 +46,7 @@ function Users() {
         .then((users) => {
           const pendingUsers = users.filter(
             (user) =>
-              user.approvedAt.length == 0 && user.rejectedAt.length == 0,
+              user.approvedAt.length === 0 && user.rejectedAt.length === 0,
           );
           setPendingMembers(pendingUsers.length);
 

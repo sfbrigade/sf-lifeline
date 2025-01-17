@@ -18,7 +18,7 @@ function Verify() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          emailVerificationToken: emailVerificationToken,
+          emailVerificationToken,
         }),
       })
         .then((response) => {

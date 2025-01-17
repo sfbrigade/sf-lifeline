@@ -106,7 +106,7 @@ function PendingUsers() {
     }
   }
   return (
-    <Container fluid={true} mt={20}>
+    <Container fluid mt={20}>
       <IconChevronLeft
         stroke={1}
         size={32}

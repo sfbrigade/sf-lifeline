@@ -36,7 +36,7 @@ function Login() {
   }, [user, redirectTo, navigate]);
 
   useEffect(() => {
-    if (error && error.status != StatusCodes.OK) {
+    if (error && error.status !== StatusCodes.OK) {
       switch (error.status) {
         case StatusCodes.NOT_FOUND:
           setEmailError('The email you entered isn’t connected to an account.');

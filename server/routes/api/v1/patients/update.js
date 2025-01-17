@@ -229,8 +229,9 @@ export default async function (fastify, _opts) {
           for (const [key, value] of Object.entries(contactData)) {
             if (value) newContactData[key] = value.trim();
             if (value?.trim()?.length === 0) newContactData[key] = null;
-            if (key === 'relationship' && value === null)
+            if (key === 'relationship' && value === null) {
               newContactData[key] = value;
+            }
           }
 
           const nullFields = Object.entries(newContactData).filter(
@@ -265,7 +266,7 @@ export default async function (fastify, _opts) {
             }
           } else {
             if (nullFields.length !== Object.keys(newContactData).length) {
-              let contact = await tx.contact.create({
+              const contact = await tx.contact.create({
                 data: newContactData,
               });
 
@@ -320,11 +321,12 @@ export default async function (fastify, _opts) {
                 const exists = await tx[relation].findUnique({
                   where: { id: item },
                 });
-                if (!exists)
+                if (!exists) {
                   // Use throw instead of return to make sure transaction is rolled back
                   throw reply.status(StatusCodes.NOT_FOUND).send({
                     message: `${key} with ID ${item} does not exist in database.`,
                   });
+                }
 
                 await tx[model].upsert({
                   where: {
@@ -361,21 +363,23 @@ export default async function (fastify, _opts) {
             const hospital = await tx.hospital.findUnique({
               where: { id: hospitalId },
             });
-            if (!hospital)
+            if (!hospital) {
               // Use throw instead of return to make sure transaction is rolled back
               throw reply.status(StatusCodes.NOT_FOUND).send({
                 message: `Hospital with ID ${hospitalId} does not exist in database.`,
               });
+            }
           }
 
           if (physicianId) {
             const physician = await tx.physician.findUnique({
               where: { id: physicianId },
             });
-            if (!physician)
+            if (!physician) {
               throw reply.status(StatusCodes.NOT_FOUND).send({
                 message: `Physician with ID ${physicianId} does not exist in database.`,
               });
+            }
           }
 
           const hospitalData = hospitalId

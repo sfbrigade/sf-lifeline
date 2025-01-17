@@ -42,7 +42,12 @@ export const UserDataTableCell = ({ type, value }) => {
     case 'checkbox':
       return (
         <Table.Td>
-          <Checkbox checked={value.selected} onChange={value.select} />
+          <Checkbox
+            checked={value.selected}
+            // onChange is a Mantine prop for the Checkbox component, improperly considers it a react event handler
+            // eslint-disable-next-line react/jsx-handler-names
+            onChange={value.select}
+          />
         </Table.Td>
       );
     default:

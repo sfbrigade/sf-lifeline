@@ -67,7 +67,7 @@ describe('/api/v1/invites', () => {
       const sentMails = nodemailerMock.mock.getSentMail();
       assert.deepStrictEqual(sentMails.length, 4);
 
-      const mail = sentMails.find((m) => m.to == '<invitee.1@test.com>');
+      const mail = sentMails.find((m) => m.to === '<invitee.1@test.com>');
 
       assert.ok(mail.to);
       assert.deepStrictEqual(mail.subject, 'Your invitation to SF Life Line');

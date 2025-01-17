@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   Box,
   Button,
@@ -64,20 +64,20 @@ function PatientsGenerate() {
       {isLoading && <Loader />}
       {!isLoading &&
         pages.map((p) => (
-          <>
+          <Fragment key={p}>
             <Flex
               wrap="wrap"
               className={`${classes.codes} ${classes[`codes--${layout}`]}`}
             >
               {p.map((url, i) => (
-                <>
+                <Fragment key={url}>
                   <Box className={classes.code}>
                     <QRCode id={`qrcode-${i}`} key={url} value={url} />
                   </Box>
-                </>
+                </Fragment>
               ))}
             </Flex>
-          </>
+          </Fragment>
         ))}
     </Container>
   );

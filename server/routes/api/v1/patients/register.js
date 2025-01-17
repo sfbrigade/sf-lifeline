@@ -89,7 +89,7 @@ export default async function (fastify, _opts) {
             if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
           }
 
-          let patient = await tx.patient.create({
+          const patient = await tx.patient.create({
             data: {
               ...newPatientData,
               createdById: userId,

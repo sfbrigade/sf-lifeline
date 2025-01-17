@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate, useLocation } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 import { Flex, Button, Modal, Text, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useNavigate, useLocation } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
@@ -145,7 +144,6 @@ export default function PatientRegistration() {
 
     setOpenedSection(section);
     // NOTE: Only want this useEffect to run once on mount to set the opened section
-    // eslint-disable-next-line
   }, []);
 
   // Sets the initial values of the form based on the data from an existing patient
@@ -219,7 +217,6 @@ export default function PatientRegistration() {
 
     // NOTE: below is necessary to avoid infinite loop when adding form to depedency arrays
     // see this https://github.com/mantinedev/mantine/issues/5338#issuecomment-1837468066
-    // eslint-disable-next-line
   }, [data]);
 
   const showSuccessNotification = (message) => {
@@ -326,7 +323,7 @@ export default function PatientRegistration() {
     const errorKeys = Object.keys(errors).map((key) => key.split('.')[0]);
     const errorSets = new Set(errorKeys);
 
-    let errorSections = [];
+    const errorSections = [];
     errorSets.forEach((key) => {
       errorSections.push(FORM_TABS[key]);
     });
@@ -421,13 +418,15 @@ export default function PatientRegistration() {
 
     let errorFieldCount = 0;
 
-    if (openedSection === 'codeStatus') {
-      form.isValid(`${openedSection}`) ? null : errorFieldCount++;
+    if (openedSection === 'codeStatus' && !form.isValid(`${openedSection}`)) {
+      errorFieldCount++;
     }
 
     for (const field in form.getValues()[openedSection]) {
       form.validateField(`${openedSection}.${field}`);
-      form.isValid(`${openedSection}.${field}`) ? null : errorFieldCount++;
+      if (!form.isValid(`${openedSection}.${field}`)) {
+        errorFieldCount++;
+      }
     }
 
     if (errorFieldCount === 0) {

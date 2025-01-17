@@ -48,8 +48,8 @@ function PasswordReset() {
    * @param {*} event text field events
    */
   function onFormChange(event) {
-    const newFormChange = {},
-      newErrorsChange = {};
+    const newFormChange = {};
+    const newErrorsChange = {};
     newFormChange[event.target.name] = event.target.value;
     newErrorsChange[event.target.name] = '';
     setForm({ ...form, ...newFormChange });
@@ -71,7 +71,7 @@ function PasswordReset() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        passwordResetToken: passwordResetToken,
+        passwordResetToken,
         password: form.password,
       }),
     })
