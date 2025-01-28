@@ -15,11 +15,11 @@ ContactInfo.propTypes = contactInfoProps;
  *
  * @param {PropTypes.InferProps<typeof contactInfoProps>} props
  */
-export default function ContactInfo({ emergencyContact, physician }) {
+export default function ContactInfo ({ emergencyContact, physician }) {
   return (
     <section>
       <Text className={classes.sectionTitle}> Contact Information</Text>
-      <Paper shadow="xs" p="md" radius="md" withBorder>
+      <Paper shadow='xs' p='md' radius='md' withBorder>
         <div className={classes.titleRow}>
           <Text className={classes.contactInfoColumnTitle}>
             Emergency Contact

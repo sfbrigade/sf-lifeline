@@ -45,6 +45,6 @@ export default async function (fastify) {
       const { records, total } =
         await fastify.prisma.medication.paginate(options);
       reply.setPaginationHeaders(page, perPage, total).send(records);
-    },
+    }
   );
 }

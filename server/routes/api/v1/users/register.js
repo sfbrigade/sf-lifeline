@@ -60,7 +60,7 @@ export default async function (fastify, _opts) {
         User.schema.parse(request.body);
       } catch (error) {
         error.errors.forEach((e) =>
-          errorList.push({ path: e.path[0], message: e.message }),
+          errorList.push({ path: e.path[0], message: e.message })
         );
       }
 
@@ -177,6 +177,6 @@ export default async function (fastify, _opts) {
         }
       });
       reply.code(StatusCodes.CREATED).send(data);
-    },
+    }
   );
 }

@@ -1,7 +1,7 @@
 const SERVER_BASE_URL = '/api/v1';
 
 export default class LifelineAPI {
-  static async getHealthcareChoices(route, query) {
+  static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {
       return this.getHospitals(query);
     } else if (route === 'physician') {
@@ -9,9 +9,9 @@ export default class LifelineAPI {
     }
   }
 
-  static async getPhysicians(query) {
+  static async getPhysicians (query) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/physicians?physician=${query}`,
+      `${SERVER_BASE_URL}/physicians?physician=${query}`
     );
     const data = await response.json();
     return data.map((item) => {
@@ -23,7 +23,7 @@ export default class LifelineAPI {
     });
   }
 
-  static async registerPhysician(data) {
+  static async registerPhysician (data) {
     const response = await fetch(`${SERVER_BASE_URL}/physicians`, {
       method: 'POST',
       headers: {
@@ -35,27 +35,27 @@ export default class LifelineAPI {
     return response;
   }
 
-  static async getHospitals(query) {
+  static async getHospitals (query) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/hospitals?hospital=${query}`,
+      `${SERVER_BASE_URL}/hospitals?hospital=${query}`
     );
     const data = await response.json();
     return data;
   }
 
-  static async getPatient(patientId) {
+  static async getPatient (patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`);
     return response;
   }
 
-  static async getPatients(query, page) {
+  static async getPatients (query, page) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/patients?patient=${query}&page=${page}`,
+      `${SERVER_BASE_URL}/patients?patient=${query}&page=${page}`
     );
     return response;
   }
 
-  static async registerPatient(data, patientId) {
+  static async registerPatient (data, patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients`, {
       method: 'POST',
       headers: {
@@ -67,7 +67,7 @@ export default class LifelineAPI {
     return response;
   }
 
-  static async updatePatient(data, patientId) {
+  static async updatePatient (data, patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
       method: 'PATCH',
       headers: {
@@ -78,16 +78,16 @@ export default class LifelineAPI {
     return response;
   }
 
-  static async deletePatient(patientId) {
+  static async deletePatient (patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
       method: 'DELETE',
     });
     return response;
   }
 
-  static async getMedicalData(path, pathInfo, query) {
+  static async getMedicalData (path, pathInfo, query) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/${path}?${pathInfo}=${query}`,
+      `${SERVER_BASE_URL}/${path}?${pathInfo}=${query}`
     );
     const data = await response.json();
     return data;

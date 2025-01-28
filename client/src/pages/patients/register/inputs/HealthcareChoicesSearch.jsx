@@ -20,7 +20,7 @@ const healthcareChoicesSearchProps = {
  *
  * @param {PropTypes.InferProps<typeof healthcareChoicesSearchProps>} props
  */
-export default function HealthcareChoicesSearch({ form, choice, initialData }) {
+export default function HealthcareChoicesSearch ({ form, choice, initialData }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [empty, setEmpty] = useState(false);
@@ -47,7 +47,7 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
       const result = await LifelineAPI.getHealthcareChoices(
         choice,
         query,
-        abortController.current.signal,
+        abortController.current.signal
       );
       setData(result);
       setLoading(false);
@@ -96,20 +96,22 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
    *
    * Conditional rendering of combobox content
    */
-  function renderComboxContent() {
+  function renderComboxContent () {
     if (empty) {
-      return choice === 'physician' ? (
-        <>
-          <Combobox.Empty> No results found</Combobox.Empty>
-          <Combobox.Option value="$register" onClick={openRegisterPhysician}>
-            <Text fw={700} size="sm">
-              + Register new physician
-            </Text>
-          </Combobox.Option>
-        </>
-      ) : (
-        <Combobox.Empty>No results found</Combobox.Empty>
-      );
+      return choice === 'physician'
+        ? (
+          <>
+            <Combobox.Empty> No results found</Combobox.Empty>
+            <Combobox.Option value='$register' onClick={openRegisterPhysician}>
+              <Text fw={700} size='sm'>
+                + Register new physician
+              </Text>
+            </Combobox.Option>
+          </>
+          )
+        : (
+          <Combobox.Empty>No results found</Combobox.Empty>
+          );
     }
 
     if (data.length === 0) {
@@ -117,11 +119,11 @@ export default function HealthcareChoicesSearch({ form, choice, initialData }) {
     }
 
     return (
-      <ScrollArea.Autosize type="scroll" mah={200}>
+      <ScrollArea.Autosize type='scroll' mah={200}>
         {options}
         {choice === 'physician' && (
-          <Combobox.Option value="$register" onClick={openRegisterPhysician}>
-            <Text fw={700} size="sm">
+          <Combobox.Option value='$register' onClick={openRegisterPhysician}>
+            <Text fw={700} size='sm'>
               + Register new physician
             </Text>
           </Combobox.Option>

@@ -11,11 +11,11 @@ import {
 /**
  *
  */
-export function DataTableMenu() {
+export function DataTableMenu () {
   return (
-    <Menu shadow="md" width={200}>
+    <Menu shadow='md' width={200}>
       <Menu.Target>
-        <ActionIcon variant="default">
+        <ActionIcon variant='default'>
           <IconDotsVertical />
         </ActionIcon>
       </Menu.Target>
@@ -48,7 +48,7 @@ export function DataTableMenu() {
           Update role
         </Menu.Item>
         <Menu.Item
-          color="red"
+          color='red'
           leftSection={
             <IconTrash style={{ width: rem(14), height: rem(14) }} />
           }

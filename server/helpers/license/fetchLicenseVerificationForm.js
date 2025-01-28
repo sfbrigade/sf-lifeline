@@ -8,7 +8,7 @@
  *  necessary to make a POST request on the registry website
  */
 
-export default async function fetchLicenseVerificationForm(website, license) {
+export default async function fetchLicenseVerificationForm (website, license) {
   const formData = new FormData();
   formData.append('t_web_lookup__license_no', license);
 

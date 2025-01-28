@@ -128,6 +128,6 @@ export default async function (fastify, _opts) {
           message: `Patient with ID ${id} does not exist in database.`,
         });
       }
-    },
+    }
   );
 }

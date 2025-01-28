@@ -13,7 +13,7 @@ describe('User', () => {
       const user = new User(
         await t.prisma.user.findUnique({
           where: { email: 'admin.user@test.com' },
-        }),
+        })
       );
       assert.ok(user.isApproved);
     });
@@ -39,7 +39,7 @@ describe('User', () => {
       const user = new User(
         await t.prisma.user.findUnique({
           where: { email: 'admin.user@test.com' },
-        }),
+        })
       );
       assert.ok(await user.comparePassword('test'));
     });

@@ -14,7 +14,7 @@ import Context from '../Context';
  *  handleLogout: () => Promise<void>,
  * }}
  */
-export function useAuthorization() {
+export function useAuthorization () {
   const { user, setUser } = useContext(Context);
   const [error, setError] = useState(null);
 

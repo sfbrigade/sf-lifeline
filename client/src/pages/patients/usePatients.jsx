@@ -55,7 +55,7 @@ const formatDate = (date) => {
  *  isFetching: boolean,
  * }}
  */
-export function usePatients() {
+export function usePatients () {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({

@@ -52,6 +52,6 @@ export default async function (fastify, _opts) {
       // generate fully qualified URLs
       results = results.map((id) => `${process.env.BASE_URL}/patients/${id}`);
       reply.send(results);
-    },
+    }
   );
 }

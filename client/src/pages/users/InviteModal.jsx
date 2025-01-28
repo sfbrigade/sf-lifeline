@@ -11,7 +11,7 @@ import classes from './Users.module.css';
  *  @param {boolean} props.opened - State of modal being open or not
  *  @param {Function} props.close - Function to close the modal
  */
-export function InviteModal({ opened, close }) {
+export function InviteModal ({ opened, close }) {
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -36,7 +36,7 @@ export function InviteModal({ opened, close }) {
    * @param {string} props.name - Name of recipient
    * @param {string} props.email - Email of recipient
    */
-  function onSubmit({ role, name, email }) {
+  function onSubmit ({ role, name, email }) {
     const formattedBody = {
       recipients: `${name} <${email}>`,
       role: role.toLocaleUpperCase().replace(' ', '_'),
@@ -66,7 +66,7 @@ export function InviteModal({ opened, close }) {
         console.log(error);
         notifications.show({
           color: 'red',
-          title: `Invite failed to send`,
+          title: 'Invite failed to send',
           autoClose: 5000,
         });
       });
@@ -75,7 +75,7 @@ export function InviteModal({ opened, close }) {
   /**
    * Resets form value and closes the modal.
    */
-  function onClose() {
+  function onClose () {
     close();
     form.reset();
   }
@@ -94,37 +94,37 @@ export function InviteModal({ opened, close }) {
         className={classes.modal}
       >
         <form
-          className="form"
+          className='form'
           onSubmit={form.onSubmit((values) => onSubmit(values))}
         >
           <Select
             allowDeselect={false}
-            label="Member Type"
+            label='Member Type'
             data={['Volunteer', 'First Responder', 'Admin']}
             key={form.key('role')}
             {...form.getInputProps('role')}
           />
           <TextInput
-            label="Name"
-            placeholder="Name"
+            label='Name'
+            placeholder='Name'
             key={form.key('name')}
             {...form.getInputProps('name')}
           />
           <TextInput
-            label="Email"
-            placeholder="Email"
+            label='Email'
+            placeholder='Email'
             key={form.key('email')}
             {...form.getInputProps('email')}
           />
-          <Group justify="flex-end">
-            <Button variant="outline" color="gray" onClick={onClose}>
+          <Group justify='flex-end'>
+            <Button variant='outline' color='gray' onClick={onClose}>
               Cancel
             </Button>
             <Button
               disabled={
                 !form.getValues().name.length || !form.getValues().email.length
               }
-              type="submit"
+              type='submit'
             >
               Send Invite
             </Button>

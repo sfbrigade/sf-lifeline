@@ -60,7 +60,7 @@ export default async function (fastify) {
           }
 
           throw new Error(
-            `Physician with ${duplicateFields.join(' and ')} already exists.`,
+            `Physician with ${duplicateFields.join(' and ')} already exists.`
           );
         }
 
@@ -88,6 +88,6 @@ export default async function (fastify) {
         }
         throw error;
       }
-    },
+    }
   );
 }

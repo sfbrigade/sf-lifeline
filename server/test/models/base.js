@@ -4,22 +4,22 @@ import * as assert from 'node:assert';
 import Base from '../../models/base.js';
 
 class Test extends Base {
-  constructor(data) {
+  constructor (data) {
     super({ property0: 'property0' }, data);
     this.property1 = 'value1';
   }
 
-  get property2() {
+  get property2 () {
     return this.property0 + this.property1;
   }
 
-  set property2(newValue) {
+  set property2 (newValue) {
     const tokens = newValue.split(',');
     this.property0 = tokens[0];
     this.property1 = tokens[1];
   }
 
-  function1() {
+  function1 () {
     return `${this.property0} accessed through function 1`;
   }
 }
@@ -45,7 +45,7 @@ describe('Base', () => {
       const test = new Test({ property0: 'value0' });
       assert.deepStrictEqual(
         test.function1(),
-        'value0 accessed through function 1',
+        'value0 accessed through function 1'
       );
     });
   });

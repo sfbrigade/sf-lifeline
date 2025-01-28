@@ -14,7 +14,7 @@ import { useAuthorization } from './hooks/useAuthorization';
  * @param  {PropTypes.func} handleRedirects
  * @returns {React.ReactElement}
  */
-function App({ handleRedirects }) {
+function App ({ handleRedirects }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,23 +36,25 @@ function App({ handleRedirects }) {
   useEffect(() => {
     try {
       handleRedirects(user, location, (to, options) =>
-        navigate(to, { ...options, replace: true }),
+        navigate(to, { ...options, replace: true })
       );
     } catch {
       handleLogout();
     }
   }, [handleRedirects, handleLogout, user, location, navigate]);
 
-  return isLoading ? (
-    <Center w="100vw" h="100vh">
-      <Loader />
-    </Center>
-  ) : (
-    <>
-      <Outlet />
-      <Notifications position="bottom-right" />
-    </>
-  );
+  return isLoading
+    ? (
+      <Center w='100vw' h='100vh'>
+        <Loader />
+      </Center>
+      )
+    : (
+      <>
+        <Outlet />
+        <Notifications position='bottom-right' />
+      </>
+      );
 }
 
 App.propTypes = {

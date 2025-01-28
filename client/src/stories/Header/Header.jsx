@@ -18,27 +18,29 @@ import { Sidebar } from '../../components/Sidebar/Sidebar';
  * Buttons for logged out buttons
  * @param {PropTypes.InferProps<typeof headerProps>} props
  */
-export function Header({ user = null }) {
+export function Header ({ user = null }) {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
 
   return (
     <Box>
       <header className={classes.header}>
-        <Group justify="end" h="100%">
-          {user ? (
-            <Group visibleFrom="sm">
-              <Button variant="default">Alerts</Button>
-              <Button>Profile</Button>
-            </Group>
-          ) : (
-            <LoggedOutButtons visibleFrom="sm" />
-          )}
+        <Group justify='end' h='100%'>
+          {user
+            ? (
+              <Group visibleFrom='sm'>
+                <Button variant='default'>Alerts</Button>
+                <Button>Profile</Button>
+              </Group>
+              )
+            : (
+              <LoggedOutButtons visibleFrom='sm' />
+              )}
 
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}
-            hiddenFrom="sm"
+            hiddenFrom='sm'
           />
         </Group>
       </header>
@@ -46,17 +48,17 @@ export function Header({ user = null }) {
       <Drawer
         opened={drawerOpened}
         onClose={closeDrawer}
-        size="100%"
-        hiddenFrom="sm"
+        size='100%'
+        hiddenFrom='sm'
         zIndex={1}
-        position="left"
+        position='left'
         className={classes.header_drawer}
       >
         <ScrollArea
           className={classes.drawerBody}
           h={`calc(100vh - ${rem(80)})`}
-          mx="-md"
-          scrollbars="y"
+          mx='-md'
+          scrollbars='y'
         >
           <Sidebar toggleSidebar={toggleDrawer} />
         </ScrollArea>
@@ -83,10 +85,10 @@ const loggedOutButtonsProps = {};
 const LoggedOutButtons = ({ ...groupProps }) => {
   return (
     <Group {...groupProps}>
-      <Button variant="default" component="a" href="/login">
+      <Button variant='default' component='a' href='/login'>
         Log in
       </Button>
-      <Button component="a" href="/login">
+      <Button component='a' href='/login'>
         Sign up
       </Button>
     </Group>

@@ -8,7 +8,7 @@ import LifelineAPI from './LifelineAPI';
  *  isPending: boolean
  * }}
  */
-export function useDeletePatient() {
+export function useDeletePatient () {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({

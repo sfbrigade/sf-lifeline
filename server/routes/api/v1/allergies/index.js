@@ -44,6 +44,6 @@ export default async function (fastify) {
 
       const { records, total } = await fastify.prisma.allergy.paginate(options);
       reply.setPaginationHeaders(page, perPage, total).send(records);
-    },
+    }
   );
 }

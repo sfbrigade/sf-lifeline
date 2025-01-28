@@ -35,13 +35,13 @@ export default async function (fastify, _opts) {
         });
       } catch (error) {
         return reply.unauthorized(
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       }
 
       if (!data) {
         return reply.unauthorized(
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       }
 
@@ -49,11 +49,11 @@ export default async function (fastify, _opts) {
 
       if (!user.isPasswordResetTokenValid) {
         return reply.unauthorized(
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       }
 
       reply.code(StatusCodes.OK);
-    },
+    }
   );
 }

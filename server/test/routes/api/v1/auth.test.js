@@ -37,7 +37,7 @@ describe('/api/v1/auth', () => {
       const { message } = JSON.parse(response.body);
       assert.deepStrictEqual(
         message,
-        'Your account has not been verified. Please check your inbox to verify your account.',
+        'Your account has not been verified. Please check your inbox to verify your account.'
       );
     });
 
@@ -52,7 +52,7 @@ describe('/api/v1/auth', () => {
       const { message } = JSON.parse(response.body);
       assert.deepStrictEqual(
         message,
-        'Your account has not been approved by admins yet. Please contact support or wait for further instructions.',
+        'Your account has not been approved by admins yet. Please contact support or wait for further instructions.'
       );
     });
 
@@ -67,7 +67,7 @@ describe('/api/v1/auth', () => {
       const { message } = JSON.parse(response.body);
       assert.deepStrictEqual(
         message,
-        'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
+        'Your account has been rejected or disabled by admins. Please contact support for further instructions.'
       );
     });
 
@@ -82,7 +82,7 @@ describe('/api/v1/auth', () => {
       const { message } = JSON.parse(response.body);
       assert.deepStrictEqual(
         message,
-        'Your account has been rejected or disabled by admins. Please contact support for further instructions.',
+        'Your account has been rejected or disabled by admins. Please contact support for further instructions.'
       );
     });
 
@@ -141,11 +141,11 @@ describe('/api/v1/auth', () => {
         assert.deepStrictEqual(sentMails.length, 1);
         assert.deepStrictEqual(
           sentMails[0].to,
-          'Volunteer User <volunteer.user@test.com>',
+          'Volunteer User <volunteer.user@test.com>'
         );
         assert.deepStrictEqual(
           sentMails[0].subject,
-          'Reset your password for your SF Life Line account',
+          'Reset your password for your SF Life Line account'
         );
       });
 
@@ -161,7 +161,7 @@ describe('/api/v1/auth', () => {
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Email not found in SF Life Line Database',
+          'Email not found in SF Life Line Database'
         );
       });
     });
@@ -174,7 +174,7 @@ describe('/api/v1/auth', () => {
         const res = await app
           .inject()
           .get(
-            '/api/v1/auth/password/' + '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
+            '/api/v1/auth/password/' + '4ae4a190-005e-4222-aac3-7dd5ff2c477f'
           );
 
         assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
@@ -187,14 +187,14 @@ describe('/api/v1/auth', () => {
         const res = await app
           .inject()
           .get(
-            '/api/v1/auth/password/' + '3b5afcb9-1669-4196-94f1-01251e59f12c',
+            '/api/v1/auth/password/' + '3b5afcb9-1669-4196-94f1-01251e59f12c'
           );
 
         assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       });
 
@@ -205,14 +205,14 @@ describe('/api/v1/auth', () => {
         const res = await app
           .inject()
           .get(
-            '/api/v1/auth/password/' + '9a616ebe-f68a-440a-9c4f-fca7f32c88cb',
+            '/api/v1/auth/password/' + '9a616ebe-f68a-440a-9c4f-fca7f32c88cb'
           );
 
         assert.deepStrictEqual(res.statusCode, StatusCodes.UNAUTHORIZED);
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       });
     });
@@ -239,7 +239,7 @@ describe('/api/v1/auth', () => {
           function (err, result) {
             assert.ifError(err);
             assert.deepStrictEqual(result, true);
-          },
+          }
         );
 
         assert.deepStrictEqual(user.passwordResetToken, null);
@@ -249,11 +249,11 @@ describe('/api/v1/auth', () => {
         assert.deepStrictEqual(sentMails.length, 1);
         assert.deepStrictEqual(
           sentMails[0].to,
-          'ValidPasswordReset User <validreset.user@test.com>',
+          'ValidPasswordReset User <validreset.user@test.com>'
         );
         assert.deepStrictEqual(
           sentMails[0].subject,
-          'Your SF Life Line password has been changed',
+          'Your SF Life Line password has been changed'
         );
       });
 
@@ -268,12 +268,12 @@ describe('/api/v1/auth', () => {
 
         assert.deepStrictEqual(
           res.statusCode,
-          StatusCodes.UNPROCESSABLE_ENTITY,
+          StatusCodes.UNPROCESSABLE_ENTITY
         );
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Password must be at least 8 characters long. Password must include uppercase, lowercase, number, and special character',
+          'Password must be at least 8 characters long. Password must include uppercase, lowercase, number, and special character'
         );
       });
 
@@ -301,7 +301,7 @@ describe('/api/v1/auth', () => {
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
 
         bcrypt.compare(
@@ -310,7 +310,7 @@ describe('/api/v1/auth', () => {
           function (err, result) {
             assert.ifError(err);
             assert.deepStrictEqual(result, true);
-          },
+          }
         );
 
         assert.deepStrictEqual(user.passwordResetToken, null);

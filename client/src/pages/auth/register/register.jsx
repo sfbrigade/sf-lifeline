@@ -9,7 +9,7 @@ import { RegisterForm } from './RegisterForm';
 /**
  * Register page component
  */
-function Register() {
+function Register () {
   const { inviteId } = useParams();
   const [user, setUser] = useState({
     firstName: '',
@@ -56,7 +56,7 @@ function Register() {
       .catch(() => {
         notifications.show({
           color: 'red',
-          title: `Invalid invite`,
+          title: 'Invalid invite',
           autoClose: 5000,
         });
         navigate('/register');
@@ -67,7 +67,7 @@ function Register() {
    * Handles input fields in the Registration form
    * @param {*} event text field events
    */
-  function onFormChange(event) {
+  function onFormChange (event) {
     const newUserChange = {};
     const newErrorsChange = {};
     newUserChange[event.target.name] = event.target.value;
@@ -80,7 +80,7 @@ function Register() {
    * Checks if License Number is a valid license number.
    * Toggles Error if invalid.
    */
-  function fetchLicenseNumber() {
+  function fetchLicenseNumber () {
     setIsLoading(true);
     fetch('/api/v1/licenses?license=' + user.licenseNumber)
       .then((response) => {
@@ -120,7 +120,7 @@ function Register() {
    * Process the Registration with the Register API
    * Toggles any field errors if any is invalid
    */
-  function handleRegister() {
+  function handleRegister () {
     setErrors({});
     setIsLoading(true);
     fetch('/api/v1/users/register', {
@@ -160,7 +160,7 @@ function Register() {
   return (
     <div>
       <div className={classes.header}>
-        <Title order={3} mb="1.5rem">
+        <Title order={3} mb='1.5rem'>
           First Responder Sign Up
         </Title>
         <Text>
@@ -170,7 +170,7 @@ function Register() {
           An administrator will review your application for acceptance.
         </Text>
       </div>
-      <Flex direction="column" gap="md">
+      <Flex direction='column' gap='md'>
         <RegisterForm
           user={user}
           errors={errors}

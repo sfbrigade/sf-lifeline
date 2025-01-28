@@ -17,14 +17,14 @@ export const EMS_VERIFICATION_WEBSITE = `${EMS_VERIFICATION_WEBSITE_BASE_URL}${E
  * @returns {object} EMS personnel information which includes name, licenseType, status, and licenseNumber
  * @throws An error if the EMS verification website has issues or if there is no match for the licesnse
  */
-export default async function verifyLicense(license) {
+export default async function verifyLicense (license) {
   let formData;
   let sessionCookie;
 
   try {
     const res = await fetchLicenseVerificationForm(
       EMS_VERIFICATION_WEBSITE,
-      license,
+      license
     );
 
     formData = res.formData;
@@ -33,7 +33,7 @@ export default async function verifyLicense(license) {
     console.error(err);
     throw new LicenseWebsiteError(
       503,
-      'Unable to access verification website, try again later.',
+      'Unable to access verification website, try again later.'
     );
   }
 
@@ -42,7 +42,7 @@ export default async function verifyLicense(license) {
       const emsPersonnelInfo = await fetchLicenseVerificationResults(
         EMS_VERIFICATION_WEBSITE,
         formData,
-        sessionCookie,
+        sessionCookie
       );
       return emsPersonnelInfo;
     } catch (err) {
@@ -52,7 +52,7 @@ export default async function verifyLicense(license) {
       console.error(err);
       throw new LicenseWebsiteError(
         503,
-        'Unable to access verification results, try again later.',
+        'Unable to access verification results, try again later.'
       );
     }
   }

@@ -84,7 +84,7 @@ const UserRoleBadge = ({ value }) => {
   }
   return (
     <Badge color={color}>
-      <Text fw={700} tt="capitalize" size="sm">
+      <Text fw={700} tt='capitalize' size='sm'>
         {value.toLocaleLowerCase().replace('_', ' ')}
       </Text>
     </Badge>

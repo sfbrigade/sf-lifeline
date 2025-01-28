@@ -30,7 +30,7 @@ class User extends Base {
       .min(8, 'Password must be at least 8 characters long')
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-        'Password must include uppercase, lowercase, number, and special character',
+        'Password must include uppercase, lowercase, number, and special character'
       ),
 
     licenseNumber: z.string().optional(),
@@ -38,53 +38,53 @@ class User extends Base {
     inviteId: z.string().optional(),
   });
 
-  static get Role() {
+  static get Role () {
     return Role;
   }
 
-  constructor(data) {
+  constructor (data) {
     super(Prisma.UserScalarFieldEnum, data);
   }
 
-  get isActive() {
+  get isActive () {
     return this.isApproved && this.isEmailVerified && !this.isDisabled;
   }
 
-  get isUnapproved() {
+  get isUnapproved () {
     return !this.isApproved && !this.isRejected;
   }
 
-  get isApproved() {
+  get isApproved () {
     return !!this.approvedAt;
   }
 
-  get isRejected() {
+  get isRejected () {
     return !!this.rejectedAt;
   }
 
-  get isDisabled() {
+  get isDisabled () {
     return !!this.disabledAt;
   }
 
-  get isEmailVerified() {
+  get isEmailVerified () {
     return !!this.emailVerifiedAt;
   }
 
-  get isPasswordResetTokenValid() {
+  get isPasswordResetTokenValid () {
     return new Date() <= new Date(this.passwordResetExpires);
   }
 
-  get fullNameAndEmail() {
+  get fullNameAndEmail () {
     return `${this.firstName} ${this.middleName ?? ''} ${this.lastName} <${this.email}>`
       .trim()
       .replace(/ {2,}/g, ' ');
   }
 
-  generateEmailVerificationToken() {
+  generateEmailVerificationToken () {
     this.emailVerificationToken = crypto.randomUUID();
   }
 
-  async sendVerificationEmail() {
+  async sendVerificationEmail () {
     const { firstName } = this;
     const url = `${process.env.BASE_URL}/verify/${this.emailVerificationToken}`;
     return mailer.send({
@@ -99,11 +99,11 @@ class User extends Base {
     });
   }
 
-  generatePasswordResetToken() {
+  generatePasswordResetToken () {
     this.passwordResetToken = crypto.randomUUID();
   }
 
-  async sendPasswordResetEmail() {
+  async sendPasswordResetEmail () {
     const { firstName } = this;
     const url = `${process.env.BASE_URL}/password/${this.passwordResetToken}`;
     return mailer.send({
@@ -118,7 +118,7 @@ class User extends Base {
     });
   }
 
-  async sendPasswordResetSuccessEmail() {
+  async sendPasswordResetSuccessEmail () {
     const { firstName } = this;
     const url = `${process.env.BASE_URL}/login`;
     return mailer.send({
@@ -133,11 +133,11 @@ class User extends Base {
     });
   }
 
-  async setPassword(password) {
+  async setPassword (password) {
     this.hashedPassword = await bcrypt.hash(password, 10);
   }
 
-  async comparePassword(password) {
+  async comparePassword (password) {
     return bcrypt.compare(password, this.hashedPassword);
   }
 }

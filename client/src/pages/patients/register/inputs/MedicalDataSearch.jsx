@@ -24,7 +24,7 @@ const medicalDataSearchProps = {
  *  Medical Data Search component for Medical Data section of patient form
  * @param {PropTypes.InferProps<typeof medicalDataSearchProps>} props
  */
-export default function MedicalDataSearch({
+export default function MedicalDataSearch ({
   category,
   form,
   initialMedicalData,
@@ -51,7 +51,7 @@ export default function MedicalDataSearch({
       const result = await LifelineAPI.getMedicalData(
         category,
         API_PATHS[category],
-        query,
+        query
       );
       setData(result);
       setLoading(false);
@@ -79,7 +79,7 @@ export default function MedicalDataSearch({
     setValue((current) =>
       current.includes(id)
         ? current.filter((v) => v.id !== id)
-        : [...current, { id, name }],
+        : [...current, { id, name }]
     );
 
     form.setFieldValue(`medicalData.${category}`, (current) => [
@@ -92,7 +92,7 @@ export default function MedicalDataSearch({
   const handleValueRemove = (val) => {
     setValue((current) => current.filter((v) => v.id !== val));
     form.setFieldValue(`medicalData.${category}`, (current) =>
-      current.filter((v) => v !== val),
+      current.filter((v) => v !== val)
     );
   };
 
@@ -107,8 +107,8 @@ export default function MedicalDataSearch({
       <Pill
         key={item?.id}
         withRemoveButton
-        radius="md"
-        size="md"
+        radius='md'
+        size='md'
         onRemove={() => handleValueRemove(item?.id)}
       >
         {item?.name}
@@ -132,7 +132,7 @@ export default function MedicalDataSearch({
    *
    * Conditional rendering of combobox content
    */
-  function renderComboxContent() {
+  function renderComboxContent () {
     if (empty) {
       return <Combobox.Empty>No results found</Combobox.Empty>;
     }
@@ -146,7 +146,7 @@ export default function MedicalDataSearch({
     }
 
     return (
-      <ScrollArea.Autosize type="scroll" mah={200}>
+      <ScrollArea.Autosize type='scroll' mah={200}>
         {options}
       </ScrollArea.Autosize>
     );

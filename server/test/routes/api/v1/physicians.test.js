@@ -18,7 +18,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/physicians?physician=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/physicians?physician=&perPage=1&page=3>; rel="last"',
+        '<http://localhost/api/v1/physicians?physician=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/physicians?physician=&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -124,7 +124,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload).phone, '(555) 555-5555');
       assert.deepStrictEqual(
         JSON.parse(reply.payload).email,
-        'jane.doe@test.com',
+        'jane.doe@test.com'
       );
     });
 
@@ -190,7 +190,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
-        'Physician with email jane.doe@test.com already exists.',
+        'Physician with email jane.doe@test.com already exists.'
       );
 
       reply = await app
@@ -207,7 +207,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
-        'Physician with phone (555) 555-5555 and email jane.doe@test.com already exists.',
+        'Physician with phone (555) 555-5555 and email jane.doe@test.com already exists.'
       );
 
       reply = await app

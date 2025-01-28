@@ -43,6 +43,6 @@ export default async function (fastify, _opts) {
         return reply.notFound();
       }
       reply.send(invite);
-    },
+    }
   );
 }

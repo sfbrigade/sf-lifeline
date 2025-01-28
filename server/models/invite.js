@@ -4,33 +4,33 @@ import Base from './base.js';
 import mailer from '../helpers/email/mailer.js';
 
 class Invite extends Base {
-  constructor(data) {
+  constructor (data) {
     super(Prisma.InviteScalarFieldEnum, data);
   }
 
-  get isValid() {
+  get isValid () {
     return !this.isAccepted && !this.isExpired && !this.isRevoked;
   }
 
-  get isAccepted() {
+  get isAccepted () {
     return !!this.acceptedAt;
   }
 
-  get isExpired() {
+  get isExpired () {
     return Date.parse(this.expiresAt) < Date.now();
   }
 
-  get isRevoked() {
+  get isRevoked () {
     return !!this.revokedAt;
   }
 
-  get fullNameAndEmail() {
+  get fullNameAndEmail () {
     return `${this.firstName ?? ''} ${this.middleName ?? ''} ${this.lastName ?? ''} <${this.email}>`
       .trim()
       .replace(/ {2,}/g, ' ');
   }
 
-  async sendInviteEmail() {
+  async sendInviteEmail () {
     const { firstName } = this;
     const url = `${process.env.BASE_URL}/register/${this.id}`;
     return mailer.send({

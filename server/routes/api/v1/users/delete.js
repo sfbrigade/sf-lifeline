@@ -28,6 +28,6 @@ export default async function (fastify, _opts) {
       });
 
       reply.send({ message: 'User deleted successfully' });
-    },
+    }
   );
 }

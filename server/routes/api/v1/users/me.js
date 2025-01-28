@@ -32,6 +32,6 @@ export default async function (fastify, _opts) {
     },
     async (request, reply) => {
       reply.send(request.user);
-    },
+    }
   );
 }

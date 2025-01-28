@@ -6,7 +6,7 @@ import { PasswordForgotForm } from './PasswordForgotForm';
 /**
  * Password reset page
  */
-function PasswordForgot() {
+function PasswordForgot () {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ function PasswordForgot() {
   /**
    * API call to send a request for a password reset to email on account profile
    */
-  function sendPasswordReset() {
+  function sendPasswordReset () {
     setEmailError(null);
     setIsLoading(true);
     fetch('/api/v1/auth/password', {
@@ -49,7 +49,7 @@ function PasswordForgot() {
           password link
         </p>
       </div>
-      <Flex direction="column" gap="md">
+      <Flex direction='column' gap='md'>
         <PasswordForgotForm
           email={email}
           emailError={emailError}

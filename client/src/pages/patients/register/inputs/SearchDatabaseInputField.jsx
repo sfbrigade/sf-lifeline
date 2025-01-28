@@ -19,7 +19,7 @@ const searchDatabaseInputFieldProps = {
  *
  * @param {PropTypes.InferProps<typeof searchDatabaseInputFieldProps>} props
  */
-export default function SearchDatabaseInputField({
+export default function SearchDatabaseInputField ({
   data,
   loading,
   combobox,
@@ -71,7 +71,7 @@ export default function SearchDatabaseInputField({
                 handleSelectValue('', '');
               }
             }}
-            rightSection={loading ? <Loader size="xs" /> : null}
+            rightSection={loading ? <Loader size='xs' /> : null}
           />
         </Combobox.EventsTarget>
       </Combobox.DropdownTarget>

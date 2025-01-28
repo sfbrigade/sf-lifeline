@@ -20,7 +20,7 @@ import { usePatients } from './usePatients';
  *  Patients page component
  *
  */
-export default function Patients() {
+export default function Patients () {
   const [inputValue, setInputValue] = useState('');
   const { patients, headers, isFetching, page, pages, setPage, setSearch } =
     usePatients();
@@ -32,14 +32,14 @@ export default function Patients() {
   return (
     <Container>
       <div className={classes.header}>
-        <Text fw={600} size="xl" mr="md">
+        <Text fw={600} size='xl' mr='md'>
           Patients
         </Text>
         <Group>
           <TextInput
-            leftSectionPointerEvents="none"
+            leftSectionPointerEvents='none'
             leftSection={<IconSearch stroke={2} />}
-            placeholder="Search"
+            placeholder='Search'
             onChange={(event) => {
               setInputValue(event.currentTarget.value);
               handleSearch(event.currentTarget.value);
@@ -48,7 +48,7 @@ export default function Patients() {
           />
         </Group>
       </div>
-      <Divider mb="xl" />
+      <Divider mb='xl' />
       <Container className={classes.patientsContainer}>
         <LoadingOverlay
           visible={isFetching}

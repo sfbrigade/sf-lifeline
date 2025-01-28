@@ -15,7 +15,7 @@ const patientTableRowProps = {
     PropTypes.shape({
       key: PropTypes.string.isRequired,
       text: PropTypes.node,
-    }),
+    })
   ),
   patient: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -34,7 +34,7 @@ const patientTableRowProps = {
  * Patient table row component
  * @param {PropTypes.InferProps<typeof patientTableRowProps>} props
  */
-export default function PatientTableRow({
+export default function PatientTableRow ({
   headers,
   patient,
   onDelete,
@@ -48,9 +48,9 @@ export default function PatientTableRow({
         </Table.Td>
       ))}
       <Table.Td>
-        <Menu shadow="md">
+        <Menu shadow='md'>
           <Menu.Target>
-            <ActionIcon variant="subtle" color="gray">
+            <ActionIcon variant='subtle' color='gray'>
               <IconDotsVertical size={18} />
             </ActionIcon>
           </Menu.Target>
@@ -68,13 +68,12 @@ export default function PatientTableRow({
             {showDeleteMenu && (
               <Menu.Item
                 leftSection={<IconTrash size={18} />}
-                color="red"
+                color='red'
                 onClick={() =>
                   onDelete({
                     id: patient.id,
                     name: patient.name,
-                  })
-                }
+                  })}
               >
                 Delete
               </Menu.Item>

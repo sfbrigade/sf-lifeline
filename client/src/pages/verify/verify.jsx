@@ -6,7 +6,7 @@ import { notifications } from '@mantine/notifications';
 /**
  * Email Verification
  */
-function Verify() {
+function Verify () {
   const { emailVerificationToken } = useParams();
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ function Verify() {
         .catch(() => {
           notifications.show({
             color: 'red',
-            title: `Invalid Email Verification Token`,
+            title: 'Invalid Email Verification Token',
             autoClose: 5000,
           });
           navigate('/');

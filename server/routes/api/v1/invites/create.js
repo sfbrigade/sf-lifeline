@@ -50,7 +50,7 @@ export default async function (fastify, _opts) {
       const payload = await Promise.all(
         [
           ...recipients.matchAll(
-            /(?:"?([^"<@\n]+)"? ?<)?([^@< ,\n]+@[^ ,>\n]+)>?/g,
+            /(?:"?([^"<@\n]+)"? ?<)?([^@< ,\n]+@[^ ,>\n]+)>?/g
           ),
         ].map(async (match) => {
           const [, fullName, email] = match;
@@ -76,9 +76,9 @@ export default async function (fastify, _opts) {
           const invite = new Invite(data);
           await invite.sendInviteEmail();
           return data;
-        }),
+        })
       );
       reply.code(StatusCodes.CREATED).send(payload);
-    },
+    }
   );
 }

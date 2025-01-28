@@ -53,7 +53,7 @@ export const UNAUTH_ROUTES = [
  * @param {Object} location
  * @param {Function} callback
  */
-export function handleRedirects(user, location, callback) {
+export function handleRedirects (user, location, callback) {
   const { pathname, search } = location;
   const from = `${pathname}${search}`;
   const LOGIN_PATH = '/login';

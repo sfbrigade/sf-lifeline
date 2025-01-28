@@ -49,6 +49,6 @@ export default async function (fastify, _opts) {
         orderBy: [{ createdAt: 'desc' }],
       });
       reply.setPaginationHeaders(page, perPage, total).send(records);
-    },
+    }
   );
 }

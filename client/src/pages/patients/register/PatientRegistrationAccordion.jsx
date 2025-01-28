@@ -39,7 +39,7 @@ const FORM_SELECT_ENUM_VALUES = {
  *  Patient Registration Accordion component
  * @param {PropTypes.InferProps<typeof PatientRegistrationAccordionProps>} props
  */
-export default function PatientRegistrationAccordion({
+export default function PatientRegistrationAccordion ({
   form,
   initialMedicalData,
   initialHospitalData,
@@ -51,42 +51,44 @@ export default function PatientRegistrationAccordion({
   return (
     <>
       <Accordion
-        defaultValue="patientData"
+        defaultValue='patientData'
         value={openedSection}
         onChange={handleAccordionChange}
         classNames={classes}
       >
-        <Accordion.Item value="patientData">
+        <Accordion.Item value='patientData'>
           <Accordion.Control chevron={false}>
             &#9312; Basic Information{' '}
-            {showCheck['patientData'] ? (
-              <IconCircleCheck color="green" size={30} />
-            ) : null}
+            {showCheck['patientData']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
           </Accordion.Control>
           <Accordion.Panel>
             <TextInput
-              label="First Name"
-              placeholder="First Name"
+              label='First Name'
+              placeholder='First Name'
               withAsterisk
               key={form.key('patientData.firstName')}
               {...form.getInputProps('patientData.firstName')}
             />
             <TextInput
-              label="Middle Name"
-              placeholder="Middle Name"
+              label='Middle Name'
+              placeholder='Middle Name'
               key={form.key('patientData.middleName')}
               {...form.getInputProps('patientData.middleName')}
             />
             <TextInput
-              label="Last Name"
-              placeholder="Last Name"
+              label='Last Name'
+              placeholder='Last Name'
               withAsterisk
               key={form.key('patientData.lastName')}
               {...form.getInputProps('patientData.lastName')}
             />
             <Select
-              label="Gender"
-              placeholder="Select Gender"
+              label='Gender'
+              placeholder='Select Gender'
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
                 value,
@@ -97,8 +99,8 @@ export default function PatientRegistrationAccordion({
               {...form.getInputProps('patientData.gender')}
             />
             <Select
-              label="Language"
-              placeholder="Select Language"
+              label='Language'
+              placeholder='Select Language'
               withAsterisk
               data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
                 value,
@@ -109,10 +111,10 @@ export default function PatientRegistrationAccordion({
               {...form.getInputProps('patientData.language')}
             />
             <DateInput
-              label="Date of Birth"
-              valueFormat="YYYY-MM-DD"
-              placeholder="YYYY-MM-DD"
-              defaultLevel="decade"
+              label='Date of Birth'
+              valueFormat='YYYY-MM-DD'
+              placeholder='YYYY-MM-DD'
+              defaultLevel='decade'
               maxDate={new Date()}
               withAsterisk
               key={form.key('patientData.dateOfBirth')}
@@ -121,49 +123,51 @@ export default function PatientRegistrationAccordion({
           </Accordion.Panel>
         </Accordion.Item>
 
-        <Accordion.Item value="contactData">
+        <Accordion.Item value='contactData'>
           <Accordion.Control>
             &#9313; Emergency Contact{' '}
-            {showCheck['contactData'] ? (
-              <IconCircleCheck color="green" size={30} />
-            ) : null}
+            {showCheck['contactData']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
           </Accordion.Control>
           <Accordion.Panel>
             <TextInput
-              label="First Name"
-              placeholder="First Name"
+              label='First Name'
+              placeholder='First Name'
               key={form.key('contactData.firstName')}
               {...form.getInputProps('contactData.firstName')}
             />
             <TextInput
-              label="Middle Name"
-              placeholder="Middle Name"
+              label='Middle Name'
+              placeholder='Middle Name'
               key={form.key('contactData.middleName')}
               {...form.getInputProps('contactData.middleName')}
             />
             <TextInput
-              label="Last Name"
-              placeholder="Last Name"
+              label='Last Name'
+              placeholder='Last Name'
               key={form.key('contactData.lastName')}
               {...form.getInputProps('contactData.lastName')}
             />
             <InputBase
-              label="Phone Number"
+              label='Phone Number'
               component={IMaskInput}
-              mask="(000) 000-0000"
-              placeholder="(000) 000-0000"
+              mask='(000) 000-0000'
+              placeholder='(000) 000-0000'
               key={form.key('contactData.phone')}
               {...form.getInputProps('contactData.phone')}
             />
             <TextInput
-              label="Email"
-              placeholder="Email"
+              label='Email'
+              placeholder='Email'
               key={form.key('contactData.email')}
               {...form.getInputProps('contactData.email')}
             />
             <Select
-              label="Relationship"
-              placeholder="Select Relationship"
+              label='Relationship'
+              placeholder='Select Relationship'
               data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
                 value,
                 label: humanize(value),
@@ -175,12 +179,14 @@ export default function PatientRegistrationAccordion({
           </Accordion.Panel>
         </Accordion.Item>
 
-        <Accordion.Item value="medicalData">
+        <Accordion.Item value='medicalData'>
           <Accordion.Control>
             &#9314; Medical Information{' '}
-            {showCheck['medicalData'] ? (
-              <IconCircleCheck color="green" size={30} />
-            ) : null}
+            {showCheck['medicalData']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
           </Accordion.Control>
           <Accordion.Panel>
             {Object.keys(form.getValues().medicalData).map((category) => {
@@ -196,38 +202,42 @@ export default function PatientRegistrationAccordion({
           </Accordion.Panel>
         </Accordion.Item>
 
-        <Accordion.Item value="healthcareChoices">
+        <Accordion.Item value='healthcareChoices'>
           <Accordion.Control>
             &#9315; Healthcare Choices{' '}
-            {showCheck['healthcareChoices'] ? (
-              <IconCircleCheck color="green" size={30} />
-            ) : null}
+            {showCheck['healthcareChoices']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
           </Accordion.Control>
           <Accordion.Panel>
             <HealthcareChoicesSearch
               form={form}
-              choice="hospital"
+              choice='hospital'
               initialData={initialHospitalData}
             />
             <HealthcareChoicesSearch
               form={form}
-              choice="physician"
+              choice='physician'
               initialData={initialPhysicianData}
             />
           </Accordion.Panel>
         </Accordion.Item>
 
-        <Accordion.Item value="codeStatus">
+        <Accordion.Item value='codeStatus'>
           <Accordion.Control>
             &#9316; Advanced Directive{' '}
-            {showCheck['codeStatus'] ? (
-              <IconCircleCheck color="green" size={30} />
-            ) : null}
+            {showCheck['codeStatus']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
           </Accordion.Control>
           <Accordion.Panel>
             <Select
-              label="Code Status"
-              placeholder="Select Code Status"
+              label='Code Status'
+              placeholder='Select Code Status'
               data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
                 value,
                 label: humanize(value),

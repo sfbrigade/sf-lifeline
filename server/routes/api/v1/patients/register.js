@@ -75,7 +75,7 @@ export default async function (fastify, _opts) {
           });
           if (exists) {
             throw new Error(
-              `Patient with ID ${id} already exists in database.`,
+              `Patient with ID ${id} already exists in database.`
             );
           }
 
@@ -109,6 +109,6 @@ export default async function (fastify, _opts) {
         }
         throw error;
       }
-    },
+    }
   );
 }
