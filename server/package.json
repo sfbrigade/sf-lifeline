@@ -14,9 +14,7 @@
     "db:preview": "npx prisma studio",
     "db:reset": "npx prisma migrate reset --force",
     "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
-    "format": "prettier --write --ignore-unknown .",
-    "format:check": "prettier --check --ignore-unknown .",
-    "lint": "eslint . -c eslint.config.js --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint --fix",
     "start": "fastify start -l info app.js",
     "test": "node --test-concurrency 1 --test $(find test -name '*.test.js')",
     "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test npx prisma migrate reset --force"

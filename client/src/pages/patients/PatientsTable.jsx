@@ -15,7 +15,7 @@ const patientTableProps = {
     PropTypes.shape({
       key: PropTypes.string.isRequired,
       text: PropTypes.node,
-    }),
+    })
   ),
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -25,7 +25,7 @@ const patientTableProps = {
       createdAt: PropTypes.string.isRequired,
       updatedBy: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
-    }),
+    })
   ),
 };
 
@@ -33,7 +33,7 @@ const patientTableProps = {
  * Patients table component
  * @param {PropTypes.InferProps<typeof patientTableProps>} props
  */
-export default function PatientsTable({ headers, data }) {
+export default function PatientsTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const { mutateAsync: deletePatient, isPending } = useDeletePatient();
@@ -44,7 +44,7 @@ export default function PatientsTable({ headers, data }) {
       setSelectedPatient(patient);
       open();
     },
-    [open],
+    [open]
   );
   const confirmPatientDeletion = async () => {
     try {
@@ -79,7 +79,7 @@ export default function PatientsTable({ headers, data }) {
         <Table.Td colSpan={headers.length}>No patients found.</Table.Td>
       </Table.Tr>
     ),
-    [headers.length],
+    [headers.length]
   );
 
   const patientRows = useMemo(() => {
@@ -97,11 +97,11 @@ export default function PatientsTable({ headers, data }) {
   return (
     <>
       <Paper withBorder className={classes.tableWrapper}>
-        <Table.ScrollContainer minWidth={500} type="native">
+        <Table.ScrollContainer minWidth={500} type='native'>
           <Table
             stickyHeader
             highlightOnHover
-            verticalSpacing="lg"
+            verticalSpacing='lg'
             classNames={{ table: classes.table }}
           >
             <Table.Thead>
@@ -120,7 +120,7 @@ export default function PatientsTable({ headers, data }) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Delete Patient"
+        title='Delete Patient'
         classNames={{ title: classes.title }}
       >
         <Text fw={600}>
@@ -128,7 +128,7 @@ export default function PatientsTable({ headers, data }) {
         </Text>
         <Button
           classNames={{ root: classes.button }}
-          color="red"
+          color='red'
           fullWidth
           onClick={confirmPatientDeletion}
           loading={isPending}
@@ -137,7 +137,7 @@ export default function PatientsTable({ headers, data }) {
         </Button>
         <Button
           classNames={{ root: classes.button }}
-          color="blue"
+          color='blue'
           fullWidth
           onClick={cancelPatientDeletion}
           disabled={isPending}

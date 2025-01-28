@@ -11,13 +11,13 @@ const userDataTableProps = {
   rows: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-    }),
+    })
   ),
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
       text: PropTypes.node,
-    }),
+    })
   ),
 };
 

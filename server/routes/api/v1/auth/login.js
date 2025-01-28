@@ -81,6 +81,6 @@ export default async function (fastify, _opts) {
 
       request.session.set('userId', user.id);
       reply.send(data);
-    },
+    }
   );
 }

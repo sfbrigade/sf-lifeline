@@ -31,7 +31,7 @@ const headers = [
 /**
  * Users list.
  */
-function Users() {
+function Users () {
   const navigate = useNavigate();
   const [pendingMembers, setPendingMembers] = useState(0);
   const [opened, { open, close }] = useDisclosure(false);
@@ -46,7 +46,7 @@ function Users() {
         .then((users) => {
           const pendingUsers = users.filter(
             (user) =>
-              user.approvedAt.length === 0 && user.rejectedAt.length === 0,
+              user.approvedAt.length === 0 && user.rejectedAt.length === 0
           );
           setPendingMembers(pendingUsers.length);
 
@@ -72,31 +72,33 @@ function Users() {
         <h4>Members</h4>
         <Group className={classes.actions}>
           <TextInput
-            leftSectionPointerEvents="none"
+            leftSectionPointerEvents='none'
             leftSection={<IconSearch stroke={2} />}
-            placeholder="Search"
+            placeholder='Search'
           />
           <div className={classes.relative}>
             <Button
-              variant="default"
+              variant='default'
               onClick={() => navigate('/users/pending')}
             >
               Pending Members
             </Button>
-            {pendingMembers > 0 ? (
-              <Badge className={classes.badge} size="xs" circle color="red">
-                {pendingMembers}
-              </Badge>
-            ) : null}
+            {pendingMembers > 0
+              ? (
+                <Badge className={classes.badge} size='xs' circle color='red'>
+                  {pendingMembers}
+                </Badge>
+                )
+              : null}
           </div>
-          <Button variant="filled" onClick={open}>
+          <Button variant='filled' onClick={open}>
             Invite Member
           </Button>
         </Group>
       </div>
-      <Divider mb="xl" />
+      <Divider mb='xl' />
       <Container className={classes.datatableWrapper}>
-        <Box pos="relative">
+        <Box pos='relative'>
           <LoadingOverlay
             visible={isFetching}
             zIndex={1000}
@@ -106,7 +108,7 @@ function Users() {
             headers={headers}
             rows={data}
             highlightOnHover
-            verticalSpacing="lg"
+            verticalSpacing='lg'
           />
         </Box>
       </Container>

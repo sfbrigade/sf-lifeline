@@ -13,11 +13,11 @@ Preferences.propTypes = preferencesProps;
  * Preferences section of patient details
  * @param {PropTypes.InferProps<typeof preferencesProps>} props
  */
-export default function Preferences({ codeStatus, hospital }) {
+export default function Preferences ({ codeStatus, hospital }) {
   return (
     <section>
       <Text className={classes.sectionTitle}>Preferences</Text>
-      <Paper shadow="xs" p="md" radius="md" withBorder>
+      <Paper shadow='xs' p='md' radius='md' withBorder>
         <section>
           <Text className={classes.boldText}>Code status</Text>
           <Text>{codeStatus ? humanize(codeStatus) : 'Not provided'}</Text>

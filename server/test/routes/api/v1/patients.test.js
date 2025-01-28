@@ -18,7 +18,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/patients?patient=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/patients?patient=&perPage=1&page=3>; rel="last"',
+        '<http://localhost/api/v1/patients?patient=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/patients?patient=&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -113,7 +113,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].id,
-        '27963f68-ebc1-408a-8bb5-8fbe54671064',
+        '27963f68-ebc1-408a-8bb5-8fbe54671064'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].firstName, 'John');
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].middleName, 'A');
@@ -122,23 +122,23 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].language, 'ENGLISH');
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].dateOfBirth,
-        '2000-10-05T00:00:00.000Z',
+        '2000-10-05T00:00:00.000Z'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].createdBy.id,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].updatedBy.id,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].createdAt,
-        '2022-10-05T00:00:00.000Z',
+        '2022-10-05T00:00:00.000Z'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].updatedAt,
-        '2022-10-05T00:00:00.000Z',
+        '2022-10-05T00:00:00.000Z'
       );
     });
 
@@ -228,7 +228,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.'
       );
     });
   });
@@ -381,7 +381,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe54671064 already exists in database.',
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe54671064 already exists in database.'
       );
     });
 
@@ -403,7 +403,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        "body must have required property 'firstName'",
+        "body must have required property 'firstName'"
       );
     });
 
@@ -429,7 +429,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/language must be equal to one of the allowed values',
+        'body/language must be equal to one of the allowed values'
       );
     });
 
@@ -455,7 +455,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/id must match format "uuid"',
+        'body/id must match format "uuid"'
       );
     });
   });
@@ -632,7 +632,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'Patient with ID not-a-uuid does not exist in database.',
+        'Patient with ID not-a-uuid does not exist in database.'
       );
     });
 
@@ -693,7 +693,7 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
-        reply.body,
+        reply.body
       );
       assert.deepStrictEqual(firstName, 'Jane');
       assert.deepStrictEqual(middleName, 'A');
@@ -741,7 +741,7 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const { firstName, middleName, lastName, emergencyContact } = JSON.parse(
-        reply.body,
+        reply.body
       );
 
       assert.deepStrictEqual(firstName, 'Jane');
@@ -869,15 +869,15 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
       assert.deepStrictEqual(
         allergies[0].allergy.id,
-        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2'
       );
       assert.deepStrictEqual(
         medications[0].medication.id,
-        '583c7775-9466-4dab-8a4d-edf1056f097f',
+        '583c7775-9466-4dab-8a4d-edf1056f097f'
       );
       assert.deepStrictEqual(
         conditions[0].condition.id,
-        '471c8529-81fc-4129-8ca0-f1b7406ed90c',
+        '471c8529-81fc-4129-8ca0-f1b7406ed90c'
       );
     });
 
@@ -906,19 +906,19 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(
         allergies[0].allergy.id,
-        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2'
       );
       assert.deepStrictEqual(
         allergies[1].allergy.id,
-        'ebcca2da-655f-48d4-be90-307f36870dc0',
+        'ebcca2da-655f-48d4-be90-307f36870dc0'
       );
       assert.deepStrictEqual(
         medications[0].medication.id,
-        '583c7775-9466-4dab-8a4d-edf1056f097f',
+        '583c7775-9466-4dab-8a4d-edf1056f097f'
       );
       assert.deepStrictEqual(
         conditions[0].condition.id,
-        '471c8529-81fc-4129-8ca0-f1b7406ed90c',
+        '471c8529-81fc-4129-8ca0-f1b7406ed90c'
       );
 
       reply = await app
@@ -943,16 +943,16 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(
         allergies[0].allergy.id,
-        'ebcca2da-655f-48d4-be90-307f36870dc0',
+        'ebcca2da-655f-48d4-be90-307f36870dc0'
       );
       assert.deepStrictEqual(
         allergies[1].allergy.id,
-        '5c057fc3-15d2-40fc-b664-707d04ba66c2',
+        '5c057fc3-15d2-40fc-b664-707d04ba66c2'
       );
       assert.deepStrictEqual(allergies.length, 2);
       assert.deepStrictEqual(
         medications[0].medication.id,
-        '583c7775-9466-4dab-8a4d-edf1056f097f',
+        '583c7775-9466-4dab-8a4d-edf1056f097f'
       );
       assert.deepStrictEqual(medications.length, 1);
       assert.deepStrictEqual(conditions.length, 0);
@@ -975,7 +975,7 @@ describe('/api/v1/patients', () => {
       let result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'allergies with ID 5c057fc3-15d2-40fc-b664-707d04ba66c1 does not exist in database.',
+        'allergies with ID 5c057fc3-15d2-40fc-b664-707d04ba66c1 does not exist in database.'
       );
 
       reply = await app
@@ -992,7 +992,7 @@ describe('/api/v1/patients', () => {
       result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'conditions with ID 471c8529-81fc-4129-8ca0-f1b7406ed90a does not exist in database.',
+        'conditions with ID 471c8529-81fc-4129-8ca0-f1b7406ed90a does not exist in database.'
       );
     });
 
@@ -1029,11 +1029,11 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
       assert.deepStrictEqual(
         hospital.id,
-        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025'
       );
       assert.deepStrictEqual(
         physician.id,
-        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb'
       );
     });
 
@@ -1058,11 +1058,11 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(
         hospital.id,
-        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025'
       );
       assert.deepStrictEqual(
         physician.id,
-        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb'
       );
 
       reply = await app
@@ -1081,11 +1081,11 @@ describe('/api/v1/patients', () => {
 
       assert.deepStrictEqual(
         hospital.id,
-        'b50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+        'b50538cd-1e10-42a3-8d6b-f9ae1e48a025'
       );
       assert.deepStrictEqual(
         physician.id,
-        'bbbf7f99-36cc-40b5-a26c-cd95daae04b5',
+        'bbbf7f99-36cc-40b5-a26c-cd95daae04b5'
       );
     });
 
@@ -1110,11 +1110,11 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(id, '27963f68-ebc1-408a-8bb5-8fbe54671064');
       assert.deepStrictEqual(
         hospital.id,
-        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025',
+        'a50538cd-1e10-42a3-8d6b-f9ae1e48a025'
       );
       assert.deepStrictEqual(
         physician.id,
-        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb',
+        '1ef50c4c-92cb-4298-ab0a-ce7644513bfb'
       );
 
       reply = await app
@@ -1159,7 +1159,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'Hospital with ID a50538cd-1e10-42a3-8d6b-f9ae1e48a022 does not exist in database.',
+        'Hospital with ID a50538cd-1e10-42a3-8d6b-f9ae1e48a022 does not exist in database.'
       );
     });
 
@@ -1249,7 +1249,7 @@ describe('/api/v1/patients', () => {
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.',
+        'Patient with ID 27963f68-ebc1-408a-8bb5-8fbe5467106a does not exist in database.'
       );
     });
   });

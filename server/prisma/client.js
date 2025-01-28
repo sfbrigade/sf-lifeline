@@ -6,7 +6,7 @@ const prisma = new PrismaClient({
   name: 'paginate',
   model: {
     $allModels: {
-      async paginate({ page, perPage, include, ...options }) {
+      async paginate ({ page, perPage, include, ...options }) {
         const take = parseInt(perPage, 10);
         const skip = (parseInt(page, 10) - 1) * take;
         const context = Prisma.getExtensionContext(this);

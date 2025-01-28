@@ -13,23 +13,23 @@ import { BsQrCode } from 'react-icons/bs';
 /**
  * Authenticated Dashboard.
  */
-function Dashboard() {
+function Dashboard () {
   return (
-    <Container fluid mt="xl">
-      <Title mb="xl">Dashboard</Title>
+    <Container fluid mt='xl'>
+      <Title mb='xl'>Dashboard</Title>
       <Grid>
         <Grid.Col span={{ sm: 6, lg: 4 }}>
-          <Paper shadow="xs" p="md">
-            <Group gap="md" align="top">
-              <BsQrCode size="5rem" />
+          <Paper shadow='xs' p='md'>
+            <Group gap='md' align='top'>
+              <BsQrCode size='5rem' />
               <Box>
-                <Title mb="sm" order={3}>
+                <Title mb='sm' order={3}>
                   QR Codes
                 </Title>
                 <Button
                   component={Link}
-                  to="/patients/generate"
-                  target="_blank"
+                  to='/patients/generate'
+                  target='_blank'
                 >
                   Print QR Codes
                 </Button>

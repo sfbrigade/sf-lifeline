@@ -29,6 +29,6 @@ export default async function (fastify) {
       }
 
       return results;
-    },
+    }
   );
 }

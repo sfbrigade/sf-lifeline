@@ -47,12 +47,12 @@ export default async function (fastify, _opts) {
         data: {
           passwordResetToken: user.passwordResetToken,
           passwordResetExpires: new Date(
-            new Date().getTime() + 30 * 60000,
+            new Date().getTime() + 30 * 60000
           ).toISOString(),
         },
       });
 
       reply.code(StatusCodes.OK);
-    },
+    }
   );
 }

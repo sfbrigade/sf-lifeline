@@ -18,7 +18,7 @@ describe('/api/v1/hospitals', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=3>; rel="last"',
+        '<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });

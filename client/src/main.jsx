@@ -26,5 +26,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </MantineProvider>
       </QueryClientProvider>
     </ContextProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

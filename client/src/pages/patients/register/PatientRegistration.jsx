@@ -21,7 +21,7 @@ const FORM_TABS = {
  *  Patients page component
  *
  */
-export default function PatientRegistration() {
+export default function PatientRegistration () {
   const [loading, setLoading] = useState(false);
   const [initialMedicalData, setInitialMedicalData] = useState({});
   const [initialHospitalData, setInitialHospitalData] = useState('');
@@ -239,7 +239,7 @@ export default function PatientRegistration() {
    *
    * @param {object} values
    */
-  async function submitPatient(values) {
+  async function submitPatient (values) {
     setLoading(true);
 
     const {
@@ -272,7 +272,7 @@ export default function PatientRegistration() {
             healthcareChoices,
             codeStatus,
           },
-          patientId,
+          patientId
         );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification('Successfully registered patient.');
@@ -290,11 +290,11 @@ export default function PatientRegistration() {
             healthcareChoices,
             codeStatus,
           },
-          patientId,
+          patientId
         );
         if (updateRes.status === StatusCodes.OK) {
           showSuccessNotification(
-            'Patient basic information has been successfully updated.',
+            'Patient basic information has been successfully updated.'
           );
           navigate(`/patients/${patientId}`, { replace: true });
           return;
@@ -313,7 +313,7 @@ export default function PatientRegistration() {
    *
    * @param {object} errors
    */
-  function handleErrors(errors) {
+  function handleErrors (errors) {
     // Set focus to the first error field
     const firstErrorPath = Object.keys(errors)[0];
     form.getInputNode(firstErrorPath)?.focus();
@@ -329,7 +329,7 @@ export default function PatientRegistration() {
     });
 
     showErrorNotification(
-      `Please fix the following sections: ${errorSections.join(', ')}`,
+      `Please fix the following sections: ${errorSections.join(', ')}`
     );
   }
 
@@ -337,7 +337,7 @@ export default function PatientRegistration() {
    *
    * @param {object} data
    */
-  async function registerOrUpdatePatient(data) {
+  async function registerOrUpdatePatient (data) {
     try {
       const res = await LifelineAPI.registerPatient(data, patientId);
       if (res.status === StatusCodes.CREATED) {
@@ -351,7 +351,7 @@ export default function PatientRegistration() {
       if (res.status === StatusCodes.CONFLICT) {
         const updateRes = await LifelineAPI.updatePatient(
           { patientData: data },
-          patientId,
+          patientId
         );
         if (updateRes.status === StatusCodes.OK) {
           setShowCheck((prevShowCheck) => ({
@@ -378,7 +378,7 @@ export default function PatientRegistration() {
    *
    * @param {object} data
    */
-  async function updatePatientRecord(data) {
+  async function updatePatientRecord (data) {
     try {
       const res = await LifelineAPI.updatePatient(data, patientId);
       if (res.status === StatusCodes.OK) {
@@ -393,7 +393,7 @@ export default function PatientRegistration() {
       }
       if (res.status === StatusCodes.NOT_FOUND) {
         throw new Error(
-          'Patient ID not found. Please ensure the Basic Information section is filled out correctly.',
+          'Patient ID not found. Please ensure the Basic Information section is filled out correctly.'
         );
       }
 
@@ -408,7 +408,7 @@ export default function PatientRegistration() {
    *
    * @param {string} value
    */
-  async function handleAccordionChange(value) {
+  async function handleAccordionChange (value) {
     if (value === null) {
       navigate('', { replace: true });
       return;
@@ -456,13 +456,13 @@ export default function PatientRegistration() {
     <main>
       <Container style={{ marginBottom: '1rem' }}>
         <h1>Register Patient</h1>
-        <Flex direction="column" gap="md">
+        <Flex direction='column' gap='md'>
           <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
             <Modal
               opened={opened}
               onClose={close}
               title="Some Sections Haven't Been Viewed"
-              size="lg"
+              size='lg'
             >
               <Text>Please verify the sections below:</Text>
               <ul>
@@ -480,10 +480,10 @@ export default function PatientRegistration() {
               showCheck={showCheck}
               handleAccordionChange={handleAccordionChange}
             />
-            <Flex justify="center" mt="md">
+            <Flex justify='center' mt='md'>
               <Button
                 onClick={form.onSubmit(submitPatient, handleErrors)}
-                color="gray"
+                color='gray'
                 fullWidth
                 loading={loading}
                 loaderProps={{ type: 'dots' }}

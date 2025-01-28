@@ -15,7 +15,7 @@ const formProps = {
  * Reset Form component for Password Reset page
  * @param {PropTypes.InferProps<typeof formProps>} props
  */
-export function PasswordForgotForm({
+export function PasswordForgotForm ({
   email,
   emailError,
   onEmailChange,
@@ -30,24 +30,24 @@ export function PasswordForgotForm({
         onSubmit();
       }}
     >
-      <Container size="25rem" className={classes.form}>
+      <Container size='25rem' className={classes.form}>
         <TextInput
           disabled={isLoading || formState === 2}
-          name="email"
-          type="email"
-          label="Email"
-          placeholder="user@email.com"
+          name='email'
+          type='email'
+          label='Email'
+          placeholder='user@email.com'
           value={email}
           onChange={onEmailChange}
           error={emailError}
         />
         {formState === 1 && (
-          <Button type="submit" disabled={!email.length}>
+          <Button type='submit' disabled={!email.length}>
             {isLoading ? <Loader size={20} /> : 'Send Password Reset'}
           </Button>
         )}
         {formState === 2 && (
-          <Container size="25rem" styles={{ root: { padding: 0 } }}>
+          <Container size='25rem' styles={{ root: { padding: 0 } }}>
             <div className={classes.formCompletion}>
               <p>
                 Form Complete! You will receive a confirmation email shortly.

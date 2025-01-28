@@ -17,7 +17,7 @@ import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
 /**
  * Page for admin to view pending users
  */
-function PendingUsers() {
+function PendingUsers () {
   const navigate = useNavigate();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ function PendingUsers() {
       fetch('/api/v1/users?status=unapproved', { credentials: 'include' }).then(
         (res) => {
           return res.json();
-        },
+        }
       ),
   });
 
@@ -56,7 +56,7 @@ function PendingUsers() {
       key: 'checkbox',
       text: (
         <Checkbox
-          aria-label="Select row"
+          aria-label='Select row'
           onChange={(e) => {
             if (e.target.checked) {
               setSelectedUsers(data);
@@ -80,7 +80,7 @@ function PendingUsers() {
    * Approve or rejects selected pending users
    * @param {string} status string that either holds "approve" or "reject"
    */
-  async function updateStatus(status) {
+  async function updateStatus (status) {
     setIsLoading(true);
 
     const fetchPromises = selectedUsers.map((user) =>
@@ -91,7 +91,7 @@ function PendingUsers() {
         },
         credentials: 'include',
         body: JSON.stringify(user),
-      }),
+      })
     );
     try {
       // Wait for all fetch requests to complete
@@ -111,7 +111,7 @@ function PendingUsers() {
         stroke={1}
         size={32}
         onClick={() => navigate(-1)}
-        cursor={'pointer'}
+        cursor='pointer'
       />
       <Container className={classes.datatableWrapper}>
         <LoadingOverlay
@@ -124,7 +124,7 @@ function PendingUsers() {
             <h4>Pending Members</h4>
             <Group>
               <Button
-                variant="default"
+                variant='default'
                 onClick={() => {
                   updateStatus('reject');
                 }}
@@ -132,7 +132,7 @@ function PendingUsers() {
                 Deny
               </Button>
               <Button
-                variant="filled"
+                variant='filled'
                 onClick={() => {
                   updateStatus('approve');
                 }}
@@ -146,7 +146,7 @@ function PendingUsers() {
             headers={headers}
             rows={transformedData}
             highlightOnHover
-            verticalSpacing="lg"
+            verticalSpacing='lg'
           />
         </Box>
       </Container>

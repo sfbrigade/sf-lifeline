@@ -46,6 +46,6 @@ export default fp(async function (fastify) {
       reply.header('X-Total-Count', total);
       reply.header('X-Total-Pages', pages);
       return reply;
-    },
+    }
   );
 });

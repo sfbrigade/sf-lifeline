@@ -28,7 +28,7 @@ const contextProviderProps = {
  *
  * @param {PropTypes.InferProps<typeof contextProviderProps>} props
  */
-function ContextProvider({ children, initialUser }) {
+function ContextProvider ({ children, initialUser }) {
   const [user, setUser] = useState(initialUser);
 
   const contextValue = {

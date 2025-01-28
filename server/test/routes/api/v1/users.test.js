@@ -55,7 +55,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=5>; rel="last"',
+        '<http://localhost/api/v1/users?perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&page=5>; rel="last"'
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
@@ -104,7 +104,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=4>; rel="last"',
+        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=4>; rel="last"'
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
@@ -208,7 +208,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(sentMails[0].to, 'John Doe <john.doe@test.com>');
       assert.deepStrictEqual(
         sentMails[0].subject,
-        'Please verify your email with SF Life Line',
+        'Please verify your email with SF Life Line'
       );
     });
 
@@ -235,11 +235,11 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(user.role, 'VOLUNTEER');
       assert.deepStrictEqual(
         user.approvedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.deepStrictEqual(
         Date.parse(user.approvedAt),
-        Date.parse('2024-04-07T16:53:41-07:00'),
+        Date.parse('2024-04-07T16:53:41-07:00')
       );
       assert.ok(user.emailVerifiedAt);
 
@@ -419,7 +419,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.approvedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(data.approvedAt);
 
@@ -429,7 +429,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.approvedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(user.approvedAt);
     });
@@ -447,7 +447,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.approvedById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(data.approvedAt);
 
@@ -457,7 +457,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.approvedById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(user.approvedAt);
     });
@@ -501,7 +501,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.rejectedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(data.rejectedAt);
 
@@ -511,7 +511,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.rejectedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(user.rejectedAt);
     });
@@ -529,7 +529,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.rejectedById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(data.rejectedAt);
 
@@ -539,7 +539,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.rejectedById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(user.rejectedAt);
     });
@@ -583,7 +583,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.disabledById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(data.disabledAt);
 
@@ -593,7 +593,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.disabledById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
       assert.ok(user.disabledAt);
     });
@@ -611,7 +611,7 @@ describe('/api/v1/users', () => {
       const data = JSON.parse(reply.body);
       assert.deepStrictEqual(
         data.disabledById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(data.disabledAt);
 
@@ -621,7 +621,7 @@ describe('/api/v1/users', () => {
       assert.ok(user);
       assert.deepStrictEqual(
         user.disabledById,
-        'b6310669-1400-4346-ae61-7f872dfdedd3',
+        'b6310669-1400-4346-ae61-7f872dfdedd3'
       );
       assert.ok(user.disabledAt);
     });
@@ -719,7 +719,7 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(
         date.toISOString().split('T')[0],
-        today.toISOString().split('T')[0],
+        today.toISOString().split('T')[0]
       );
     });
 

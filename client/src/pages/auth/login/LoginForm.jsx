@@ -26,7 +26,7 @@ const loginFormProps = {
  * Login page component.
  * @param {PropTypes.InferProps<typeof loginFormProps>} props
  */
-export function LoginForm({
+export function LoginForm ({
   email,
   password,
   onEmailChange,
@@ -41,7 +41,7 @@ export function LoginForm({
    *
    * @param {Event} event
    */
-  function onSubmit(event) {
+  function onSubmit (event) {
     event.preventDefault();
     onLogin();
   }
@@ -49,20 +49,20 @@ export function LoginForm({
   return (
     <>
       <form onSubmit={onSubmit}>
-        <Container size="25rem">
+        <Container size='25rem'>
           <TextInput
             className={classes.email}
-            type="email"
-            label="Email"
-            placeholder="user@email.com"
+            type='email'
+            label='Email'
+            placeholder='user@email.com'
             value={email}
             onChange={onEmailChange}
             error={emailError}
           />
           <PasswordInput
             className={classes.password}
-            label="Password"
-            placeholder="password"
+            label='Password'
+            placeholder='password'
             value={password}
             onChange={onPasswordChange}
             visible={visible}
@@ -70,18 +70,18 @@ export function LoginForm({
             error={passwordError}
           />
         </Container>
-        <Container size="25rem">
+        <Container size='25rem'>
           <Button
             disabled={!email.length || !password.length}
             className={classes.loginBtn}
-            variant="filled"
+            variant='filled'
             fullWidth
-            type="submit"
+            type='submit'
           >
             Log in
           </Button>
           <div className={classes.anchor}>
-            <Anchor component={Link} to="/password/forgot">
+            <Anchor component={Link} to='/password/forgot'>
               Forgot password
             </Anchor>
           </div>

@@ -1,10 +1,10 @@
 class Base {
-  constructor(fields, data) {
+  constructor (fields, data) {
     if (!data) {
       return null;
     }
     return new Proxy(this, {
-      get(target, property, receiver) {
+      get (target, property, receiver) {
         // if the property is in the schema, return it from the data object
         if (Object.hasOwn(fields, property)) {
           return data[property];
@@ -13,7 +13,7 @@ class Base {
         const { get, value } =
           Object.getOwnPropertyDescriptor(
             Object.getPrototypeOf(target),
-            property,
+            property
           ) ?? {};
         // handle property accessor
         if (get) {
@@ -26,7 +26,7 @@ class Base {
         // otherwise, return value directly off of target
         return target[property];
       },
-      set(target, property, value, receiver) {
+      set (target, property, value, receiver) {
         // if the property is in the schema, set it in the data object
         if (Object.hasOwn(fields, property)) {
           data[property] = value;
@@ -36,7 +36,7 @@ class Base {
         const descriptor =
           Object.getOwnPropertyDescriptor(
             Object.getPrototypeOf(target),
-            property,
+            property
           ) ?? {};
         const { set } = descriptor;
         if (set) {

@@ -9,10 +9,10 @@ import { LicenseMatchError } from '../../errors/LicenseErrors.js';
  * @returns personnel info that matches the license number from the formData
  * @throws a LicenseMatchError if there are not matching personnels or an Error if there were issues accessing the registry
  */
-export default async function fetchLicenseVerificationResults(
+export default async function fetchLicenseVerificationResults (
   website,
   formData,
-  sessionCookie,
+  sessionCookie
 ) {
   const response = await fetch(website, {
     method: 'POST',

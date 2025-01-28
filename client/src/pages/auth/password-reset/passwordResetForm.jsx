@@ -25,7 +25,7 @@ const formProps = {
  * Password rest formfor Password Reset page
  * @param {PropTypes.InferProps<typeof formProps>} props
  */
-export function PasswordResetForm({
+export function PasswordResetForm ({
   form,
   errors,
   onFormChange,
@@ -53,7 +53,7 @@ export function PasswordResetForm({
 
   const strength = Math.max(
     100 - (100 / (requirements.length + 1)) * multiplier,
-    0,
+    0
   );
   return (
     <form
@@ -62,14 +62,14 @@ export function PasswordResetForm({
         onSubmit();
       }}
     >
-      <Container size="25rem" className={classes.form}>
+      <Container size='25rem' className={classes.form}>
         <Group grow>
-          <Flex direction="column" gap="xs">
+          <Flex direction='column' gap='xs'>
             <PasswordInput
               disabled={isLoading || formState === 2}
-              name="password"
-              label="New Password"
-              placeholder="New password"
+              name='password'
+              label='New Password'
+              placeholder='New password'
               value={form.password}
               onChange={onFormChange}
               error={errors.password}
@@ -91,16 +91,16 @@ export function PasswordResetForm({
 
         <PasswordInput
           disabled={isLoading || formState === 2}
-          name="confirmPassword"
-          label="Confirm Password"
-          placeholder="Confirm new password"
+          name='confirmPassword'
+          label='Confirm Password'
+          placeholder='Confirm new password'
           value={form.confirmPassword}
           onChange={onFormChange}
           error={errors.confirmPassword}
         />
         {formState === 1 && (
           <Button
-            type="submit"
+            type='submit'
             disabled={!form.password.length || !form.confirmPassword.length}
           >
             {isLoading ? <Loader size={20} /> : 'Send Password Reset'}
@@ -108,7 +108,7 @@ export function PasswordResetForm({
         )}
         {formState === 2 && (
           <>
-            <Container size="25rem" styles={{ root: { padding: 0 } }}>
+            <Container size='25rem' styles={{ root: { padding: 0 } }}>
               <div className={classes.formCompletion}>
                 <p>
                   Your password jas been successfully reset! You can now log in

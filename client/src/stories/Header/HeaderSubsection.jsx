@@ -13,7 +13,7 @@ const HeaderSubsectionProps = {
       label: PropTypes.string.isRequired,
       link: PropTypes.string.isRequired,
       icon: PropTypes.node,
-    }),
+    })
   ).isRequired,
 };
 
@@ -29,7 +29,7 @@ export const HeaderSubsection = ({ label, icon, links }) => {
       <UnstyledButton className={classes.link} onClick={toggleLinks}>
         <Center inline>
           <div>{icon}</div>
-          <Box component="span" mr={5}>
+          <Box component='span' mr={5}>
             {label}
           </Box>
         </Center>

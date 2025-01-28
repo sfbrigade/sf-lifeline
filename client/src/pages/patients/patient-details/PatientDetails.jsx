@@ -17,7 +17,7 @@ import classes from './PatientDetails.module.css';
  *
  * Patient page component
  */
-export default function PatientDetails() {
+export default function PatientDetails () {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,9 +51,9 @@ export default function PatientDetails() {
   return (
     <main className={classes.details}>
       <Container style={{ marginBottom: '2rem' }}>
-        <Grid my="2rem">
+        <Grid my='2rem'>
           <Grid.Col span={{ base: 12, md: 8 }}>
-            <Title mb="1rem">
+            <Title mb='1rem'>
               {data?.firstName} {data?.lastName}
             </Title>
             <section className={classes.patientInfoContainer}>
@@ -65,7 +65,7 @@ export default function PatientDetails() {
               <Text>{humanize(data?.language)}</Text>
             </section>
           </Grid.Col>
-          <Grid.Col display={{ base: 'none', md: 'block' }} span={4} ta="right">
+          <Grid.Col display={{ base: 'none', md: 'block' }} span={4} ta='right'>
             <QRCode value={`${window.location.origin}${location.pathname}`} />
           </Grid.Col>
         </Grid>

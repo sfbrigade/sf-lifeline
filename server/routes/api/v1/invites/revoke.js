@@ -39,6 +39,6 @@ export default async function (fastify, _opts) {
         });
       }
       reply.send(invite);
-    },
+    }
   );
 }

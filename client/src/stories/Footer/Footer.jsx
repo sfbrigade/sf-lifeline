@@ -8,12 +8,12 @@ import classes from './footer.module.css';
 /**
  *
  */
-export function Footer() {
+export function Footer () {
   const { user } = useAuthorization();
 
   return (
     <footer className={classes.footer}>
-      <Group justify="space-between" py="md" px="sm">
+      <Group justify='space-between' py='md' px='sm'>
         <div>
           <div>
             <strong>{`${user?.firstName} ${user?.lastName}`}</strong>

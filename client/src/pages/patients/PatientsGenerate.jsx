@@ -18,14 +18,14 @@ import classes from './PatientsGenerate.module.css';
  *
  * @returns {React.ReactElement}
  */
-function PatientsGenerate() {
+function PatientsGenerate () {
   const [numPages, setNumPages] = useState(1);
   const [layout, setLayout] = useState(12);
   const { isLoading, data } = useQuery({
     queryKey: ['generate', numPages, layout],
     queryFn: () =>
       fetch(`/api/v1/patients/generate?count=${numPages * layout}`).then(
-        (response) => response.json(),
+        (response) => response.json()
       ),
   });
 
@@ -39,15 +39,15 @@ function PatientsGenerate() {
   return (
     <Container className={classes.container}>
       <Box className={classes.controls}>
-        <Group mb="1rem">
+        <Group mb='1rem'>
           <NumberInput
-            label="Number of pages"
+            label='Number of pages'
             min={1}
             value={numPages}
             onChange={setNumPages}
           />
           <NativeSelect
-            label="Layout"
+            label='Layout'
             value={layout}
             onChange={(event) => setLayout(parseInt(event.target.value, 10))}
             data={[
@@ -55,7 +55,7 @@ function PatientsGenerate() {
               { label: '2" x 2", 20 per 8.5" x 11"', value: '20' },
             ]}
           />
-          <Button onClick={() => window.print()} mt="1.625rem">
+          <Button onClick={() => window.print()} mt='1.625rem'>
             Print
           </Button>
         </Group>
@@ -66,7 +66,7 @@ function PatientsGenerate() {
         pages.map((p) => (
           <Fragment key={p}>
             <Flex
-              wrap="wrap"
+              wrap='wrap'
               className={`${classes.codes} ${classes[`codes--${layout}`]}`}
             >
               {p.map((url, i) => (

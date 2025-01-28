@@ -235,7 +235,7 @@ export default async function (fastify, _opts) {
           }
 
           const nullFields = Object.entries(newContactData).filter(
-            ([_, value]) => value === null,
+            ([_, value]) => value === null
           );
 
           const existingContact = await tx.patient.findUnique({
@@ -436,6 +436,6 @@ export default async function (fastify, _opts) {
       });
 
       return reply.code(StatusCodes.OK).send(updatedPatient);
-    },
+    }
   );
 }

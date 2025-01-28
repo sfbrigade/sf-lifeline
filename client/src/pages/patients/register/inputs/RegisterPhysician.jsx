@@ -30,7 +30,7 @@ const registerPhysicianProps = {
  *
  * @param {PropTypes.InferProps<typeof registerPhysicianProps>} props
  */
-export default function RegisterPhysician({
+export default function RegisterPhysician ({
   setPhysician,
   registerPhysicianOpened,
   closeRegisterPhysician,
@@ -116,19 +116,19 @@ export default function RegisterPhysician({
       <Modal
         opened={registerPhysicianOpened}
         onClose={confirmClose}
-        title="Register a new physician"
+        title='Register a new physician'
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Transition
             mounted={error}
-            transition="slide-right"
+            transition='slide-right'
             duration={400}
-            timingFunction="ease"
+            timingFunction='ease'
           >
             {(transitionStyle) => (
               <Alert
-                title="Failed to register physician."
-                color="red"
+                title='Failed to register physician.'
+                color='red'
                 style={{ ...transitionStyle }}
               >
                 {error?.message}
@@ -136,44 +136,44 @@ export default function RegisterPhysician({
             )}
           </Transition>
           <TextInput
-            label="First Name"
-            placeholder="First Name"
+            label='First Name'
+            placeholder='First Name'
             withAsterisk
             key={form.key('firstName')}
             {...form.getInputProps('firstName')}
           />
           <TextInput
-            label="Middle Name"
-            placeholder="Middle Name"
+            label='Middle Name'
+            placeholder='Middle Name'
             key={form.key('middleName')}
             {...form.getInputProps('middleName')}
           />
           <TextInput
-            label="Last Name"
-            placeholder="Last Name"
+            label='Last Name'
+            placeholder='Last Name'
             withAsterisk
             key={form.key('lastName')}
             {...form.getInputProps('lastName')}
           />
           <InputBase
-            label="Phone Number"
+            label='Phone Number'
             component={IMaskInput}
-            mask="(000) 000-0000"
-            placeholder="(000) 000-0000"
+            mask='(000) 000-0000'
+            placeholder='(000) 000-0000'
             withAsterisk
             key={form.key('phone')}
             {...form.getInputProps('phone')}
           />
           <TextInput
-            label="Email"
-            placeholder="Email"
-            format="email"
+            label='Email'
+            placeholder='Email'
+            format='email'
             key={form.key('email')}
             {...form.getInputProps('email')}
           />
           <Button
             style={{ marginTop: '1rem' }}
-            color="gray"
+            color='gray'
             fullWidth
             onClick={form.onSubmit(handleSubmit)}
           >
@@ -187,15 +187,15 @@ export default function RegisterPhysician({
         classNames={{
           title: classes.title,
         }}
-        title="This form has unsaved changes."
-        yOffset="16vh"
+        title='This form has unsaved changes.'
+        yOffset='16vh'
       >
         <Text fw={600}>
           Are you sure you want to close this form without submitting?
         </Text>
         <Button
           classNames={{ root: classes.button }}
-          color="red"
+          color='red'
           fullWidth
           onClick={() => confirmClose(true)}
         >
@@ -203,7 +203,7 @@ export default function RegisterPhysician({
         </Button>
         <Button
           classNames={{ root: classes.button }}
-          color="blue"
+          color='blue'
           fullWidth
           onClick={closeConfirmationModal}
         >

@@ -42,7 +42,7 @@ export default async function (fastify, _opts) {
 
       if (!data) {
         return reply.unauthorized(
-          'Password Reset Link is expired or not valid',
+          'Password Reset Link is expired or not valid'
         );
       }
 
@@ -77,6 +77,6 @@ export default async function (fastify, _opts) {
       await user.sendPasswordResetSuccessEmail();
 
       reply.code(StatusCodes.OK);
-    },
+    }
   );
 }

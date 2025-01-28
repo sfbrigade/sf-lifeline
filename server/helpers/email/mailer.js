@@ -56,7 +56,7 @@ const mailer = new Email({
   juice: false,
 });
 
-async function send(options) {
+async function send (options) {
   options.locals ||= {};
   options.locals._layout = {
     logoUrl: `${process.env.BASE_URL}/logo.svg`,

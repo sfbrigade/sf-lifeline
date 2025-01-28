@@ -21,7 +21,7 @@ const AllergyType = {
   OTHER: 'OTHER',
 };
 
-async function seedConditions() {
+async function seedConditions () {
   try {
     const response = await fetch(MedicalSurgicalURL);
     const data = await response.json();
@@ -46,7 +46,7 @@ async function seedConditions() {
   }
 }
 
-async function seedMedicationAllergies() {
+async function seedMedicationAllergies () {
   try {
     const response = await fetch(MedicationAllergyURL);
     const data = await response.json();
@@ -71,7 +71,7 @@ async function seedMedicationAllergies() {
   }
 }
 
-async function seedEnvFoodAllergies() {
+async function seedEnvFoodAllergies () {
   try {
     const response = await fetch(EnvFoodAllergyURL);
     const data = await response.json();
@@ -96,7 +96,7 @@ async function seedEnvFoodAllergies() {
   }
 }
 
-async function seedMedications() {
+async function seedMedications () {
   try {
     const response = await fetch(RxNormAPIEndpoint);
 
@@ -157,7 +157,7 @@ async function seedMedications() {
   }
 }
 
-async function seedHospitals() {
+async function seedHospitals () {
   const hospitals = [
     'SF General',
     'CPMC Van Ness',
@@ -178,7 +178,7 @@ async function seedHospitals() {
   console.log('Hospitals seeded successfully');
 }
 
-async function seedPhysicians() {
+async function seedPhysicians () {
   const physicians = ['John Smith', 'Jane Smith', 'Bob Smith', 'Alice Smith'];
 
   const hospitals = ['SF General', 'SF General', 'Kaiser SF', 'UCSF Parnassus'];
@@ -187,7 +187,7 @@ async function seedPhysicians() {
     return seedPhysician(
       tuple[0],
       tuple[1],
-      hospitals[index % hospitals.length],
+      hospitals[index % hospitals.length]
     );
   });
 
@@ -195,7 +195,7 @@ async function seedPhysicians() {
   console.log('Seeded multiple physicians successfully');
 }
 
-async function seedAdminUser() {
+async function seedAdminUser () {
   const now = new Date();
   const data = {};
   const user = new User(data);
@@ -210,7 +210,7 @@ async function seedAdminUser() {
   console.log('Admin User seeded successfully');
 }
 
-async function seedUsers() {
+async function seedUsers () {
   const names = [
     'Staff User',
     'Volunteer User',
@@ -235,7 +235,7 @@ async function seedUsers() {
  * @param {string} last name
  * @param {Role} role user role
  */
-async function seedUser(first, last, role) {
+async function seedUser (first, last, role) {
   const now = new Date();
   const data = {};
   const user = new User(data);
@@ -249,7 +249,7 @@ async function seedUser(first, last, role) {
   await prisma.user.create({ data });
 }
 
-async function seedPhysician(first, last, hospitalName) {
+async function seedPhysician (first, last, hospitalName) {
   const data = {};
   data.firstName = first;
   data.lastName = last;
@@ -269,7 +269,7 @@ async function seedPhysician(first, last, hospitalName) {
   await prisma.physician.create({ data });
 }
 
-async function main() {
+async function main () {
   await seedAdminUser();
   await seedConditions();
   await seedMedicationAllergies();

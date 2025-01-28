@@ -11,7 +11,7 @@ import Context from '../../../Context';
 /**
  * Login page component.
  */
-function Login() {
+function Login () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(null);

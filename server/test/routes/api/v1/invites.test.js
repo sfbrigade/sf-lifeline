@@ -24,7 +24,7 @@ describe('/api/v1/invites', () => {
 
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/invites?perPage=2&page=2>; rel="next"',
+        '<http://localhost/api/v1/invites?perPage=2&page=2>; rel="next"'
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
@@ -115,7 +115,7 @@ describe('/api/v1/invites', () => {
       assert.ok(invite.revokedAt);
       assert.deepStrictEqual(
         invite.revokedById,
-        '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        '555740af-17e9-48a3-93b8-d5236dfd2c29'
       );
     });
   });

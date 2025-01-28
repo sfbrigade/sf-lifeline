@@ -10,7 +10,7 @@ import { PasswordResetForm } from './passwordResetForm';
 /**
  * Password reset page
  */
-function PasswordReset() {
+function PasswordReset () {
   const { passwordResetToken } = useParams();
   const navigate = useNavigate();
   const { isFetching } = useQuery({
@@ -47,7 +47,7 @@ function PasswordReset() {
    * Handles input fields in the form
    * @param {*} event text field events
    */
-  function onFormChange(event) {
+  function onFormChange (event) {
     const newFormChange = {};
     const newErrorsChange = {};
     newFormChange[event.target.name] = event.target.value;
@@ -59,7 +59,7 @@ function PasswordReset() {
   /**
    * API call to reset password
    */
-  function resetPassword() {
+  function resetPassword () {
     setErrors({});
     if (form.password !== form.confirmPassword) {
       setErrors({ confirmPassword: 'Passwords do not match' });
@@ -106,7 +106,7 @@ function PasswordReset() {
             <h2>Reset Password</h2>
             <p>Enter a new password below to change your password</p>
           </div>
-          <Flex direction="column" gap="md">
+          <Flex direction='column' gap='md'>
             <PasswordResetForm
               form={form}
               errors={errors}
