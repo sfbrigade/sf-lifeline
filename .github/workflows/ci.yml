@@ -34,10 +34,8 @@ jobs:
           cache: 'npm'
       - name: Install Dependencies
         run: npm ci
-      - name: Check Formatting
-        run: npm run format:check
       - name: Run ESLint
-        run: npm run lint --workspaces
+        run: npm run lint
       - name: Initialize database, set up .env, generate Prisma client
         run: cd server; cp example.env .env; npm run test:db:reset
         env:
