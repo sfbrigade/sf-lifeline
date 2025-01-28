@@ -1,5 +1,6 @@
 .control {
   font-weight: 600;
+  padding-inline: 0 !important;
 }
 
 .label {
@@ -8,4 +9,8 @@
   justify-content: space-between;
   font-size: 1.5rem;
   margin-right: 1rem;
+}
+
+.content {
+  padding-inline: 0 !important;
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Accordion, TextInput, Select, InputBase } from '@mantine/core';
+import { Accordion, TextInput, Select, Stack, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { TbCircleCheck as IconCircleCheck } from 'react-icons/tb';
 import { IMaskInput } from 'react-imask';
@@ -9,7 +9,7 @@ import { humanize } from 'inflection';
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
 
-import classes from './PatientRegistationAccordion.module.css';
+import classes from './PatientRegistrationAccordion.module.css';
 
 const PatientRegistrationAccordionProps = {
   form: PropTypes.object.isRequired,
@@ -66,60 +66,62 @@ export default function PatientRegistrationAccordion ({
               : null}
           </Accordion.Control>
           <Accordion.Panel>
-            <TextInput
-              label='First Name'
-              placeholder='First Name'
-              withAsterisk
-              key={form.key('patientData.firstName')}
-              {...form.getInputProps('patientData.firstName')}
-            />
-            <TextInput
-              label='Middle Name'
-              placeholder='Middle Name'
-              key={form.key('patientData.middleName')}
-              {...form.getInputProps('patientData.middleName')}
-            />
-            <TextInput
-              label='Last Name'
-              placeholder='Last Name'
-              withAsterisk
-              key={form.key('patientData.lastName')}
-              {...form.getInputProps('patientData.lastName')}
-            />
-            <Select
-              label='Gender'
-              placeholder='Select Gender'
-              withAsterisk
-              data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
-                value,
-                label: humanize(value),
-              }))}
-              searchable
-              key={form.key('patientData.gender')}
-              {...form.getInputProps('patientData.gender')}
-            />
-            <Select
-              label='Language'
-              placeholder='Select Language'
-              withAsterisk
-              data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
-                value,
-                label: humanize(value),
-              }))}
-              searchable
-              key={form.key('patientData.language')}
-              {...form.getInputProps('patientData.language')}
-            />
-            <DateInput
-              label='Date of Birth'
-              valueFormat='YYYY-MM-DD'
-              placeholder='YYYY-MM-DD'
-              defaultLevel='decade'
-              maxDate={new Date()}
-              withAsterisk
-              key={form.key('patientData.dateOfBirth')}
-              {...form.getInputProps('patientData.dateOfBirth')}
-            />
+            <Stack>
+              <TextInput
+                label='First Name'
+                placeholder='First Name'
+                withAsterisk
+                key={form.key('patientData.firstName')}
+                {...form.getInputProps('patientData.firstName')}
+              />
+              <TextInput
+                label='Middle Name'
+                placeholder='Middle Name'
+                key={form.key('patientData.middleName')}
+                {...form.getInputProps('patientData.middleName')}
+              />
+              <TextInput
+                label='Last Name'
+                placeholder='Last Name'
+                withAsterisk
+                key={form.key('patientData.lastName')}
+                {...form.getInputProps('patientData.lastName')}
+              />
+              <Select
+                label='Gender'
+                placeholder='Select Gender'
+                withAsterisk
+                data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
+                  value,
+                  label: humanize(value),
+                }))}
+                searchable
+                key={form.key('patientData.gender')}
+                {...form.getInputProps('patientData.gender')}
+              />
+              <Select
+                label='Language'
+                placeholder='Select Language'
+                withAsterisk
+                data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
+                  value,
+                  label: humanize(value),
+                }))}
+                searchable
+                key={form.key('patientData.language')}
+                {...form.getInputProps('patientData.language')}
+              />
+              <DateInput
+                label='Date of Birth'
+                valueFormat='YYYY-MM-DD'
+                placeholder='YYYY-MM-DD'
+                defaultLevel='decade'
+                maxDate={new Date()}
+                withAsterisk
+                key={form.key('patientData.dateOfBirth')}
+                {...form.getInputProps('patientData.dateOfBirth')}
+              />
+            </Stack>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -133,49 +135,51 @@ export default function PatientRegistrationAccordion ({
               : null}
           </Accordion.Control>
           <Accordion.Panel>
-            <TextInput
-              label='First Name'
-              placeholder='First Name'
-              key={form.key('contactData.firstName')}
-              {...form.getInputProps('contactData.firstName')}
-            />
-            <TextInput
-              label='Middle Name'
-              placeholder='Middle Name'
-              key={form.key('contactData.middleName')}
-              {...form.getInputProps('contactData.middleName')}
-            />
-            <TextInput
-              label='Last Name'
-              placeholder='Last Name'
-              key={form.key('contactData.lastName')}
-              {...form.getInputProps('contactData.lastName')}
-            />
-            <InputBase
-              label='Phone Number'
-              component={IMaskInput}
-              mask='(000) 000-0000'
-              placeholder='(000) 000-0000'
-              key={form.key('contactData.phone')}
-              {...form.getInputProps('contactData.phone')}
-            />
-            <TextInput
-              label='Email'
-              placeholder='Email'
-              key={form.key('contactData.email')}
-              {...form.getInputProps('contactData.email')}
-            />
-            <Select
-              label='Relationship'
-              placeholder='Select Relationship'
-              data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
-                value,
-                label: humanize(value),
-              }))}
-              searchable
-              key={form.key('contactData.relationship')}
-              {...form.getInputProps('contactData.relationship')}
-            />
+            <Stack>
+              <TextInput
+                label='First Name'
+                placeholder='First Name'
+                key={form.key('contactData.firstName')}
+                {...form.getInputProps('contactData.firstName')}
+              />
+              <TextInput
+                label='Middle Name'
+                placeholder='Middle Name'
+                key={form.key('contactData.middleName')}
+                {...form.getInputProps('contactData.middleName')}
+              />
+              <TextInput
+                label='Last Name'
+                placeholder='Last Name'
+                key={form.key('contactData.lastName')}
+                {...form.getInputProps('contactData.lastName')}
+              />
+              <InputBase
+                label='Phone Number'
+                component={IMaskInput}
+                mask='(000) 000-0000'
+                placeholder='(000) 000-0000'
+                key={form.key('contactData.phone')}
+                {...form.getInputProps('contactData.phone')}
+              />
+              <TextInput
+                label='Email'
+                placeholder='Email'
+                key={form.key('contactData.email')}
+                {...form.getInputProps('contactData.email')}
+              />
+              <Select
+                label='Relationship'
+                placeholder='Select Relationship'
+                data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
+                  value,
+                  label: humanize(value),
+                }))}
+                searchable
+                key={form.key('contactData.relationship')}
+                {...form.getInputProps('contactData.relationship')}
+              />
+            </Stack>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -189,16 +193,18 @@ export default function PatientRegistrationAccordion ({
               : null}
           </Accordion.Control>
           <Accordion.Panel>
-            {Object.keys(form.getValues().medicalData).map((category) => {
-              return (
-                <MedicalDataSearch
-                  category={category}
-                  form={form}
-                  initialMedicalData={initialMedicalData[category]}
-                  key={category}
-                />
-              );
-            })}
+            <Stack>
+              {Object.keys(form.getValues().medicalData).map((category) => {
+                return (
+                  <MedicalDataSearch
+                    category={category}
+                    form={form}
+                    initialMedicalData={initialMedicalData[category]}
+                    key={category}
+                  />
+                );
+              })}
+            </Stack>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -212,16 +218,18 @@ export default function PatientRegistrationAccordion ({
               : null}
           </Accordion.Control>
           <Accordion.Panel>
-            <HealthcareChoicesSearch
-              form={form}
-              choice='hospital'
-              initialData={initialHospitalData}
-            />
-            <HealthcareChoicesSearch
-              form={form}
-              choice='physician'
-              initialData={initialPhysicianData}
-            />
+            <Stack>
+              <HealthcareChoicesSearch
+                form={form}
+                choice='hospital'
+                initialData={initialHospitalData}
+              />
+              <HealthcareChoicesSearch
+                form={form}
+                choice='physician'
+                initialData={initialPhysicianData}
+              />
+            </Stack>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -235,17 +243,19 @@ export default function PatientRegistrationAccordion ({
               : null}
           </Accordion.Control>
           <Accordion.Panel>
-            <Select
-              label='Code Status'
-              placeholder='Select Code Status'
-              data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
-                value,
-                label: humanize(value),
-              }))}
-              searchable
-              key={form.key('codeStatus')}
-              {...form.getInputProps('codeStatus')}
-            />
+            <Stack>
+              <Select
+                label='Code Status'
+                placeholder='Select Code Status'
+                data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
+                  value,
+                  label: humanize(value),
+                }))}
+                searchable
+                key={form.key('codeStatus')}
+                {...form.getInputProps('codeStatus')}
+              />
+            </Stack>
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
