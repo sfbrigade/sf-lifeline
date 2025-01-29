@@ -4,7 +4,7 @@ import { Accordion, TextInput, Select, Stack, InputBase } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { TbCircleCheck as IconCircleCheck } from 'react-icons/tb';
 import { IMaskInput } from 'react-imask';
-import { humanize } from 'inflection';
+import { useTranslation } from 'react-i18next';
 
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
@@ -48,6 +48,8 @@ export default function PatientRegistrationAccordion ({
   showCheck,
   handleAccordionChange,
 }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Accordion
@@ -93,7 +95,7 @@ export default function PatientRegistrationAccordion ({
                 withAsterisk
                 data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
                   value,
-                  label: humanize(value),
+                  label: t(`Gender.${value}`),
                 }))}
                 searchable
                 key={form.key('patientData.gender')}
@@ -105,7 +107,7 @@ export default function PatientRegistrationAccordion ({
                 withAsterisk
                 data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
                   value,
-                  label: humanize(value),
+                  label: t(`Language.${value}`),
                 }))}
                 searchable
                 key={form.key('patientData.language')}
@@ -173,7 +175,7 @@ export default function PatientRegistrationAccordion ({
                 placeholder='Select Relationship'
                 data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
                   value,
-                  label: humanize(value),
+                  label: t(`Relationship.${value}`),
                 }))}
                 searchable
                 key={form.key('contactData.relationship')}
@@ -249,7 +251,7 @@ export default function PatientRegistrationAccordion ({
                 placeholder='Select Code Status'
                 data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
                   value,
-                  label: humanize(value),
+                  label: t(`CodeStatus.${value}`),
                 }))}
                 searchable
                 key={form.key('codeStatus')}
