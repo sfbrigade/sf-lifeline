@@ -47,8 +47,6 @@ export function useUsers() {
     },
   });
 
-  console.log(data);
-
   return {
     users: data?.users,
     headers: USER_TABLE_HEADERS,
