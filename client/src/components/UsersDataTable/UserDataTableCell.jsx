@@ -44,7 +44,7 @@ export const UserDataTableCell = ({ type, value }) => {
         <Table.Td>
           <Checkbox
             checked={value.selected}
-            // onChange is a Mantine prop for the Checkbox component, improperly considers it a react event handler
+            // onChange is a Mantine prop for the Checkbox component, neostandard improperly considers it a react event handler
             // eslint-disable-next-line react/jsx-handler-names
             onChange={value.select}
           />
