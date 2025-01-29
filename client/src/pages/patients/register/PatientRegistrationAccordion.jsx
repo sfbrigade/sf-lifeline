@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Accordion, TextInput, Select, Stack, InputBase } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { Accordion, TextInput, NativeSelect, Stack, InputBase } from '@mantine/core';
 import { TbCircleCheck as IconCircleCheck } from 'react-icons/tb';
 import { IMaskInput } from 'react-imask';
 import { useTranslation } from 'react-i18next';
@@ -89,31 +88,28 @@ export default function PatientRegistrationAccordion ({
                 key={form.key('patientData.lastName')}
                 {...form.getInputProps('patientData.lastName')}
               />
-              <Select
+              <NativeSelect
                 label='Gender'
-                placeholder='Select Gender'
                 withAsterisk
                 data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
                   value,
                   label: t(`Gender.${value}`),
                 }))}
-                searchable
                 key={form.key('patientData.gender')}
                 {...form.getInputProps('patientData.gender')}
               />
-              <Select
+              <NativeSelect
                 label='Language'
-                placeholder='Select Language'
                 withAsterisk
                 data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
                   value,
                   label: t(`Language.${value}`),
                 }))}
-                searchable
                 key={form.key('patientData.language')}
                 {...form.getInputProps('patientData.language')}
               />
-              <DateInput
+              <TextInput
+                type='date'
                 label='Date of Birth'
                 valueFormat='YYYY-MM-DD'
                 placeholder='YYYY-MM-DD'
@@ -170,14 +166,13 @@ export default function PatientRegistrationAccordion ({
                 key={form.key('contactData.email')}
                 {...form.getInputProps('contactData.email')}
               />
-              <Select
+              <NativeSelect
                 label='Relationship'
                 placeholder='Select Relationship'
                 data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
                   value,
                   label: t(`Relationship.${value}`),
                 }))}
-                searchable
                 key={form.key('contactData.relationship')}
                 {...form.getInputProps('contactData.relationship')}
               />
@@ -246,14 +241,13 @@ export default function PatientRegistrationAccordion ({
           </Accordion.Control>
           <Accordion.Panel>
             <Stack>
-              <Select
+              <NativeSelect
                 label='Code Status'
                 placeholder='Select Code Status'
                 data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
                   value,
                   label: t(`CodeStatus.${value}`),
                 }))}
-                searchable
                 key={form.key('codeStatus')}
                 {...form.getInputProps('codeStatus')}
               />

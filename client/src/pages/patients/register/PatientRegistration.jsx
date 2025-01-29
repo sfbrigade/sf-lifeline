@@ -100,14 +100,6 @@ export default function PatientRegistration () {
       codeStatus: null,
     },
 
-    transformValues: (values) => ({
-      ...values,
-      patientData: {
-        ...values.patientData,
-        dateOfBirth: values.patientData.dateOfBirth.toISOString().split('T')[0],
-      },
-    }),
-
     validate: {
       patientData: {
         firstName: isNotEmpty('First Name is required'),

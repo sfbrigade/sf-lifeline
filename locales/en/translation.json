@@ -36,7 +36,8 @@
     "PARENT": "Parent",
     "CHILD": "Child",
     "SIBLING": "Sibling",
-    "OTHER": "Other"
+    "OTHER": "Other",
+    "UNKNOWN": "Unknown"
   },
   "Role": {
     "ADMIN": "Admin",
