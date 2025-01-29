@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     allowedHosts: true,
     proxy: {
-      '/api': {
+      '^/api|/locales': {
         target: 'http://0.0.0.0:5100',
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {

@@ -76,8 +76,8 @@ export default function PatientRegistration () {
         firstName: '',
         middleName: '',
         lastName: '',
-        gender: null,
-        language: null,
+        gender: 'UNKNOWN',
+        language: 'ENGLISH',
         dateOfBirth: '',
       },
       contactData: {
@@ -86,7 +86,7 @@ export default function PatientRegistration () {
         lastName: '',
         phone: '',
         email: '',
-        relationship: null,
+        relationship: 'UNKNOWN',
       },
       medicalData: {
         allergies: [],
@@ -97,16 +97,8 @@ export default function PatientRegistration () {
         hospitalId: '',
         physicianId: '',
       },
-      codeStatus: null,
+      codeStatus: 'FULL',
     },
-
-    transformValues: (values) => ({
-      ...values,
-      patientData: {
-        ...values.patientData,
-        dateOfBirth: values.patientData.dateOfBirth.toISOString().split('T')[0],
-      },
-    }),
 
     validate: {
       patientData: {

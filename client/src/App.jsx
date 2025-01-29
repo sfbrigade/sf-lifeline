@@ -9,6 +9,8 @@ import { Notifications } from '@mantine/notifications';
 import Context from './Context';
 import { useAuthorization } from './hooks/useAuthorization';
 
+import './i18n';
+
 /**
  * Top-level application component.  *
  * @param  {PropTypes.func} handleRedirects

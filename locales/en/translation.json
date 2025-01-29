@@ -1,0 +1,48 @@
+{
+  "AllergyType": {
+    "DRUG": "Drug",
+    "OTHER": "Other"
+  },
+  "CodeStatus": {
+    "COMFORT": "Comfort Care",
+    "DNR": "DNR: Do not Resuscitate",
+    "DNI": "DNI: Do not Intubate",
+    "DNR_DNI": "DNR/DNI: Do not Resuscitate/Do not Intubate",
+    "FULL": "Full Code"
+  },
+  "CodingSystem": {
+    "SNOMED": "SNOMED",
+    "RXNORM": "RxNorm",
+    "ICD10": "ICD-10"
+  },
+  "Gender": {
+    "FEMALE": "Female",
+    "MALE": "Male",
+    "TRANS_MALE": "Trans Male",
+    "TRANS_FEMALE": "Trans Female",
+    "OTHER": "Other",
+    "UNKNOWN": "Unknown"
+  },
+  "Language": {
+    "CANTONESE": "Cantonese",
+    "ENGLISH": "English",
+    "MANDARIN": "Mandarin",
+    "RUSSIAN": "Russian",
+    "SPANISH": "Spanish",
+    "TAGALOG": "Tagalog"
+  },
+  "Relationship": {
+    "SPOUSE": "Spouse",
+    "PARENT": "Parent",
+    "CHILD": "Child",
+    "SIBLING": "Sibling",
+    "OTHER": "Other",
+    "UNKNOWN": "Unknown"
+  },
+  "Role": {
+    "ADMIN": "Admin",
+    "STAFF": "Staff",
+    "VOLUNTEER": "Volunteer",
+    "FIRST_RESPONDER": "First Responder"
+  }
+}
