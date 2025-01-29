@@ -41,7 +41,7 @@ export default function TableMenu ({ menuItems }) {
             <Menu.Item
               key={item.label}
               leftSection={item.icon}
-              // onChange is a Mantine prop for the Menu.Item component, neostandard improperly considers it a react event handler
+              // onClick is a Mantine prop for the Menu.Item component, neostandard improperly considers it a react event handler
               // eslint-disable-next-line react/jsx-handler-names
               onClick={item.onClick}
               to={item.to}
