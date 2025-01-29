@@ -9,6 +9,7 @@ import classes from './Patients.module.css';
 import Context from '../../Context';
 
 import PatientTableRow from './PatientTableRow';
+import DataTable from '../../components/DataTable/DataTable';
 
 const patientTableProps = {
   headers: PropTypes.arrayOf(
@@ -73,17 +74,8 @@ export default function PatientsTable ({ headers, data }) {
     close();
   };
 
-  const emptyStateRow = useMemo(
-    () => (
-      <Table.Tr>
-        <Table.Td colSpan={headers.length}>No patients found.</Table.Td>
-      </Table.Tr>
-    ),
-    [headers.length]
-  );
-
-  const patientRows = useMemo(() => {
-    return data?.map((patient) => (
+  const renderRow = useCallback(
+    (patient) => (
       <PatientTableRow
         key={patient.id}
         patient={patient}
@@ -91,32 +83,18 @@ export default function PatientsTable ({ headers, data }) {
         onDelete={showDeleteConfirmation}
         showDeleteMenu={user?.role === 'ADMIN'}
       />
-    ));
-  }, [data, headers, user.role, showDeleteConfirmation]);
+    ),
+    [headers, user?.role, showDeleteConfirmation]
+  );
 
   return (
     <>
-      <Paper withBorder className={classes.tableWrapper}>
-        <Table.ScrollContainer minWidth={500} type='native'>
-          <Table
-            stickyHeader
-            highlightOnHover
-            verticalSpacing='lg'
-            classNames={{ table: classes.table }}
-          >
-            <Table.Thead>
-              <Table.Tr>
-                {headers.map((header) => (
-                  <Table.Th key={header.key}>{header.text}</Table.Th>
-                ))}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {data?.length > 0 ? patientRows : emptyStateRow}
-            </Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
-      </Paper>
+      <DataTable
+        headers={headers}
+        data={data}
+        renderRow={renderRow}
+        emptyStateMessage="No patients found."
+      />
       <Modal
         opened={opened}
         onClose={close}
