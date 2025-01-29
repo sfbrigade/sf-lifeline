@@ -9,10 +9,12 @@ import {
   Divider,
   Group,
   LoadingOverlay,
+  Pagination,
   TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useQuery } from '@tanstack/react-query';
+import { useUsers } from './useUsers';
+import { useDebouncedCallback } from '@mantine/hooks';
 
 import classes from './Users.module.css';
 import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
@@ -33,37 +35,14 @@ const headers = [
  */
 function Users () {
   const navigate = useNavigate();
-  const [pendingMembers, setPendingMembers] = useState(0);
   const [opened, { open, close }] = useDisclosure(false);
+  const [inputValue, setInputValue] = useState('');
+  
+  const { users, isFetching, page, pages, setPage, setSearch } = useUsers();
 
-  const { isFetching, data } = useQuery({
-    queryKey: ['users'],
-    queryFn: () =>
-      fetch('/api/v1/users', { credentials: 'include' })
-        .then((res) => {
-          return res.json();
-        })
-        .then((users) => {
-          const pendingUsers = users.filter(
-            (user) =>
-              user.approvedAt.length === 0 && user.rejectedAt.length === 0
-          );
-          setPendingMembers(pendingUsers.length);
-
-          return users.map((user) => {
-            return {
-              ...user,
-              name: user.firstName + ' ' + user.lastName,
-              status:
-                user.rejectedAt.length > 0
-                  ? 'Rejected'
-                  : user.approvedAt.length > 0
-                    ? 'Active'
-                    : 'Pending',
-            };
-          });
-        }),
-  });
+  const handleSearch = useDebouncedCallback((query) => {
+    setSearch(query);
+  }, 500);
 
   return (
     <Container>
@@ -75,6 +54,11 @@ function Users () {
             leftSectionPointerEvents='none'
             leftSection={<IconSearch stroke={2} />}
             placeholder='Search'
+            onChange={(event) => {
+              setInputValue(event.currentTarget.value);
+              handleSearch(event.currentTarget.value);
+            }}
+            value={inputValue}
           />
           <div className={classes.relative}>
             <Button
@@ -83,13 +67,6 @@ function Users () {
             >
               Pending Members
             </Button>
-            {pendingMembers > 0
-              ? (
-                <Badge className={classes.badge} size='xs' circle color='red'>
-                  {pendingMembers}
-                </Badge>
-                )
-              : null}
           </div>
           <Button variant='filled' onClick={open}>
             Invite Member
@@ -106,10 +83,11 @@ function Users () {
           />
           <UserDataTable
             headers={headers}
-            rows={data}
+            rows={users}
             highlightOnHover
             verticalSpacing='lg'
           />
+          <Pagination total={pages} value={page} onChange={setPage} />
         </Box>
       </Container>
     </Container>
