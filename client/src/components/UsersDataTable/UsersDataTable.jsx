@@ -35,7 +35,7 @@ export const UserDataTable = ({ headers = [], rows = [] }) => {
       headers={headers}
       data={rows}
       renderRow={renderRow}
-      emptyStateMessage="No users found."
+      emptyStateMessage='No users found.'
     />
   );
 };

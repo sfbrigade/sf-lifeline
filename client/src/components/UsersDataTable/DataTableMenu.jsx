@@ -11,7 +11,7 @@ import TableMenu from '../DataTable/TableMenu';
 /**
  *
  */
-export function DataTableMenu() {
+export function DataTableMenu () {
   const menuItems = [
     {
       isLabel: true,
@@ -20,12 +20,12 @@ export function DataTableMenu() {
     {
       icon: <IconSettings style={{ width: rem(14), height: rem(14) }} />,
       label: 'Account',
-      onClick: () => {/* implement account action */},
+      onClick: () => { /* implement account action */ },
     },
     {
       icon: <IconMessageCircle style={{ width: rem(14), height: rem(14) }} />,
       label: 'Message',
-      onClick: () => {/* implement message action */},
+      onClick: () => { /* implement message action */ },
     },
     {
       divider: true,
@@ -37,13 +37,13 @@ export function DataTableMenu() {
     {
       icon: <IconArrowsLeftRight style={{ width: rem(14), height: rem(14) }} />,
       label: 'Update role',
-      onClick: () => {/* implement role update action */},
+      onClick: () => { /* implement role update action */ },
     },
     {
       icon: <IconTrash style={{ width: rem(14), height: rem(14) }} />,
       label: 'Delete account',
       color: 'red',
-      onClick: () => {/* implement delete action */},
+      onClick: () => { /* implement delete action */ },
     },
   ];
 

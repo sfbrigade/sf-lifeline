@@ -12,11 +12,11 @@ const USER_TABLE_HEADERS = [
   { key: 'more', text: '' },
 ];
 
-export function useUsers() {
+export function useUsers () {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [pendingMembers, setPendingMembers] = useState(0);
-  
+
   const { data, isFetching } = useQuery({
     queryKey: ['users', search, page],
     queryFn: async () => {
@@ -26,7 +26,7 @@ export function useUsers() {
       }
       const users = await res.json();
       const pages = +res.headers.get('X-Total-Pages');
-      
+
       const pendingUsers = users.filter(
         (user) => user.approvedAt.length === 0 && user.rejectedAt.length === 0
       );
@@ -59,4 +59,3 @@ export function useUsers() {
     pendingMembers,
   };
 }
-

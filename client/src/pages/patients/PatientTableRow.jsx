@@ -32,7 +32,7 @@ const patientTableRowProps = {
  * Patient table row component
  * @param {PropTypes.InferProps<typeof patientTableRowProps>} props
  */
-export default function PatientTableRow({
+export default function PatientTableRow ({
   headers,
   patient,
   onDelete,
@@ -48,7 +48,7 @@ export default function PatientTableRow({
     {
       icon: <IconQrcode size={18} />,
       label: 'Reprint QR Code',
-      onClick: () => {/* implement QR code logic */},
+      onClick: () => { /* implement QR code logic */ },
     },
   ];
 

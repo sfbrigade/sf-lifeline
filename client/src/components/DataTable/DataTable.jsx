@@ -22,7 +22,7 @@ const dataTableProps = {
  * Reusable DataTable component
  * @param {PropTypes.InferProps<typeof dataTableProps>} props
  */
-export default function DataTable({
+export default function DataTable ({
   headers,
   data = [],
   renderRow,
@@ -36,11 +36,11 @@ export default function DataTable({
 
   return (
     <Paper withBorder className={classes.tableWrapper}>
-      <Table.ScrollContainer minWidth={500} type="native">
+      <Table.ScrollContainer minWidth={500} type='native'>
         <Table
           stickyHeader
           highlightOnHover
-          verticalSpacing="lg"
+          verticalSpacing='lg'
           classNames={{ table: classes.table }}
         >
           <Table.Thead>

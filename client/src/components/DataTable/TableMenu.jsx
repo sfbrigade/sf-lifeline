@@ -21,11 +21,11 @@ const tableMenuProps = {
  * Reusable table menu component
  * @param {PropTypes.InferProps<typeof tableMenuProps>} props
  */
-export default function TableMenu({ menuItems }) {
+export default function TableMenu ({ menuItems }) {
   return (
-    <Menu shadow="md">
+    <Menu shadow='md'>
       <Menu.Target>
-        <ActionIcon variant="subtle" color="gray">
+        <ActionIcon variant='subtle' color='gray'>
           <IconDotsVertical size={18} />
         </ActionIcon>
       </Menu.Target>
@@ -55,4 +55,4 @@ export default function TableMenu({ menuItems }) {
   );
 }
 
-TableMenu.propTypes = tableMenuProps; 
+TableMenu.propTypes = tableMenuProps;

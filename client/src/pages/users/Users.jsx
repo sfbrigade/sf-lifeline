@@ -12,9 +12,8 @@ import {
   Pagination,
   TextInput,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { useUsers } from './useUsers';
-import { useDebouncedCallback } from '@mantine/hooks';
 
 import classes from './Users.module.css';
 import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
@@ -37,7 +36,7 @@ function Users () {
   const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [inputValue, setInputValue] = useState('');
-  
+
   const { users, isFetching, page, pages, setPage, setSearch } = useUsers();
 
   const handleSearch = useDebouncedCallback((query) => {

@@ -1,7 +1,6 @@
 const SERVER_BASE_URL = '/api/v1';
 
 export default class LifelineAPI {
-
   static async getUsers (query, page) {
     const response = await fetch(
       `${SERVER_BASE_URL}/users?user=${query}&page=${page}`, {

@@ -93,7 +93,7 @@ export default function PatientsTable ({ headers, data }) {
         headers={headers}
         data={data}
         renderRow={renderRow}
-        emptyStateMessage="No patients found."
+        emptyStateMessage='No patients found.'
       />
       <Modal
         opened={opened}
