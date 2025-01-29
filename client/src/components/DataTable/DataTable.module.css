@@ -1,0 +1,8 @@
+.tableWrapper {
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.table {
+  border-radius: 7px;
+  overflow: hidden;
+} 
