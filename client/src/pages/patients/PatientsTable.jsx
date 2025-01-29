@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
-import { useState, useContext, useMemo, useCallback } from 'react';
-import { Paper, Table, Modal, Button, Text } from '@mantine/core';
+import { useState, useContext, useCallback } from 'react';
+import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useDeletePatient } from './useDeletePatient';
 import { notifications } from '@mantine/notifications';
