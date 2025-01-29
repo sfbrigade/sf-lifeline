@@ -1,14 +1,12 @@
 import PropTypes from 'prop-types';
-
 import { Link } from 'react-router';
-
-import { Table, Menu, ActionIcon } from '@mantine/core';
+import { Table } from '@mantine/core';
 import {
-  TbDotsVertical as IconDotsVertical,
   TbUser as IconUser,
   TbQrcode as IconQrcode,
   TbTrash as IconTrash,
 } from 'react-icons/tb';
+import TableMenu from '../../components/DataTable/TableMenu';
 
 const patientTableRowProps = {
   headers: PropTypes.arrayOf(
@@ -34,12 +32,35 @@ const patientTableRowProps = {
  * Patient table row component
  * @param {PropTypes.InferProps<typeof patientTableRowProps>} props
  */
-export default function PatientTableRow ({
+export default function PatientTableRow({
   headers,
   patient,
   onDelete,
   showDeleteMenu,
 }) {
+  const menuItems = [
+    {
+      icon: <IconUser size={18} />,
+      label: 'View/Edit',
+      to: `/patients/${patient.id}`,
+      component: Link,
+    },
+    {
+      icon: <IconQrcode size={18} />,
+      label: 'Reprint QR Code',
+      onClick: () => {/* implement QR code logic */},
+    },
+  ];
+
+  if (showDeleteMenu) {
+    menuItems.push({
+      icon: <IconTrash size={18} />,
+      label: 'Delete',
+      color: 'red',
+      onClick: () => onDelete({ id: patient.id, name: patient.name }),
+    });
+  }
+
   return (
     <Table.Tr key={patient.id}>
       {headers.map((header) => (
@@ -48,38 +69,7 @@ export default function PatientTableRow ({
         </Table.Td>
       ))}
       <Table.Td>
-        <Menu shadow='md'>
-          <Menu.Target>
-            <ActionIcon variant='subtle' color='gray'>
-              <IconDotsVertical size={18} />
-            </ActionIcon>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item
-              leftSection={<IconUser size={18} />}
-              component={Link}
-              to={`/patients/${patient.id}`}
-            >
-              View/Edit
-            </Menu.Item>
-            <Menu.Item leftSection={<IconQrcode size={18} />}>
-              Reprint QR Code
-            </Menu.Item>
-            {showDeleteMenu && (
-              <Menu.Item
-                leftSection={<IconTrash size={18} />}
-                color='red'
-                onClick={() =>
-                  onDelete({
-                    id: patient.id,
-                    name: patient.name,
-                  })}
-              >
-                Delete
-              </Menu.Item>
-            )}
-          </Menu.Dropdown>
-        </Menu>
+        <TableMenu menuItems={menuItems} />
       </Table.Td>
     </Table.Tr>
   );

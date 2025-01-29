@@ -1,61 +1,51 @@
 import React from 'react';
-import { Menu, rem, ActionIcon } from '@mantine/core';
+import { rem } from '@mantine/core';
 import {
   TbSettings as IconSettings,
   TbMessageCircle as IconMessageCircle,
   TbTrash as IconTrash,
   TbArrowsLeftRight as IconArrowsLeftRight,
-  TbDotsVertical as IconDotsVertical,
 } from 'react-icons/tb';
+import TableMenu from '../DataTable/TableMenu';
 
 /**
  *
  */
-export function DataTableMenu () {
-  return (
-    <Menu shadow='md' width={200}>
-      <Menu.Target>
-        <ActionIcon variant='default'>
-          <IconDotsVertical />
-        </ActionIcon>
-      </Menu.Target>
+export function DataTableMenu() {
+  const menuItems = [
+    {
+      isLabel: true,
+      label: 'Account',
+    },
+    {
+      icon: <IconSettings style={{ width: rem(14), height: rem(14) }} />,
+      label: 'Account',
+      onClick: () => {/* implement account action */},
+    },
+    {
+      icon: <IconMessageCircle style={{ width: rem(14), height: rem(14) }} />,
+      label: 'Message',
+      onClick: () => {/* implement message action */},
+    },
+    {
+      divider: true,
+    },
+    {
+      isLabel: true,
+      label: 'Danger zone',
+    },
+    {
+      icon: <IconArrowsLeftRight style={{ width: rem(14), height: rem(14) }} />,
+      label: 'Update role',
+      onClick: () => {/* implement role update action */},
+    },
+    {
+      icon: <IconTrash style={{ width: rem(14), height: rem(14) }} />,
+      label: 'Delete account',
+      color: 'red',
+      onClick: () => {/* implement delete action */},
+    },
+  ];
 
-      <Menu.Dropdown>
-        <Menu.Label>Account</Menu.Label>
-        <Menu.Item
-          leftSection={
-            <IconSettings style={{ width: rem(14), height: rem(14) }} />
-          }
-        >
-          Account
-        </Menu.Item>
-        <Menu.Item
-          leftSection={
-            <IconMessageCircle style={{ width: rem(14), height: rem(14) }} />
-          }
-        >
-          Message
-        </Menu.Item>
-
-        <Menu.Divider />
-
-        <Menu.Label>Danger zone</Menu.Label>
-        <Menu.Item
-          leftSection={
-            <IconArrowsLeftRight style={{ width: rem(14), height: rem(14) }} />
-          }
-        >
-          Update role
-        </Menu.Item>
-        <Menu.Item
-          color='red'
-          leftSection={
-            <IconTrash style={{ width: rem(14), height: rem(14) }} />
-          }
-        >
-          Delete account
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
-  );
+  return <TableMenu menuItems={menuItems} />;
 }
