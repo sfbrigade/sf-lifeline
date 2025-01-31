@@ -10,6 +10,7 @@ import {
   LoadingOverlay,
   Pagination,
   TextInput,
+  Text,
 } from '@mantine/core';
 import { useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { useUsers } from './useUsers';
@@ -46,7 +47,9 @@ function Users () {
     <Container>
       <InviteModal opened={opened} close={close} />
       <div className={classes.header}>
-        <h4>Members</h4>
+        <Text fw={600} size='xl' mr='md'>
+          Members
+        </Text>
         <Group className={classes.actions}>
           <TextInput
             leftSectionPointerEvents='none'
