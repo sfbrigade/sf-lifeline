@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Checkbox, Table, Text } from '@mantine/core';
+import { humanize } from 'inflection';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
@@ -104,7 +105,7 @@ const UserRoleBadge = ({ value }) => {
           whiteSpace: 'nowrap'
         }}
       >
-        {value.toLowerCase().replace('_', ' ')}
+        {humanize(value)}
       </Text>
       <Text
         span
