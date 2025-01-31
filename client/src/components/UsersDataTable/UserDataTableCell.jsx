@@ -25,10 +25,10 @@ export const UserDataTableCell = ({ type, value }) => {
       return (
         <Table.Td>
           <Badge color={color}>
-            <Text span visibleFrom="sm" fw={700} tt="capitalize" size="sm">
+            <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
               {value}
             </Text>
-            <Text span hiddenFrom="sm" fw={700} tt="capitalize" size="sm">
+            <Text span hiddenFrom='sm' fw={700} tt='capitalize' size='sm'>
               {value[0]}
             </Text>
           </Badge>
@@ -94,10 +94,10 @@ const UserRoleBadge = ({ value }) => {
     <Badge color={color} style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem' }}>
       <Text
         span
-        visibleFrom="sm"
+        visibleFrom='sm'
         fw={700}
-        tt="capitalize"
-        size="sm"
+        tt='capitalize'
+        size='sm'
         style={{
           lineHeight: '1.2',
           display: 'flex',
@@ -109,10 +109,10 @@ const UserRoleBadge = ({ value }) => {
       </Text>
       <Text
         span
-        hiddenFrom="sm"
+        hiddenFrom='sm'
         fw={700}
-        tt="capitalize"
-        size="sm"
+        tt='capitalize'
+        size='sm'
         style={{
           lineHeight: '1.2',
           display: 'flex',
