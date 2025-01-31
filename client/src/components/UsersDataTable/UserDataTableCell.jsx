@@ -93,7 +93,7 @@ const UserRoleBadge = ({ value }) => {
   return (
     <Badge
       color={color}
-      style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem' }}
+      style={{ padding: '0.25rem 0.5rem' }}
     >
       <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
         {humanize(value)}
