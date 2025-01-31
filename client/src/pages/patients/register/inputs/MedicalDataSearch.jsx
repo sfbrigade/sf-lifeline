@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Combobox, useCombobox, Pill, ScrollArea } from '@mantine/core';
+import { Box, Combobox, useCombobox, Pill, ScrollArea } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
@@ -87,6 +87,7 @@ export default function MedicalDataSearch ({
       id,
     ]);
     combobox.closeDropdown();
+    setSearch('');
   };
 
   const handleValueRemove = (val) => {
@@ -94,12 +95,6 @@ export default function MedicalDataSearch ({
     form.setFieldValue(`medicalData.${category}`, (current) =>
       current.filter((v) => v !== val)
     );
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Backspace' && search.length === 0) {
-      event.preventDefault();
-    }
   };
 
   const values = value?.map((item) => {
@@ -153,20 +148,21 @@ export default function MedicalDataSearch ({
   }
 
   return (
-    <SearchDatabaseInputField
-      data={data}
-      loading={loading}
-      combobox={combobox}
-      label={category.charAt(0).toUpperCase() + category.slice(1)}
-      searchQuery={search}
-      handleSelectValue={handleSelectValue}
-      fetchOptions={fetchOptions}
-      comboboxOptions={renderComboxContent}
-      handleSearch={setSearch}
-      handleKeyDown={handleKeyDown}
-    >
-      <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
-    </SearchDatabaseInputField>
+    <Box>
+      <SearchDatabaseInputField
+        data={data}
+        loading={loading}
+        combobox={combobox}
+        label={category.charAt(0).toUpperCase() + category.slice(1)}
+        searchQuery={search}
+        handleSelectValue={handleSelectValue}
+        fetchOptions={fetchOptions}
+        comboboxOptions={renderComboxContent}
+        handleSearch={setSearch}
+      >
+        <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
+      </SearchDatabaseInputField>
+    </Box>
   );
 }
 
