@@ -91,35 +91,14 @@ const UserRoleBadge = ({ value }) => {
       break;
   }
   return (
-    <Badge color={color} style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem' }}>
-      <Text
-        span
-        visibleFrom='sm'
-        fw={700}
-        tt='capitalize'
-        size='sm'
-        style={{
-          lineHeight: '1.2',
-          display: 'flex',
-          alignItems: 'center',
-          whiteSpace: 'nowrap'
-        }}
-      >
+    <Badge
+      color={color}
+      style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem' }}
+    >
+      <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
         {humanize(value)}
       </Text>
-      <Text
-        span
-        hiddenFrom='sm'
-        fw={700}
-        tt='capitalize'
-        size='sm'
-        style={{
-          lineHeight: '1.2',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 2px'
-        }}
-      >
+      <Text span hiddenFrom='sm' fw={700} tt='capitalize' size='sm'>
         {value[0]}
       </Text>
     </Badge>
