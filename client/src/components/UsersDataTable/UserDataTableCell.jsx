@@ -23,7 +23,14 @@ export const UserDataTableCell = ({ type, value }) => {
             : 'yellow';
       return (
         <Table.Td>
-          <Badge color={color}>{value}</Badge>
+          <Badge color={color}>
+            <Text span visibleFrom="sm" fw={700} tt="capitalize" size="sm">
+              {value}
+            </Text>
+            <Text span hiddenFrom="sm" fw={700} tt="capitalize" size="sm">
+              {value[0]}
+            </Text>
+          </Badge>
         </Table.Td>
       );
     }
@@ -83,9 +90,36 @@ const UserRoleBadge = ({ value }) => {
       break;
   }
   return (
-    <Badge color={color}>
-      <Text fw={700} tt='capitalize' size='sm'>
-        {value.toLocaleLowerCase().replace('_', ' ')}
+    <Badge color={color} style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem' }}>
+      <Text
+        span
+        visibleFrom="sm"
+        fw={700}
+        tt="capitalize"
+        size="sm"
+        style={{
+          lineHeight: '1.2',
+          display: 'flex',
+          alignItems: 'center',
+          whiteSpace: 'nowrap'
+        }}
+      >
+        {value.toLowerCase().replace('_', ' ')}
+      </Text>
+      <Text
+        span
+        hiddenFrom="sm"
+        fw={700}
+        tt="capitalize"
+        size="sm"
+        style={{
+          lineHeight: '1.2',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 2px'
+        }}
+      >
+        {value[0]}
       </Text>
     </Badge>
   );
