@@ -59,7 +59,7 @@ const mailer = new Email({
 async function send (options) {
   options.locals ||= {};
   options.locals._layout = {
-    logoUrl: `${process.env.BASE_URL}/logo.svg`,
+    logoUrl: `${process.env.BASE_URL}/logo.png`,
   };
   return mailer.send(options);
 }
