@@ -1,16 +1,14 @@
 .datatableWrapper {
   border-radius: 12px;
   overflow: hidden;
-  border: calc(0.0625rem * var(--mantine-scale)) solid
-    var(--mantine-color-gray-3);
-
   margin: 0 2rem;
+  margin-bottom: var(--mantine-spacing-xs);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  margin: 0 1rem;
+  margin: 1rem 1rem;
 }
 
 .header > * {

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Checkbox, Table, Text } from '@mantine/core';
+import { humanize } from 'inflection';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
@@ -23,7 +24,14 @@ export const UserDataTableCell = ({ type, value }) => {
             : 'yellow';
       return (
         <Table.Td>
-          <Badge color={color}>{value}</Badge>
+          <Badge color={color}>
+            <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
+              {value}
+            </Text>
+            <Text span hiddenFrom='sm' fw={700} tt='capitalize' size='sm'>
+              {value[0]}
+            </Text>
+          </Badge>
         </Table.Td>
       );
     }
@@ -44,7 +52,7 @@ export const UserDataTableCell = ({ type, value }) => {
         <Table.Td>
           <Checkbox
             checked={value.selected}
-            // onChange is a Mantine prop for the Checkbox component, improperly considers it a react event handler
+            // onChange is a Mantine prop for the Checkbox component, neostandard improperly considers it a react event handler
             // eslint-disable-next-line react/jsx-handler-names
             onChange={value.select}
           />
@@ -83,9 +91,15 @@ const UserRoleBadge = ({ value }) => {
       break;
   }
   return (
-    <Badge color={color}>
-      <Text fw={700} tt='capitalize' size='sm'>
-        {value.toLocaleLowerCase().replace('_', ' ')}
+    <Badge
+      color={color}
+      style={{ padding: '0.25rem 0.5rem' }}
+    >
+      <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
+        {humanize(value)}
+      </Text>
+      <Text span hiddenFrom='sm' fw={700} tt='capitalize' size='sm'>
+        {value[0]}
       </Text>
     </Badge>
   );

@@ -1,63 +1,42 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from '@mantine/core';
+import DataTable from '../DataTable/DataTable';
 import { UserDataTableCell } from './UserDataTableCell';
+import { Table } from '@mantine/core';
 
 const userDataTableProps = {
-  striped: PropTypes.bool,
-  highlightOnHover: PropTypes.bool,
-  withTableBorder: PropTypes.bool,
-  withColumnBorders: PropTypes.bool,
-  rows: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    })
-  ),
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
       text: PropTypes.node,
     })
   ),
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    })
+  ),
 };
 
-/**
- * Basic DataTable
- * @param {PropTypes.InferProps<typeof userDataTableProps>} props
- */
-export const UserDataTable = ({ headers = [], rows = [], ...rest }) => {
-  const formattedRows = rows.map((row) => {
-    return {
-      ...row,
-      cells: headers.map((header) => ({
-        key: header.key,
-        value: row[header.key],
-      })),
-    };
-  });
+export const UserDataTable = ({ headers = [], rows = [] }) => {
+  const renderRow = (row) => (
+    <Table.Tr key={row.id}>
+      {headers.map((header) => (
+        <UserDataTableCell
+          key={header.key}
+          type={header.key}
+          value={row[header.key]}
+        />
+      ))}
+    </Table.Tr>
+  );
+
   return (
-    <Table {...rest}>
-      <Table.Thead>
-        <Table.Tr>
-          {headers.map((header) => (
-            <Table.Th key={header.key}>{header.text}</Table.Th>
-          ))}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {formattedRows.map((row) => (
-          <Table.Tr key={row.id}>
-            {row.cells.map((cell) => (
-              <UserDataTableCell
-                key={cell.key}
-                type={cell.key}
-                value={cell.value}
-              />
-            ))}
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+    <DataTable
+      headers={headers}
+      data={rows}
+      renderRow={renderRow}
+      emptyStateMessage='No users found.'
+    />
   );
 };
 
