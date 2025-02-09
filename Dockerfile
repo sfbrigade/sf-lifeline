@@ -26,6 +26,6 @@ RUN npm install
 RUN npm run -w client build
 
 # Generate Prisma client for the server
-RUN npm run -w server
+RUN npm run -w server prisma:generate
 
 CMD ["npm", "start"]
