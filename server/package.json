@@ -11,13 +11,13 @@
     "seed": "node prisma/seed"
   },
   "scripts": {
-    "db:preview": "npx prisma studio",
-    "db:reset": "npx prisma migrate reset --force",
-    "dev": "npx prisma migrate dev && fastify start -w -l info -P app.js",
+    "db:reset": "prisma migrate reset --force",
+    "dev": "prisma migrate dev && fastify start -w -l info -P app.js",
     "lint": "eslint --fix",
+    "prisma:generate": "prisma generate",
     "start": "fastify start -l info app.js",
     "test": "node --test-concurrency 1 --test $(find test -name '*.test.js')",
-    "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test npx prisma migrate reset --force"
+    "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test prisma migrate reset --force"
   },
   "keywords": [],
   "author": "",
