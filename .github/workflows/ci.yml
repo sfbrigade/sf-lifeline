@@ -72,15 +72,15 @@ jobs:
           push: true
           tags: sfcivictech/sf-lifeline:${{ github.sha }}
 
-  deploy-dev:
-    name: Deploy to Dev
-    needs: build
-    runs-on: ubuntu-latest
-    # if: ${{ env.BRANCH_NAME == 'dev' }}
-    steps:
-      - name: Push to dokku
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: 'ssh://dokku@dokku.sflifeline.app:22/dev'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          deploy_docker_image: sfcivictech/sf-lifeline:${{ github.sha }}
+  # deploy-dev:
+  #   name: Deploy to Dev
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   # if: ${{ env.BRANCH_NAME == 'dev' }}
+  #   steps:
+  #     - name: Push to dokku
+  #       uses: dokku/github-action@master
+  #       with:
+  #         git_remote_url: 'ssh://dokku@dokku.sflifeline.app:22/dev'
+  #         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #         deploy_docker_image: sfcivictech/sf-lifeline:${{ github.sha }}
