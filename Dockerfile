@@ -21,3 +21,5 @@ WORKDIR $APP_HOME
 
 # Install dependencies for the main app
 RUN npm install
+
+CMD ["npm", "start"]
