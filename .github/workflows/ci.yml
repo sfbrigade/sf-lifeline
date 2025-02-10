@@ -50,7 +50,7 @@ jobs:
     name: Build Image
     needs: test
     runs-on: ubuntu-latest
-    if: ${{ env.BRANCH_NAME == 'dev' }}
+    if: ${{ $BRANCH_NAME == 'dev' }}
     steps:
       - name: Cloning repo
         uses: actions/checkout@v4
@@ -76,7 +76,7 @@ jobs:
     name: Deploy to Dev
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ env.BRANCH_NAME == 'dev' }}
+    if: ${{ $BRANCH_NAME == 'dev' }}
     steps:
       - name: Push to dokku
         uses: dokku/github-action@master
