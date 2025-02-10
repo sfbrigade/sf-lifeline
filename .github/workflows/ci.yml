@@ -7,9 +7,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-env:
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-
 jobs:
   test:
     name: Test
@@ -50,7 +47,7 @@ jobs:
     name: Build Image
     needs: test
     runs-on: ubuntu-latest
-    if: ${{ $BRANCH_NAME == 'dev' }}
+    if: ${{ github.ref_name == 'dev' }}
     steps:
       - name: Cloning repo
         uses: actions/checkout@v4
@@ -76,7 +73,7 @@ jobs:
     name: Deploy to Dev
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ $BRANCH_NAME == 'dev' }}
+    if: ${{ github.ref_name == 'dev' }}
     steps:
       - name: Push to dokku
         uses: dokku/github-action@master
