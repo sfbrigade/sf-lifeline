@@ -19,5 +19,13 @@ RUN mkdir -p $APP_HOME
 ADD . $APP_HOME
 WORKDIR $APP_HOME
 
-# Install dependencies for the main app
+# Install dependencies
 RUN npm install
+
+# Build the SPA
+RUN npm run -w client build
+
+# Generate Prisma client for the server
+RUN npm run -w server prisma:generate
+
+CMD ["npm", "start"]
