@@ -1,6 +1,4 @@
-import React from 'react';
-import { NavLink as RouterNavLink } from 'react-router';
-import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
+import { Group } from '@mantine/core';
 import {
   // TbHealthRecognition,
   TbHeartHandshake,
@@ -87,7 +85,6 @@ export function Sidebar ({ toggleSidebar }) {
   }
 
   return (
-    <>
       <Stack
         className={classes.navbar}
         justify='space-between'
@@ -152,7 +149,6 @@ export function Sidebar ({ toggleSidebar }) {
           </a>
         </Group>
       </Stack>
-    </>
   );
 }
 

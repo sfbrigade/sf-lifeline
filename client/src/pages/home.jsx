@@ -1,5 +1,4 @@
-import { useContext, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Button,

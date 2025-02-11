@@ -1,8 +1,8 @@
 import { Flex, LoadingOverlay } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import classes from '../form.module.css';
 import { PasswordResetForm } from './passwordResetForm';

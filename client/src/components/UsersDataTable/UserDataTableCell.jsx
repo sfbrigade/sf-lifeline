@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Checkbox, Table, Text } from '@mantine/core';
 import { humanize } from 'inflection';
