@@ -1,4 +1,3 @@
-import React from 'react';
 import { ActionIcon, Container, Group, ScrollArea } from '@mantine/core';
 import {
   IconDashboard,

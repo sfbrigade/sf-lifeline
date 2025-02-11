@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classes from '../form.module.css';
 import { Flex } from '@mantine/core';
 import { PasswordForgotForm } from './PasswordForgotForm';

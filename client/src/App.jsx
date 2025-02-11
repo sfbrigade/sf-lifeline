@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import {
   Outlet,
   Routes,
@@ -124,7 +124,6 @@ function App() {
   const isLoggedIn = !isLoading && !!user?.id;
 
   return (
-    <>
       <Routes>
         <Route
           element={
@@ -180,7 +179,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
-    </>
+
   );
 }
 
