@@ -1,4 +1,3 @@
-import React from 'react';
 import { rem } from '@mantine/core';
 import {
   TbSettings as IconSettings,

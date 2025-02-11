@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Header } from '../Header/Header.jsx';
 import './page.css';
 import { useAuthorization } from '../../hooks/useAuthorization.jsx';

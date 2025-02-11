@@ -6,7 +6,7 @@ import {
   Group,
   Button,
 } from '@mantine/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TbChevronLeft as IconChevronLeft } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
