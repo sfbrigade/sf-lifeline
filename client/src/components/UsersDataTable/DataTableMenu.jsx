@@ -35,7 +35,6 @@ export function DataTableMenu () {
     },
     {
       icon: <></>,
-      label: '',
       isLabel: true,
       label: 'Danger zone',
     },
