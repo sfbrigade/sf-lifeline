@@ -14,6 +14,7 @@ import TableMenu from '../DataTable/TableMenu';
 export function DataTableMenu () {
   const menuItems = [
     {
+      icon: <></>,
       isLabel: true,
       label: 'Account',
     },
@@ -28,9 +29,13 @@ export function DataTableMenu () {
       onClick: () => { /* implement message action */ },
     },
     {
+      icon: <></>,
+      label: '',
       divider: true,
     },
     {
+      icon: <></>,
+      label: '',
       isLabel: true,
       label: 'Danger zone',
     },
