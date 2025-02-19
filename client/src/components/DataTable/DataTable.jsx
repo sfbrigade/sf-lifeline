@@ -38,7 +38,6 @@ export default function DataTable ({
     <Paper withBorder className={classes.tableWrapper}>
       <Table.ScrollContainer minWidth={500} type='native'>
         <Table
-          stickyHeader
           highlightOnHover
           verticalSpacing='lg'
           classNames={{ table: classes.table }}

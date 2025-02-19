@@ -1,0 +1,29 @@
+.tableWrapper {
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.table {
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--mantine-color-red-8);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 1rem;
+}
+
+.physiciansContainer {
+  position: relative;
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.button {
+  margin-top: var(--mantine-spacing-lg);
+}

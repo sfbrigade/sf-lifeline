@@ -23,6 +23,7 @@ import PatientRegistration from './pages/patients/register/PatientRegistration';
 import PatientDetails from './pages/patients/patient-details/PatientDetails';
 import Patients from './pages/patients/Patients';
 import PatientsGenerate from './pages/patients/PatientsGenerate';
+import Physicians from './pages/physicians/Physicians';
 
 // roles in order of least to most privileged
 export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
@@ -146,6 +147,10 @@ export default [
                 element: <PatientRegistration />,
               },
             ],
+          },
+          {
+            path: 'physicians',
+            element: <Physicians />,
           },
           {
             path: 'users',

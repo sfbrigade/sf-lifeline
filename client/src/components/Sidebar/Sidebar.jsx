@@ -46,6 +46,11 @@ const sections = [
         href: '/patients',
         icon: <TbHeartHandshake className={classes.navbar__icon} />,
       },
+      {
+        label: 'Physicians',
+        href: '/physicians',
+        icon: <></>
+      },
     ],
   },
   // {
