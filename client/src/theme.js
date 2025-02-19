@@ -1,3 +1,5 @@
 import { createTheme } from '@mantine/core';
 
-export default createTheme({});
+export default createTheme({
+  scale: 1.2,
+});
