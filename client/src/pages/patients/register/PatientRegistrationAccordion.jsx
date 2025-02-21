@@ -111,11 +111,8 @@ export default function PatientRegistrationAccordion ({
               <TextInput
                 type='date'
                 label='Date of Birth'
-                valueFormat='YYYY-MM-DD'
-                placeholder='YYYY-MM-DD'
-                defaultLevel='decade'
-                maxDate={new Date()}
                 withAsterisk
+                max={new Date().toLocaleDateString('en-CA')} // need to use en-CA to get the correct format for HTML date input
                 key={form.key('patientData.dateOfBirth')}
                 {...form.getInputProps('patientData.dateOfBirth')}
               />
