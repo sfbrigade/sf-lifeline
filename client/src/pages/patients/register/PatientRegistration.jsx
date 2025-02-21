@@ -178,7 +178,7 @@ export default function PatientRegistration () {
         lastName,
         gender,
         language,
-        dateOfBirth: new Date(dateOfBirth),
+        dateOfBirth: dateOfBirth,
       };
       const contactData = {
         firstName: emergencyContact?.firstName || '',
