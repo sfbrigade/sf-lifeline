@@ -33,8 +33,8 @@ export default function ContactInfo ({ emergencyContact, physician }) {
             <div className={classes.contactRow}>
               <Text className={classes.boldText}>Name</Text>
               <Text>
-                {emergencyContact
-                  ? `${emergencyContact?.firstName} ${emergencyContact?.lastName}`
+                {(emergencyContact?.firstName || emergencyContact?.lastName)
+                  ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
                   : '-'}
               </Text>
             </div>
