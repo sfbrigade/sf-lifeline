@@ -22,7 +22,7 @@ import { usePhysicians } from './usePhysicians';
  */
 export default function Physicians () {
   const [inputValue, setInputValue] = useState('');
-  const { patients, headers, isFetching, page, pages, setPage, setSearch } = usePhysicians();
+  const { physicians, headers, isFetching, page, pages, setPage, setSearch } = usePhysicians();
 
   const handleSearch = useDebouncedCallback((query) => {
     setSearch(query);
@@ -54,7 +54,7 @@ export default function Physicians () {
           zIndex={1000}
           overlayProps={{ radius: 'sm', blur: 2 }}
         />
-        <PhysiciansTable headers={headers} data={patients} />
+        <PhysiciansTable headers={headers} data={physicians} />
         <Pagination total={pages} value={page} onChange={setPage} />
       </Container>
     </Container>

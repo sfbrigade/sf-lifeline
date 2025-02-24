@@ -22,10 +22,10 @@ const physiciansTableProps = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      createdBy: PropTypes.string.isRequired,
-      createdAt: PropTypes.string.isRequired,
-      updatedBy: PropTypes.string.isRequired,
-      updatedAt: PropTypes.string.isRequired,
+      // createdBy: PropTypes.string.isRequired,
+      // createdAt: PropTypes.string.isRequired,
+      // updatedBy: PropTypes.string.isRequired,
+      // updatedAt: PropTypes.string.isRequired,
     })
   ),
 };
@@ -36,20 +36,21 @@ const physiciansTableProps = {
  */
 export default function PhysiciansTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const { mutateAsync: deletePatient, isPending } = useDeletePhysicians();
+  const [physicians, setSelectedPhysicians] = useState(null);
+  const { mutateAsync: deletePhysicans, isPending } = useDeletePhysicians();
   const { user } = useContext(Context);
 
   const showDeleteConfirmation = useCallback(
-    (patient) => {
-      setSelectedPatient(patient);
+    (physicians) => {
+      setSelectedPhysicians(physicians);
       open();
     },
     [open]
   );
+
   const confirmPatientDeletion = async () => {
     try {
-      await deletePatient(selectedPatient.id);
+      await deletePhysicans(physicians.id);
       notifications.show({
         title: 'Success',
         message: 'Patient deleted successfully.',
@@ -64,21 +65,21 @@ export default function PhysiciansTable ({ headers, data }) {
       });
     }
     if (!isPending) {
-      setSelectedPatient(null);
+      setSelectedPhysicians(null);
       close();
     }
   };
 
   const cancelPatientDeletion = () => {
-    setSelectedPatient(null);
+    setSelectedPhysicians(null);
     close();
   };
 
   const renderRow = useCallback(
-    (patient) => (
+    (physicians) => (
       <PhysiciansTableRow
-        key={patient.id}
-        patient={patient}
+        key={physicians.id}
+        physicians={physicians}
         headers={headers}
         onDelete={showDeleteConfirmation}
         showDeleteMenu={user?.role === 'ADMIN'}

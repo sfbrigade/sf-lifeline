@@ -18,32 +18,18 @@ export default class LifelineAPI {
     }
   }
 
-  // static async getPhysicians (query) {
-  //   const response = await fetch(
-  //     `${SERVER_BASE_URL}/physicians?physician=${query}`
-  //   );
-  //   const data = await response.json();
-  //   return data.map((item) => {
-  //     return {
-  //       ...item,
-  //       name: `${item.firstName} ${item.lastName}`,
-  //       hospital: item.hospitals[0]?.name,
-  //     };
-  //   });
-  // }
-
-  static async getPhysicians (query) {
+  static async getPhysicians (query, page) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/physicians?physician=${query}`
+      `${SERVER_BASE_URL}/physicians?physician=${query}&page=${page}`
     );
-    const data = await response.json();
-    return data.map((item) => {
-      return {
-        ...item,
-        name: `${item.firstName} ${item.lastName}`,
-        hospital: item.hospitals[0]?.name,
-      };
-    });
+    return response;
+  }
+
+  static async getPhysician (id) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/physicians/${id}`
+    );
+    return response;
   }
 
   static async registerPhysician (data) {
@@ -105,6 +91,16 @@ export default class LifelineAPI {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
       method: 'DELETE',
     });
+    return response;
+  }
+
+  static async deletePhysicians (physicianId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/physicians/${physicianId}`,
+      {
+        method: 'DELETE',
+      }
+    );
     return response;
   }
 

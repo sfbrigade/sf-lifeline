@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
@@ -12,20 +9,13 @@ datasource db {
   extensions = [citext]
 }
 
-enum Role {
-  ADMIN
-  STAFF
-  VOLUNTEER
-  FIRST_RESPONDER
-}
-
 model User {
   id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName              String
   middleName             String?
   lastName               String
   email                  String    @unique @db.Citext
-  emailVerificationToken String?   @db.Uuid @unique
+  emailVerificationToken String?   @unique @db.Uuid
   emailVerifiedAt        DateTime?
   passwordResetToken     String?   @unique @db.Uuid
   passwordResetExpires   DateTime?
@@ -34,24 +24,24 @@ model User {
   licenseNumber          String?   @unique
   licenseData            Json?
   approvedAt             DateTime?
-  approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
   approvedById           String?   @db.Uuid
-  approvedUsers          User[]    @relation("UserApprovedBy")
   rejectedAt             DateTime?
-  rejectedBy             User?     @relation("UserRejectedBy", fields: [rejectedById], references: [id])
   rejectedById           String?   @db.Uuid
-  rejectedUsers          User[]    @relation("UserRejectedBy")
   disabledAt             DateTime?
-  disabledBy             User?     @relation("UserDisabledBy", fields: [disabledById], references: [id])
   disabledById           String?   @db.Uuid
-  disabledUsers          User[]    @relation("UserDisabledBy")
-  invitedUsers           Invite[]  @relation("UserInvitedBy")
+  updatedAt              DateTime  @updatedAt
+  createdAt              DateTime  @default(now())
   acceptedInvites        Invite[]  @relation("UserAcceptedBy")
+  invitedUsers           Invite[]  @relation("UserInvitedBy")
   revokedInvites         Invite[]  @relation("UserRevokedBy")
   createdPatients        Patient[] @relation("UserCreatedBy")
   updatedPatients        Patient[] @relation("UserUpdatedBy")
-  updatedAt              DateTime  @updatedAt
-  createdAt              DateTime  @default(now())
+  approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
+  approvedUsers          User[]    @relation("UserApprovedBy")
+  disabledBy             User?     @relation("UserDisabledBy", fields: [disabledById], references: [id])
+  disabledUsers          User[]    @relation("UserDisabledBy")
+  rejectedBy             User?     @relation("UserRejectedBy", fields: [rejectedById], references: [id])
+  rejectedUsers          User[]    @relation("UserRejectedBy")
 }
 
 model Invite {
@@ -62,16 +52,16 @@ model Invite {
   email        String
   role         Role
   expiresAt    DateTime
-  invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
   invitedById  String    @db.Uuid
-  acceptedBy   User?     @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
   acceptedById String?   @db.Uuid
   acceptedAt   DateTime?
   revokedAt    DateTime?
-  revokedBy    User?     @relation("UserRevokedBy", fields: [revokedById], references: [id])
   revokedById  String?   @db.Uuid
   updatedAt    DateTime  @updatedAt
   createdAt    DateTime  @default(now())
+  acceptedBy   User?     @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
+  invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
+  revokedBy    User?     @relation("UserRevokedBy", fields: [revokedById], references: [id])
 }
 
 model Patient {
@@ -82,23 +72,122 @@ model Patient {
   dateOfBirth        DateTime?
   gender             Gender?
   language           Language?
-  allergies          PatientAllergy[]
-  medications        PatientMedication[]
-  conditions         PatientCondition[]
   codeStatus         CodeStatus?
   codeStatusAttached Boolean?
-  hospital           Hospital?           @relation(fields: [hospitalId], references: [id])
   hospitalId         String?             @db.Uuid
-  emergencyContact   Contact?            @relation(fields: [emergencyContactId], references: [id])
   emergencyContactId String?             @unique @db.Uuid
-  physician          Physician?          @relation(fields: [physicianId], references: [id])
   physicianId        String?             @db.Uuid
-  createdBy          User                @relation("UserCreatedBy", fields: [createdById], references: [id])
   createdById        String              @db.Uuid
-  updatedBy          User                @relation("UserUpdatedBy", fields: [updatedById], references: [id])
   updatedById        String              @db.Uuid
   updatedAt          DateTime            @updatedAt
   createdAt          DateTime            @default(now())
+  createdBy          User                @relation("UserCreatedBy", fields: [createdById], references: [id])
+  emergencyContact   Contact?            @relation(fields: [emergencyContactId], references: [id])
+  hospital           Hospital?           @relation(fields: [hospitalId], references: [id])
+  physician          Physician?          @relation(fields: [physicianId], references: [id])
+  updatedBy          User                @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  allergies          PatientAllergy[]
+  conditions         PatientCondition[]
+  medications        PatientMedication[]
+}
+
+model Contact {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  phone        String?
+  email        String?
+  address      String?
+  relationship String?
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  patient      Patient?
+}
+
+model Allergy {
+  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  type     AllergyType
+  system   CodingSystem
+  code     String
+  patients PatientAllergy[]
+}
+
+model Medication {
+  id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  altNames String
+  system   CodingSystem
+  code     String
+  patients PatientMedication[]
+}
+
+model Condition {
+  id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  category String
+  system   CodingSystem
+  code     String
+  patients PatientCondition[]
+}
+
+model PatientAllergy {
+  patientId String  @db.Uuid
+  allergyId String  @db.Uuid
+  sortOrder Int
+  allergy   Allergy @relation(fields: [allergyId], references: [id], onDelete: Cascade)
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@id([patientId, allergyId])
+}
+
+model PatientMedication {
+  patientId    String     @db.Uuid
+  medicationId String     @db.Uuid
+  sortOrder    Int
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  patient      Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@id([patientId, medicationId])
+}
+
+model PatientCondition {
+  patientId   String    @db.Uuid
+  conditionId String    @db.Uuid
+  sortOrder   Int
+  condition   Condition @relation(fields: [conditionId], references: [id], onDelete: Cascade)
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@id([patientId, conditionId])
+}
+
+model Physician {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName  String?
+  middleName String?
+  lastName   String?
+  phone      String?
+  email      String?
+  patients   Patient[]
+  hospitals  Hospital[] @relation("HospitalToPhysician")
+}
+
+model Hospital {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String?
+  address    String?
+  phone      String?
+  email      String?
+  patients   Patient[]
+  physicians Physician[] @relation("HospitalToPhysician")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  VOLUNTEER
+  FIRST_RESPONDER
 }
 
 enum Gender {
@@ -127,105 +216,13 @@ enum CodeStatus {
   FULL
 }
 
-model Contact {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName    String?
-  middleName   String?
-  lastName     String?
-  phone        String?
-  email        String?
-  address      String?
-  relationship String?
-  patient      Patient?
-  updatedAt    DateTime @updatedAt
-  createdAt    DateTime @default(now())
-}
-
-model Allergy {
-  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  type     AllergyType
-  system   CodingSystem
-  code     String
-  patients PatientAllergy[]
-}
-
 enum AllergyType {
   DRUG
   OTHER
-}
-
-model Medication {
-  id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  altNames String
-  system   CodingSystem
-  code     String
-  patients PatientMedication[]
-}
-
-model Condition {
-  id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  category String
-  system   CodingSystem
-  code     String
-  patients PatientCondition[]
 }
 
 enum CodingSystem {
   SNOMED
   RXNORM
   ICD10
-}
-
-model PatientAllergy {
-  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  patientId String  @db.Uuid
-  allergy   Allergy @relation(fields: [allergyId], references: [id], onDelete: Cascade)
-  allergyId String  @db.Uuid
-  sortOrder Int
-
-  @@id([patientId, allergyId])
-}
-
-model PatientMedication {
-  patient      Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  patientId    String     @db.Uuid
-  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
-  medicationId String     @db.Uuid
-  sortOrder    Int
-
-  @@id([patientId, medicationId])
-}
-
-model PatientCondition {
-  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  patientId   String    @db.Uuid
-  condition   Condition @relation(fields: [conditionId], references: [id], onDelete: Cascade)
-  conditionId String    @db.Uuid
-  sortOrder   Int
-
-  @@id([patientId, conditionId])
-}
-
-model Physician {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName  String?
-  middleName String?
-  lastName   String?
-  phone      String?
-  email      String?
-  hospitals  Hospital[]
-  patients   Patient[]
-}
-
-model Hospital {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String?
-  address    String?
-  phone      String?
-  email      String?
-  physicians Physician[]
-  patients   Patient[]
 }

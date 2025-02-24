@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { Table } from '@mantine/core';
 import {
   TbUser as IconUser,
-  TbQrcode as IconQrcode,
   TbTrash as IconTrash,
 } from 'react-icons/tb';
 import TableMenu from '../../components/DataTable/TableMenu';
@@ -18,10 +17,10 @@ const physiciansTableRowProps = {
   physicians: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    createdBy: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-    updatedBy: PropTypes.string.isRequired,
-    updatedAt: PropTypes.string.isRequired,
+    // createdBy: PropTypes.string.isRequired,
+    // createdAt: PropTypes.string.isRequired,
+    // updatedBy: PropTypes.string.isRequired,
+    // updatedAt: PropTypes.string.isRequired,
   }),
 
   onDelete: PropTypes.func.isRequired,
@@ -34,7 +33,7 @@ const physiciansTableRowProps = {
  */
 export default function PhysiciansTableRow ({
   headers,
-  patient,
+  physicians,
   onDelete,
   showDeleteMenu,
 }) {
@@ -42,14 +41,9 @@ export default function PhysiciansTableRow ({
     {
       icon: <IconUser size={18} />,
       label: 'View/Edit',
-      to: `/Physicians/${patient.id}`,
+      to: `/physicians/${physicians.id}`,
       component: Link,
-    },
-    {
-      icon: <IconQrcode size={18} />,
-      label: 'Reprint QR Code',
-      onClick: () => { /* implement QR code logic */ },
-    },
+    }
   ];
 
   if (showDeleteMenu) {
@@ -57,15 +51,15 @@ export default function PhysiciansTableRow ({
       icon: <IconTrash size={18} />,
       label: 'Delete',
       color: 'red',
-      onClick: () => onDelete({ id: patient.id, name: patient.name }),
+      onClick: () => onDelete({ id: physicians.id, name: physicians.name }),
     });
   }
 
   return (
-    <Table.Tr key={patient.id}>
+    <Table.Tr key={physicians.id}>
       {headers.map((header) => (
-        <Table.Td key={patient[header.key] + header.key}>
-          {patient[header.key]}
+        <Table.Td key={physicians[header.key] + header.key}>
+          {physicians[header.key]}
         </Table.Td>
       ))}
       <Table.Td>

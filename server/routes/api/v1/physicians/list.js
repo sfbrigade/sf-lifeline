@@ -46,6 +46,20 @@ export default async function (fastify) {
     async (request, reply) => {
       const { page = '1', perPage = '25', physician } = request.query;
 
+      if (!physician) {
+        const { records, total } =
+          await fastify.prisma.physician.paginate({
+            page,
+            perPage,
+            orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+            include: {
+              hospitals: true
+            },
+          });
+        reply.setPaginationHeaders(page, perPage, total).send(records);
+        return;
+      }
+
       const splitQuery = physician.trim().split(' ');
 
       let whereClause = {};
