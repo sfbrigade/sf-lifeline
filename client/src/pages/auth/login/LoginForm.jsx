@@ -46,7 +46,6 @@ export function LoginForm ({
   }
 
   return (
-    <>
       <form onSubmit={onSubmit}>
         <Container size='25rem'>
           <TextInput
@@ -86,7 +85,6 @@ export function LoginForm ({
           </div>
         </Container>
       </form>
-    </>
   );
 }
 
