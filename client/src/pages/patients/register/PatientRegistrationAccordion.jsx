@@ -51,7 +51,6 @@ export default function PatientRegistrationAccordion ({
   const { t } = useTranslation();
 
   return (
-    <>
       <Accordion
         defaultValue='patientData'
         value={openedSection}
@@ -253,7 +252,6 @@ export default function PatientRegistrationAccordion ({
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
-    </>
   );
 }
 

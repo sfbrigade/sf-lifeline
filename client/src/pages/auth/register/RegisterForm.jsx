@@ -62,7 +62,6 @@ export function RegisterForm ({
   );
 
   return (
-    <>
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -212,7 +211,6 @@ export function RegisterForm ({
           )}
         </Container>
       </form>
-    </>
   );
 }
 
