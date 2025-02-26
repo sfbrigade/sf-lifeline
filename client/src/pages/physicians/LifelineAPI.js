@@ -87,6 +87,20 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async updatePhysician (data, physicianId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/physicians/${physicianId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    return response;
+  }
+
   static async deletePatient (patientId) {
     const response = await fetch(`${SERVER_BASE_URL}/patients/${patientId}`, {
       method: 'DELETE',

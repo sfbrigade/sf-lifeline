@@ -1,18 +1,22 @@
-import { useParams } from 'react-router';
+import { useParams, useNavigate, useLocation } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { Container, Grid, Loader, Text, Title } from '@mantine/core';
+import PhysicianForm from './Components/PhysicianForm.jsx';
 
 import LifelineAPI from '../LifelineAPI.js';
 /**
  *
- * Patient page component
+ * Physician page component
  */
 export default function PhysicianDetail () {
   const { physicianId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isEditAble = location.pathname.endsWith('edit');
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['physician'],
+    queryKey: ['physician', isEditAble],
     queryFn: async () => {
       const res = await LifelineAPI.getPhysician(physicianId);
       if (res.status === StatusCodes.OK) {
@@ -24,8 +28,6 @@ export default function PhysicianDetail () {
     retry: false,
   });
 
-  console.log(data);
-
   if (isLoading || isError) {
     return <Loader />;
   }
@@ -33,21 +35,24 @@ export default function PhysicianDetail () {
   return (
     <main>
       <Container>
-        <Title order={1}>{data.firstName} {data.middleName} {data.lastName}</Title>
-        <Grid>
-          <Grid.Col span={6}>
-            <Text>{data.phone}</Text>
-            <Text>{data.email}</Text>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            {data.hospitals.map((hospital) => (
-              <Text key={hospital.id}>{hospital.name}</Text>
-            ))}
-            {data.patients.map((patient) => (
-              <Text key={patient.id}>{patient.firstName} {patient.lastName}</Text>
-            ))}
-          </Grid.Col>
-        </Grid>
+        {isEditAble
+          ? (
+            <PhysicianForm physician={data} />
+            )
+          : (
+            <Grid>
+              <button onClick={() => {
+                navigate(`${location.pathname}/edit`);
+              }}
+              >Edit Page
+              </button>
+              <Grid.Col span={12}>
+                <Title order={1}>{data.firstName}</Title>
+                <Text>{data.email}</Text>
+                <Text>{data.phone}</Text>
+              </Grid.Col>
+            </Grid>
+            )}
       </Container>
     </main>
   );
