@@ -4,6 +4,7 @@ import { Accordion, TextInput, NativeSelect, Stack, InputBase } from '@mantine/c
 import { TbCircleCheck as IconCircleCheck } from 'react-icons/tb';
 import { IMaskInput } from 'react-imask';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
@@ -112,7 +113,7 @@ export default function PatientRegistrationAccordion ({
                 type='date'
                 label='Date of Birth'
                 withAsterisk
-                max={new Date().toLocaleDateString('en-CA')} // need to use en-CA to get the correct format for HTML date input
+                max={dayjs().format('YYYY-MM-DD')}
                 key={form.key('patientData.dateOfBirth')}
                 {...form.getInputProps('patientData.dateOfBirth')}
               />
