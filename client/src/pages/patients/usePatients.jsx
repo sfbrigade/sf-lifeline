@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI';
+import dayjs from 'dayjs';
 
 const PATIENT_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
@@ -14,14 +15,6 @@ const PATIENT_TABLE_HEADERS = [
 const formatName = (entry) => {
   const formattedName = `${entry.firstName}${entry.middleName ? ` ${entry.middleName}` : ''} ${entry.lastName}`;
   return formattedName.trim() ? formattedName : '-';
-};
-
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString(undefined, {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
 };
 
 /**
@@ -75,9 +68,9 @@ export function usePatients () {
         id: patient.id,
         name: formatName(patient),
         createdBy: formatName(patient.createdBy),
-        createdAt: formatDate(patient.createdAt),
-        updatedBy: formatName(patient.createdBy),
-        updatedAt: formatDate(patient.updatedAt),
+        createdAt: dayjs(patient.createdAt).format('MMMM D, YYYY'),
+        updatedBy: formatName(patient.updatedBy),
+        updatedAt: dayjs(patient.updatedAt).format('MMMM D, YYYY'),
       })),
       pages: res.pages,
     }),
