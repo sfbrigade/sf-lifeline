@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { UnstyledButton, Center, Box, Collapse, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
