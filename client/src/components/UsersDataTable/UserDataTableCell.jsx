@@ -14,14 +14,14 @@ const userDataTableProps = {
  */
 export const UserDataTableCell = ({ type, value }) => {
   const statusColor = () => {
-    if(value === 'Disabled' || value === 'Rejected'){
-      return 'red'
-    }else if(value === 'Active'){
-      return 'green'
-    }else{
-      return 'yellow'
+    if (value === 'Disabled' || value === 'Rejected') {
+      return 'red';
+    } else if (value === 'Active') {
+      return 'green';
+    } else {
+      return 'yellow';
     }
-  }
+  };
   switch (type) {
     case 'status': {
       return (

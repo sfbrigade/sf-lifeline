@@ -1,4 +1,4 @@
-import {StrictMode} from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { MantineProvider } from '@mantine/core';
@@ -26,5 +26,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </MantineProvider>
       </QueryClientProvider>
     </ContextProvider>
-  </StrictMode>,
+  </StrictMode>
 );

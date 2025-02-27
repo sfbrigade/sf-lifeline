@@ -51,207 +51,207 @@ export default function PatientRegistrationAccordion ({
   const { t } = useTranslation();
 
   return (
-      <Accordion
-        defaultValue='patientData'
-        value={openedSection}
-        onChange={handleAccordionChange}
-        classNames={classes}
-      >
-        <Accordion.Item value='patientData'>
-          <Accordion.Control chevron={false}>
-            &#9312; Basic Information{' '}
-            {showCheck['patientData']
-              ? (
-                <IconCircleCheck color='green' size={30} />
-                )
-              : null}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              <TextInput
-                label='First Name'
-                placeholder='First Name'
-                withAsterisk
-                key={form.key('patientData.firstName')}
-                {...form.getInputProps('patientData.firstName')}
-              />
-              <TextInput
-                label='Middle Name'
-                placeholder='Middle Name'
-                key={form.key('patientData.middleName')}
-                {...form.getInputProps('patientData.middleName')}
-              />
-              <TextInput
-                label='Last Name'
-                placeholder='Last Name'
-                withAsterisk
-                key={form.key('patientData.lastName')}
-                {...form.getInputProps('patientData.lastName')}
-              />
-              <NativeSelect
-                label='Gender'
-                withAsterisk
-                data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
-                  value,
-                  label: t(`Gender.${value}`),
-                }))}
-                key={form.key('patientData.gender')}
-                {...form.getInputProps('patientData.gender')}
-              />
-              <NativeSelect
-                label='Language'
-                withAsterisk
-                data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
-                  value,
-                  label: t(`Language.${value}`),
-                }))}
-                key={form.key('patientData.language')}
-                {...form.getInputProps('patientData.language')}
-              />
-              <TextInput
-                type='date'
-                label='Date of Birth'
-                withAsterisk
-                max={dayjs().format('YYYY-MM-DD')}
-                key={form.key('patientData.dateOfBirth')}
-                {...form.getInputProps('patientData.dateOfBirth')}
-              />
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
+    <Accordion
+      defaultValue='patientData'
+      value={openedSection}
+      onChange={handleAccordionChange}
+      classNames={classes}
+    >
+      <Accordion.Item value='patientData'>
+        <Accordion.Control chevron={false}>
+          &#9312; Basic Information{' '}
+          {showCheck['patientData']
+            ? (
+              <IconCircleCheck color='green' size={30} />
+              )
+            : null}
+        </Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            <TextInput
+              label='First Name'
+              placeholder='First Name'
+              withAsterisk
+              key={form.key('patientData.firstName')}
+              {...form.getInputProps('patientData.firstName')}
+            />
+            <TextInput
+              label='Middle Name'
+              placeholder='Middle Name'
+              key={form.key('patientData.middleName')}
+              {...form.getInputProps('patientData.middleName')}
+            />
+            <TextInput
+              label='Last Name'
+              placeholder='Last Name'
+              withAsterisk
+              key={form.key('patientData.lastName')}
+              {...form.getInputProps('patientData.lastName')}
+            />
+            <NativeSelect
+              label='Gender'
+              withAsterisk
+              data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
+                value,
+                label: t(`Gender.${value}`),
+              }))}
+              key={form.key('patientData.gender')}
+              {...form.getInputProps('patientData.gender')}
+            />
+            <NativeSelect
+              label='Language'
+              withAsterisk
+              data={FORM_SELECT_ENUM_VALUES.language.map((value) => ({
+                value,
+                label: t(`Language.${value}`),
+              }))}
+              key={form.key('patientData.language')}
+              {...form.getInputProps('patientData.language')}
+            />
+            <TextInput
+              type='date'
+              label='Date of Birth'
+              withAsterisk
+              max={dayjs().format('YYYY-MM-DD')}
+              key={form.key('patientData.dateOfBirth')}
+              {...form.getInputProps('patientData.dateOfBirth')}
+            />
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
 
-        <Accordion.Item value='contactData'>
-          <Accordion.Control>
-            &#9313; Emergency Contact{' '}
-            {showCheck['contactData']
-              ? (
-                <IconCircleCheck color='green' size={30} />
-                )
-              : null}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              <TextInput
-                label='First Name'
-                placeholder='First Name'
-                key={form.key('contactData.firstName')}
-                {...form.getInputProps('contactData.firstName')}
-              />
-              <TextInput
-                label='Middle Name'
-                placeholder='Middle Name'
-                key={form.key('contactData.middleName')}
-                {...form.getInputProps('contactData.middleName')}
-              />
-              <TextInput
-                label='Last Name'
-                placeholder='Last Name'
-                key={form.key('contactData.lastName')}
-                {...form.getInputProps('contactData.lastName')}
-              />
-              <InputBase
-                label='Phone Number'
-                component={IMaskInput}
-                mask='(000) 000-0000'
-                placeholder='(000) 000-0000'
-                key={form.key('contactData.phone')}
-                {...form.getInputProps('contactData.phone')}
-              />
-              <TextInput
-                label='Email'
-                placeholder='Email'
-                key={form.key('contactData.email')}
-                {...form.getInputProps('contactData.email')}
-              />
-              <NativeSelect
-                label='Relationship'
-                placeholder='Select Relationship'
-                data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
-                  value,
-                  label: t(`Relationship.${value}`),
-                }))}
-                key={form.key('contactData.relationship')}
-                {...form.getInputProps('contactData.relationship')}
-              />
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
+      <Accordion.Item value='contactData'>
+        <Accordion.Control>
+          &#9313; Emergency Contact{' '}
+          {showCheck['contactData']
+            ? (
+              <IconCircleCheck color='green' size={30} />
+              )
+            : null}
+        </Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            <TextInput
+              label='First Name'
+              placeholder='First Name'
+              key={form.key('contactData.firstName')}
+              {...form.getInputProps('contactData.firstName')}
+            />
+            <TextInput
+              label='Middle Name'
+              placeholder='Middle Name'
+              key={form.key('contactData.middleName')}
+              {...form.getInputProps('contactData.middleName')}
+            />
+            <TextInput
+              label='Last Name'
+              placeholder='Last Name'
+              key={form.key('contactData.lastName')}
+              {...form.getInputProps('contactData.lastName')}
+            />
+            <InputBase
+              label='Phone Number'
+              component={IMaskInput}
+              mask='(000) 000-0000'
+              placeholder='(000) 000-0000'
+              key={form.key('contactData.phone')}
+              {...form.getInputProps('contactData.phone')}
+            />
+            <TextInput
+              label='Email'
+              placeholder='Email'
+              key={form.key('contactData.email')}
+              {...form.getInputProps('contactData.email')}
+            />
+            <NativeSelect
+              label='Relationship'
+              placeholder='Select Relationship'
+              data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
+                value,
+                label: t(`Relationship.${value}`),
+              }))}
+              key={form.key('contactData.relationship')}
+              {...form.getInputProps('contactData.relationship')}
+            />
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
 
-        <Accordion.Item value='medicalData'>
-          <Accordion.Control>
-            &#9314; Medical Information{' '}
-            {showCheck['medicalData']
-              ? (
-                <IconCircleCheck color='green' size={30} />
-                )
-              : null}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              {Object.keys(form.getValues().medicalData).map((category) => {
-                return (
-                  <MedicalDataSearch
-                    category={category}
-                    form={form}
-                    initialMedicalData={initialMedicalData[category]}
-                    key={category}
-                  />
-                );
-              })}
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
+      <Accordion.Item value='medicalData'>
+        <Accordion.Control>
+          &#9314; Medical Information{' '}
+          {showCheck['medicalData']
+            ? (
+              <IconCircleCheck color='green' size={30} />
+              )
+            : null}
+        </Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            {Object.keys(form.getValues().medicalData).map((category) => {
+              return (
+                <MedicalDataSearch
+                  category={category}
+                  form={form}
+                  initialMedicalData={initialMedicalData[category]}
+                  key={category}
+                />
+              );
+            })}
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
 
-        <Accordion.Item value='healthcareChoices'>
-          <Accordion.Control>
-            &#9315; Healthcare Choices{' '}
-            {showCheck['healthcareChoices']
-              ? (
-                <IconCircleCheck color='green' size={30} />
-                )
-              : null}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              <HealthcareChoicesSearch
-                form={form}
-                choice='hospital'
-                initialData={initialHospitalData}
-              />
-              <HealthcareChoicesSearch
-                form={form}
-                choice='physician'
-                initialData={initialPhysicianData}
-              />
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
+      <Accordion.Item value='healthcareChoices'>
+        <Accordion.Control>
+          &#9315; Healthcare Choices{' '}
+          {showCheck['healthcareChoices']
+            ? (
+              <IconCircleCheck color='green' size={30} />
+              )
+            : null}
+        </Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            <HealthcareChoicesSearch
+              form={form}
+              choice='hospital'
+              initialData={initialHospitalData}
+            />
+            <HealthcareChoicesSearch
+              form={form}
+              choice='physician'
+              initialData={initialPhysicianData}
+            />
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
 
-        <Accordion.Item value='codeStatus'>
-          <Accordion.Control>
-            &#9316; Advanced Directive{' '}
-            {showCheck['codeStatus']
-              ? (
-                <IconCircleCheck color='green' size={30} />
-                )
-              : null}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              <NativeSelect
-                label='Code Status'
-                placeholder='Select Code Status'
-                data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
-                  value,
-                  label: t(`CodeStatus.${value}`),
-                }))}
-                key={form.key('codeStatus')}
-                {...form.getInputProps('codeStatus')}
-              />
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+      <Accordion.Item value='codeStatus'>
+        <Accordion.Control>
+          &#9316; Advanced Directive{' '}
+          {showCheck['codeStatus']
+            ? (
+              <IconCircleCheck color='green' size={30} />
+              )
+            : null}
+        </Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            <NativeSelect
+              label='Code Status'
+              placeholder='Select Code Status'
+              data={FORM_SELECT_ENUM_VALUES.codeStatus.map((value) => ({
+                value,
+                label: t(`CodeStatus.${value}`),
+              }))}
+              key={form.key('codeStatus')}
+              {...form.getInputProps('codeStatus')}
+            />
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 }
 

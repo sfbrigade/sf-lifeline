@@ -8,6 +8,8 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 import Context from '../Context';
 

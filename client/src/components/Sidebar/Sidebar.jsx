@@ -1,4 +1,5 @@
-import { Group } from '@mantine/core';
+import { NavLink as RouterNavLink } from 'react-router';
+import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
 import {
   // TbHealthRecognition,
   TbHeartHandshake,
@@ -85,70 +86,70 @@ export function Sidebar ({ toggleSidebar }) {
   }
 
   return (
-      <Stack
-        className={classes.navbar}
-        justify='space-between'
-        px='md'
-        py='xl'
-        w='100%'
-        h='100%'
-      >
-        <Box>
-          <Group align='center' gap='sm' mb='lg'>
-            <img
-              src='/logo.svg'
-              alt='SF Lifeline Logo'
-              width='32rem'
-              height='32rem'
-            />
-            <Title order={4}>SF Life Line</Title>
-          </Group>
-          {sections.map((section) => (
-            <Box key={section.label} mb='lg'>
-              <Title fw='normal' pl='sm' order={6}>
-                {section.label}
-              </Title>
-              {section.links?.map((link) => (
-                <NavLink
-                  key={link.label}
-                  component={RouterNavLink}
-                  to={link.href}
-                  label={
-                    <Text fz='md' fw='600'>
-                      {link.label}
-                    </Text>
-                  }
-                  leftSection={link.icon}
-                  target={link.target}
-                  onClick={toggleSidebar}
-                />
-              ))}
-            </Box>
-          ))}
-        </Box>
-        <Group
-          className={classes.footer}
-          justify='space-between'
-          align='top'
-          wrap='nowrap'
-        >
-          <Box fz='sm'>
-            {user && (
-              <>
-                <Box fw='600'>{`${user?.firstName} ${user?.lastName}`}</Box>
-                <Box c='gray.7'>{user?.email}</Box>
-              </>
-            )}
-          </Box>
-          <a
-            className={classes.footer__logout}
-            href='/logout'
-            onClick={onLogout}
-          >
-            <FiLogOut />
-          </a>
+    <Stack
+      className={classes.navbar}
+      justify='space-between'
+      px='md'
+      py='xl'
+      w='100%'
+      h='100%'
+    >
+      <Box>
+        <Group align='center' gap='sm' mb='lg'>
+          <img
+            src='/logo.svg'
+            alt='SF Lifeline Logo'
+            width='32rem'
+            height='32rem'
+          />
+          <Title order={4}>SF Life Line</Title>
         </Group>
-      </Stack>
+        {sections.map((section) => (
+          <Box key={section.label} mb='lg'>
+            <Title fw='normal' pl='sm' order={6}>
+              {section.label}
+            </Title>
+            {section.links?.map((link) => (
+              <NavLink
+                key={link.label}
+                component={RouterNavLink}
+                to={link.href}
+                label={
+                  <Text fz='md' fw='600'>
+                    {link.label}
+                  </Text>
+                  }
+                leftSection={link.icon}
+                target={link.target}
+                onClick={toggleSidebar}
+              />
+            ))}
+          </Box>
+        ))}
+      </Box>
+      <Group
+        className={classes.footer}
+        justify='space-between'
+        align='top'
+        wrap='nowrap'
+      >
+        <Box fz='sm'>
+          {user && (
+            <>
+              <Box fw='600'>{`${user?.firstName} ${user?.lastName}`}</Box>
+              <Box c='gray.7'>{user?.email}</Box>
+            </>
+          )}
+        </Box>
+        <a
+          className={classes.footer__logout}
+          href='/logout'
+          onClick={onLogout}
+        >
+          <FiLogOut />
+        </a>
+      </Group>
+    </Stack>
   );
 }
 

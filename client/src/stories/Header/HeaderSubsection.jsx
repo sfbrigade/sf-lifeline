@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Fragment } from 'react';
 import { UnstyledButton, Center, Box, Collapse, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -24,7 +25,7 @@ export const HeaderSubsection = ({ label, icon, links }) => {
   const [isOpen, { toggle: toggleLinks }] = useDisclosure(false);
 
   return (
-    <React.Fragment key={label}>
+    <Fragment key={label}>
       <UnstyledButton className={classes.link} onClick={toggleLinks}>
         <Center inline>
           <div>{icon}</div>
@@ -43,7 +44,7 @@ export const HeaderSubsection = ({ label, icon, links }) => {
           />
         ))}
       </Collapse>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
