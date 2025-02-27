@@ -42,6 +42,8 @@ jobs:
         run: npm test
         env:
           DATABASE_URL: postgresql://postgres@db/app
+      - name: Run client build
+        run: npm run build -w client
 
   build:
     name: Build Image
