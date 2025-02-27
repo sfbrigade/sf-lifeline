@@ -1,5 +1,4 @@
-import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   TextInput,
@@ -47,47 +46,45 @@ export function LoginForm ({
   }
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        <Container size='25rem'>
-          <TextInput
-            className={classes.email}
-            type='email'
-            label='Email'
-            placeholder='user@email.com'
-            value={email}
-            onChange={onEmailChange}
-            error={emailError}
-          />
-          <PasswordInput
-            className={classes.password}
-            label='Password'
-            placeholder='password'
-            value={password}
-            onChange={onPasswordChange}
-            visible={visible}
-            onVisibilityChange={toggle}
-            error={passwordError}
-          />
-        </Container>
-        <Container size='25rem'>
-          <Button
-            disabled={!email.length || !password.length}
-            className={classes.loginBtn}
-            variant='filled'
-            fullWidth
-            type='submit'
-          >
-            Log in
-          </Button>
-          <div className={classes.anchor}>
-            <Anchor component={Link} to='/password/forgot'>
-              Forgot password
-            </Anchor>
-          </div>
-        </Container>
-      </form>
-    </>
+    <form onSubmit={onSubmit}>
+      <Container size='25rem'>
+        <TextInput
+          className={classes.email}
+          type='email'
+          label='Email'
+          placeholder='user@email.com'
+          value={email}
+          onChange={onEmailChange}
+          error={emailError}
+        />
+        <PasswordInput
+          className={classes.password}
+          label='Password'
+          placeholder='password'
+          value={password}
+          onChange={onPasswordChange}
+          visible={visible}
+          onVisibilityChange={toggle}
+          error={passwordError}
+        />
+      </Container>
+      <Container size='25rem'>
+        <Button
+          disabled={!email.length || !password.length}
+          className={classes.loginBtn}
+          variant='filled'
+          fullWidth
+          type='submit'
+        >
+          Log in
+        </Button>
+        <div className={classes.anchor}>
+          <Anchor component={Link} to='/password/forgot'>
+            Forgot password
+          </Anchor>
+        </div>
+      </Container>
+    </form>
   );
 }
 

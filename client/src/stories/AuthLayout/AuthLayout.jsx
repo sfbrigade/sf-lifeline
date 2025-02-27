@@ -1,5 +1,4 @@
-import React from 'react';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 import { Image, Text, Title } from '@mantine/core';
 
 import classes from './AuthLayout.module.css';
