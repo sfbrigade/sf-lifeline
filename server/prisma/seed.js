@@ -6,7 +6,7 @@ const MedicalSurgicalURL =
 const MedicationAllergyURL =
   'https://nemsis.org/media/nemsis_v3/master/SuggestedLists/MedicationAllergy/MedicationAllergy.json';
 const RxNormAPIEndpoint =
-  'https://rxnav.nlm.nih.gov/REST/allstatus.json?status=ACTIVE';
+  'https://rxnav.nlm.nih.gov/REST/Prescribe/allconcepts.json?tty=BN%20IN';
 const EnvFoodAllergyURL =
   'https://nemsis.org/media/nemsis_v3/master/SuggestedLists/EnvironmentalFoodAllergy/EnvironmentalFoodAllergy.json';
 
