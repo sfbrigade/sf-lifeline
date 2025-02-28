@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   Box,
   Button,
@@ -9,7 +9,6 @@ import {
   Title,
 } from '@mantine/core';
 import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router';
 
 import Context from '../Context';
 
