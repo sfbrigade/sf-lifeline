@@ -13,7 +13,7 @@ const userDataTableProps = {
  * @param {PropTypes.InferProps<typeof userDataTableProps>} props
  */
 export const UserDataTableCell = ({ type, value }) => {
-  const statusColor = () => {
+  const statusColor = (() => {
     if (value === 'Disabled' || value === 'Rejected') {
       return 'red';
     } else if (value === 'Active') {
@@ -21,7 +21,7 @@ export const UserDataTableCell = ({ type, value }) => {
     } else {
       return 'yellow';
     }
-  };
+  })();
   switch (type) {
     case 'status': {
       return (
