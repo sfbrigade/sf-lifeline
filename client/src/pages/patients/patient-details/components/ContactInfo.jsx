@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 
-import { Paper, Text } from '@mantine/core';
+import { Box, Paper, Text, Title } from '@mantine/core';
 import { humanize } from 'inflection';
-import classes from '../PatientDetails.module.css';
 
 const contactInfoProps = {
   emergencyContact: PropTypes.object,
@@ -17,66 +16,35 @@ ContactInfo.propTypes = contactInfoProps;
  */
 export default function ContactInfo ({ emergencyContact, physician }) {
   return (
-    <section>
-      <Text className={classes.sectionTitle}> Contact Information</Text>
+    <Box component='section' mb='md'>
+      <Title order={4} mb='xs'>Contact Information</Title>
       <Paper shadow='xs' p='md' radius='md' withBorder>
-        <div className={classes.titleRow}>
-          <Text className={classes.contactInfoColumnTitle}>
+        <Box component='section' mb='xs'>
+          <Title order={5}>
             Emergency Contact
+          </Title>
+          <Text>
+            {(emergencyContact?.firstName || emergencyContact?.lastName)
+              ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
+              : '-'}
+            {emergencyContact?.relationship &&
+              ` (${humanize(emergencyContact?.relationship)})`}
+            {emergencyContact?.phone && <><br />{emergencyContact?.phone}</>}
           </Text>
-          <Text className={classes.contactInfoColumnTitle}>
-            Primary care physician (PCP) contact
+        </Box>
+        <Box component='section'>
+          <Title order={5}>
+            Primary care physician (PCP)
+          </Title>
+          <Text>
+            {physician
+              ? `${physician?.firstName} ${physician?.lastName}`
+              : '-'}
+            {physician?.phone && <><br />{physician?.phone}</>}
+            {physician?.hospitals[0]?.name && <><br />{physician?.hospitals[0]?.name}</>}
           </Text>
-        </div>
-        <div className={classes.twoColumnGrid}>
-          <section>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Name</Text>
-              <Text>
-                {(emergencyContact?.firstName || emergencyContact?.lastName)
-                  ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
-                  : '-'}
-              </Text>
-            </div>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Phone</Text>
-              <Text>
-                {emergencyContact?.phone ? emergencyContact?.phone : '-'}
-              </Text>
-            </div>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Relationship</Text>
-              <Text>
-                {emergencyContact?.relationship
-                  ? humanize(emergencyContact?.relationship)
-                  : '-'}
-              </Text>
-            </div>
-          </section>
-          <section>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Name</Text>
-              <Text>
-                {physician
-                  ? `${physician?.firstName} ${physician?.lastName}`
-                  : '-'}
-              </Text>
-            </div>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Phone</Text>
-              <Text>{physician?.phone ? physician?.phone : '-'}</Text>
-            </div>
-            <div className={classes.contactRow}>
-              <Text className={classes.boldText}>Hospital</Text>
-              <Text>
-                {physician?.hospitals[0]?.name
-                  ? physician?.hospitals[0]?.name
-                  : '-'}
-              </Text>
-            </div>
-          </section>
-        </div>
+        </Box>
       </Paper>
-    </section>
+    </Box>
   );
 }
