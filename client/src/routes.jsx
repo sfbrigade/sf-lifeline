@@ -31,7 +31,7 @@ export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
 export const AUTH_ROUTES = [
   ['ADMIN', ['users', 'users/pending']],
   ['STAFF', ['patients/generate', 'patients']],
-  ['VOLUNTEER', ['patients/register/:patientId']],
+  ['VOLUNTEER', ['patients/:patientId/edit']],
   ['FIRST_RESPONDER', ['dashboard', 'patients/:patientId']],
 ];
 
@@ -138,12 +138,12 @@ export default [
                 element: <Patients />,
               },
               {
-                path: ':patientId',
-                element: <PatientDetails />,
+                path: ':patientId/edit',
+                element: <PatientRegistration />,
               },
               {
-                path: 'register/:patientId',
-                element: <PatientRegistration />,
+                path: ':patientId',
+                element: <PatientDetails />,
               },
             ],
           },

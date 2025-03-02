@@ -44,7 +44,7 @@ export function PasswordResetForm ({
 
   let multiplier = password.length > 7 ? 0 : 1;
 
-  const progressColor = () => {
+  const progressColor = (() => {
     if (strength === 100) {
       return 'teal';
     } else if (strength > 50) {
@@ -54,7 +54,7 @@ export function PasswordResetForm ({
     } else {
       return 'red';
     }
-  };
+  })();
 
   requirements.forEach((requirement) => {
     if (!requirement.re.test(password)) {

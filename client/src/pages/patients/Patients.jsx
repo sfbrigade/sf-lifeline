@@ -5,14 +5,13 @@ import {
   Divider,
   Pagination,
   LoadingOverlay,
-  Text,
+  Title,
 } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
 
 import { TbSearch as IconSearch } from 'react-icons/tb';
 
-import classes from './Patients.module.css';
 import PatientsTable from './PatientsTable';
 import { usePatients } from './usePatients';
 
@@ -31,33 +30,29 @@ export default function Patients () {
 
   return (
     <Container>
-      <div className={classes.header}>
-        <Text fw={600} size='xl' mr='md'>
+      <Group justify='space-between' wrap='nowrap' my='sm'>
+        <Title order={3} mr='md'>
           Patients
-        </Text>
-        <Group>
-          <TextInput
-            leftSectionPointerEvents='none'
-            leftSection={<IconSearch stroke={2} />}
-            placeholder='Search'
-            onChange={(event) => {
-              setInputValue(event.currentTarget.value);
-              handleSearch(event.currentTarget.value);
-            }}
-            value={inputValue}
-          />
-        </Group>
-      </div>
-      <Divider mb='xl' />
-      <Container className={classes.patientsContainer}>
-        <LoadingOverlay
-          visible={isFetching}
-          zIndex={1000}
-          overlayProps={{ radius: 'sm', blur: 2 }}
+        </Title>
+        <TextInput
+          leftSectionPointerEvents='none'
+          leftSection={<IconSearch stroke={2} />}
+          placeholder='Search'
+          onChange={(event) => {
+            setInputValue(event.currentTarget.value);
+            handleSearch(event.currentTarget.value);
+          }}
+          value={inputValue}
         />
-        <PatientsTable headers={headers} data={patients} />
-        <Pagination total={pages} value={page} onChange={setPage} />
-      </Container>
+      </Group>
+      <Divider mb='xl' />
+      <LoadingOverlay
+        visible={isFetching}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+      />
+      <PatientsTable headers={headers} data={patients} />
+      <Pagination total={pages} value={page} onChange={setPage} />
     </Container>
   );
 }

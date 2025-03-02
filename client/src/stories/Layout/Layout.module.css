@@ -12,10 +12,15 @@
 
 .layout__header {
   grid-area: head;
+  position: fixed;
+  width: 100%;
+  background-color: white;
 }
 
 .layout__content {
   grid-area: main;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .layout__sidebar {
@@ -38,6 +43,13 @@
   .layout__sidebar {
     display: block;
     max-width: 19.5rem;
+  }
+
+  .layout__content {
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
+    padding-top: 1rem;
   }
 }
 
