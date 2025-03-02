@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-
 import { Box, Paper, Text, Title } from '@mantine/core';
-import { humanize } from 'inflection';
+import { useTranslation } from 'react-i18next';
 
 const contactInfoProps = {
   emergencyContact: PropTypes.object,
@@ -15,6 +14,8 @@ ContactInfo.propTypes = contactInfoProps;
  * @param {PropTypes.InferProps<typeof contactInfoProps>} props
  */
 export default function ContactInfo ({ emergencyContact, physician }) {
+  const { t } = useTranslation();
+
   return (
     <Box component='section' mb='md'>
       <Title order={4} mb='xs'>Contact Information</Title>
@@ -28,7 +29,7 @@ export default function ContactInfo ({ emergencyContact, physician }) {
               ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
               : '-'}
             {emergencyContact?.relationship &&
-              ` (${humanize(emergencyContact?.relationship)})`}
+              ` (${t(`Relationship.${emergencyContact?.relationship}`)})`}
             {emergencyContact?.phone && <><br />{emergencyContact?.phone}</>}
           </Text>
         </Box>

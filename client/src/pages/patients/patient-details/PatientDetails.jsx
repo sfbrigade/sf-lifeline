@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
-import { humanize } from 'inflection';
 import { QRCode } from 'react-qrcode-logo';
 import { Center, Container, Grid, Loader, Paper, Text, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 import LifelineAPI from '../LifelineAPI.js';
 import ContactInfo from './components/ContactInfo.jsx';
@@ -16,6 +16,7 @@ import Preferences from './components/Preferences.jsx';
  * Patient page component
  */
 export default function PatientDetails () {
+  const { t } = useTranslation();
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,9 +58,9 @@ export default function PatientDetails () {
             <Title order={5}>Date of Birth</Title>
             <Text mb='xs'>{data?.dateOfBirth}</Text>
             <Title order={5}>Gender</Title>
-            <Text mb='xs'>{humanize(data?.gender)}</Text>
+            <Text mb='xs'>{data?.gender && t(`Gender.${data?.gender}`)}</Text>
             <Title order={5}>Preferred language</Title>
-            <Text>{humanize(data?.language)}</Text>
+            <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
           </Paper>
         </Grid.Col>
         <Grid.Col display={{ base: 'none', md: 'block' }} span={4}>
