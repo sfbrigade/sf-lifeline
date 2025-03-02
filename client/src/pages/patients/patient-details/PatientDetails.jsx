@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router';
+import { useParams, useNavigate, useLocation, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { QRCode } from 'react-qrcode-logo';
-import { Center, Container, Grid, Loader, Paper, Text, Title } from '@mantine/core';
+import { Button, Center, Container, Grid, Group, Loader, Paper, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
+import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import LifelineAPI from '../LifelineAPI.js';
 import ContactInfo from './components/ContactInfo.jsx';
 import MedicalInfo from './components/MedicalInfo.jsx';
@@ -16,6 +17,7 @@ import Preferences from './components/Preferences.jsx';
  * Patient page component
  */
 export default function PatientDetails () {
+  const { user } = useAuthorization();
   const { t } = useTranslation();
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ export default function PatientDetails () {
 
   useEffect(() => {
     if (isError) {
-      navigate('/patients/register/' + patientId, {
+      navigate(`/patients/${patientId}/edit`, {
         replace: true,
         state: { existingPatient: false },
       });
@@ -47,11 +49,16 @@ export default function PatientDetails () {
     return <Loader />;
   }
 
+  const canEdit = user?.role === 'VOLUNTEER' || user?.role === 'STAFF' || user?.role === 'ADMIN';
+
   return (
     <Container component='main'>
-      <Title order={2} my='sm'>
-        {data?.firstName} {data?.lastName}
-      </Title>
+      <Group>
+        <Title order={2} my='sm'>
+          {data?.firstName} {data?.lastName}
+        </Title>
+        {canEdit && <Button component={Link} to='edit'>Edit</Button>}
+      </Group>
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Paper shadow='xs' p='md' radius='md' withBorder>
