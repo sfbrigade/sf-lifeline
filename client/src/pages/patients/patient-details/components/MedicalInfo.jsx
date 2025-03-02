@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Paper, Text, Pill } from '@mantine/core';
-import classes from '../PatientDetails.module.css';
+import { Box, Paper, Text, Title, Pill } from '@mantine/core';
 
 const medicalInfoProps = {
   allergies: PropTypes.array,
@@ -17,11 +16,11 @@ MedicalInfo.propTypes = medicalInfoProps;
  */
 export default function MedicalInfo ({ allergies, medications, conditions }) {
   return (
-    <section>
-      <Text className={classes.sectionTitle}>Medical Information</Text>
+    <Box component='section' mb='md'>
+      <Title order={4} mb='xs'>Medical Information</Title>
       <Paper shadow='xs' p='md' radius='md' withBorder>
-        <section>
-          <Text className={classes.boldText}>Allergies</Text>
+        <Box component='section' mb='xs'>
+          <Title order={5} mb='xs'>Allergies</Title>
           {allergies.length === 0
             ? (
               <Text>None</Text>
@@ -31,15 +30,16 @@ export default function MedicalInfo ({ allergies, medications, conditions }) {
                   <Pill
                     size='md'
                     key={entry.allergy.id}
-                    className={classes.medicalInfoPills}
+                    me='xs'
+                    mb='xs'
                   >
                     {entry.allergy.name}
                   </Pill>
                 ))
               )}
-        </section>
-        <section>
-          <Text className={classes.boldText}>Medications</Text>
+        </Box>
+        <Box component='section' mb='xs'>
+          <Title order={5} mb='xs'>Medications</Title>
           {medications.length === 0
             ? (
               <Text>None</Text>
@@ -49,28 +49,34 @@ export default function MedicalInfo ({ allergies, medications, conditions }) {
                   <Pill
                     size='md'
                     key={entry.medication.id}
-                    className={classes.medicalInfoPills}
+                    me='xs'
+                    mb='xs'
                   >
                     {entry.medication.name}
                   </Pill>
                 ))
               )}
-        </section>
-        <section>
-          <Text className={classes.boldText}>Conditions</Text>
+        </Box>
+        <Box component='section'>
+          <Title order={5} mb='xs'>Conditions</Title>
           {conditions?.length === 0
             ? (
               <Text>None</Text>
               )
             : (
-              <ul>
-                {conditions.map((entry) => (
-                  <li key={entry.condition.id}>{entry.condition.name}</li>
-                ))}
-              </ul>
+                conditions.map((entry) => (
+                  <Pill
+                    size='md'
+                    key={entry.condition.id}
+                    me='xs'
+                    mb='xs'
+                  >
+                    {entry.condition.name}
+                  </Pill>
+                ))
               )}
-        </section>
+        </Box>
       </Paper>
-    </section>
+    </Box>
   );
 }

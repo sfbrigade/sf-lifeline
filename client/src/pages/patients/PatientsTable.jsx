@@ -5,7 +5,6 @@ import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useDeletePatient } from './useDeletePatient';
 import { notifications } from '@mantine/notifications';
-import classes from './Patients.module.css';
 import Context from '../../Context';
 
 import PatientTableRow from './PatientTableRow';
@@ -99,26 +98,25 @@ export default function PatientsTable ({ headers, data }) {
         opened={opened}
         onClose={close}
         title='Delete Patient'
-        classNames={{ title: classes.title }}
       >
         <Text fw={600}>
           Are you sure you want to delete this patient record?
         </Text>
         <Button
-          classNames={{ root: classes.button }}
           color='red'
           fullWidth
           onClick={confirmPatientDeletion}
           loading={isPending}
+          mt='lg'
         >
           Yes
         </Button>
         <Button
-          classNames={{ root: classes.button }}
           color='blue'
           fullWidth
           onClick={cancelPatientDeletion}
           disabled={isPending}
+          mt='lg'
         >
           No
         </Button>

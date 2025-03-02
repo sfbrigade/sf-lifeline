@@ -1,23 +1,24 @@
 import { useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router';
+import { useParams, useNavigate, useLocation, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
-import { humanize } from 'inflection';
 import { QRCode } from 'react-qrcode-logo';
-import { Container, Grid, Loader, Text, Title } from '@mantine/core';
+import { Button, Center, Container, Grid, Group, Loader, Paper, Text, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
+import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import LifelineAPI from '../LifelineAPI.js';
 import ContactInfo from './components/ContactInfo.jsx';
 import MedicalInfo from './components/MedicalInfo.jsx';
 import Preferences from './components/Preferences.jsx';
-
-import classes from './PatientDetails.module.css';
 
 /**
  *
  * Patient page component
  */
 export default function PatientDetails () {
+  const { user } = useAuthorization();
+  const { t } = useTranslation();
   const { patientId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +38,7 @@ export default function PatientDetails () {
 
   useEffect(() => {
     if (isError) {
-      navigate('/patients/register/' + patientId, {
+      navigate(`/patients/${patientId}/edit`, {
         replace: true,
         state: { existingPatient: false },
       });
@@ -48,38 +49,43 @@ export default function PatientDetails () {
     return <Loader />;
   }
 
+  const canEdit = user?.role === 'VOLUNTEER' || user?.role === 'STAFF' || user?.role === 'ADMIN';
+
   return (
-    <main className={classes.details}>
-      <Container style={{ marginBottom: '2rem' }}>
-        <Grid my='2rem'>
-          <Grid.Col span={{ base: 12, md: 8 }}>
-            <Title mb='1rem'>
-              {data?.firstName} {data?.lastName}
-            </Title>
-            <section className={classes.patientInfoContainer}>
-              <Text>Date of birth</Text>
-              <Text>Gender</Text>
-              <Text>Preferred language</Text>
-              <Text>{data?.dateOfBirth}</Text>
-              <Text>{humanize(data?.gender)}</Text>
-              <Text>{humanize(data?.language)}</Text>
-            </section>
-          </Grid.Col>
-          <Grid.Col display={{ base: 'none', md: 'block' }} span={4} ta='right'>
+    <Container component='main'>
+      <Group>
+        <Title order={2} my='sm'>
+          {data?.firstName} {data?.lastName}
+        </Title>
+        {canEdit && <Button component={Link} to='edit'>Edit</Button>}
+      </Group>
+      <Grid mb='md'>
+        <Grid.Col span={{ base: 12, md: 8 }}>
+          <Paper shadow='xs' p='md' radius='md' withBorder>
+            <Title order={5}>Date of Birth</Title>
+            <Text mb='xs'>{data?.dateOfBirth}</Text>
+            <Title order={5}>Gender</Title>
+            <Text mb='xs'>{data?.gender && t(`Gender.${data?.gender}`)}</Text>
+            <Title order={5}>Preferred language</Title>
+            <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
+          </Paper>
+        </Grid.Col>
+        <Grid.Col display={{ base: 'none', md: 'block' }} span={4}>
+          <Center h='100%'>
             <QRCode value={`${window.location.origin}${location.pathname}`} />
-          </Grid.Col>
-        </Grid>
-        <ContactInfo
-          emergencyContact={data?.emergencyContact}
-          physician={data?.physician}
-        />
-        <MedicalInfo
-          allergies={data?.allergies}
-          medications={data?.medications}
-          conditions={data?.conditions}
-        />
-        <Preferences codeStatus={data?.codeStatus} hospital={data?.hospital} />
-      </Container>
-    </main>
+          </Center>
+        </Grid.Col>
+      </Grid>
+      <MedicalInfo
+        allergies={data?.allergies}
+        medications={data?.medications}
+        conditions={data?.conditions}
+      />
+      <Preferences codeStatus={data?.codeStatus} hospital={data?.hospital} />
+      <ContactInfo
+        emergencyContact={data?.emergencyContact}
+        physician={data?.physician}
+      />
+    </Container>
   );
 }

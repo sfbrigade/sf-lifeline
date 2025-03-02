@@ -447,7 +447,7 @@ export default function PatientRegistration () {
   return (
     <main>
       <Container style={{ marginBottom: '1rem' }}>
-        <h1>Register Patient</h1>
+        <h1>Edit Patient</h1>
         <Flex direction='column' gap='md'>
           <form onSubmit={form.onSubmit(submitPatient, handleErrors)}>
             <Modal
@@ -480,7 +480,7 @@ export default function PatientRegistration () {
                 loading={loading}
                 loaderProps={{ type: 'dots' }}
               >
-                Register Patient
+                Save Patient
               </Button>
             </Flex>
           </form>
