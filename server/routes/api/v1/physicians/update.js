@@ -22,9 +22,7 @@ export default async function (fastify, _opts) {
             middleName: { type: 'string' },
             lastName: { type: 'string' },
             phone: { type: 'string' },
-            email: { type: 'string' },
-            patients: { type: 'array' },
-            hospitals: { type: 'array' },
+            email: { type: 'string' }
           },
         },
         [StatusCodes.NOT_FOUND]: {
