@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Checkbox, Table, Text } from '@mantine/core';
 import { humanize } from 'inflection';
@@ -14,17 +13,20 @@ const userDataTableProps = {
  * @param {PropTypes.InferProps<typeof userDataTableProps>} props
  */
 export const UserDataTableCell = ({ type, value }) => {
+  const statusColor = (() => {
+    if (value === 'Disabled' || value === 'Rejected') {
+      return 'red';
+    } else if (value === 'Active') {
+      return 'green';
+    } else {
+      return 'yellow';
+    }
+  })();
   switch (type) {
     case 'status': {
-      const color =
-        value === 'Disabled' || value === 'Rejected'
-          ? 'red'
-          : value === 'Active'
-            ? 'green'
-            : 'yellow';
       return (
         <Table.Td>
-          <Badge color={color}>
+          <Badge color={statusColor}>
             <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
               {value}
             </Text>

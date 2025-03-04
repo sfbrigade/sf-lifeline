@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Header } from '../Header/Header.jsx';
 import './page.css';
 import { useAuthorization } from '../../hooks/useAuthorization.jsx';
@@ -60,8 +58,7 @@ export const Page = () => {
             rel='noopener noreferrer'
           >
             docs
-          </a>
-          .
+          </a>.
         </p>
         <div className='tip-wrapper'>
           <span className='tip'>Tip</span> Adjust the width of the canvas with

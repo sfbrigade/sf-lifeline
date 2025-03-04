@@ -10,6 +10,7 @@ import Context from './Context';
 import { useAuthorization } from './hooks/useAuthorization';
 
 import './i18n';
+import './App.css';
 
 /**
  * Top-level application component.  *

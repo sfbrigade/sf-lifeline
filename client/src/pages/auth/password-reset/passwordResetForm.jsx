@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import classes from '../form.module.css';
 import {
@@ -45,6 +44,18 @@ export function PasswordResetForm ({
 
   let multiplier = password.length > 7 ? 0 : 1;
 
+  const progressColor = (() => {
+    if (strength === 100) {
+      return 'teal';
+    } else if (strength > 50) {
+      return 'yellow';
+    } else if (strength > 20) {
+      return 'orange';
+    } else {
+      return 'red';
+    }
+  })();
+
   requirements.forEach((requirement) => {
     if (!requirement.re.test(password)) {
       multiplier += 1;
@@ -76,15 +87,7 @@ export function PasswordResetForm ({
             />
             <Progress
               value={strength}
-              color={
-                strength === 100
-                  ? 'teal'
-                  : strength > 50
-                    ? 'yellow'
-                    : strength > 20
-                      ? 'orange'
-                      : 'red'
-              }
+              color={progressColor}
             />
           </Flex>
         </Group>
