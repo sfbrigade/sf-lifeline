@@ -1,0 +1,29 @@
+
+.physicianInfoContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantine-spacing-md);
+  margin-top: var(--mantine-spacing-lg);
+}
+
+.physicianInfoContainer p:nth-child(-n + 3) {
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.physicianInfoContainer p:nth-child(n + 4) {
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .physicianInfoContainer {
+    text-align: left;
+    width: 70%;
+  }
+
+  .details {
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
+}

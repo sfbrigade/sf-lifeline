@@ -1,0 +1,7 @@
+.details{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mantine-spacing-md);
+    margin-top: var(--mantine-spacing-lg);
+    
+}
