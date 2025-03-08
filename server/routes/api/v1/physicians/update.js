@@ -35,8 +35,7 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([
         Role.ADMIN,
         Role.STAFF,
-        Role.VOLUNTEER,
-        Role.FIRST_RESPONDER,
+        Role.VOLUNTEER
       ]),
     },
     async (request, reply) => {
