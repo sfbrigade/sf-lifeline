@@ -5,7 +5,6 @@ import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useDeletePhysicians } from './useDeletePhysicians';
 import { notifications } from '@mantine/notifications';
-import classes from './Physicians.module.css';
 import Context from '../../Context';
 
 import PhysiciansTableRow from './PhysiciansTableRow';
@@ -22,10 +21,6 @@ const physiciansTableProps = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      // createdBy: PropTypes.string.isRequired,
-      // createdAt: PropTypes.string.isRequired,
-      // updatedBy: PropTypes.string.isRequired,
-      // updatedAt: PropTypes.string.isRequired,
     })
   ),
 };
@@ -53,14 +48,14 @@ export default function PhysiciansTable ({ headers, data }) {
       await deletePhysicans(physicians.id);
       notifications.show({
         title: 'Success',
-        message: 'Patient deleted successfully.',
+        message: 'Physician deleted successfully.',
         color: 'green',
       });
     } catch (error) {
-      console.error('Failed to delete patient:', error);
+      console.error('Failed to delete physician:', error);
       notifications.show({
         title: 'Error',
-        message: 'Failed to delete patient.',
+        message: 'Failed to delete physician.',
         color: 'red',
       });
     }
@@ -100,13 +95,11 @@ export default function PhysiciansTable ({ headers, data }) {
         opened={opened}
         onClose={close}
         title='Delete Patient'
-        classNames={{ title: classes.title }}
       >
         <Text fw={600}>
-          Are you sure you want to delete this patient record?
+          Are you sure you want to delete this physician record?
         </Text>
         <Button
-          classNames={{ root: classes.button }}
           color='red'
           fullWidth
           onClick={confirmPatientDeletion}
@@ -115,7 +108,6 @@ export default function PhysiciansTable ({ headers, data }) {
           Yes
         </Button>
         <Button
-          classNames={{ root: classes.button }}
           color='blue'
           fullWidth
           onClick={cancelPatientDeletion}

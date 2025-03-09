@@ -1,10 +1,11 @@
-import { useParams, useNavigate, useLocation } from 'react-router';
+import { useParams, useNavigate, useLocation, Link } from 'react-router';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
-import { Container, Grid, Loader, Text, Title } from '@mantine/core';
+import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import PhysicianForm from './Components/PhysicianForm.jsx';
-import classes from './PhysicianDetail.module.css';
-
 import LifelineAPI from '../LifelineAPI.js';
 /**
  *
@@ -14,6 +15,8 @@ export default function PhysicianDetail () {
   const { physicianId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
+  const { user } = useAuthorization();
   const isEditAble = location.pathname.endsWith('edit');
 
   const { data, isError, isLoading } = useQuery({
@@ -29,6 +32,15 @@ export default function PhysicianDetail () {
     retry: false,
   });
 
+  useEffect(() => {
+    if (isError) {
+      navigate(`/physicans/${physicianId}/edit`, {
+        replace: true,
+        state: { existingPatient: false },
+      });
+    }
+  }, [isError, navigate, physicianId]);
+
   if (isLoading || isError) {
     return <Loader />;
   }
@@ -36,35 +48,26 @@ export default function PhysicianDetail () {
     return <PhysicianForm physician={data} />;
   }
 
-  return (
-    <main className={classes.details}>
-      <Container style={{ marginBottom: '2rem' }}>
-        <Grid my='2rem'>
-          <Grid.Col span={{ base: 12, md: 8 }}>
-            <Title mb='1rem'>
-              {data?.firstName} {data?.middleName} {data?.lastName}
-            </Title>
-            <section>
-              <div className='editButton'>
-                <button
-                  onClick={() => navigate(`/physicians/${physicianId}/edit`)}
-                  color='blue'
-                  variant='outline'
-                >
-                  Edit
-                </button>
+  const canEdit = user?.role === 'VOLUNTEER' || user?.role === 'STAFF' || user?.role === 'ADMIN';
 
-              </div>
-            </section>
-            <section className={classes.physicianInfoContainer}>
-              <Text>Phone:</Text>
-              <Text>{data?.phone}</Text>
-              <Text>Email:</Text>
-              <Text>{data?.email}</Text>
-            </section>
-          </Grid.Col>
-        </Grid>
-      </Container>
-    </main>
+  return (
+    <Container component='main'>
+      <Group>
+        <Title order={2} my='sm'>
+          {data?.firstName} {data?.middleName} {data?.lastName}
+        </Title>
+        {canEdit && <Button component={Link} to='edit'>Edit</Button>}
+      </Group>
+      <Grid mb='md'>
+        <Grid.Col span={{ base: 12, md: 8 }}>
+          <Paper shadow='xs' p='md' radius='md' withBorder>
+            <Title order={5}>Phone</Title>
+            <Text mb='xs'>{data?.phone}</Text>
+            <Title order={5}>Email</Title>
+            <Text mb='xs'>{data?.email && t(`${data?.email}`)}</Text>
+          </Paper>
+        </Grid.Col>
+      </Grid>
+    </Container>
   );
 }
