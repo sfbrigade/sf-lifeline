@@ -4,10 +4,8 @@ import LifelineAPI from './LifelineAPI';
 
 const PHYSICIANS_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
-  // { key: 'createdBy', text: 'Created by' },
-  // { key: 'createdAt', text: 'Date created' },
-  // { key: 'updatedBy', text: 'Updated by' },
-  // { key: 'updatedAt', text: 'Last updated' },
+  { key: 'email', text: 'Email' },
+  { key: 'phone', text: 'Phone' },
   { key: 'more', text: '' },
 ];
 
@@ -29,10 +27,8 @@ const formatName = (entry) => {
  * @typedef {object} Physicians
  * @property {string} id - Physicians ID
  * @property {string} name - Physicians first name, middle name and last name
- * @property {string} createdBy - Lifeline user first name, middle name and last name
- * @property {string} createdAt - Date patient profile was created
- * @property {string} updatedBy - Lifeline user first name, middle name and last name
- * @property {string} updatedAt - Date patient profile was last updated
+ * @property {string} email - Physicians email
+ * @property {string} phone - Physicians phone
  */
 
 /**
@@ -77,10 +73,9 @@ export function usePhysicians () {
         return {
           id: physicians.id,
           name: formatName(physicians),
-          // createdBy: physicians.createdBy,
-          // createdAt: formatDate(physicians.createdAt),
-          // updatedBy: physicians.updatedBy,
-          // updatedAt: formatDate(physicians.updatedAt),
+          email: physicians.email,
+          phone: physicians.phone,
+
         };
       }),
       pages: res.pages

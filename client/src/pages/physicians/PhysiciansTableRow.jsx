@@ -17,10 +17,8 @@ const physiciansTableRowProps = {
   physicians: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    // createdBy: PropTypes.string.isRequired,
-    // createdAt: PropTypes.string.isRequired,
-    // updatedBy: PropTypes.string.isRequired,
-    // updatedAt: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    phone: PropTypes.string.isRequired,
   }),
 
   onDelete: PropTypes.func.isRequired,
@@ -62,7 +60,7 @@ export default function PhysiciansTableRow ({
           {physicians[header.key]}
         </Table.Td>
       ))}
-      <Table.Td>
+      <Table.Td style={{ textAlign: 'right' }}>
         <TableMenu menuItems={menuItems} />
       </Table.Td>
     </Table.Tr>
