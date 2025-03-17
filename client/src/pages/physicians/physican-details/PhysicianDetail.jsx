@@ -7,6 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import PhysicianForm from './Components/PhysicianForm.jsx';
 import LifelineAPI from '../LifelineAPI.js';
+import HospitalTable from './Components/HospitalComponent/HospitalTable.jsx';
+
+const headers = [
+  { key: 'name', text: 'Name' },
+];
+
 /**
  *
  * Physician page component
@@ -66,6 +72,10 @@ export default function PhysicianDetail () {
             <Title order={5}>Email</Title>
             <Text mb='xs'>{data?.email && t(`${data?.email}`)}</Text>
           </Paper>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 8 }}>
+          <Title order={2} my='sm'> Hospitals</Title>
+          <HospitalTable headers={headers} hospitals={data?.hospitals} />
         </Grid.Col>
       </Grid>
     </Container>
