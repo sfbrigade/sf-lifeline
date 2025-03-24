@@ -16,6 +16,17 @@ export default class LifelineAPI {
     });
   }
 
+  static async updateUser (id, data) {
+    return fetch(`${SERVER_BASE_URL}/users/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+  }
+
   static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {
       return this.getHospitals(query);

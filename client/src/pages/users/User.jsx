@@ -15,7 +15,7 @@ function User () {
   const { t } = useTranslation();
 
   const { data } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: ['users', userId],
     queryFn: async () => {
       const res = await LifelineAPI.getUser(userId);
       if (res.status === StatusCodes.OK) {
@@ -28,6 +28,7 @@ function User () {
   });
 
   const canEdit = user?.role === 'ADMIN';
+  const dateFormat = 'MMMM D, YYYY [at] h:mma';
 
   return (
     <Container component='main'>
@@ -59,21 +60,23 @@ function User () {
       </Paper>
       <Paper shadow='xs' p='md' radius='md' withBorder>
         <Title order={5}>Registered</Title>
-        <Text mb='xs'>{dayjs(data?.createdAt).format('MMMM D, YYYY [at] h:mm a')}</Text>
+        <Text mb='xs'>{dayjs(data?.createdAt).format(dateFormat)}</Text>
+        <Title order={5}>Updated</Title>
+        <Text mb='xs'>{dayjs(data?.updatedAt).format(dateFormat)}</Text>
         {data?.approvedAt &&
           <>
             <Title order={5}>Approved</Title>
-            <Text mb='xs'>{dayjs(data?.approvedAt).format('MMMM D, YYYY [at] h:mm a')}</Text>
+            <Text mb='xs'>{dayjs(data?.approvedAt).format(dateFormat)}</Text>
           </>}
         {data?.disabledAt &&
           <>
             <Title order={5}>Disabled</Title>
-            <Text mb='xs'>{dayjs(data?.disabledAt).format('MMMM D, YYYY [at] h:mm a')}</Text>
+            <Text mb='xs'>{dayjs(data?.disabledAt).format(dateFormat)}</Text>
           </>}
         {data?.rejectedAt &&
           <>
             <Title order={5}>Rejected</Title>
-            <Text mb='xs'>{dayjs(data?.rejectedAt).format('MMMM D, YYYY [at] h:mm a')}</Text>
+            <Text mb='xs'>{dayjs(data?.rejectedAt).format(dateFormat)}</Text>
           </>}
       </Paper>
     </Container>

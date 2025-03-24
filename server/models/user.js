@@ -6,41 +6,52 @@ import { z } from 'zod';
 import Base from './base.js';
 import mailer from '../helpers/email/mailer.js';
 
+const UserAttributesSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, 'First name must be between 2 and 30 characters long')
+    .max(30, 'First name must be between 2 and 30 characters long'),
+
+  middleName: z
+    .string()
+    .max(30, 'Middle name must be at most 30 characters long')
+    .optional(),
+
+  lastName: z
+    .string()
+    .min(2, 'Last name must be between 2 and 30 characters long')
+    .max(30, 'Last name must be between 2 and 30 characters long'),
+
+  email: z.string().email('Invalid email format'),
+
+  licenseNumber: z.string().optional(),
+});
+
+const UserPasswordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters long')
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+    'Password must include uppercase, lowercase, number, and special character'
+  );
+
+const UserRegisterSchema = UserAttributesSchema.extend({
+  password: UserPasswordSchema,
+  inviteId: z.string().uuid().optional(),
+});
+
+const UserUpdateSchema = UserAttributesSchema.extend({
+  password: UserPasswordSchema.or(z.literal('')),
+  role: z.string(),
+  deactivatedAt: z.coerce.date().nullable(),
+}).partial();
+
 class User extends Base {
-  static schema = z.object({
-    firstName: z
-      .string()
-      .min(2, 'First name must be between 2 and 30 characters long')
-      .max(30, 'First name must be between 2 and 30 characters long'),
+  static Role = Role;
 
-    middleName: z
-      .string()
-      .max(30, 'Middle name must be at most 30 characters long')
-      .optional(),
-
-    lastName: z
-      .string()
-      .min(2, 'Last name must be between 2 and 30 characters long')
-      .max(30, 'Last name must be between 2 and 30 characters long'),
-
-    email: z.string().email('Invalid email format'),
-
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters long')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-        'Password must include uppercase, lowercase, number, and special character'
-      ),
-
-    licenseNumber: z.string().optional(),
-
-    inviteId: z.string().optional(),
-  });
-
-  static get Role () {
-    return Role;
-  }
+  static PasswordSchema = UserPasswordSchema;
+  static RegisterSchema = UserRegisterSchema;
+  static UpdateSchema = UserUpdateSchema;
 
   constructor (data) {
     super(Prisma.UserScalarFieldEnum, data);
