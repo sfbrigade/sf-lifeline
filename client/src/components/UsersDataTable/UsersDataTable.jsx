@@ -19,9 +19,10 @@ const userDataTableProps = {
 
 export const UserDataTable = ({ headers = [], rows = [] }) => {
   const renderRow = (row) => (
-    <Table.Tr key={row.id}>
+    <Table.Tr className='clickable' key={row.id}>
       {headers.map((header) => (
         <UserDataTableCell
+          id={row.id}
           key={header.key}
           type={header.key}
           value={row[header.key]}

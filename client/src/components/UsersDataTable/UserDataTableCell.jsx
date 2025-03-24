@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
 import { Badge, Checkbox, Table, Text } from '@mantine/core';
 import { humanize } from 'inflection';
 import { DataTableMenu } from './DataTableMenu';
 
 const userDataTableProps = {
+  id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   value: PropTypes.any,
 };
@@ -12,7 +14,9 @@ const userDataTableProps = {
  * Basic DataTable
  * @param {PropTypes.InferProps<typeof userDataTableProps>} props
  */
-export const UserDataTableCell = ({ type, value }) => {
+export const UserDataTableCell = ({ id, type, value }) => {
+  const navigate = useNavigate();
+
   const statusColor = (() => {
     if (value === 'Disabled' || value === 'Rejected') {
       return 'red';
@@ -25,7 +29,7 @@ export const UserDataTableCell = ({ type, value }) => {
   switch (type) {
     case 'status': {
       return (
-        <Table.Td>
+        <Table.Td onClick={() => navigate(`/users/${id}`)}>
           <Badge color={statusColor}>
             <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
               {value}
@@ -39,7 +43,7 @@ export const UserDataTableCell = ({ type, value }) => {
     }
     case 'role':
       return (
-        <Table.Td>
+        <Table.Td onClick={() => navigate(`/users/${id}`)}>
           <UserRoleBadge value={value ?? ''} />
         </Table.Td>
       );
@@ -61,7 +65,7 @@ export const UserDataTableCell = ({ type, value }) => {
         </Table.Td>
       );
     default:
-      return <Table.Td>{value}</Table.Td>;
+      return <Table.Td onClick={() => navigate(`/users/${id}`)}>{value}</Table.Td>;
   }
 };
 
