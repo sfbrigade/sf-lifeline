@@ -10,6 +10,12 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async getUser (id) {
+    return fetch(`${SERVER_BASE_URL}/users/${id}`, {
+      credentials: 'include',
+    });
+  }
+
   static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {
       return this.getHospitals(query);
