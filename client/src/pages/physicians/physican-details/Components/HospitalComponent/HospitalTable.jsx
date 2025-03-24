@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 
 import { useCallback } from 'react';
-
 import HospitalTableRow from './HospitalTableRow';
-import DataTable from '../../../../../components/DataTable/DataTable';
+import DataTable from '../../../../../components/DataTable/DataTable.jsx';
 
-const hostpitalTableProps = {
+const hospitalTableProps = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
@@ -14,6 +13,7 @@ const hostpitalTableProps = {
   ),
   hospitals: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     })
   ),
@@ -28,7 +28,7 @@ export default function HospitalTable ({ headers, hospitals }) {
     (hospitals) => (
       <HospitalTableRow
         key={hospitals.id}
-        hospitals={hospitals}
+        hospital={hospitals}
         headers={headers}
       />
     ),
@@ -47,4 +47,4 @@ export default function HospitalTable ({ headers, hospitals }) {
   );
 }
 
-HospitalTable.propTypes = hostpitalTableProps;
+HospitalTable.propTypes = hospitalTableProps;

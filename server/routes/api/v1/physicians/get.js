@@ -22,9 +22,7 @@ export default async function (fastify, _opts) {
             middleName: { type: 'string' },
             lastName: { type: 'string' },
             phone: { type: 'string' },
-            email: { type: 'string' },
-            patients: { type: 'array' },
-            hospitals: { type: 'array' },
+            email: { type: 'string' }
           },
         },
         [StatusCodes.NOT_FOUND]: {
@@ -46,14 +44,9 @@ export default async function (fastify, _opts) {
 
       try {
         const physician = await fastify.prisma.physician.findUnique({
-          where: { id },
-          include: {
-            patients: true,
-            hospitals: true,
-          }
+          where: { id }
         });
         if (!physician) throw new Error('Physician not found');
-
         return reply.code(StatusCodes.OK).send(physician);
       } catch (error) {
         return reply.status(StatusCodes.NOT_FOUND).send({

@@ -1,10 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import { Table } from '@mantine/core';
-import {
-  TbUser as IconUser,
-} from 'react-icons/tb';
-import TableMenu from '../../../../../components/DataTable/TableMenu';
 
 const hospitalTableRowProps = {
   headers: PropTypes.arrayOf(
@@ -13,13 +8,9 @@ const hospitalTableRowProps = {
       text: PropTypes.node,
     })
   ),
-  hospitals: PropTypes.shape({
+  hospital: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    // createdBy: PropTypes.string.isRequired,
-    // createdAt: PropTypes.string.isRequired,
-    // updatedBy: PropTypes.string.isRequired,
-    // updatedAt: PropTypes.string.isRequired,
   }),
 };
 
@@ -29,27 +20,16 @@ const hospitalTableRowProps = {
  */
 export default function HospitalTableRow ({
   headers,
-  hospitals,
+  hospital,
 }) {
-  const menuItems = [
-    {
-      icon: <IconUser size={18} />,
-      label: 'View/Edit',
-      to: `/hospital/${hospitals.id}`,
-      component: Link,
-    }
-  ];
-
   return (
-    <Table.Tr key={hospitals.id}>
+    <Table.Tr key={hospital.id}>
       {headers.map((header) => (
-        <Table.Td key={hospitals[header.key] + header.key}>
-          {hospitals[header.key]}
+        <Table.Td key={hospital[header.key] + header.key}>
+          {hospital[header.key]}
         </Table.Td>
       ))}
-      <Table.Td style={{ textAlign: 'right' }}>
-        <TableMenu menuItems={menuItems} />
-      </Table.Td>
+      <Table.Td style={{ textAlign: 'right' }} />
     </Table.Tr>
   );
 }

@@ -7,11 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import PhysicianForm from './Components/PhysicianForm.jsx';
 import LifelineAPI from '../LifelineAPI.js';
-import HospitalTable from './Components/HospitalComponent/HospitalTable.jsx';
-
-const headers = [
-  { key: 'name', text: 'Name' },
-];
+import HospitalTable from './Components/HospitalComponent/Hospital.jsx';
 
 /**
  *
@@ -75,7 +71,7 @@ export default function PhysicianDetail () {
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Title order={2} my='sm'> Hospitals</Title>
-          <HospitalTable headers={headers} hospitals={data?.hospitals} />
+          <HospitalTable physicansId={physicianId} />
         </Grid.Col>
       </Grid>
     </Container>
