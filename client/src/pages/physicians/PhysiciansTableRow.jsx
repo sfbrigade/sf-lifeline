@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { Table } from '@mantine/core';
 import {
   TbUser as IconUser,
@@ -35,6 +35,8 @@ export default function PhysiciansTableRow ({
   onDelete,
   showDeleteMenu,
 }) {
+  const navigate = useNavigate();
+
   const menuItems = [
     {
       icon: <IconUser size={18} />,
@@ -54,9 +56,9 @@ export default function PhysiciansTableRow ({
   }
 
   return (
-    <Table.Tr key={physicians.id}>
+    <Table.Tr className='clickable' key={physicians.id}>
       {headers.map((header) => (
-        <Table.Td key={physicians[header.key] + header.key}>
+        <Table.Td onClick={() => navigate(`/physicians/${physicians.id}`)} key={physicians[header.key] + header.key}>
           {physicians[header.key]}
         </Table.Td>
       ))}
