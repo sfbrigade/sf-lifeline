@@ -12,6 +12,7 @@ export default async function (fastify) {
             page: { type: 'integer' },
             limit: { type: 'integer' },
             hospital: { type: 'string' },
+            physicianId: { type: 'string' },
           },
         },
         response: {
@@ -33,14 +34,26 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', hospital } = request.query;
+      const { page = '1', perPage = '25', hospital, physicianId } = request.query;
 
       const options = {
         page,
         perPage,
         orderBy: [{ name: 'asc' }],
-        where: { name: { contains: hospital.trim(), mode: 'insensitive' } },
+        where: { },
       };
+
+      if (hospital) {
+        options.where.name = { contains: hospital.trim(), mode: 'insensitive' };
+      }
+
+      if (physicianId) {
+        options.where.physicians = {
+          some: {
+            id: physicianId,
+          },
+        };
+      }
 
       const { records, total } =
         await fastify.prisma.hospital.paginate(options);
