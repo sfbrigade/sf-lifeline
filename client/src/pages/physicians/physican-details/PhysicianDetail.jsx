@@ -1,12 +1,13 @@
-import { useParams, useNavigate, useLocation, Link } from 'react-router';
+import { useParams, useNavigate, Link } from 'react-router';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
-import PhysicianForm from './Components/PhysicianForm.jsx';
 import LifelineAPI from '../LifelineAPI.js';
+
 import PhysicanPatients from './Components/PatientComponent/PhysicanPatients.jsx';
 import Hospital from './Components/HospitalComponent/Hospital.jsx';
 
@@ -17,13 +18,11 @@ import Hospital from './Components/HospitalComponent/Hospital.jsx';
 export default function PhysicianDetail () {
   const { physicianId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const { t } = useTranslation();
   const { user } = useAuthorization();
-  const isEditAble = location.pathname.endsWith('edit');
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['physician', isEditAble],
+    queryKey: ['physician', physicianId],
     queryFn: async () => {
       const res = await LifelineAPI.getPhysician(physicianId);
       if (res.status === StatusCodes.OK) {
@@ -47,9 +46,6 @@ export default function PhysicianDetail () {
   if (isLoading || isError) {
     return <Loader />;
   }
-  if (isEditAble) {
-    return <PhysicianForm physician={data} />;
-  }
 
   const canEdit = user?.role === 'VOLUNTEER' || user?.role === 'STAFF' || user?.role === 'ADMIN';
 
@@ -64,10 +60,13 @@ export default function PhysicianDetail () {
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Paper shadow='xs' p='md' radius='md' withBorder>
-            <Title order={5}>Phone</Title>
-            <Text mb='xs'>{data?.phone}</Text>
+            {data?.phone &&
+              <>
+                <Title order={5}>Phone</Title>
+                <Text mb='xs'>{data?.phone}</Text>
+              </>}
             <Title order={5}>Email</Title>
-            <Text mb='xs'>{data?.email && t(`${data?.email}`)}</Text>
+            <Text>{data?.email && t(`${data?.email}`)}</Text>
           </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>

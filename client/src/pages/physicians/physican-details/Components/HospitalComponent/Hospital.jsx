@@ -10,7 +10,7 @@ import HospitalTable from './HospitalTable';
  *
  */
 export default function Hospital ({ physicansId }) {
-  const { hospitals, headers, isFetching, setPage, setSearch } = useHospitals(physicansId);
+  const { hospitals, headers, isFetching } = useHospitals(physicansId);
 
   return (
     <>
