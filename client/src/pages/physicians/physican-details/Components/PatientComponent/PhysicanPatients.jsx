@@ -1,5 +1,4 @@
 import {
-  Container,
   Group,
   TextInput,
   Pagination,
@@ -25,7 +24,7 @@ export default function PhysicanPatients ({ physicansId }) {
   }, 500);
 
   return (
-    <Container>
+    <>
       <Group justify='space-between' wrap='nowrap' my='sm'>
         <TextInput
           leftSectionPointerEvents='none'
@@ -45,6 +44,6 @@ export default function PhysicanPatients ({ physicansId }) {
       />
       <PatientsTable headers={headers} patients={patients} />
       <Pagination total={pages} value={page} onChange={setPage} />
-    </Container>
+    </>
   );
 }

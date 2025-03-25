@@ -63,14 +63,12 @@ export default function PhysicianDetail () {
       </Group>
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
-          <Container>
-            <Paper shadow='xs' p='md' radius='md' withBorder>
-              <Title order={5}>Phone</Title>
-              <Text mb='xs'>{data?.phone}</Text>
-              <Title order={5}>Email</Title>
-              <Text mb='xs'>{data?.email && t(`${data?.email}`)}</Text>
-            </Paper>
-          </Container>
+          <Paper shadow='xs' p='md' radius='md' withBorder>
+            <Title order={5}>Phone</Title>
+            <Text mb='xs'>{data?.phone}</Text>
+            <Title order={5}>Email</Title>
+            <Text mb='xs'>{data?.email && t(`${data?.email}`)}</Text>
+          </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Title order={2} my='sm'> Hospitals</Title>
