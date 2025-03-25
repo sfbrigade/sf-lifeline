@@ -12,6 +12,7 @@ export default async function (fastify) {
             page: { type: 'integer' },
             limit: { type: 'integer' },
             patient: { type: 'string' },
+            physicianId: { type: 'string' },
           },
         },
         response: {
@@ -57,11 +58,16 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', patient = '' } = request.query;
+      const { page = '1', perPage = '25', patient = '', physicianId } = request.query;
 
       const splitQuery = patient.trim().split(' ');
 
       let whereClause = {};
+
+      if (physicianId) {
+        whereClause.physicianId = physicianId;
+      }
+
       if (splitQuery.length > 1) {
         whereClause = {
           AND: [
