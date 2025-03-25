@@ -57,4 +57,11 @@ export default class LifelineAPI {
     );
     return response;
   }
+
+  static async getPhysicianPatients (query, page, physicianId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/physicians/${physicianId}/patients?patients=${query}&page=${page}`
+    );
+    return response;
+  }
 }

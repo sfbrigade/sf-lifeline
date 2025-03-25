@@ -9,16 +9,16 @@ import { useDebouncedCallback } from '@mantine/hooks';
 import { useState } from 'react';
 
 import { TbSearch as IconSearch } from 'react-icons/tb';
-import { useHospitals } from './useHospital';
-import HospitalTable from './HospitalTable';
+import { usePhysicanPatients } from './usePhysicanPatients';
+import PatientsTable from './PatientTable';
 
 /**
- *  Physicians page component
+ *  Patient page component
  *
  */
-export default function Hospital ({ physicansId }) {
+export default function Patient ({ physicansId }) {
   const [inputValue, setInputValue] = useState('');
-  const { hospitals, headers, isFetching, page, pages, setPage, setSearch } = useHospitals(physicansId);
+  const { patients, headers, isFetching, page, pages, setPage, setSearch } = usePhysicanPatients(physicansId);
 
   const handleSearch = useDebouncedCallback((query) => {
     setSearch(query);
@@ -43,7 +43,7 @@ export default function Hospital ({ physicansId }) {
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
-      <HospitalTable headers={headers} hospitals={hospitals} />
+      <PatientsTable headers={headers} patients={patients} />
       <Pagination total={pages} value={page} onChange={setPage} />
     </Container>
   );

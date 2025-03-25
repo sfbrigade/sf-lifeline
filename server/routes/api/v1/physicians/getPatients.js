@@ -32,10 +32,10 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', paitents } = request.query;
+      const { page = '1', perPage = '25', patients } = request.query;
       const { physicianId } = request.params;
 
-      const splitQuery = paitents.trim().split(' ');
+      const splitQuery = patients.trim().split(' ');
 
       let whereClause = {};
       if (splitQuery.length > 1) {
@@ -57,18 +57,18 @@ export default async function (fastify) {
         whereClause = {
           physicianId,
           OR: [
-            { firstName: { contains: paitents.trim(), mode: 'insensitive' } },
-            { lastName: { contains: paitents.trim(), mode: 'insensitive' } },
+            { firstName: { contains: patients.trim(), mode: 'insensitive' } },
+            { lastName: { contains: patients.trim(), mode: 'insensitive' } },
             {
               AND: [
                 {
                   firstName: {
-                    contains: paitents.trim(),
+                    contains: patients.trim(),
                     mode: 'insensitive',
                   },
                 },
                 {
-                  lastName: { contains: paitents.trim(), mode: 'insensitive' },
+                  lastName: { contains: patients.trim(), mode: 'insensitive' },
                 },
               ],
             },
