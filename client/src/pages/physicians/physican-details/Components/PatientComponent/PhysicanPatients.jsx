@@ -10,13 +10,13 @@ import { useState } from 'react';
 
 import { TbSearch as IconSearch } from 'react-icons/tb';
 import { usePhysicanPatients } from './usePhysicanPatients';
-import PatientsTable from './PatientTable';
+import PatientsTable from './PhysicanPatientsTable';
 
 /**
- *  Patient page component
+ *  PhysicanPatients page component
  *
  */
-export default function Patient ({ physicansId }) {
+export default function PhysicanPatients ({ physicansId }) {
   const [inputValue, setInputValue] = useState('');
   const { patients, headers, isFetching, page, pages, setPage, setSearch } = usePhysicanPatients(physicansId);
 

@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 
 import { useCallback } from 'react';
 import DataTable from '../../../../../components/DataTable/DataTable.jsx';
-import PatientTableRow from './PatientTableRow';
+import PhysicanPatientsTableRow from './PhysicanPatientsTableRow.jsx';
 
-const patientTableRowProps = {
+const physicanPatientTable = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
@@ -21,12 +21,12 @@ const patientTableRowProps = {
 
 /**
  * Patients table component
- * @param {PropTypes.InferProps<typeof patientTableRow>} props
+ * @param {PropTypes.InferProps<typeof physicanPatientTable>} props
  */
-export default function PatientTable ({ headers, patients }) {
+export default function PhysicanPatientTable ({ headers, patients }) {
   const renderRow = useCallback(
     (patients) => (
-      <PatientTableRow
+      <PhysicanPatientsTableRow
         key={patients.id}
         patient={patients}
         headers={headers}
@@ -47,4 +47,4 @@ export default function PatientTable ({ headers, patients }) {
   );
 }
 
-PatientTable.propTypes = patientTableRowProps;
+PhysicanPatientTable.propTypes = physicanPatientTable;

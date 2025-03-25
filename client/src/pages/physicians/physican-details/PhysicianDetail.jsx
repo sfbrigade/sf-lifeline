@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import PhysicianForm from './Components/PhysicianForm.jsx';
 import LifelineAPI from '../LifelineAPI.js';
-import Patient from './Components/PatientComponent/Patient.jsx';
+import PhysicanPatients from './Components/PatientComponent/PhysicanPatients.jsx';
 import Hospital from './Components/HospitalComponent/Hospital.jsx';
 
 /**
@@ -78,7 +78,7 @@ export default function PhysicianDetail () {
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Title order={2} my='sm'> Patients</Title>
-          <Patient physicansId={physicianId} />
+          <PhysicanPatients physicansId={physicianId} />
         </Grid.Col>
       </Grid>
     </Container>

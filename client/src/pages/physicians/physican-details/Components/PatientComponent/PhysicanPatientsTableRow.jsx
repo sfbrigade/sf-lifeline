@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Table } from '@mantine/core';
 
-const patientTableRowProps = {
+const physicanPatientsTableRow = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
@@ -16,9 +16,9 @@ const patientTableRowProps = {
 
 /**
  * Patient table row component
- * @param {PropTypes.InferProps<typeof hospitalTableRowProps>} props
+ * @param {PropTypes.InferProps<typeof physicanPatientsTableRow>} props
  */
-export default function PatientTableRow ({
+export default function PhysicanPatientsTableRow ({
   headers,
   patient,
 }) {
@@ -34,4 +34,4 @@ export default function PatientTableRow ({
   );
 }
 
-PatientTableRow.propTypes = patientTableRowProps;
+PhysicanPatientsTableRow.propTypes = physicanPatientsTableRow;
