@@ -8,24 +8,24 @@ import LifelineAPI from './LifelineAPI';
  *  isPending: boolean
  * }}
  */
-export function useDeletePhysicians () {
+export function useDeletePhysician () {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['deletePhysicans'],
     mutationFn: async (physicanId) => {
-      const res = await LifelineAPI.deletePhysicians(physicanId);
+      const res = await LifelineAPI.deletePhysician(physicanId);
       if (!res.status) {
         throw new Error('Failed to delete patient.');
       }
       return res.json();
     },
     onSuccess: () => {
-      // Invalidate and refetch the patients list
-      queryClient.invalidateQueries({ queryKey: ['patients'] });
+      // Invalidate and refetch the physicians list
+      queryClient.invalidateQueries({ queryKey: ['physicians'] });
     },
     onError: (error) => {
-      console.error('Failed to delete patient:', error);
+      console.error('Failed to delete physician:', error);
     },
   });
 

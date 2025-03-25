@@ -41,7 +41,7 @@ export default class LifelineAPI {
     return response;
   }
 
-  static async deletePhysicians (physicianId) {
+  static async deletePhysician (physicianId) {
     const response = await fetch(
       `${SERVER_BASE_URL}/physicians/${physicianId}`,
       {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState, useContext, useCallback } from 'react';
 import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useDeletePhysicians } from './useDeletePhysicians';
+import { useDeletePhysician } from './useDeletePhysician';
 import { notifications } from '@mantine/notifications';
 import Context from '../../Context';
 
@@ -33,13 +33,13 @@ const physiciansTableProps = {
  */
 export default function PhysiciansTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const [physicians, setSelectedPhysicians] = useState(null);
-  const { mutateAsync: deletePhysicans, isPending } = useDeletePhysicians();
+  const [physician, setSelectedPhysician] = useState(null);
+  const { mutateAsync: deletePhysican, isPending } = useDeletePhysician();
   const { user } = useContext(Context);
 
   const showDeleteConfirmation = useCallback(
     (physicians) => {
-      setSelectedPhysicians(physicians);
+      setSelectedPhysician(physicians);
       open();
     },
     [open]
@@ -47,7 +47,7 @@ export default function PhysiciansTable ({ headers, data }) {
 
   const confirmPatientDeletion = async () => {
     try {
-      await deletePhysicans(physicians.id);
+      await deletePhysican(physician.id);
       notifications.show({
         title: 'Success',
         message: 'Physician deleted successfully.',
@@ -62,21 +62,21 @@ export default function PhysiciansTable ({ headers, data }) {
       });
     }
     if (!isPending) {
-      setSelectedPhysicians(null);
+      setSelectedPhysician(null);
       close();
     }
   };
 
   const cancelPatientDeletion = () => {
-    setSelectedPhysicians(null);
+    setSelectedPhysician(null);
     close();
   };
 
   const renderRow = useCallback(
-    (physicians) => (
+    (physician) => (
       <PhysiciansTableRow
-        key={physicians.id}
-        physicians={physicians}
+        key={physician.id}
+        physician={physician}
         headers={headers}
         onDelete={showDeleteConfirmation}
         showDeleteMenu={user?.role === 'ADMIN'}

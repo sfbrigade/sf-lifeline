@@ -14,7 +14,7 @@ const physiciansTableRowProps = {
       text: PropTypes.node,
     })
   ),
-  physicians: PropTypes.shape({
+  physician: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
@@ -31,7 +31,7 @@ const physiciansTableRowProps = {
  */
 export default function PhysiciansTableRow ({
   headers,
-  physicians,
+  physician,
   onDelete,
   showDeleteMenu,
 }) {
@@ -41,7 +41,7 @@ export default function PhysiciansTableRow ({
     {
       icon: <IconUser size={18} />,
       label: 'View/Edit',
-      to: `/physicians/${physicians.id}`,
+      to: `/physicians/${physician.id}`,
       component: Link,
     }
   ];
@@ -51,15 +51,15 @@ export default function PhysiciansTableRow ({
       icon: <IconTrash size={18} />,
       label: 'Delete',
       color: 'red',
-      onClick: () => onDelete({ id: physicians.id, name: physicians.name }),
+      onClick: () => onDelete({ id: physician.id, name: physician.name }),
     });
   }
 
   return (
-    <Table.Tr className='clickable' key={physicians.id}>
+    <Table.Tr className='clickable' key={physician.id}>
       {headers.map((header) => (
-        <Table.Td onClick={() => navigate(`/physicians/${physicians.id}`)} key={physicians[header.key] + header.key}>
-          {physicians[header.key]}
+        <Table.Td onClick={() => navigate(`/physicians/${physician.id}`)} key={physician[header.key] + header.key}>
+          {physician[header.key]}
         </Table.Td>
       ))}
       <Table.Td style={{ textAlign: 'right' }}>
