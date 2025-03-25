@@ -61,8 +61,6 @@ function User () {
       <Paper shadow='xs' p='md' radius='md' withBorder>
         <Title order={5}>Registered</Title>
         <Text mb='xs'>{dayjs(data?.createdAt).format(dateFormat)}</Text>
-        <Title order={5}>Updated</Title>
-        <Text mb='xs'>{dayjs(data?.updatedAt).format(dateFormat)}</Text>
         {data?.approvedAt &&
           <>
             <Title order={5}>Approved</Title>
@@ -78,6 +76,8 @@ function User () {
             <Title order={5}>Rejected</Title>
             <Text mb='xs'>{dayjs(data?.rejectedAt).format(dateFormat)}</Text>
           </>}
+        <Title order={5}>Updated</Title>
+        <Text mb='xs'>{dayjs(data?.updatedAt).format(dateFormat)}</Text>
       </Paper>
     </Container>
   );
