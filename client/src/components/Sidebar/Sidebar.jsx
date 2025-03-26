@@ -6,6 +6,7 @@ import {
   // TbMessageReport,
   // TbNotebook,
   // TbSettings,
+  TbStethoscope,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -44,6 +45,11 @@ const sections = [
         label: 'Patients',
         href: '/patients',
         icon: <TbHeartHandshake className={classes.navbar__icon} />,
+      },
+      {
+        label: 'Physicians',
+        href: '/physicians',
+        icon: <TbStethoscope className={classes.navbar__icon} />,
       },
     ],
   },
