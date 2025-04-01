@@ -108,7 +108,6 @@ function PendingUsers () {
   return (
     <Container fluid mt={20}>
       <IconChevronLeft
-        stroke={1}
         size={32}
         onClick={() => navigate(-1)}
         cursor='pointer'

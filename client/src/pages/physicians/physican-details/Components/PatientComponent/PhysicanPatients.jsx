@@ -28,7 +28,7 @@ export default function PhysicanPatients ({ physicansId }) {
       <Group justify='space-between' wrap='nowrap' my='sm'>
         <TextInput
           leftSectionPointerEvents='none'
-          leftSection={<IconSearch stroke={2} />}
+          leftSection={<IconSearch />}
           placeholder='Search'
           onChange={(event) => {
             setInputValue(event.currentTarget.value);

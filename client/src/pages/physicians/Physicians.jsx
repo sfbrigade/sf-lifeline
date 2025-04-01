@@ -35,7 +35,7 @@ export default function Physicians () {
         </Title>
         <TextInput
           leftSectionPointerEvents='none'
-          leftSection={<IconSearch stroke={2} />}
+          leftSection={<IconSearch />}
           placeholder='Search'
           onChange={(event) => {
             setInputValue(event.currentTarget.value);
