@@ -140,6 +140,29 @@ class User extends Base {
   async comparePassword (password) {
     return bcrypt.compare(password, this.hashedPassword);
   }
+
+  // Passkey-related methods
+  async getPasskeys () {
+    return this.prisma.passkey.findMany({
+      where: { userId: this.id }
+    });
+  }
+
+  async hasPasskeys () {
+    const count = await this.prisma.passkey.count({
+      where: { userId: this.id }
+    });
+    return count > 0;
+  }
+
+  async deletePasskey (credentialId) {
+    return this.prisma.passkey.delete({
+      where: { 
+        credentialID: credentialId,
+        userId: this.id
+      }
+    });
+  }
 }
 
 export { User, Role };
