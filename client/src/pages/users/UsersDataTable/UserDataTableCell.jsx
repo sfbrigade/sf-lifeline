@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
-import { Badge, Checkbox, Table, Text } from '@mantine/core';
+import { rem, Badge, Checkbox, Table, Text } from '@mantine/core';
 import { humanize } from 'inflection';
-import { DataTableMenu } from './DataTableMenu';
+import {
+  TbUser as IconUser,
+} from 'react-icons/tb';
+
+import TableMenu from '../../../components/DataTable/TableMenu';
 
 const userDataTableProps = {
   id: PropTypes.string.isRequired,
@@ -50,7 +54,14 @@ export const UserDataTableCell = ({ id, type, value }) => {
     case 'more':
       return (
         <Table.Td>
-          <DataTableMenu />
+          <TableMenu menuItems={[
+            {
+              icon: <IconUser style={{ width: rem(14), height: rem(14) }} />,
+              label: 'View/Edit',
+              onClick: () => navigate(`/users/${id}`)
+            },
+          ]}
+          />
         </Table.Td>
       );
     case 'checkbox':

@@ -46,7 +46,7 @@ function EditUser () {
     mutationKey: ['users', userId],
     mutationFn: async (data) => {
       const res = await LifelineAPI.updateUser(userId, form.getValues());
-      if (res.status === StatusCodes.CREATED) {
+      if (res.status === StatusCodes.OK) {
         return res.json();
       } else {
         const { message } = await res.json();
@@ -55,6 +55,7 @@ function EditUser () {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users', userId] });
+      navigate(`/users/${userId}`);
     }
   });
 

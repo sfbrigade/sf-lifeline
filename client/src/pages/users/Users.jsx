@@ -14,7 +14,7 @@ import {
 import { useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { useUsers } from './useUsers';
 
-import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
+import { UserDataTable } from './UsersDataTable/UsersDataTable';
 import { InviteModal } from './InviteModal';
 
 const headers = [

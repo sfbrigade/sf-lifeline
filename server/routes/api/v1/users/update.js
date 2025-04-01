@@ -119,7 +119,7 @@ export default async function (fastify, _opts) {
         lastName,
         email,
         role,
-        licenseNumber,
+        licenseNumber: licenseNumber || null,
         licenseData,
       };
       const user = new User(data);

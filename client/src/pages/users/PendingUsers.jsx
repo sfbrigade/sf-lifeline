@@ -12,7 +12,7 @@ import { TbChevronLeft as IconChevronLeft } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 
 import classes from './PendingUsers.module.css';
-import { UserDataTable } from '../../components/UsersDataTable/UsersDataTable';
+import { UserDataTable } from './UsersDataTable/UsersDataTable';
 
 /**
  * Page for admin to view pending users
