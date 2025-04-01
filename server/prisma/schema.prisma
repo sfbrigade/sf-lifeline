@@ -50,6 +50,7 @@ model User {
   revokedInvites         Invite[]  @relation("UserRevokedBy")
   createdPatients        Patient[] @relation("UserCreatedBy")
   updatedPatients        Patient[] @relation("UserUpdatedBy")
+  passkeys               Passkey[]
   updatedAt              DateTime  @updatedAt
   createdAt              DateTime  @default(now())
 }
@@ -228,4 +229,15 @@ model Hospital {
   email      String?
   physicians Physician[]
   patients   Patient[]
+}
+
+model Passkey {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String   @db.Uuid
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID        String   @unique
+  credentialPublicKey Bytes
+  counter            Int
+  createdAt          DateTime @default(now())
+  lastUsedAt         DateTime @updatedAt
 }
