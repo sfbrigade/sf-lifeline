@@ -16,6 +16,8 @@ import Verify from './pages/verify/verify';
 
 import Dashboard from './pages/dashboard/Dashboard';
 
+import EditUser from './pages/users/EditUser';
+import User from './pages/users/User';
 import Users from './pages/users/Users';
 import PendingUsers from './pages/users/PendingUsers';
 
@@ -169,7 +171,20 @@ export default [
           },
           {
             path: 'users',
-            element: <Users />,
+            children: [
+              {
+                index: true,
+                element: <Users />,
+              },
+              {
+                path: ':userId',
+                element: <User />,
+              },
+              {
+                path: ':userId/edit',
+                element: <EditUser />,
+              },
+            ]
           },
           {
             path: 'users/pending',

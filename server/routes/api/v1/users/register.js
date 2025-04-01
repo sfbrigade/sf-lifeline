@@ -57,7 +57,7 @@ export default async function (fastify, _opts) {
 
       // Validate request body
       try {
-        User.schema.parse(request.body);
+        User.RegisterSchema.parse(request.body);
       } catch (error) {
         error.errors.forEach((e) =>
           errorList.push({ path: e.path[0], message: e.message })

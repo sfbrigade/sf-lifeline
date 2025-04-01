@@ -48,7 +48,7 @@ export default async function (fastify, _opts) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', status } = request.query;
+      const { page = '1', perPage = '25', search, status } = request.query;
       const options = {
         page,
         perPage,
@@ -58,19 +58,29 @@ export default async function (fastify, _opts) {
           { middleName: 'asc' },
           { email: 'asc' },
         ],
+        where: {}
       };
+      if (search) {
+        options.where.OR = [
+          { lastName: { contains: search, mode: 'insensitive' } },
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { middleName: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+        ];
+      }
       switch (status) {
         case 'unapproved':
-          options.where = { approvedAt: null, rejectedAt: null };
+          options.where.approvedAt = null;
+          options.where.rejectedAt = null;
           break;
         case 'approved':
-          options.where = { approvedAt: { not: null } };
+          options.where.approvedAt = { not: null };
           break;
         case 'rejected':
-          options.where = { rejectedAt: { not: null } };
+          options.where.rejectedAt = { not: null };
           break;
         case 'disabled':
-          options.where = { disabledAt: { not: null } };
+          options.where.disabledAt = { not: null };
           break;
       }
       const { records, total } = await fastify.prisma.user.paginate(options);

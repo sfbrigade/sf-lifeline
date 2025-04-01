@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import DataTable from '../DataTable/DataTable';
+import DataTable from '../../../components/DataTable/DataTable';
 import { UserDataTableCell } from './UserDataTableCell';
 import { Table } from '@mantine/core';
 
@@ -19,9 +19,10 @@ const userDataTableProps = {
 
 export const UserDataTable = ({ headers = [], rows = [] }) => {
   const renderRow = (row) => (
-    <Table.Tr key={row.id}>
+    <Table.Tr className='clickable' key={row.id}>
       {headers.map((header) => (
         <UserDataTableCell
+          id={row.id}
           key={header.key}
           type={header.key}
           value={row[header.key]}
