@@ -3,11 +3,28 @@ const SERVER_BASE_URL = '/api/v1';
 export default class LifelineAPI {
   static async getUsers (query, page) {
     const response = await fetch(
-      `${SERVER_BASE_URL}/users?user=${query}&page=${page}`, {
+      `${SERVER_BASE_URL}/users?search=${query}&page=${page}`, {
         credentials: 'include',
       }
     );
     return response;
+  }
+
+  static async getUser (id) {
+    return fetch(`${SERVER_BASE_URL}/users/${id}`, {
+      credentials: 'include',
+    });
+  }
+
+  static async updateUser (id, data) {
+    return fetch(`${SERVER_BASE_URL}/users/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
   }
 
   static async getHealthcareChoices (route, query) {

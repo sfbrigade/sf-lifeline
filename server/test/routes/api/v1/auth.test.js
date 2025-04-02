@@ -226,7 +226,6 @@ describe('/api/v1/auth', () => {
           passwordResetToken: '4ae4a190-005e-4222-aac3-7dd5ff2c477f',
           password: 'NewPassword123!',
         });
-
         assert.deepStrictEqual(res.statusCode, StatusCodes.OK);
 
         const user = await t.prisma.user.findUnique({

@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
-import { Badge, Checkbox, Table, Text } from '@mantine/core';
+import { useNavigate } from 'react-router';
+import { rem, Badge, Checkbox, Table, Text } from '@mantine/core';
 import { humanize } from 'inflection';
-import { DataTableMenu } from './DataTableMenu';
+import {
+  TbUser as IconUser,
+} from 'react-icons/tb';
+
+import TableMenu from '../../../components/DataTable/TableMenu';
 
 const userDataTableProps = {
+  id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   value: PropTypes.any,
 };
@@ -12,7 +18,9 @@ const userDataTableProps = {
  * Basic DataTable
  * @param {PropTypes.InferProps<typeof userDataTableProps>} props
  */
-export const UserDataTableCell = ({ type, value }) => {
+export const UserDataTableCell = ({ id, type, value }) => {
+  const navigate = useNavigate();
+
   const statusColor = (() => {
     if (value === 'Disabled' || value === 'Rejected') {
       return 'red';
@@ -25,7 +33,7 @@ export const UserDataTableCell = ({ type, value }) => {
   switch (type) {
     case 'status': {
       return (
-        <Table.Td>
+        <Table.Td onClick={() => navigate(`/users/${id}`)}>
           <Badge color={statusColor}>
             <Text span visibleFrom='sm' fw={700} tt='capitalize' size='sm'>
               {value}
@@ -39,14 +47,21 @@ export const UserDataTableCell = ({ type, value }) => {
     }
     case 'role':
       return (
-        <Table.Td>
+        <Table.Td onClick={() => navigate(`/users/${id}`)}>
           <UserRoleBadge value={value ?? ''} />
         </Table.Td>
       );
     case 'more':
       return (
         <Table.Td>
-          <DataTableMenu />
+          <TableMenu menuItems={[
+            {
+              icon: <IconUser style={{ width: rem(14), height: rem(14) }} />,
+              label: 'View/Edit',
+              onClick: () => navigate(`/users/${id}`)
+            },
+          ]}
+          />
         </Table.Td>
       );
     case 'checkbox':
@@ -61,7 +76,7 @@ export const UserDataTableCell = ({ type, value }) => {
         </Table.Td>
       );
     default:
-      return <Table.Td>{value}</Table.Td>;
+      return <Table.Td onClick={() => navigate(`/users/${id}`)}>{value}</Table.Td>;
   }
 };
 
