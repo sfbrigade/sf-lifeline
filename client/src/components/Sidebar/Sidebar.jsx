@@ -6,6 +6,7 @@ import {
   // TbMessageReport,
   // TbNotebook,
   // TbSettings,
+  TbBuildingHospital,
   TbStethoscope,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
@@ -50,6 +51,11 @@ const sections = [
         label: 'Physicians',
         href: '/physicians',
         icon: <TbStethoscope className={classes.navbar__icon} />,
+      },
+      {
+        label: 'Hospitals',
+        href: '/hospitals',
+        icon: <TbBuildingHospital className={classes.navbar__icon} />,
       },
     ],
   },

@@ -28,6 +28,9 @@ import PatientsGenerate from './pages/patients/PatientsGenerate';
 import Physicians from './pages/physicians/Physicians';
 import PhysicianDetail from './pages/physicians/physican-details/PhysicianDetail';
 import PhysicianForm from './pages/physicians/physican-details/Components/PhysicianForm';
+import Hospitals from './pages/hospitals/Hospitals';
+import HospitalDetail from './pages/hospitals/hospital-details/HospitalDetail';
+import HospitalForm from './pages/hospitals/hospital-details/Components/HospitalForm';
 
 // roles in order of least to most privileged
 export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
@@ -167,6 +170,23 @@ export default [
                 path: ':physicianId/edit',
                 element: <PhysicianForm />
               }
+            ],
+          },
+          {
+            path: 'hospitals',
+            children: [
+              {
+                index: true,
+                element: <Hospitals />,
+              },
+              {
+                path: ':hospitalId',
+                element: <HospitalDetail />,
+              },
+              {
+                path: ':hospitalId/edit',
+                element: <HospitalForm />,
+              },
             ],
           },
           {
