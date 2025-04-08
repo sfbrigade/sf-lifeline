@@ -8,15 +8,15 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import Context from '../Context';
+import { useAppContext } from '../AppContext';
 
 /**
  * Home page component.
  */
 function Home () {
-  const { user } = useContext(Context);
+  const { user } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {

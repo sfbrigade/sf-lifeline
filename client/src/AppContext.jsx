@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -7,11 +7,10 @@ import PropTypes from 'prop-types';
  */
 const env = {
   FEATURE_COLLECT_PHI: import.meta.env.VITE_FEATURE_COLLECT_PHI === 'true',
-}
+};
 if (window.env) {
   env.FEATURE_COLLECT_PHI = window.env.VITE_FEATURE_COLLECT_PHI === 'true';
 }
-console.log('!!!', env);
 
 /**
  * @typedef {object} user
@@ -27,7 +26,7 @@ console.log('!!!', env);
  * @property {Function} setUser update function for user
  */
 
-const Context = createContext(/** @type {lifeLineContext} */ (null));
+const AppContext = createContext(/** @type {lifeLineContext} */ (null));
 
 const contextProviderProps = {
   children: PropTypes.oneOfType([
@@ -41,7 +40,7 @@ const contextProviderProps = {
  *
  * @param {PropTypes.InferProps<typeof contextProviderProps>} props
  */
-function ContextProvider ({ children, initialUser }) {
+function AppContextProvider ({ children, initialUser }) {
   const [user, setUser] = useState(initialUser);
 
   const contextValue = {
@@ -50,11 +49,15 @@ function ContextProvider ({ children, initialUser }) {
     env,
   };
 
-  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
+  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 }
 
-ContextProvider.propTypes = contextProviderProps;
+AppContextProvider.propTypes = contextProviderProps;
 
-export { ContextProvider };
+function useAppContext () {
+  return useContext(AppContext);
+}
 
-export default Context;
+export { useAppContext, AppContext, AppContextProvider };
+
+export default AppContext;
