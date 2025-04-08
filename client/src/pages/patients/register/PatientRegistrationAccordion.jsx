@@ -187,7 +187,7 @@ export default function PatientRegistrationAccordion ({
 
       <Accordion.Item value='medicalData'>
         <Accordion.Control>
-          &#9314; Medical Information{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9314;</> : <>&#9313;</>} Medical Information{' '}
           {showCheck['medicalData']
             ? (
               <IconCircleCheck color='green' size={30} />
@@ -212,7 +212,7 @@ export default function PatientRegistrationAccordion ({
 
       <Accordion.Item value='healthcareChoices'>
         <Accordion.Control>
-          &#9315; Healthcare Choices{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9315;</> : <>&#9314;</>} Healthcare Choices{' '}
           {showCheck['healthcareChoices']
             ? (
               <IconCircleCheck color='green' size={30} />
@@ -237,7 +237,7 @@ export default function PatientRegistrationAccordion ({
 
       <Accordion.Item value='codeStatus'>
         <Accordion.Control>
-          &#9316; Advanced Directive{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9316;</> : <>&#9315;</>} Advanced Directive{' '}
           {showCheck['codeStatus']
             ? (
               <IconCircleCheck color='green' size={30} />
