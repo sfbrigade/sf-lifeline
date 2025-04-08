@@ -29,7 +29,7 @@ function Home () {
     <>
       <header>
         <Image
-          src='/logo.svg'
+          src='/assets/logo.svg'
           w={{ base: 60, sm: 100 }}
           h={{ base: 60, sm: 100 }}
           m='2rem'
