@@ -42,7 +42,7 @@ export default function PatientRegistration () {
 
   const [visitedSections, setVisitedSections] = useState({
     patientData: true,
-    contactData: false,
+    contactData: !env.FEATURE_COLLECT_PHI,
     medicalData: false,
     healthcareChoices: false,
     codeStatus: false,
