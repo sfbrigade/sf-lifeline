@@ -62,12 +62,13 @@ export default function PatientDetails () {
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Paper shadow='xs' p='md' radius='md' withBorder>
-            {env.FEATURE_COLLECT_PHI && <>
-              <Title order={5}>Date of Birth</Title>
-              <Text mb='xs'>{data?.dateOfBirth}</Text>
-              <Title order={5}>Gender</Title>
-              <Text mb='xs'>{data?.gender && t(`Gender.${data?.gender}`)}</Text>
-            </>}
+            {env.FEATURE_COLLECT_PHI &&
+              <>
+                <Title order={5}>Date of Birth</Title>
+                <Text mb='xs'>{data?.dateOfBirth}</Text>
+                <Title order={5}>Gender</Title>
+                <Text mb='xs'>{data?.gender && t(`Gender.${data?.gender}`)}</Text>
+              </>}
             <Title order={5}>Preferred language</Title>
             <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
           </Paper>
