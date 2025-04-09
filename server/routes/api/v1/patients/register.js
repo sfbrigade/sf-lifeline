@@ -8,14 +8,16 @@ export default async function (fastify, _opts) {
       schema: {
         body: {
           type: 'object',
-          required: [
-            'id',
-            'firstName',
-            'lastName',
-            'gender',
-            'language',
-            'dateOfBirth',
-          ],
+          required: process.env.VITE_FEATURE_COLLECT_PHI
+            ? [
+                'id',
+                'firstName',
+                'lastName',
+                'gender',
+                'language',
+                'dateOfBirth',
+              ]
+            : [],
           properties: {
             id: { type: 'string', format: 'uuid' },
             firstName: { type: 'string' },
@@ -43,7 +45,12 @@ export default async function (fastify, _opts) {
                 'TAGALOG',
               ],
             },
-            dateOfBirth: { type: 'string', format: 'date' },
+            dateOfBirth: {
+              oneOf: [
+                { type: 'string', format: 'date' },
+                { type: 'string', minLength: 0, maxLength: 0 },
+              ]
+            }
           },
         },
         response: {
@@ -82,11 +89,13 @@ export default async function (fastify, _opts) {
           const newPatientData = {};
 
           for (const [key, value] of Object.entries(request.body)) {
-            if (value) newPatientData[key] = value.trim();
-            if (key === 'middleName' && value.length === 0) {
+            if (value) {
+              newPatientData[key] = value.trim();
+            } else if (value.trim().length === 0) {
               newPatientData[key] = null;
+            } else if (key === 'dateOfBirth') {
+              newPatientData[key] = new Date(value);
             }
-            if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
           }
 
           const patient = await tx.patient.create({

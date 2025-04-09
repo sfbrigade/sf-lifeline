@@ -6,6 +6,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useQuery } from '@tanstack/react-query';
+
+import { useAppContext } from '../../../AppContext.jsx';
 import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
@@ -22,6 +24,7 @@ const FORM_TABS = {
  *
  */
 export default function PatientRegistration () {
+  const { env } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [initialMedicalData, setInitialMedicalData] = useState({});
   const [initialHospitalData, setInitialHospitalData] = useState('');
@@ -100,21 +103,23 @@ export default function PatientRegistration () {
       codeStatus: 'FULL',
     },
 
-    validate: {
-      patientData: {
-        firstName: isNotEmpty('First Name is required'),
-        lastName: isNotEmpty('Last Name is required'),
-        language: isNotEmpty('Language is required'),
-        gender: isNotEmpty('Gender is required'),
-        dateOfBirth: isNotEmpty('Date of Birth is required'),
-      },
-      contactData: {
-        phone: (value) =>
-          value.length === 0 || value.match(/^\(\d{3}\) \d{3}-\d{4}$/)
-            ? null
-            : 'Phone number is not in (XXX) XXX-XXXX format',
-      },
-    },
+    validate: env.FEATURE_COLLECT_PHI
+      ? {
+          patientData: {
+            firstName: isNotEmpty('First Name is required'),
+            lastName: isNotEmpty('Last Name is required'),
+            language: isNotEmpty('Language is required'),
+            gender: isNotEmpty('Gender is required'),
+            dateOfBirth: isNotEmpty('Date of Birth is required'),
+          },
+          contactData: {
+            phone: (value) =>
+              value.length === 0 || value.match(/^\(\d{3}\) \d{3}-\d{4}$/)
+                ? null
+                : 'Phone number is not in (XXX) XXX-XXXX format',
+          },
+        }
+      : {},
     validateInputOnBlur: true,
   });
 
