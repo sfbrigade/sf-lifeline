@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { build } from '../../../helper.js';
 
-describe('/api/v1/patients', () => {
+describe('/api/v1/patients', { only: true }, () => {
   describe('GET /', () => {
     it('should return all patients for ADMIN user', async (t) => {
       const app = await build(t);
@@ -159,6 +159,7 @@ describe('/api/v1/patients', () => {
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
 
       reply = await app
         .inject()
@@ -386,6 +387,7 @@ describe('/api/v1/patients', () => {
     });
 
     it('errors if missing required fields', async (t) => {
+      process.env.VITE_FEATURE_COLLECT_PHI = 'true';
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
@@ -460,7 +462,7 @@ describe('/api/v1/patients', () => {
     });
   });
 
-  describe('PATCH /:id', () => {
+  describe('PATCH /:id', { only: true }, () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -512,7 +514,7 @@ describe('/api/v1/patients', () => {
           },
         })
         .headers(headers);
-
+      console.log(reply.body);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const {
         id,
@@ -710,7 +712,8 @@ describe('/api/v1/patients', () => {
       });
     });
 
-    it('optional fields should be null if not provided or sent as empty string', async (t) => {
+    it('optional fields should be null if not provided or sent as empty string', { only: true }, async (t) => {
+      process.env.VITE_FEATURE_COLLECT_PHI = 'true';
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');

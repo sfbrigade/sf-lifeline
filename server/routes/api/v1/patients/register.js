@@ -88,12 +88,14 @@ export default async function (fastify, _opts) {
 
           const newPatientData = {};
 
-          for (const [key, value] of Object.entries(request.body)) {
+          for (let [key, value] of Object.entries(request.body)) {
+            value = value?.trim();
             if (value) {
-              newPatientData[key] = value.trim();
-            } else if (value.trim().length === 0) {
+              newPatientData[key] = value;
+            } else {
               newPatientData[key] = null;
-            } else if (key === 'dateOfBirth') {
+            }
+            if (key === 'dateOfBirth' && value) {
               newPatientData[key] = new Date(value);
             }
           }
