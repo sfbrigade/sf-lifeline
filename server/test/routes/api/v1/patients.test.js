@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { build } from '../../../helper.js';
 
-describe('/api/v1/patients', { only: true }, () => {
+describe('/api/v1/patients', () => {
   describe('GET /', () => {
     it('should return all patients for ADMIN user', async (t) => {
       const app = await build(t);
@@ -462,7 +462,7 @@ describe('/api/v1/patients', { only: true }, () => {
     });
   });
 
-  describe('PATCH /:id', { only: true }, () => {
+  describe('PATCH /:id', () => {
     it('should return an error if not an ADMIN, STAFF or VOLUNTEER user', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -712,7 +712,7 @@ describe('/api/v1/patients', { only: true }, () => {
       });
     });
 
-    it('optional fields should be null if not provided or sent as empty string', { only: true }, async (t) => {
+    it('optional fields should be null if not provided or sent as empty string', async (t) => {
       process.env.VITE_FEATURE_COLLECT_PHI = 'true';
       const app = await build(t);
       await t.loadFixtures();
