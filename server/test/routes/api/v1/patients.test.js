@@ -514,7 +514,7 @@ describe('/api/v1/patients', () => {
           },
         })
         .headers(headers);
-      console.log(reply.body);
+
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const {
         id,

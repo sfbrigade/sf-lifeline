@@ -22,7 +22,6 @@ export default async function (fastify, _opts) {
         env[key] = process.env[key];
       }
     });
-    console.log('!!!', env);
     reply.header('Content-Type', 'text/html');
     reply.send(
       HTML.replace('window.env = null;', `window.env=${JSON.stringify(env)};`)
