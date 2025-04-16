@@ -6,7 +6,7 @@ import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 import { MantineProvider, useMantineColorScheme } from '@mantine/core';
 import { MemoryRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AppContextProvider } from '../src/Context';
+import { AppContextProvider } from '../src/AppContext';
 import theme from '../src/theme';
 
 const channel = addons.getChannel();
