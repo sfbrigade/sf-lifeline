@@ -30,7 +30,7 @@ const HOSPITALS_TABLE_HEADERS = [
 /**
  *
  * @returns {{
- *  Hospitals: Array<Physicians>,
+ *  Hospitals: Array<Hospitals>,
  *  headers: Array<TableHeader>,
  *  search: string,
  *  setSearch: (search: string) => void,

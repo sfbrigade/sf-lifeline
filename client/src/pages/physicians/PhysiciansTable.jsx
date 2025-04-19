@@ -45,7 +45,7 @@ export default function PhysiciansTable ({ headers, data }) {
     [open]
   );
 
-  const confirmPatientDeletion = async () => {
+  const confirmPhysicianDeletion = async () => {
     try {
       await deletePhysican(physician.id);
       notifications.show({
@@ -67,7 +67,7 @@ export default function PhysiciansTable ({ headers, data }) {
     }
   };
 
-  const cancelPatientDeletion = () => {
+  const cancelPhysiciantDeletion = () => {
     setSelectedPhysician(null);
     close();
   };
@@ -104,7 +104,7 @@ export default function PhysiciansTable ({ headers, data }) {
         <Button
           color='red'
           fullWidth
-          onClick={confirmPatientDeletion}
+          onClick={confirmPhysicianDeletion}
           loading={isPending}
         >
           Yes
@@ -112,7 +112,7 @@ export default function PhysiciansTable ({ headers, data }) {
         <Button
           color='blue'
           fullWidth
-          onClick={cancelPatientDeletion}
+          onClick={cancelPhysiciantDeletion}
           disabled={isPending}
         >
           No

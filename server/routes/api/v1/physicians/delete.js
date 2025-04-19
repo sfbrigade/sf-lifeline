@@ -28,15 +28,20 @@ export default async function (fastify, _opts) {
       try {
         const physician = await fastify.prisma.physician.findUnique({
           where: { id },
+          include: {
+            patients: true,
+            hospitals: true
+          }
         });
 
-        if (physician.patients.length !== 0 && physician.hospitals.length !== 0) {
+        if (physician.patients.length !== 0 || physician.hospitals.length !== 0) {
           return reply.status(StatusCodes.BAD_REQUEST).send({ message: `Physician with ID ${id} has patients and hospitals assigned. Cannot delete.` });
         }
+
         await fastify.prisma.physician.delete({
           where: { id },
         });
-        reply.send({ message: 'Physician deleted successfully' });
+        return reply.send({ message: 'Physician deleted successfully' });
       } catch (error) {
         if (error.message.includes('does not exist')) {
           return reply.status(StatusCodes.NOT_FOUND).send({

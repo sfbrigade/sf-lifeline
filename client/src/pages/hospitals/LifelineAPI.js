@@ -15,6 +15,20 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async getPhysicansInHospital (query, hospitalId, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/physicians?physician=${query}&hospitalId=${hospitalId}&page=${page}`
+    );
+    return response;
+  }
+
+  static async getPatientsInHospital (query, hospitalId, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/patients?patient=${query}&hospitalId=${hospitalId}&page=${page}`
+    );
+    return response;
+  }
+
   static async createHospital (data) {
     const response = await fetch(`${SERVER_BASE_URL}/hospitals`, {
       method: 'POST',

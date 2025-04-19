@@ -21,30 +21,6 @@ export default async function (fastify) {
               address: { type: 'string' },
               phone: { type: 'string' },
               email: { type: 'string' },
-              physicians: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                  },
-                },
-              },
-              patients: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                  }
-                }
-              }
             },
           },
         },
@@ -54,11 +30,7 @@ export default async function (fastify) {
     async (request, reply) => {
       const id = request.params.id;
       const record = await fastify.prisma.hospital.findUnique({
-        where: { id },
-        include: {
-          patients: true,
-          physicians: true
-        }
+        where: { id }
       });
       if (!record) {
         return reply.status(StatusCodes.NOT_FOUND).send({ message: 'Hospital not found' });

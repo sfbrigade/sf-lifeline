@@ -13,6 +13,7 @@ export default async function (fastify) {
             limit: { type: 'integer' },
             patient: { type: 'string' },
             physicianId: { type: 'string' },
+            hospitalId: { type: 'string' }
           },
         },
         response: {
@@ -58,15 +59,11 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', patient = '', physicianId } = request.query;
+      const { page = '1', perPage = '25', patient = '', physicianId, hospitalId } = request.query;
 
       const splitQuery = patient.trim().split(' ');
 
       let whereClause = {};
-
-      if (physicianId) {
-        whereClause.physicianId = physicianId;
-      }
 
       if (splitQuery.length > 1) {
         whereClause = {
@@ -128,6 +125,14 @@ export default async function (fastify) {
             },
           ],
         };
+      }
+
+      if (physicianId) {
+        whereClause.physicianId = physicianId;
+      }
+
+      if (hospitalId) {
+        whereClause.hospitalId = hospitalId;
       }
 
       const options = {
