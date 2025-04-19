@@ -44,6 +44,11 @@ export function PasswordResetForm ({
 
   let multiplier = password.length > 7 ? 0 : 1;
 
+  const strength = Math.max(
+    100 - (100 / (requirements.length + 1)) * multiplier,
+    0
+  );
+
   const progressColor = (() => {
     if (strength === 100) {
       return 'teal';
@@ -61,11 +66,6 @@ export function PasswordResetForm ({
       multiplier += 1;
     }
   });
-
-  const strength = Math.max(
-    100 - (100 / (requirements.length + 1)) * multiplier,
-    0
-  );
   return (
     <form
       onSubmit={(event) => {
