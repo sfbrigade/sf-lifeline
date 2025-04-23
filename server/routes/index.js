@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function readIndexFile () {
-  const filePath = path.join(__dirname, '../../client/dist', 'index.html');
+  const filePath = path.resolve(__dirname, '../../client/dist', 'index.html');
   if (fs.existsSync(filePath)) {
     return fs.readFileSync(filePath, { encoding: 'utf8' });
   }
