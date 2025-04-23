@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
-import Context from '../Context';
+import { useAppContext } from '../AppContext';
 
 /**
  * Global user and login/logout logic
@@ -15,7 +15,7 @@ import Context from '../Context';
  * }}
  */
 export function useAuthorization () {
-  const { user, setUser } = useContext(Context);
+  const { user, setUser } = useAppContext();
   const [error, setError] = useState(null);
 
   const loginMutation = useMutation({

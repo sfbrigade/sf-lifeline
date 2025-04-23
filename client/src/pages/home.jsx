@@ -8,15 +8,15 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import Context from '../Context';
+import { useAppContext } from '../AppContext';
 
 /**
  * Home page component.
  */
 function Home () {
-  const { user } = useContext(Context);
+  const { user } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function Home () {
     <>
       <header>
         <Image
-          src='/logo.svg'
+          src='/assets/logo.svg'
           w={{ base: 60, sm: 100 }}
           h={{ base: 60, sm: 100 }}
           m='2rem'

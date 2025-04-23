@@ -37,8 +37,12 @@ export default async function (fastify, _opts) {
                     'TAGALOG',
                   ],
                 },
-
-                dateOfBirth: { type: 'string', format: 'date' },
+                dateOfBirth: {
+                  oneOf: [
+                    { type: 'string', format: 'date' },
+                    { type: 'string', minLength: 0, maxLength: 0 },
+                  ]
+                }
               },
             },
             contactData: {
@@ -205,12 +209,16 @@ export default async function (fastify, _opts) {
           const newPatientData = {};
 
           // Only update the patient data if the value is truthy
-          for (const [key, value] of Object.entries(patientData)) {
-            if (value) newPatientData[key] = value.trim();
-            if (key === 'middleName' && value.trim().length === 0) {
+          for (let [key, value] of Object.entries(patientData)) {
+            value = value?.trim();
+            if (value) {
+              newPatientData[key] = value;
+            } else {
               newPatientData[key] = null;
             }
-            if (key === 'dateOfBirth') newPatientData[key] = new Date(value);
+            if (key === 'dateOfBirth' && value) {
+              newPatientData[key] = new Date(value);
+            }
           }
 
           await tx.patient.update({

@@ -159,6 +159,7 @@ describe('/api/v1/patients', () => {
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
 
       reply = await app
         .inject()
@@ -386,6 +387,7 @@ describe('/api/v1/patients', () => {
     });
 
     it('errors if missing required fields', async (t) => {
+      process.env.VITE_FEATURE_COLLECT_PHI = 'true';
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
@@ -711,6 +713,7 @@ describe('/api/v1/patients', () => {
     });
 
     it('optional fields should be null if not provided or sent as empty string', async (t) => {
+      process.env.VITE_FEATURE_COLLECT_PHI = 'true';
       const app = await build(t);
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');

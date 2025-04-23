@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+
+import { useAppContext } from '../../../../../AppContext.jsx';
 import LifelineAPI from '../../../LifelineAPI.js';
 
-const PATIENTS_TABLE_HEADERS = [
+const PATIENTS_TABLE_HEADERS_PHI = [
   { key: 'name', text: 'Name' },
+  { key: 'more', text: '' },
+];
+
+const PATIENTS_TABLE_HEADERS = [
+  { key: 'id', text: 'ID' },
   { key: 'more', text: '' },
 ];
 
@@ -40,6 +47,7 @@ const formatName = (entry) => {
  * }}
  */
 export function usePhysicanPatients (physicianId) {
+  const { env } = useAppContext();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
@@ -70,7 +78,7 @@ export function usePhysicanPatients (physicianId) {
 
   return {
     patients: data?.patients,
-    headers: PATIENTS_TABLE_HEADERS,
+    headers: env.FEATURE_COLLECT_PHI ? PATIENTS_TABLE_HEADERS_PHI : PATIENTS_TABLE_HEADERS,
     search,
     setSearch,
     page,

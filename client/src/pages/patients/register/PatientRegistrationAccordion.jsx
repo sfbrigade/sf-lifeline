@@ -6,6 +6,8 @@ import { IMaskInput } from 'react-imask';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
+import { useAppContext } from '../../../AppContext';
+
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';
 
@@ -48,6 +50,7 @@ export default function PatientRegistrationAccordion ({
   showCheck,
   handleAccordionChange,
 }) {
+  const { env } = useAppContext();
   const { t } = useTranslation();
 
   return (
@@ -68,36 +71,39 @@ export default function PatientRegistrationAccordion ({
         </Accordion.Control>
         <Accordion.Panel>
           <Stack>
-            <TextInput
-              label='First Name'
-              placeholder='First Name'
-              withAsterisk
-              key={form.key('patientData.firstName')}
-              {...form.getInputProps('patientData.firstName')}
-            />
-            <TextInput
-              label='Middle Name'
-              placeholder='Middle Name'
-              key={form.key('patientData.middleName')}
-              {...form.getInputProps('patientData.middleName')}
-            />
-            <TextInput
-              label='Last Name'
-              placeholder='Last Name'
-              withAsterisk
-              key={form.key('patientData.lastName')}
-              {...form.getInputProps('patientData.lastName')}
-            />
-            <NativeSelect
-              label='Gender'
-              withAsterisk
-              data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
-                value,
-                label: t(`Gender.${value}`),
-              }))}
-              key={form.key('patientData.gender')}
-              {...form.getInputProps('patientData.gender')}
-            />
+            {env.FEATURE_COLLECT_PHI &&
+              <>
+                <TextInput
+                  label='First Name'
+                  placeholder='First Name'
+                  withAsterisk
+                  key={form.key('patientData.firstName')}
+                  {...form.getInputProps('patientData.firstName')}
+                />
+                <TextInput
+                  label='Middle Name'
+                  placeholder='Middle Name'
+                  key={form.key('patientData.middleName')}
+                  {...form.getInputProps('patientData.middleName')}
+                />
+                <TextInput
+                  label='Last Name'
+                  placeholder='Last Name'
+                  withAsterisk
+                  key={form.key('patientData.lastName')}
+                  {...form.getInputProps('patientData.lastName')}
+                />
+                <NativeSelect
+                  label='Gender'
+                  withAsterisk
+                  data={FORM_SELECT_ENUM_VALUES.gender.map((value) => ({
+                    value,
+                    label: t(`Gender.${value}`),
+                  }))}
+                  key={form.key('patientData.gender')}
+                  {...form.getInputProps('patientData.gender')}
+                />
+              </>}
             <NativeSelect
               label='Language'
               withAsterisk
@@ -108,78 +114,80 @@ export default function PatientRegistrationAccordion ({
               key={form.key('patientData.language')}
               {...form.getInputProps('patientData.language')}
             />
-            <TextInput
-              type='date'
-              label='Date of Birth'
-              withAsterisk
-              max={dayjs().format('YYYY-MM-DD')}
-              key={form.key('patientData.dateOfBirth')}
-              {...form.getInputProps('patientData.dateOfBirth')}
-            />
+            {env.FEATURE_COLLECT_PHI &&
+              <TextInput
+                type='date'
+                label='Date of Birth'
+                withAsterisk
+                max={dayjs().format('YYYY-MM-DD')}
+                key={form.key('patientData.dateOfBirth')}
+                {...form.getInputProps('patientData.dateOfBirth')}
+              />}
           </Stack>
         </Accordion.Panel>
       </Accordion.Item>
 
-      <Accordion.Item value='contactData'>
-        <Accordion.Control>
-          &#9313; Emergency Contact{' '}
-          {showCheck['contactData']
-            ? (
-              <IconCircleCheck color='green' size={30} />
-              )
-            : null}
-        </Accordion.Control>
-        <Accordion.Panel>
-          <Stack>
-            <TextInput
-              label='First Name'
-              placeholder='First Name'
-              key={form.key('contactData.firstName')}
-              {...form.getInputProps('contactData.firstName')}
-            />
-            <TextInput
-              label='Middle Name'
-              placeholder='Middle Name'
-              key={form.key('contactData.middleName')}
-              {...form.getInputProps('contactData.middleName')}
-            />
-            <TextInput
-              label='Last Name'
-              placeholder='Last Name'
-              key={form.key('contactData.lastName')}
-              {...form.getInputProps('contactData.lastName')}
-            />
-            <InputBase
-              label='Phone Number'
-              component={IMaskInput}
-              mask='(000) 000-0000'
-              placeholder='(000) 000-0000'
-              key={form.key('contactData.phone')}
-              {...form.getInputProps('contactData.phone')}
-            />
-            <TextInput
-              label='Email'
-              placeholder='Email'
-              key={form.key('contactData.email')}
-              {...form.getInputProps('contactData.email')}
-            />
-            <NativeSelect
-              label='Relationship'
-              placeholder='Select Relationship'
-              data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
-                value,
-                label: t(`Relationship.${value}`),
-              }))}
-              key={form.key('contactData.relationship')}
-              {...form.getInputProps('contactData.relationship')}
-            />
-          </Stack>
-        </Accordion.Panel>
-      </Accordion.Item>
+      {env.FEATURE_COLLECT_PHI &&
+        <Accordion.Item value='contactData'>
+          <Accordion.Control>
+            &#9313; Emergency Contact{' '}
+            {showCheck['contactData']
+              ? (
+                <IconCircleCheck color='green' size={30} />
+                )
+              : null}
+          </Accordion.Control>
+          <Accordion.Panel>
+            <Stack>
+              <TextInput
+                label='First Name'
+                placeholder='First Name'
+                key={form.key('contactData.firstName')}
+                {...form.getInputProps('contactData.firstName')}
+              />
+              <TextInput
+                label='Middle Name'
+                placeholder='Middle Name'
+                key={form.key('contactData.middleName')}
+                {...form.getInputProps('contactData.middleName')}
+              />
+              <TextInput
+                label='Last Name'
+                placeholder='Last Name'
+                key={form.key('contactData.lastName')}
+                {...form.getInputProps('contactData.lastName')}
+              />
+              <InputBase
+                label='Phone Number'
+                component={IMaskInput}
+                mask='(000) 000-0000'
+                placeholder='(000) 000-0000'
+                key={form.key('contactData.phone')}
+                {...form.getInputProps('contactData.phone')}
+              />
+              <TextInput
+                label='Email'
+                placeholder='Email'
+                key={form.key('contactData.email')}
+                {...form.getInputProps('contactData.email')}
+              />
+              <NativeSelect
+                label='Relationship'
+                placeholder='Select Relationship'
+                data={FORM_SELECT_ENUM_VALUES.relationship.map((value) => ({
+                  value,
+                  label: t(`Relationship.${value}`),
+                }))}
+                key={form.key('contactData.relationship')}
+                {...form.getInputProps('contactData.relationship')}
+              />
+            </Stack>
+          </Accordion.Panel>
+        </Accordion.Item>}
 
       <Accordion.Item value='medicalData'>
         <Accordion.Control>
-          &#9314; Medical Information{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9314;</> : <>&#9313;</>} Medical Information{' '}
           {showCheck['medicalData']
             ? (
               <IconCircleCheck color='green' size={30} />
@@ -204,7 +212,7 @@ export default function PatientRegistrationAccordion ({
 
       <Accordion.Item value='healthcareChoices'>
         <Accordion.Control>
-          &#9315; Healthcare Choices{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9315;</> : <>&#9314;</>} Healthcare Choices{' '}
           {showCheck['healthcareChoices']
             ? (
               <IconCircleCheck color='green' size={30} />
@@ -229,7 +237,7 @@ export default function PatientRegistrationAccordion ({
 
       <Accordion.Item value='codeStatus'>
         <Accordion.Control>
-          &#9316; Advanced Directive{' '}
+          {env.FEATURE_COLLECT_PHI ? <>&#9316;</> : <>&#9315;</>} Advanced Directive{' '}
           {showCheck['codeStatus']
             ? (
               <IconCircleCheck color='green' size={30} />
