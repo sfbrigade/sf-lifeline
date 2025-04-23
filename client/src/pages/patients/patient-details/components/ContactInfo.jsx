@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { Box, Paper, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
+import { useAppContext } from '../../../../AppContext';
+
 const contactInfoProps = {
   emergencyContact: PropTypes.object,
   physician: PropTypes.object,
@@ -14,25 +16,27 @@ ContactInfo.propTypes = contactInfoProps;
  * @param {PropTypes.InferProps<typeof contactInfoProps>} props
  */
 export default function ContactInfo ({ emergencyContact, physician }) {
+  const { env } = useAppContext();
   const { t } = useTranslation();
 
   return (
     <Box component='section' mb='md'>
       <Title order={4} mb='xs'>Contact Information</Title>
       <Paper shadow='xs' p='md' radius='md' withBorder>
-        <Box component='section' mb='xs'>
-          <Title order={5}>
-            Emergency Contact
-          </Title>
-          <Text>
-            {(emergencyContact?.firstName || emergencyContact?.lastName)
-              ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
-              : '-'}
-            {emergencyContact?.relationship &&
-              ` (${t(`Relationship.${emergencyContact?.relationship}`)})`}
-            {emergencyContact?.phone && <><br />{emergencyContact?.phone}</>}
-          </Text>
-        </Box>
+        {env.FEATURE_COLLECT_PHI &&
+          <Box component='section' mb='xs'>
+            <Title order={5}>
+              Emergency Contact
+            </Title>
+            <Text>
+              {(emergencyContact?.firstName || emergencyContact?.lastName)
+                ? `${emergencyContact?.firstName || ''} ${emergencyContact?.middleName || ''} ${emergencyContact?.lastName || ''}`
+                : '-'}
+              {emergencyContact?.relationship &&
+            ` (${t(`Relationship.${emergencyContact?.relationship}`)})`}
+              {emergencyContact?.phone && <><br />{emergencyContact?.phone}</>}
+            </Text>
+          </Box>}
         <Box component='section'>
           <Title order={5}>
             Primary care physician (PCP)

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 
-import { useState, useContext, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useDeletePatient } from './useDeletePatient';
 import { notifications } from '@mantine/notifications';
-import Context from '../../Context';
 
-import PatientTableRow from './PatientTableRow';
+import { useAppContext } from '../../AppContext';
 import DataTable from '../../components/DataTable/DataTable';
+import PatientTableRow from './PatientTableRow';
 
 const patientTableProps = {
   headers: PropTypes.arrayOf(
@@ -37,7 +37,7 @@ export default function PatientsTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const { mutateAsync: deletePatient, isPending } = useDeletePatient();
-  const { user } = useContext(Context);
+  const { user } = useAppContext();
 
   const showDeleteConfirmation = useCallback(
     (patient) => {

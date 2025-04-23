@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 
@@ -6,7 +6,7 @@ import { useAuthorization } from '../../../hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from '../form.module.css';
-import Context from '../../../Context';
+import { useAppContext } from '../../../AppContext';
 
 /**
  * Login page component.
@@ -16,7 +16,7 @@ function Login () {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-  const { user } = useContext(Context);
+  const { user } = useAppContext();
   const { handleLogin, error } = useAuthorization();
   const location = useLocation();
   const navigate = useNavigate();

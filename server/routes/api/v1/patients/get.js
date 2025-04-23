@@ -120,7 +120,7 @@ export default async function (fastify, _opts) {
         });
         if (!patient) throw new Error('Patient not found');
 
-        patient.dateOfBirth = patient.dateOfBirth.toISOString().split('T')[0];
+        patient.dateOfBirth = patient.dateOfBirth?.toISOString().split('T')[0];
 
         return reply.code(StatusCodes.OK).send(patient);
       } catch (error) {

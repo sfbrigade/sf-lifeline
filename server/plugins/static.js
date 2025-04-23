@@ -15,7 +15,8 @@ const __dirname = path.dirname(__filename);
 export default fp(async (fastify) => {
   // Serve up the built client SPA files
   fastify.register(fastifyStatic.default, {
-    root: path.resolve(__dirname, '../../client/dist'),
+    root: path.resolve(__dirname, '../../client/dist/assets'),
+    prefix: '/assets/',
     wildcard: false,
   });
 
