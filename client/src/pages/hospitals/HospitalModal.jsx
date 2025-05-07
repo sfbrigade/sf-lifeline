@@ -12,7 +12,7 @@ import Form from '../../components/Form/Form';
  *  @param {Function} props.close - Function to close the modal
  */
 export default function HospitalModal ({ opened, close }) {
-  const { mutateAsync: createHospital, isPending } = useCreateHospital();
+  const { mutateAsync: createHospital } = useCreateHospital();
 
   const form = useForm({
     mode: 'uncontrolled',
