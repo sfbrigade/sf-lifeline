@@ -1,8 +1,9 @@
-import { Modal, TextInput, Group, Button } from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import PropTypes from 'prop-types';
 import { useCreateHospital } from './useCreateHospital';
+import Form from '../../components/Form/Form';
 
 /**
  * Hospital Modal
@@ -11,8 +12,7 @@ import { useCreateHospital } from './useCreateHospital';
  *  @param {Function} props.close - Function to close the modal
  */
 export default function HospitalModal ({ opened, close }) {
-
-  const { mutateAsync: createHospital } = useCreateHospital();
+  const { mutateAsync: createHospital, isPending } = useCreateHospital();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -37,21 +37,20 @@ export default function HospitalModal ({ opened, close }) {
    */
   async function onSubmit (values) {
     const response = await createHospital(values);
-
-    if(response.name){
+    if (response instanceof Error) {
+      notifications.show({
+        color: 'red',
+        title: 'Hospital failed to create',
+        message: response.message,
+        autoClose: 5000
+      });
+    } else {
       onClose();
       notifications.show({
         color: 'green',
         title: `Hospital ${response.name} created`,
         autoClose: 5000
       });
-    }
-    else {
-      notifications.show({
-        color: 'red',
-        title: 'hospital failed to create',
-        autoClose: 5000
-      })
     }
   }
 
@@ -74,48 +73,7 @@ export default function HospitalModal ({ opened, close }) {
           </div>
         }
       >
-        <form
-          className='form'
-          onSubmit={form.onSubmit((values) => onSubmit(values))}
-        >
-          <TextInput
-            label='Name'
-            placeholder='Name'
-            key={form.key('name')}
-            {...form.getInputProps('name')}
-          />
-          <TextInput
-            label='Email'
-            placeholder='Email'
-            key={form.key('email')}
-            {...form.getInputProps('email')}
-          />
-          <TextInput
-            label='Address'
-            placeholder='Address'
-            key={form.key('address')}
-            {...form.getInputProps('address')}
-          />
-          <TextInput
-            label='Phone'
-            placeholder='Phone'
-            key={form.key('phone')}
-            {...form.getInputProps('phone')}
-          />
-          <Group justify='flex-end'>
-            <Button variant='outline' color='gray' onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              disabled={
-                !form.getValues().name.length || !form.getValues().email.length || !form.getValues().address.length || !form.getValues().email.length || !form.getValues().phone.length
-              }
-              type='submit'
-            >
-              Create Hospital
-            </Button>
-          </Group>
-        </form>
+        <Form onSubmit={form.onSubmit(onSubmit)} form={form} />
       </Modal>
     </>
   );

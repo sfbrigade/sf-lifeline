@@ -14,16 +14,8 @@ const formatName = (entry) => {
   return formattedName.trim() ? formattedName : '-';
 };
 
-// const formatDate = (date) => {
-//   return new Date(date).toLocaleDateString(undefined, {
-//     month: 'long',
-//     day: 'numeric',
-//     year: 'numeric',
-//   });
-// };
-
 /**
- * Patient data
+ * Physicians data
  * @typedef {object} Physicians
  * @property {string} id - Physicians ID
  * @property {string} name - Physicians first name, middle name and last name

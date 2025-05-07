@@ -1,8 +1,9 @@
 import { useForm } from '@mantine/form';
 import { useNavigate, useParams } from 'react-router';
-import { Container, Button, Grid, Group, TextInput } from '@mantine/core';
+import { Container, Grid } from '@mantine/core';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
+import Form from '../../../../components/Form/Form';
 
 import LifelineAPI from '../../LifelineAPI';
 
@@ -56,35 +57,7 @@ export default function HospitalForm () {
       <h1>Edit Hospital</h1>
       <Grid>
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <form onSubmit={form.onSubmit(mutateAsync)}>
-            <TextInput
-              label='Name'
-              key={form.key('name')}
-              {...form.getInputProps('name')}
-              mb='sm'
-            />
-            <TextInput
-              label='Address'
-              key={form.key('address')}
-              {...form.getInputProps('address')}
-              mb='sm'
-            />
-            <TextInput
-              label='Phone'
-              key={form.key('phone')}
-              {...form.getInputProps('phone')}
-              mb='sm'
-            />
-            <TextInput
-              label='Email'
-              key={form.key('email')}
-              {...form.getInputProps('email')}
-              mb='sm'
-            />
-            <Group mt='md'>
-              <Button type='submit'>Submit</Button>
-            </Group>
-          </form>
+          <Form onSubmit={form.onSubmit(mutateAsync)} form={form} />
         </Grid.Col>
       </Grid>
     </Container>

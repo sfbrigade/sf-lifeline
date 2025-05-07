@@ -1,4 +1,3 @@
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import LifelineAPI from './LifelineAPI';
 
@@ -18,12 +17,11 @@ export function useCreateHospital () {
       const res = await LifelineAPI.createHospital(hospital);
       if (res.status >= 300) {
         const { message } = await res.json();
-        return new Error (message);
+        return new Error(message);
       }
       return res.json();
     },
     onSuccess: () => {
-      // Invalidate and refetch the physicians list
       queryClient.invalidateQueries({ queryKey: ['hospitals'] });
     },
     onError: (error) => {
