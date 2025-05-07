@@ -2,14 +2,18 @@ import { Modal, TextInput, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import PropTypes from 'prop-types';
+import { useCreateHospital } from './useCreateHospital';
 
 /**
- * Invite Modal
+ * Hospital Modal
  *  @param {object} props - The prop for the component
  *  @param {boolean} props.opened - State of modal being open or not
  *  @param {Function} props.close - Function to close the modal
  */
-export default function HospitalModel ({ opened, close }) {
+export default function HospitalModal ({ opened, close }) {
+
+  const { mutateAsync: createHospital } = useCreateHospital();
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -30,41 +34,25 @@ export default function HospitalModel ({ opened, close }) {
 
   /**
    * Calls API to create an Hospital
-   * @param {object} props - The props that contain form values
-   * @param {string} props.role - Role value on the form
-   * @param {string} props.name - Name of recipient
-   * @param {string} props.email - Email of recipient
    */
-  function onSubmit (values) {
-    fetch('/api/v1/hospitals', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return Promise.reject(response);
-        }
-        return response.json();
-      })
-      .then(() => {
-        onClose();
-        notifications.show({
-          color: 'green',
-          title: `Hospital ${values.name} created`,
-          autoClose: 5000,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        notifications.show({
-          color: 'red',
-          title: 'Hospital failed to create',
-          autoClose: 5000,
-        });
+  async function onSubmit (values) {
+    const response = await createHospital(values);
+
+    if(response.name){
+      onClose();
+      notifications.show({
+        color: 'green',
+        title: `Hospital ${response.name} created`,
+        autoClose: 5000
       });
+    }
+    else {
+      notifications.show({
+        color: 'red',
+        title: 'hospital failed to create',
+        autoClose: 5000
+      })
+    }
   }
 
   /**
@@ -133,9 +121,9 @@ export default function HospitalModel ({ opened, close }) {
   );
 }
 
-const hospitalModelProps = {
+const hospitalModalProps = {
   opened: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 
-HospitalModel.propTypes = hospitalModelProps;
+HospitalModal.propTypes = hospitalModalProps;

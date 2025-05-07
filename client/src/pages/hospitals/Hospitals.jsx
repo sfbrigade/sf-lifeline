@@ -15,7 +15,7 @@ import { TbSearch as IconSearch } from 'react-icons/tb';
 
 import HospitalsTable from './HospitalsTable';
 import { useHospitals } from './useHospitals';
-import HospitalModel from './HospitalModel';
+import HospitalModal from './HospitalModal';
 
 /**
  *  Hosptials page component
@@ -32,7 +32,7 @@ export default function Hospitals () {
 
   return (
     <Container>
-      <HospitalModel opened={opened} close={close} />
+      <HospitalModal opened={opened} close={close} />
       <Group justify='space-between' wrap='nowrap' my='sm'>
         <Title order={3} mr='md'>
           Hospitals
