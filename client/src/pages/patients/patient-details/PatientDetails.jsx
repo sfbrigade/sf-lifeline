@@ -50,11 +50,11 @@ export default function PatientDetails () {
 
   return (
     <Container component='main'>
-      <Group>
-        <Title order={2} my='sm'>
+      <Group wrap='nowrap'>
+        <Title order={2} my='sm' lineClamp={1}>
           {env.FEATURE_COLLECT_PHI ? <>{data?.firstName} {data?.lastName}</> : <>{data?.id}</>}
         </Title>
-        {canEdit && <Button component={Link} to='edit'>Edit</Button>}
+        {canEdit && <Button component={Link} to='edit' flex='0 0 auto'>Edit</Button>}
       </Group>
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
@@ -68,6 +68,8 @@ export default function PatientDetails () {
               </>}
             <Title order={5}>Code status</Title>
             <Text mb='xs'>{data?.codeStatus ? t(`CodeStatus.${data?.codeStatus}`) : 'Not provided'}</Text>
+            <Title order={5}>Language</Title>
+            <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
           </Paper>
         </Grid.Col>
         <Grid.Col display={{ base: 'none', md: 'block' }} span={4}>
@@ -138,27 +140,22 @@ export default function PatientDetails () {
           </Box>
         </Paper>
       </Box>
-      <Box component='section' mb='md'>
-        <Title order={4} mb='xs'>Contact Information</Title>
-        <Paper shadow='xs' p='md' radius='md' withBorder>
-          <Title order={5}>Language</Title>
-          <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
-          {env.FEATURE_COLLECT_PHI &&
+      {env.FEATURE_COLLECT_PHI &&
+        <Box component='section' mb='md'>
+          <Title order={4} mb='xs'>Emergency Contact</Title>
+          <Paper shadow='xs' p='md' radius='md' withBorder>
             <Box component='section' mb='xs'>
-              <Title order={5}>
-                Emergency Contact
-              </Title>
               <Text>
                 {(data?.emergencyContact?.firstName || data?.emergencyContact?.lastName)
                   ? `${data?.emergencyContact?.firstName || ''} ${data?.emergencyContact?.middleName || ''} ${data?.emergencyContact?.lastName || ''}`
                   : '-'}
                 {data?.emergencyContact?.relationship &&
-            ` (${t(`Relationship.${data?.emergencyContact?.relationship}`)})`}
+          ` (${t(`Relationship.${data?.emergencyContact?.relationship}`)})`}
                 {data?.emergencyContact?.phone && <><br />{data?.emergencyContact?.phone}</>}
               </Text>
-            </Box>}
-        </Paper>
-      </Box>
+            </Box>
+          </Paper>
+        </Box>}
       <Box component='section' mb='md'>
         <Title order={4} mb='xs'>Preferences</Title>
         <Paper shadow='xs' p='md' radius='md' withBorder>
