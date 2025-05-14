@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
-import { Flex, Button, Modal, Text, Container } from '@mantine/core';
+import { Flex, Button, Modal, Text, Container, Loader } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -54,7 +54,7 @@ export default function PatientRegistration () {
   const location = useLocation();
   const { existingPatient } = location.state ?? true;
 
-  const { data, isSuccess } = useQuery({
+  const { data, isSuccess, isLoading } = useQuery({
     queryKey: ['patient'],
     queryFn: async () => {
       const res = await LifelineAPI.getPatient(patientId);
@@ -406,13 +406,6 @@ export default function PatientRegistration () {
    * @param {string} value
    */
   async function handleAccordionChange (value) {
-    if (value === null) {
-      navigate('', { replace: true });
-      return;
-    } else {
-      navigate(`#${value}`, { replace: true });
-    }
-
     let errorFieldCount = 0;
 
     if (openedSection === 'codeStatus' && !form.isValid(`${openedSection}`)) {
@@ -447,6 +440,15 @@ export default function PatientRegistration () {
     } else {
       setOpenedSection(openedSection);
     }
+    if (value === null) {
+      navigate('', { replace: true });
+    } else {
+      navigate(`#${value}`, { replace: true });
+    }
+  }
+
+  if (isLoading) {
+    return <Loader color='blue' />;
   }
 
   return (
