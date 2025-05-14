@@ -6,10 +6,14 @@ import {
   Button,
   Container,
   Anchor,
+  Divider,
+  Text,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import classes from './login.module.css';
+import PasskeyLogin from '../../../components/PasskeyLogin';
+import { isWebAuthnSupported } from '../../../utils/webAuthn';
 
 const loginFormProps = {
   email: PropTypes.string.isRequired,
@@ -76,7 +80,7 @@ export function LoginForm ({
           fullWidth
           type='submit'
         >
-          Log in
+          Log in with Password
         </Button>
         <div className={classes.anchor}>
           <Anchor component={Link} to='/password/forgot'>
@@ -84,6 +88,21 @@ export function LoginForm ({
           </Anchor>
         </div>
       </Container>
+
+      {/* Passkey Login Section */}
+      {isWebAuthnSupported() && email && (
+        <>
+          <Container size='25rem' className={classes.dividerContainer}>
+            <Divider label="or" labelPosition="center" />
+          </Container>
+          <Container size='25rem'>
+            <PasskeyLogin 
+              email={email} 
+              onSuccess={onLogin}
+            />
+          </Container>
+        </>
+      )}
     </form>
   );
 }
