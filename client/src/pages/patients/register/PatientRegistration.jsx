@@ -406,13 +406,6 @@ export default function PatientRegistration () {
    * @param {string} value
    */
   async function handleAccordionChange (value) {
-    if (value === null) {
-      navigate('', { replace: true });
-      return;
-    } else {
-      navigate(`#${value}`, { replace: true });
-    }
-
     let errorFieldCount = 0;
 
     if (openedSection === 'codeStatus' && !form.isValid(`${openedSection}`)) {
@@ -446,6 +439,11 @@ export default function PatientRegistration () {
       }
     } else {
       setOpenedSection(openedSection);
+    }
+    if (value === null) {
+      navigate('', { replace: true });
+    } else {
+      navigate(`#${value}`, { replace: true });
     }
   }
 
