@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Center, Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
-import Context from './Context';
+import { useAppContext } from './AppContext';
 import { useAuthorization } from './hooks/useAuthorization';
 
 import './i18n';
@@ -21,7 +21,7 @@ function App ({ handleRedirects }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user, setUser } = useContext(Context);
+  const { user, setUser } = useAppContext();
   const { handleLogout } = useAuthorization();
 
   const { isLoading } = useQuery({

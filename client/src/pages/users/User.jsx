@@ -1,16 +1,15 @@
 import { Container, Group, Paper, Title, Text, Button } from '@mantine/core';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import dayjs from 'dayjs';
 
-import Context from '../../Context';
+import { useAppContext } from '../../AppContext';
 import LifelineAPI from '../patients/LifelineAPI';
 
 function User () {
-  const { user } = useContext(Context);
+  const { user } = useAppContext();
   const { userId } = useParams();
   const { t } = useTranslation();
 

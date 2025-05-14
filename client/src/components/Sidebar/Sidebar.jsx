@@ -103,7 +103,7 @@ export function Sidebar ({ toggleSidebar }) {
       <Box>
         <Group align='center' gap='sm' mb='lg'>
           <img
-            src='/logo.svg'
+            src='/assets/logo.svg'
             alt='SF Lifeline Logo'
             width='32rem'
             height='32rem'

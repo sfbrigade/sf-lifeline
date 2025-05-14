@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI';
 import dayjs from 'dayjs';
 
+import { useAppContext } from '../../AppContext';
+import LifelineAPI from './LifelineAPI';
+
 const PATIENT_TABLE_HEADERS = [
-  { key: 'name', text: 'Name' },
   { key: 'createdBy', text: 'Created by' },
   { key: 'createdAt', text: 'Date created' },
   { key: 'updatedBy', text: 'Updated by' },
@@ -49,6 +50,7 @@ const formatName = (entry) => {
  * }}
  */
 export function usePatients () {
+  const { env } = useAppContext();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
@@ -78,7 +80,7 @@ export function usePatients () {
 
   return {
     patients: data?.patients,
-    headers: PATIENT_TABLE_HEADERS,
+    headers: [env.FEATURE_COLLECT_PHI ? { key: 'name', text: 'Name' } : { key: 'id', text: 'ID' }, ...PATIENT_TABLE_HEADERS],
     search,
     setSearch,
     page,

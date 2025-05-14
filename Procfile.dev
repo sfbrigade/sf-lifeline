@@ -1,4 +1,4 @@
-client: npm run dev -w client -- --port $PORT --host 0.0.0.0
+client: cp server/.env client/.env && npm run dev -w client -- --port $PORT --host 0.0.0.0
 server: npm run dev -w server
 prisma: npm run db:preview -w server
 storybook: npm run storybook -w client

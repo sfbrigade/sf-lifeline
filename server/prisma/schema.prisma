@@ -70,7 +70,7 @@ model Patient {
   firstName          String?
   middleName         String?
   lastName           String?
-  dateOfBirth        DateTime?
+  dateOfBirth        DateTime?           @db.Date
   gender             Gender?
   language           Language?
   codeStatus         CodeStatus?
