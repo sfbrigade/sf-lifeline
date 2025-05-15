@@ -14,9 +14,11 @@ import PropTypes from 'prop-types';
 
 import classes from './Sidebar.module.css';
 import { useAuthorization } from '../../hooks/useAuthorization';
+import { ROLES } from '../../routes';
 
-const sections = [
-  {
+// Define all navigation items with role requirements
+const allNavigationItems = {
+  adminPanel: {
     label: 'Admin panel',
     icon: null,
     links: [
@@ -24,10 +26,11 @@ const sections = [
         label: 'Dashboard',
         icon: <LuLayoutDashboard className={classes.navbar__icon} />,
         href: '/',
+        minRole: 'FIRST_RESPONDER', // All roles can see dashboard
       },
     ],
   },
-  {
+  management: {
     label: 'Management',
     icon: null,
     links: [
@@ -40,16 +43,19 @@ const sections = [
         label: 'Members',
         href: '/users',
         icon: <FiUsers className={classes.navbar__icon} />,
+        minRole: 'ADMIN', // Only admins can see Members
       },
       {
         label: 'Patients',
         href: '/patients',
         icon: <TbHeartHandshake className={classes.navbar__icon} />,
+        minRole: 'STAFF', // Staff and above can see Patients
       },
       {
         label: 'Physicians',
         href: '/physicians',
         icon: <TbStethoscope className={classes.navbar__icon} />,
+        minRole: 'STAFF', // Staff and above can see Physicians
       },
     ],
   },
@@ -70,7 +76,7 @@ const sections = [
   //     },
   //   ],
   // },
-];
+};
 
 const SidebarProps = {
   toggleSidebar: PropTypes.func,
@@ -91,6 +97,28 @@ export function Sidebar ({ toggleSidebar }) {
     await handleLogout();
   }
 
+  // Helper function to check if a user has sufficient permissions
+  const hasPermission = (minRole) => {
+    if (!user || !user.role) return false;
+    return ROLES.indexOf(user.role) >= ROLES.indexOf(minRole);
+  };
+
+  // Filter navigation sections based on user role
+  const filteredSections = [
+    {
+      ...allNavigationItems.adminPanel,
+      links: allNavigationItems.adminPanel.links.filter(link => 
+        hasPermission(link.minRole)
+      ),
+    },
+    {
+      ...allNavigationItems.management,
+      links: allNavigationItems.management.links.filter(link => 
+        hasPermission(link.minRole)
+      ),
+    },
+  ].filter(section => section.links.length > 0);
+
   return (
     <Stack
       className={classes.navbar}
@@ -110,7 +138,7 @@ export function Sidebar ({ toggleSidebar }) {
           />
           <Title order={4}>SF Life Line</Title>
         </Group>
-        {sections.map((section) => (
+        {filteredSections.map((section) => (
           <Box key={section.label} mb='lg'>
             <Title fw='normal' pl='sm' order={6}>
               {section.label}
