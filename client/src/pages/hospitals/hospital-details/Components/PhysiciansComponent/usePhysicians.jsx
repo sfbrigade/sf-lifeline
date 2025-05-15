@@ -14,14 +14,6 @@ const formatName = (entry) => {
   return formattedName.trim() ? formattedName : '-';
 };
 
-// const formatDate = (date) => {
-//   return new Date(date).toLocaleDateString(undefined, {
-//     month: 'long',
-//     day: 'numeric',
-//     year: 'numeric',
-//   });
-// };
-
 /**
  * Patient data
  * @typedef {object} Physicians
