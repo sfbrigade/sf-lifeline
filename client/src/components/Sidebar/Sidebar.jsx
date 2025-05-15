@@ -16,7 +16,6 @@ import classes from './Sidebar.module.css';
 import { useAuthorization } from '../../hooks/useAuthorization';
 import { ROLES } from '../../routes';
 
-// Define all navigation items with role requirements
 const allNavigationItems = {
   adminPanel: {
     label: 'Admin panel',
@@ -26,7 +25,7 @@ const allNavigationItems = {
         label: 'Dashboard',
         icon: <LuLayoutDashboard className={classes.navbar__icon} />,
         href: '/',
-        minRole: 'FIRST_RESPONDER', // All roles can see dashboard
+        minRole: 'FIRST_RESPONDER',
       },
     ],
   },
@@ -43,19 +42,19 @@ const allNavigationItems = {
         label: 'Members',
         href: '/users',
         icon: <FiUsers className={classes.navbar__icon} />,
-        minRole: 'ADMIN', // Only admins can see Members
+        minRole: 'ADMIN',
       },
       {
         label: 'Patients',
         href: '/patients',
         icon: <TbHeartHandshake className={classes.navbar__icon} />,
-        minRole: 'STAFF', // Staff and above can see Patients
+        minRole: 'STAFF',
       },
       {
         label: 'Physicians',
         href: '/physicians',
         icon: <TbStethoscope className={classes.navbar__icon} />,
-        minRole: 'STAFF', // Staff and above can see Physicians
+        minRole: 'STAFF',
       },
     ],
   },
@@ -97,13 +96,11 @@ export function Sidebar ({ toggleSidebar }) {
     await handleLogout();
   }
 
-  // Helper function to check if a user has sufficient permissions
   const hasPermission = (minRole) => {
     if (!user || !user.role) return false;
     return ROLES.indexOf(user.role) >= ROLES.indexOf(minRole);
   };
 
-  // Filter navigation sections based on user role
   const filteredSections = [
     {
       ...allNavigationItems.adminPanel,
