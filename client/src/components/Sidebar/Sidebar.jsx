@@ -14,9 +14,10 @@ import PropTypes from 'prop-types';
 
 import classes from './Sidebar.module.css';
 import { useAuthorization } from '../../hooks/useAuthorization';
+import { ROLES } from '../../routes';
 
-const sections = [
-  {
+const allNavigationItems = {
+  adminPanel: {
     label: 'Admin panel',
     icon: null,
     links: [
@@ -24,10 +25,11 @@ const sections = [
         label: 'Dashboard',
         icon: <LuLayoutDashboard className={classes.navbar__icon} />,
         href: '/',
+        minRole: 'FIRST_RESPONDER',
       },
     ],
   },
-  {
+  management: {
     label: 'Management',
     icon: null,
     links: [
@@ -40,16 +42,19 @@ const sections = [
         label: 'Members',
         href: '/users',
         icon: <FiUsers className={classes.navbar__icon} />,
+        minRole: 'ADMIN',
       },
       {
         label: 'Patients',
         href: '/patients',
         icon: <TbHeartHandshake className={classes.navbar__icon} />,
+        minRole: 'STAFF',
       },
       {
         label: 'Physicians',
         href: '/physicians',
         icon: <TbStethoscope className={classes.navbar__icon} />,
+        minRole: 'STAFF',
       },
     ],
   },
@@ -70,7 +75,7 @@ const sections = [
   //     },
   //   ],
   // },
-];
+};
 
 const SidebarProps = {
   toggleSidebar: PropTypes.func,
@@ -91,6 +96,26 @@ export function Sidebar ({ toggleSidebar }) {
     await handleLogout();
   }
 
+  const hasPermission = (minRole) => {
+    if (!user || !user.role) return false;
+    return ROLES.indexOf(user.role) >= ROLES.indexOf(minRole);
+  };
+
+  const filteredSections = [
+    {
+      ...allNavigationItems.adminPanel,
+      links: allNavigationItems.adminPanel.links.filter(link => 
+        hasPermission(link.minRole)
+      ),
+    },
+    {
+      ...allNavigationItems.management,
+      links: allNavigationItems.management.links.filter(link => 
+        hasPermission(link.minRole)
+      ),
+    },
+  ].filter(section => section.links.length > 0);
+
   return (
     <Stack
       className={classes.navbar}
@@ -110,7 +135,7 @@ export function Sidebar ({ toggleSidebar }) {
           />
           <Title order={4}>SF Life Line</Title>
         </Group>
-        {sections.map((section) => (
+        {filteredSections.map((section) => (
           <Box key={section.label} mb='lg'>
             <Title fw='normal' pl='sm' order={6}>
               {section.label}
