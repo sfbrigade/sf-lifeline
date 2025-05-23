@@ -42,8 +42,8 @@ function Users () {
   return (
     <Container>
       <InviteModal opened={opened} close={close} />
-      <Group justify='space-between' wrap='nowrap' my='sm' style={{ flexWrap: 'wrap' }}>
-        <Title order={2} mr='md' className={classes.MembersTitle} >
+      <Group justify='space-between' wrap='nowrap' my='sm' className={classes.searchContainer}>
+        <Title order={2} mr='md' className={classes.membersTitle} >
           Members
         </Title>
         <Group justify = "center">
