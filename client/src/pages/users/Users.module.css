@@ -57,3 +57,10 @@
     gap: 12px;
   }
 }
+
+.MembersTitle{
+  @media screen and (max-width: 48em) {
+    width: 100%;
+    text-align: center;
+  }
+}
