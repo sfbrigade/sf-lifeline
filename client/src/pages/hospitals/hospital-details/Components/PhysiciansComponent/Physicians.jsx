@@ -2,7 +2,7 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 
-import { usePhysicians } from './usePhysicians';
+import { usePhysicians } from '../../../../physicians/usePhysicians';
 import PhysiciansTable from '../../../../physicians/PhysiciansTable';
 
 /**

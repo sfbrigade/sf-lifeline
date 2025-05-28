@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import Form from '../../../../components/Form/Form';
 
-import LifelineAPI from '../../LifelineAPI';
+import LifelineAPI from '../../../../LifelineAPI';
 
 export default function HospitalForm () {
   const navigate = useNavigate();

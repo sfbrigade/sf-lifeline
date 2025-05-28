@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../../../LifelineAPI.js';
+import LifelineAPI from '../../../../../LifelineAPI.js';
 
 const PHYSICIANS_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
@@ -43,8 +43,7 @@ export function useHospitals (physicianId) {
   const { data, isFetching } = useQuery({
     queryKey: ['hospital', search, page],
     queryFn: async () => {
-      const res = await LifelineAPI.getPhysicianInHospital(search, page, physicianId);
-
+      const res = await LifelineAPI.getHospitals(search, physicianId, page);
       if (res.status !== 200) {
         throw new Error('Failed to fetch patients.');
       }

@@ -6,7 +6,7 @@ import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@man
 import { useTranslation } from 'react-i18next';
 
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
-import LifelineAPI from '../LifelineAPI.js';
+import LifelineAPI from '../../../LifelineAPI.js';
 
 import PhysicanPatients from './Components/PatientComponent/PhysicanPatients.jsx';
 import Hospital from './Components/HospitalComponent/Hospital.jsx';

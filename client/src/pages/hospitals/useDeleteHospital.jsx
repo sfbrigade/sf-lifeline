@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI';
+import LifelineAPI from '../../LifelineAPI';
 
 /**
  *

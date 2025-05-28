@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../../../LifelineAPI';
+import LifelineAPI from '../../../../../LifelineAPI';
 import dayjs from 'dayjs';
 
 const PATIENT_TABLE_HEADERS = [
-  { key: 'name', text: 'Name' },
+  { key: 'id', text: 'id' },
   { key: 'createdBy', text: 'Created by' },
   { key: 'createdAt', text: 'Date created' },
   { key: 'updatedBy', text: 'Updated by' },
