@@ -139,34 +139,36 @@ export default function MedicalDataSearch ({
    * Conditional rendering of combobox content
    */
   function renderComboxContent() {
-    if (empty && search.length > 0) {
+    const registerOption = (
+      <Combobox.Option value="$register">
+        <Text fw={700} size="sm">
+          + Register new {category}: {search}
+        </Text>
+      </Combobox.Option>
+    );
+
+    if (data.length === 0 && search.length === 0) {
       return (
         <>
-          <Combobox.Empty>No results found</Combobox.Empty>
-          <Combobox.Option value="$register">
-            <Text fw={700} size="sm">
-              + Register new allergy: {search}
-            </Text>
-          </Combobox.Option>
+          <Combobox.Empty>Start typing to search</Combobox.Empty>
+          {category === 'allergies' && registerOption}
         </>
       );
     }
 
-    if (empty) {
-      return <Combobox.Empty>No results found</Combobox.Empty>;
-    }
-
-    if (data.length === 0) {
-      return <Combobox.Empty>Start typing to search</Combobox.Empty>;
-    }
-
     if (options.length === 0) {
-      return <Combobox.Empty>All options selected</Combobox.Empty>;
+      return (
+        <>
+          <Combobox.Empty>No results found</Combobox.Empty>
+          {category === 'allergies' && registerOption}
+        </>
+      );
     }
 
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
+        {category === 'allergies' && registerOption}
       </ScrollArea.Autosize>
     );
   }
