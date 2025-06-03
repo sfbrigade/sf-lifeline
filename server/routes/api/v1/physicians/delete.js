@@ -34,6 +34,10 @@ export default async function (fastify, _opts) {
           }
         });
 
+        if (!physician) {
+          throw new Error(`Physician with ID ${id} does not exist`);
+        }
+
         if (physician.patients.length !== 0 || physician.hospitals.length !== 0) {
           return reply.status(StatusCodes.BAD_REQUEST).send({ message: `Physician with ID ${id} has patients and hospitals assigned. Cannot delete.` });
         }

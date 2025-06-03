@@ -22,3 +22,9 @@ items:
     phone: 123-456-0010
     email: sf.general@test.com
     physicians: ['@physician3']
+  hospital4:
+    id: 3443778e-a590-47ad-ba87-42fbfbc48d48
+    name: Bob Hospital
+    address: 415 apple street
+    phone: 444-444-4444
+    email: test@testhopsital.com

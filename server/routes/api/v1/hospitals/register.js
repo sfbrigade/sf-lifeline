@@ -37,17 +37,23 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { phone, email } = request.body;
+      const { name, address, phone, email } = request.body;
 
       try {
         // Check if the physician already exists
         const exists = await fastify.prisma.hospital.findFirst({
           where: {
-            OR: [{ phone }, { email }],
+            OR: [{ phone }, { email }, { name }, { address }],
           },
         });
         if (exists) {
           const duplicateFields = [];
+          if (exists.name === name) {
+            duplicateFields.push(`name ${name}`);
+          }
+          if (exists.address === address) {
+            duplicateFields.push(`address ${name}`);
+          }
           if (exists.phone === phone) {
             duplicateFields.push(`phone ${phone}`);
           }
