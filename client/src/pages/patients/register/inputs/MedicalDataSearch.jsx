@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Box, Combobox, useCombobox, Pill, ScrollArea } from '@mantine/core';
-import { useDebouncedCallback } from '@mantine/hooks';
+import { Box, Combobox, useCombobox, Pill, ScrollArea, Text } from '@mantine/core';
+import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
+import RegisterAllergy from './RegisterAllergy';
 import LifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
@@ -34,6 +35,10 @@ export default function MedicalDataSearch ({
   const [value, setValue] = useState(initialMedicalData);
   const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
+  const [
+    registerAllergyOpened,
+    { open: openRegisterAllergy, close: closeRegisterAllergy },
+  ] = useDisclosure(false);
   const abortController = useRef();
 
   useEffect(() => {
@@ -75,19 +80,25 @@ export default function MedicalDataSearch ({
   });
 
   const handleSelectValue = (id, key) => {
-    const name = key.children;
-    setValue((current) =>
-      current.includes(id)
-        ? current.filter((v) => v.id !== id)
-        : [...current, { id, name }]
-    );
+    if (id === "$register") {
+      openRegisterAllergy();
+      combobox.closeDropdown();
+      setSearch("");
+    } else {
+      const name = key.children;
+      setValue((current) =>
+        current.includes(id)
+          ? current.filter((v) => v.id !== id)
+          : [...current, { id, name }]
+      );
 
-    form.setFieldValue(`medicalData.${category}`, (current) => [
-      ...current,
-      id,
-    ]);
-    combobox.closeDropdown();
-    setSearch('');
+      form.setFieldValue(`medicalData.${category}`, (current) => [
+        ...current,
+        id,
+      ]);
+      combobox.closeDropdown();
+      setSearch("");
+    }
   };
 
   const handleValueRemove = (val) => {
@@ -127,7 +138,20 @@ export default function MedicalDataSearch ({
    *
    * Conditional rendering of combobox content
    */
-  function renderComboxContent () {
+  function renderComboxContent() {
+    if (empty && search.length > 0) {
+      return (
+        <>
+          <Combobox.Empty>No results found</Combobox.Empty>
+          <Combobox.Option value="$register">
+            <Text fw={700} size="sm">
+              + Register new allergy: {search}
+            </Text>
+          </Combobox.Option>
+        </>
+      );
+    }
+
     if (empty) {
       return <Combobox.Empty>No results found</Combobox.Empty>;
     }
@@ -141,7 +165,7 @@ export default function MedicalDataSearch ({
     }
 
     return (
-      <ScrollArea.Autosize type='scroll' mah={200}>
+      <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
       </ScrollArea.Autosize>
     );
@@ -160,8 +184,14 @@ export default function MedicalDataSearch ({
         comboboxOptions={renderComboxContent}
         handleSearch={setSearch}
       >
-        <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
+        <Pill.Group style={{ marginTop: "6px" }}>{values}</Pill.Group>
       </SearchDatabaseInputField>
+      <RegisterAllergy
+        setAllergy={handleSelectValue}
+        registerAllergyOpened={registerAllergyOpened}
+        closeRegisterAllergy={closeRegisterAllergy}
+        fetchOptions={fetchOptions}
+      />
     </Box>
   );
 }

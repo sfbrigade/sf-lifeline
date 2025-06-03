@@ -118,4 +118,16 @@ export default class LifelineAPI {
     const data = await response.json();
     return data;
   }
+
+  static async registerAllergy (name) {
+    const response = await fetch(`${SERVER_BASE_URL}/allergies`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    return response;
+  }
 }
