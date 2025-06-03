@@ -8,6 +8,7 @@ import {
   Loader,
   Alert,
   Transition,
+  Select,
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -25,10 +26,12 @@ export default function RegisterAllergy({
   const form = useForm({
     initialValues: {
       name: '',
+      type: '',
     },
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name is required'),
+      type: (value) => (value.length > 0 ? null : 'Type is required'),
     },
   });
 
@@ -39,8 +42,8 @@ export default function RegisterAllergy({
     isLoading,
   } = useMutation({
     mutationKey: ['allergy'],
-    mutationFn: async (name) => {
-      const res = await LifelineAPI.registerAllergy(name);
+    mutationFn: async (data) => {
+      const res = await LifelineAPI.registerAllergy(data);
       if (res.status === StatusCodes.CREATED) {
         return await res.json();
       } else {
@@ -52,7 +55,7 @@ export default function RegisterAllergy({
 
   async function handleSubmit(values) {
     try {
-      const allergy = await mutateAsync(values.name);
+      const allergy = await mutateAsync(values);
       setAllergy(allergy.id, { children: allergy.name });
       notifications.show({
         title: 'Success',
@@ -101,6 +104,13 @@ export default function RegisterAllergy({
           label="Name"
           placeholder="Allergy Name"
           {...form.getInputProps('name')}
+        />
+        <Select
+          withAsterisk
+          label="Type"
+          placeholder="Select type"
+          data={['DRUG', 'OTHER']}
+          {...form.getInputProps('type')}
         />
 
         <Group justify="flex-end" mt="md">
