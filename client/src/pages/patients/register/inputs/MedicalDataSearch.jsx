@@ -33,7 +33,6 @@ export default function MedicalDataSearch ({
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(initialMedicalData);
-  const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const [
     registerAllergyOpened,
@@ -60,7 +59,6 @@ export default function MedicalDataSearch ({
       );
       setData(result);
       setLoading(false);
-      setEmpty(result.length === 0);
       abortController.current = undefined;
     } catch (error) {
       console.error(error);
