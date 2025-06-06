@@ -61,6 +61,30 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async registerAllergy (data) {
+    const response = await fetch(`${SERVER_BASE_URL}/allergies/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return response;
+  }
+
+  static async registerMedication (data) {
+    const response = await fetch(`${SERVER_BASE_URL}/medications/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return response;
+  }
+
   static async getHospitals (query) {
     const response = await fetch(
       `${SERVER_BASE_URL}/hospitals?hospital=${query}`
@@ -117,17 +141,5 @@ export default class LifelineAPI {
     );
     const data = await response.json();
     return data;
-  }
-
-  static async registerAllergy (data) {
-    const response = await fetch(`${SERVER_BASE_URL}/allergies/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    return response;
   }
 }

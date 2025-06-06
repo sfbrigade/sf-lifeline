@@ -7,6 +7,7 @@ import { notifications } from '@mantine/notifications';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 import RegisterAllergy from './RegisterAllergy';
+import RegisterMedication from './RegisterMedication';
 import LifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
@@ -37,6 +38,10 @@ export default function MedicalDataSearch ({
   const [
     registerAllergyOpened,
     { open: openRegisterAllergy, close: closeRegisterAllergy },
+  ] = useDisclosure(false);
+  const [
+    registerMedicationOpened,
+    { open: openRegisterMedication, close: closeRegisterMedication },
   ] = useDisclosure(false);
   const abortController = useRef();
 
@@ -79,7 +84,11 @@ export default function MedicalDataSearch ({
 
   const handleSelectValue = (id, key) => {
     if (id === "$register") {
-      openRegisterAllergy();
+      if (category === 'allergies') {
+        openRegisterAllergy();
+      } else if (category === 'medications') {
+        openRegisterMedication();
+      }
       combobox.closeDropdown();
       setSearch("");
     } else {
@@ -140,7 +149,7 @@ export default function MedicalDataSearch ({
     const registerOption = (
       <Combobox.Option value="$register">
         <Text fw={700} size="sm">
-          + Register new {category}: {search}
+          + Register new {category}
         </Text>
       </Combobox.Option>
     );
@@ -149,7 +158,7 @@ export default function MedicalDataSearch ({
       return (
         <>
           <Combobox.Empty>Start typing to search</Combobox.Empty>
-          {category === 'allergies' && registerOption}
+          {(category === 'allergies' || category === 'medications') && registerOption}
         </>
       );
     }
@@ -158,7 +167,7 @@ export default function MedicalDataSearch ({
       return (
         <>
           <Combobox.Empty>No results found</Combobox.Empty>
-          {category === 'allergies' && registerOption}
+          {(category === 'allergies' || category === 'medications') && registerOption}
         </>
       );
     }
@@ -166,7 +175,7 @@ export default function MedicalDataSearch ({
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
-        {category === 'allergies' && registerOption}
+        {(category === 'allergies' || category === 'medications') && registerOption}
       </ScrollArea.Autosize>
     );
   }
@@ -190,6 +199,12 @@ export default function MedicalDataSearch ({
         setAllergy={handleSelectValue}
         registerAllergyOpened={registerAllergyOpened}
         closeRegisterAllergy={closeRegisterAllergy}
+        fetchOptions={fetchOptions}
+      />
+      <RegisterMedication
+        setMedication={handleSelectValue}
+        registerMedicationOpened={registerMedicationOpened}
+        closeRegisterMedication={closeRegisterMedication}
         fetchOptions={fetchOptions}
       />
     </Box>

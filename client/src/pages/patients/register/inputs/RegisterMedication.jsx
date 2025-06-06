@@ -14,21 +14,19 @@ import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '../../LifelineAPI';
 
-export default function RegisterAllergy({
-  registerAllergyOpened,
-  closeRegisterAllergy,
-  setAllergy,
+export default function RegisterMedication({
+  registerMedicationOpened,
+  closeRegisterMedication,
+  setMedication,
   fetchOptions,
 }) {
   const form = useForm({
     initialValues: {
       name: '',
-      type: '',
     },
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name is required'),
-      type: (value) => (value.length > 0 ? null : 'Type is required'),
     },
   });
 
@@ -38,9 +36,9 @@ export default function RegisterAllergy({
     mutateAsync,
     isLoading,
   } = useMutation({
-    mutationKey: ['allergy'],
+    mutationKey: ['medication'],
     mutationFn: async (data) => {
-      const res = await LifelineAPI.registerAllergy(data);
+      const res = await LifelineAPI.registerMedication(data);
       if (res.status === StatusCodes.CREATED || res.status === StatusCodes.OK) {
         return { data: await res.json(), status: res.status };
       } else {
@@ -52,24 +50,24 @@ export default function RegisterAllergy({
 
   async function handleSubmit(values) {
     try {
-      const { data: allergy, status } = await mutateAsync(values);
-      setAllergy(allergy.id, { children: allergy.name });
+      const { data: medication, status } = await mutateAsync(values);
+      setMedication(medication.id, { children: medication.name });
 
       if (status === StatusCodes.OK) {
         notifications.show({
           title: 'Info',
-          message: 'Allergy already exists and has been added.',
+          message: 'Medication already exists and has been added.',
           color: 'blue',
         });
       } else {
         notifications.show({
           title: 'Success',
-          message: 'Successfully registered allergy.',
+          message: 'Successfully registered medication.',
           color: 'green',
         });
       }
 
-      closeRegisterAllergy();
+      closeRegisterMedication();
       fetchOptions('');
       form.reset();
       mutationReset();
@@ -77,7 +75,7 @@ export default function RegisterAllergy({
       console.error(error);
       notifications.show({
         title: 'Error',
-        message: 'Issue with registering allergy',
+        message: 'Issue with registering medication',
         color: 'red',
       });
     }
@@ -85,9 +83,9 @@ export default function RegisterAllergy({
 
   return (
     <Modal
-      opened={registerAllergyOpened}
-      onClose={closeRegisterAllergy}
-      title="Register New Allergy"
+      opened={registerMedicationOpened}
+      onClose={closeRegisterMedication}
+      title="Register New Medication"
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Transition
@@ -98,7 +96,7 @@ export default function RegisterAllergy({
         >
           {(transitionStyle) => (
             <Alert
-              title="Failed to register allergy."
+              title="Failed to register medication."
               color="red"
               style={{ ...transitionStyle }}
             >
@@ -109,19 +107,12 @@ export default function RegisterAllergy({
         <TextInput
           withAsterisk
           label="Name"
-          placeholder="Allergy Name"
+          placeholder="Medication Name"
           {...form.getInputProps('name')}
-        />
-        <Select
-          withAsterisk
-          label="Type"
-          placeholder="Select type"
-          data={['DRUG', 'OTHER']}
-          {...form.getInputProps('type')}
         />
 
         <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={closeRegisterAllergy}>
+          <Button variant="default" onClick={closeRegisterMedication}>
             Cancel
           </Button>
           <Button type="submit" loading={isLoading}>
