@@ -38,7 +38,7 @@ export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
 // these are routes that require authentication and authorization by role
 export const AUTH_ROUTES = [
   ['ADMIN', ['users', 'users/pending']],
-  ['STAFF', ['patients/generate', 'patients']],
+  ['STAFF', ['patients/generate', 'patients', 'physicians']],
   ['VOLUNTEER', ['patients/:patientId/edit']],
   ['FIRST_RESPONDER', ['dashboard', 'patients/:patientId']],
 ];

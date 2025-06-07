@@ -138,7 +138,7 @@ export default async function (fastify) {
       const options = {
         page,
         perPage,
-        orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
+        orderBy: [{ updatedAt: 'desc' }],
         where: whereClause,
         include: {
           createdBy: true,

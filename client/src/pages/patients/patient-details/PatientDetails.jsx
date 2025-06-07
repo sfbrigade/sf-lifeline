@@ -3,14 +3,11 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { QRCode } from 'react-qrcode-logo';
-import { Button, Center, Container, Grid, Group, Loader, Paper, Text, Title } from '@mantine/core';
+import { Box, Button, Center, Container, Grid, Group, Loader, Paper, Pill, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import { useAppContext } from '../../../AppContext.jsx';
 import LifelineAPI from '../LifelineAPI.js';
-import ContactInfo from './components/ContactInfo.jsx';
-import MedicalInfo from './components/MedicalInfo.jsx';
-import Preferences from './components/Preferences.jsx';
 
 /**
  *
@@ -53,11 +50,11 @@ export default function PatientDetails () {
 
   return (
     <Container component='main'>
-      <Group>
-        <Title order={2} my='sm'>
+      <Group wrap='nowrap'>
+        <Title order={2} my='sm' lineClamp={1}>
           {env.FEATURE_COLLECT_PHI ? <>{data?.firstName} {data?.lastName}</> : <>{data?.id}</>}
         </Title>
-        {canEdit && <Button component={Link} to='edit'>Edit</Button>}
+        {canEdit && <Button component={Link} to='edit' flex='0 0 auto'>Edit</Button>}
       </Group>
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
@@ -69,7 +66,9 @@ export default function PatientDetails () {
                 <Title order={5}>Gender</Title>
                 <Text mb='xs'>{data?.gender && t(`Gender.${data?.gender}`)}</Text>
               </>}
-            <Title order={5}>Preferred language</Title>
+            <Title order={5}>Code status</Title>
+            <Text mb='xs'>{data?.codeStatus ? t(`CodeStatus.${data?.codeStatus}`) : 'Not provided'}</Text>
+            <Title order={5}>Language</Title>
             <Text>{data?.language && t(`Language.${data?.language}`)}</Text>
           </Paper>
         </Grid.Col>
@@ -79,16 +78,105 @@ export default function PatientDetails () {
           </Center>
         </Grid.Col>
       </Grid>
-      <MedicalInfo
-        allergies={data?.allergies}
-        medications={data?.medications}
-        conditions={data?.conditions}
-      />
-      <Preferences codeStatus={data?.codeStatus} hospital={data?.hospital} />
-      <ContactInfo
-        emergencyContact={data?.emergencyContact}
-        physician={data?.physician}
-      />
+      <Box component='section' mb='md'>
+        <Title order={4} mb='xs'>Medical Information</Title>
+        <Paper shadow='xs' p='md' radius='md' withBorder>
+          <Box component='section' mb='xs'>
+            <Title order={5} mb='xs'>Allergies</Title>
+            {data?.allergies.length === 0
+              ? (
+                <Text>None</Text>
+                )
+              : (
+                  data?.allergies.map((entry) => (
+                    <Pill
+                      size='md'
+                      key={entry.allergy.id}
+                      me='xs'
+                      mb='xs'
+                    >
+                      {entry.allergy.name}
+                    </Pill>
+                  ))
+                )}
+          </Box>
+          <Box component='section' mb='xs'>
+            <Title order={5} mb='xs'>Medical History</Title>
+            {data?.conditions?.length === 0
+              ? (
+                <Text>None</Text>
+                )
+              : (
+                  data?.conditions.map((entry) => (
+                    <Pill
+                      size='md'
+                      key={entry.condition.id}
+                      me='xs'
+                      mb='xs'
+                    >
+                      {entry.condition.name}
+                    </Pill>
+                  ))
+                )}
+          </Box>
+          <Box component='section'>
+            <Title order={5} mb='xs'>Medications</Title>
+            {data?.medications.length === 0
+              ? (
+                <Text>None</Text>
+                )
+              : (
+                  data?.medications.map((entry) => (
+                    <Pill
+                      size='md'
+                      key={entry.medication.id}
+                      me='xs'
+                      mb='xs'
+                    >
+                      {entry.medication.name}
+                    </Pill>
+                  ))
+                )}
+          </Box>
+        </Paper>
+      </Box>
+      {env.FEATURE_COLLECT_PHI &&
+        <Box component='section' mb='md'>
+          <Title order={4} mb='xs'>Emergency Contact</Title>
+          <Paper shadow='xs' p='md' radius='md' withBorder>
+            <Box component='section' mb='xs'>
+              <Text>
+                {(data?.emergencyContact?.firstName || data?.emergencyContact?.lastName)
+                  ? `${data?.emergencyContact?.firstName || ''} ${data?.emergencyContact?.middleName || ''} ${data?.emergencyContact?.lastName || ''}`
+                  : '-'}
+                {data?.emergencyContact?.relationship &&
+          ` (${t(`Relationship.${data?.emergencyContact?.relationship}`)})`}
+                {data?.emergencyContact?.phone && <><br />{data?.emergencyContact?.phone}</>}
+              </Text>
+            </Box>
+          </Paper>
+        </Box>}
+      <Box component='section' mb='md'>
+        <Title order={4} mb='xs'>Preferences</Title>
+        <Paper shadow='xs' p='md' radius='md' withBorder>
+          <Box component='section'>
+            <Title order={5}>Hospital</Title>
+            <Text mb='xs'>{data?.hospital ? data?.hospital.name : 'Not provided'}</Text>
+          </Box>
+          <Box component='section'>
+            <Title order={5}>
+              Primary care physician (PCP)
+            </Title>
+            <Text>
+              {data?.physician
+                ? `${data?.physician?.firstName} ${data?.physician?.lastName}`
+                : '-'}
+              {data?.physician?.phone && <><br />{data?.physician?.phone}</>}
+              {data?.physician?.hospitals[0]?.name && <><br />{data?.physician?.hospitals[0]?.name}</>}
+            </Text>
+          </Box>
+        </Paper>
+      </Box>
     </Container>
   );
 }
