@@ -2,6 +2,65 @@ import { Role } from '../../../../models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
 export default async function (fastify) {
+  fastify.post(
+    '/register',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['name'],
+          properties: {
+            name: { type: 'string' },
+            category: { type: 'string' },
+            system: { type: 'string' },
+            code: { type: 'string' },
+          },
+        },
+        response: {
+          [StatusCodes.CREATED]: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              category: { type: 'string' },
+              system: { type: 'string' },
+              code: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const { name, category, system, code } = request.body;
+
+      try {
+        const existingCondition = await fastify.prisma.condition.findFirst({
+          where: {
+            name: name.trim(),
+          },
+        });
+
+        if (existingCondition) {
+          reply.code(StatusCodes.OK).send(existingCondition);
+          return;
+        }
+
+        const newCondition = await fastify.prisma.condition.create({
+          data: {
+            name: name.trim(),
+            category: category || "Unknown",
+            system: system || "SNOMED",
+            code: code || "Unknown",
+          },
+        });
+
+        reply.code(StatusCodes.CREATED).send(newCondition);
+      } catch (error) {
+        throw error;
+      }
+    }
+  );
+
   fastify.get(
     '',
     {

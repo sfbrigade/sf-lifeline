@@ -8,6 +8,7 @@ import { notifications } from '@mantine/notifications';
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 import RegisterAllergy from './RegisterAllergy';
 import RegisterMedication from './RegisterMedication';
+import RegisterCondition from './RegisterCondition';
 import LifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
@@ -42,6 +43,10 @@ export default function MedicalDataSearch ({
   const [
     registerMedicationOpened,
     { open: openRegisterMedication, close: closeRegisterMedication },
+  ] = useDisclosure(false);
+  const [
+    registerConditionOpened,
+    { open: openRegisterCondition, close: closeRegisterCondition },
   ] = useDisclosure(false);
   const abortController = useRef();
 
@@ -88,6 +93,8 @@ export default function MedicalDataSearch ({
         openRegisterAllergy();
       } else if (category === 'medications') {
         openRegisterMedication();
+      } else if (category === 'conditions') {
+        openRegisterCondition();
       }
       combobox.closeDropdown();
       setSearch("");
@@ -158,7 +165,7 @@ export default function MedicalDataSearch ({
       return (
         <>
           <Combobox.Empty>Start typing to search</Combobox.Empty>
-          {(category === 'allergies' || category === 'medications') && registerOption}
+          {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
         </>
       );
     }
@@ -167,7 +174,7 @@ export default function MedicalDataSearch ({
       return (
         <>
           <Combobox.Empty>No results found</Combobox.Empty>
-          {(category === 'allergies' || category === 'medications') && registerOption}
+          {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
         </>
       );
     }
@@ -175,7 +182,7 @@ export default function MedicalDataSearch ({
     return (
       <ScrollArea.Autosize type="scroll" mah={200}>
         {options}
-        {(category === 'allergies' || category === 'medications') && registerOption}
+        {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
       </ScrollArea.Autosize>
     );
   }
@@ -205,6 +212,12 @@ export default function MedicalDataSearch ({
         setMedication={handleSelectValue}
         registerMedicationOpened={registerMedicationOpened}
         closeRegisterMedication={closeRegisterMedication}
+        fetchOptions={fetchOptions}
+      />
+      <RegisterCondition
+        setCondition={handleSelectValue}
+        registerConditionOpened={registerConditionOpened}
+        closeRegisterCondition={closeRegisterCondition}
         fetchOptions={fetchOptions}
       />
     </Box>

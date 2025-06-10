@@ -85,6 +85,18 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async registerCondition (data) {
+    const response = await fetch(`${SERVER_BASE_URL}/conditions/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return response;
+  }
+
   static async getHospitals (query) {
     const response = await fetch(
       `${SERVER_BASE_URL}/hospitals?hospital=${query}`
