@@ -30,34 +30,30 @@ export default async function (fastify) {
     async (request, reply) => {
       const { name, category, system, code } = request.body;
 
-      try {
-        const existingCondition = await fastify.prisma.condition.findFirst({
-          where: {
-            name: name.trim(),
-            category,
-            system,
-            code,
-          },
-        });
+      const existingCondition = await fastify.prisma.condition.findFirst({
+        where: {
+          name: name.trim(),
+          category,
+          system,
+          code,
+        },
+      });
 
-        if (existingCondition) {
-          reply.code(200).send(existingCondition);
-          return;
-        }
-
-        const newCondition = await fastify.prisma.condition.create({
-          data: {
-            name: name.trim(),
-            category,
-            system,
-            code,
-          },
-        });
-
-        reply.code(201).send(newCondition);
-      } catch (error) {
-        throw error;
+      if (existingCondition) {
+        reply.code(200).send(existingCondition);
+        return;
       }
+
+      const newCondition = await fastify.prisma.condition.create({
+        data: {
+          name: name.trim(),
+          category,
+          system,
+          code,
+        },
+      });
+
+      reply.code(201).send(newCondition);
     }
   );
 }
