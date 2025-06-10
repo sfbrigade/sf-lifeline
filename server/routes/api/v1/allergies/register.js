@@ -30,32 +30,28 @@ export default async function (fastify) {
     async (request, reply) => {
       const { name, type } = request.body;
 
-      try {
-        const existingAllergy = await fastify.prisma.allergy.findFirst({
-          where: {
-            name: name.trim(),
-            type,
-          },
-        });
+      const existingAllergy = await fastify.prisma.allergy.findFirst({
+        where: {
+          name: name.trim(),
+          type,
+        },
+      });
 
-        if (existingAllergy) {
-          reply.code(StatusCodes.OK).send(existingAllergy);
-          return;
-        }
-
-        const newAllergy = await fastify.prisma.allergy.create({
-          data: {
-            name: name.trim(),
-            type,
-            system: "SNOMED",
-            code: "Unknown",
-          },
-        });
-
-        reply.code(StatusCodes.CREATED).send(newAllergy);
-      } catch (error) {
-        throw error;
+      if (existingAllergy) {
+        reply.code(StatusCodes.OK).send(existingAllergy);
+        return;
       }
+
+      const newAllergy = await fastify.prisma.allergy.create({
+        data: {
+          name: name.trim(),
+          type,
+          system: "SNOMED",
+          code: "Unknown",
+        },
+      });
+
+      reply.code(StatusCodes.CREATED).send(newAllergy);
     }
   );
 }

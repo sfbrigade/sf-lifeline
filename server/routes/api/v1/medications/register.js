@@ -26,31 +26,27 @@ export default async function (fastify) {
     async (request, reply) => {
       const { name } = request.body;
 
-      try {
-        const existingMedication = await fastify.prisma.medication.findFirst({
-          where: {
-            name: name.trim(),
-          },
-        });
+      const existingMedication = await fastify.prisma.medication.findFirst({
+        where: {
+          name: name.trim(),
+        },
+      });
 
-        if (existingMedication) {
-          reply.code(StatusCodes.OK).send(existingMedication);
-          return;
-        }
-
-        const newMedication = await fastify.prisma.medication.create({
-          data: {
-            name: name.trim(),
-            system: "SNOMED",
-            code: "Unknown",
-            altNames: "",
-          },
-        });
-
-        reply.code(StatusCodes.CREATED).send(newMedication);
-      } catch (error) {
-        throw error;
+      if (existingMedication) {
+        reply.code(StatusCodes.OK).send(existingMedication);
+        return;
       }
+
+      const newMedication = await fastify.prisma.medication.create({
+        data: {
+          name: name.trim(),
+          system: "SNOMED",
+          code: "Unknown",
+          altNames: "",
+        },
+      });
+
+      reply.code(StatusCodes.CREATED).send(newMedication);
     }
   );
 }
