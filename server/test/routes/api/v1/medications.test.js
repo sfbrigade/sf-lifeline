@@ -137,7 +137,6 @@ describe('/api/v1/medications', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const newMedicationData = {
         name: 'New Test Medication',
-        altNames: '',
       };
 
       const reply = await app
