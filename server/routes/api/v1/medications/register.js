@@ -20,6 +20,7 @@ export default async function (fastify) {
               name: { type: 'string' },
               system: { type: 'string' },
               code: { type: 'string' },
+              altNames: { type: 'string' },
             },
           },
         },
