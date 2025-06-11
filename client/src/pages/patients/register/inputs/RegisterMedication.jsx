@@ -50,7 +50,6 @@ export default function RegisterMedication({
   async function handleSubmit(values) {
     try {
       const { data: medication, status } = await mutateAsync(values);
-      setMedication(medication.id, { children: medication.name });
 
       if (status === StatusCodes.OK) {
         notifications.show({
@@ -58,15 +57,17 @@ export default function RegisterMedication({
           message: 'Medication already exists and has been added.',
           color: 'blue',
         });
-      } else {
+        // Do not call setMedication or closeRegisterMedication if it already exists
+      } else if (status === StatusCodes.CREATED) {
+        setMedication(medication.id, { children: medication.name });
         notifications.show({
           title: 'Success',
           message: 'Successfully registered medication.',
           color: 'green',
         });
+        closeRegisterMedication();
       }
 
-      closeRegisterMedication();
       fetchOptions('');
       form.reset();
       mutationReset();

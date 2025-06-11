@@ -53,7 +53,6 @@ export default function RegisterCondition({
   async function handleSubmit(values) {
     try {
       const { data: condition, status } = await mutateAsync(values);
-      setCondition(condition.id, { children: condition.name });
 
       if (status === StatusCodes.OK) {
         notifications.show({
@@ -61,15 +60,17 @@ export default function RegisterCondition({
           message: 'Condition already exists and has been added.',
           color: 'blue',
         });
-      } else {
+        // Do not call setCondition or closeRegisterCondition if it already exists
+      } else if (status === StatusCodes.CREATED) {
+        setCondition(condition.id, { children: condition.name });
         notifications.show({
           title: 'Success',
           message: 'Successfully registered condition.',
           color: 'green',
         });
+        closeRegisterCondition();
       }
 
-      closeRegisterCondition();
       fetchOptions('');
       form.reset();
       mutationReset();

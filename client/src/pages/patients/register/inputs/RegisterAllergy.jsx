@@ -53,7 +53,6 @@ export default function RegisterAllergy({
   async function handleSubmit(values) {
     try {
       const { data: allergy, status } = await mutateAsync(values);
-      setAllergy(allergy.id, { children: allergy.name });
 
       if (status === StatusCodes.OK) {
         notifications.show({
@@ -61,15 +60,17 @@ export default function RegisterAllergy({
           message: 'Allergy already exists and has been added.',
           color: 'blue',
         });
-      } else {
+        // Do not call setAllergy or closeRegisterAllergy if it already exists
+      } else if (status === StatusCodes.CREATED) {
+        setAllergy(allergy.id, { children: allergy.name });
         notifications.show({
           title: 'Success',
           message: 'Successfully registered allergy.',
           color: 'green',
         });
+        closeRegisterAllergy();
       }
 
-      closeRegisterAllergy();
       fetchOptions('');
       form.reset();
       mutationReset();
