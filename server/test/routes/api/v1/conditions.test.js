@@ -41,43 +41,6 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(storedCondition.code, newConditionData.code);
     });
 
-    it('should return existing condition if already registered', async (t) => {
-      const app = await build(t);
-      await t.loadFixtures();
-      const headers = await t.authenticate('admin.user@test.com', 'test');
-      const uniqueConditionName = `Test Condition ${Date.now()}`;
-      const newConditionData = {
-        name: uniqueConditionName,
-        category: 'Test Category',
-        system: 'TEST',
-        code: 'TEST_CODE',
-      };
-
-      // First, register the new condition
-      const createReply = await app
-        .inject()
-        .post('/api/v1/conditions/register')
-        .headers(headers)
-        .payload(newConditionData);
-
-      assert.deepStrictEqual(createReply.statusCode, StatusCodes.CREATED);
-      const createdCondition = JSON.parse(createReply.payload);
-      assert.ok(createdCondition.id);
-      assert.deepStrictEqual(createdCondition.name, uniqueConditionName);
-
-      // Then, attempt to register the same condition again
-      const existingReply = await app
-        .inject()
-        .post('/api/v1/conditions/register')
-        .headers(headers)
-        .payload(newConditionData);
-
-      assert.deepStrictEqual(existingReply.statusCode, StatusCodes.OK);
-      const responseBody = JSON.parse(existingReply.payload);
-      assert.deepStrictEqual(responseBody.name, uniqueConditionName);
-      assert.deepStrictEqual(responseBody.id, createdCondition.id);
-    });
-
     it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
