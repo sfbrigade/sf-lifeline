@@ -5,26 +5,26 @@ items:
     id: a50538cd-1e10-42a3-8d6b-f9ae1e48a025
     name: Chinese Hospital
     address: 123 Main Street
-    phone: 123-456-7890
+    phone: (123) 456-7890
     email: chinese.hospital@test.com
     physicians: ['@physician1', '@physician2']
   hospital2:
     id: b50538cd-1e10-42a3-8d6b-f9ae1e48a025
     name: Kaiser SF
     address: 456 Main Street
-    phone: 123-456-9999
+    phone: (123) 456-9999
     email: kaiser.sf@test.com
     physicians: ['@physician3']
   hospital3:
     id: c50538cd-1e10-42a3-8d6b-f9ae1e48a025
     name: SF General
     address: 999 Main Street
-    phone: 123-456-0010
+    phone: (123) 456-0010
     email: sf.general@test.com
     physicians: ['@physician3']
   hospital4:
     id: 3443778e-a590-47ad-ba87-42fbfbc48d48
     name: Bob Hospital
     address: 415 apple street
-    phone: 444-444-4444
+    phone: (444) 444-4444
     email: test@testhopsital.com

@@ -17,7 +17,7 @@ export default async function (fastify) {
             },
             phone: {
               type: 'string',
-              pattern: '^\\d{3}-\\d{3}-\\d{4}$',
+              pattern: '^(\\([0-9]{3}\\)) [0-9]{3}-[0-9]{4}$',
             },
           },
         },

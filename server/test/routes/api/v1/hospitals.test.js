@@ -143,7 +143,7 @@ describe('/api/v1/hospitals', () => {
         .payload({
           name: 'New Hospital',
           address: '123 Main St',
-          phone: '415-555-1234',
+          phone: '(415) 555-1234',
           email: 'contact@newhospital.com'
         })
         .headers(headers);
@@ -151,7 +151,7 @@ describe('/api/v1/hospitals', () => {
       const hospital = JSON.parse(reply.payload);
       assert.deepStrictEqual(hospital.name, 'New Hospital');
       assert.deepStrictEqual(hospital.address, '123 Main St');
-      assert.deepStrictEqual(hospital.phone, '415-555-1234');
+      assert.deepStrictEqual(hospital.phone, '(415) 555-1234');
       assert.deepStrictEqual(hospital.email, 'contact@newhospital.com');
     });
 
@@ -178,7 +178,7 @@ describe('/api/v1/hospitals', () => {
         .payload({
           name: 'New Hospital',
           address: '123 Main St',
-          phone: '(555) 555-5555',
+          phone: '555-555-5555',
           email: 'contact@'
         })
         .headers(headers);
@@ -196,14 +196,14 @@ describe('/api/v1/hospitals', () => {
         .payload({
           name: 'Kaiser SF',
           address: '456 Main Street',
-          phone: '123-456-9999',
+          phone: '(123) 456-9999',
           email: 'kaiser.sf@test.com'
         })
         .headers(headers);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
-        'Hospital with name Kaiser SF and address Kaiser SF and phone 123-456-9999 and email kaiser.sf@test.com already exists.'
+        'Hospital with name Kaiser SF and address Kaiser SF and phone (123) 456-9999 and email kaiser.sf@test.com already exists.'
       );
     });
   });
@@ -227,7 +227,7 @@ describe('/api/v1/hospitals', () => {
         .payload({
           name: 'Kaiser SF Updated',
           address: '456 New St',
-          phone: '415-555-1234',
+          phone: '(415) 555-1234',
           email: 'newcontact@kaiser.com'
         })
         .headers(headers);
@@ -235,7 +235,7 @@ describe('/api/v1/hospitals', () => {
       const hospital = JSON.parse(reply.payload);
       assert.deepStrictEqual(hospital.name, 'Kaiser SF Updated');
       assert.deepStrictEqual(hospital.address, '456 New St');
-      assert.deepStrictEqual(hospital.phone, '415-555-1234');
+      assert.deepStrictEqual(hospital.phone, '(415) 555-1234');
       assert.deepStrictEqual(hospital.email, 'newcontact@kaiser.com');
     });
 
@@ -250,7 +250,7 @@ describe('/api/v1/hospitals', () => {
         .payload({
           name: 'Kaiser SF Updated',
           address: '456 New St',
-          phone: '415-555-1234',
+          phone: '(415) 555-1234',
           email: 'newcontact@kaiser.com'
         })
         .headers(headers);

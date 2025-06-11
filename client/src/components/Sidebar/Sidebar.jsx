@@ -110,13 +110,13 @@ export function Sidebar ({ toggleSidebar }) {
   const filteredSections = [
     {
       ...allNavigationItems.adminPanel,
-      links: allNavigationItems.adminPanel.links.filter(link => 
+      links: allNavigationItems.adminPanel.links.filter(link =>
         hasPermission(link.minRole)
       ),
     },
     {
       ...allNavigationItems.management,
-      links: allNavigationItems.management.links.filter(link => 
+      links: allNavigationItems.management.links.filter(link =>
         hasPermission(link.minRole)
       ),
     },
