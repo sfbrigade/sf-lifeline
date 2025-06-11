@@ -143,7 +143,9 @@ describe('/api/v1/allergies', () => {
         .payload(newAllergyData);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      console.log('Reply Payload:', reply.payload); // Add this line
       const responseBody = JSON.parse(reply.payload);
+      console.log('Response Body:', responseBody); // Add this line
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newAllergyData.name);
       assert.deepStrictEqual(responseBody.type, newAllergyData.type);
