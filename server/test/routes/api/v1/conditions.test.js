@@ -110,15 +110,15 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
-          id: '00000000-0000-0000-0000-000000000001',
-          name: 'Asthma',
-          category: 'Respiratory',
+          id: '061047c4-00b2-4793-a58b-12f93a509d23',
+          name: 'Deaf',
+          category: 'EENT',
           system: 'ICD10',
-          code: 'J45.909',
+          code: 'H91.3',
         },
       ]);
     });
@@ -134,15 +134,15 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
-          id: '00000000-0000-0000-0000-000000000001',
-          name: 'Asthma',
-          category: 'Respiratory',
+          id: '061047c4-00b2-4793-a58b-12f93a509d23',
+          name: 'Deaf',
+          category: 'EENT',
           system: 'ICD10',
-          code: 'J45.909',
+          code: 'H91.3',
         },
       ]);
     });
@@ -161,15 +161,15 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
-          id: '00000000-0000-0000-0000-000000000001',
-          name: 'Asthma',
-          category: 'Respiratory',
+          id: '061047c4-00b2-4793-a58b-12f93a509d23',
+          name: 'Deaf',
+          category: 'EENT',
           system: 'ICD10',
-          code: 'J45.909',
+          code: 'H91.3',
         },
       ]);
     });
@@ -195,11 +195,11 @@ describe('/api/v1/conditions', () => {
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
-          id: '00000000-0000-0000-0000-000000000001',
-          name: 'Asthma',
-          category: 'Respiratory',
+          id: '061047c4-00b2-4793-a58b-12f93a509d23',
+          name: 'Deaf',
+          category: 'EENT',
           system: 'ICD10',
-          code: 'J45.909',
+          code: 'H91.3',
         },
       ]);
     });

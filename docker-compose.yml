@@ -4,6 +4,7 @@ services:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=POSTGRES_DB=sf_lifeline_test_test
     ports:
       - 5432:5432
     volumes:
