@@ -128,4 +128,67 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload), []);
     });
   });
+
+  describe('POST /register', () => {
+    it('should register a new medication and store it in the database', async () => {
+      const newMedicationData = {
+        name: 'New Test Medication',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/medications/register')
+        .headers(headers)
+        .payload(newMedicationData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      const responseBody = JSON.parse(reply.payload);
+      assert.ok(responseBody.id);
+      assert.deepStrictEqual(responseBody.name, newMedicationData.name);
+      assert.deepStrictEqual(responseBody.system, 'SNOMED');
+      assert.deepStrictEqual(responseBody.code, 'Unknown');
+      assert.deepStrictEqual(responseBody.altNames, '');
+
+      const storedMedication = await app.prisma.medication.findUnique({
+        where: { id: responseBody.id },
+      });
+
+      assert.ok(storedMedication);
+      assert.deepStrictEqual(storedMedication.name, newMedicationData.name);
+      assert.deepStrictEqual(storedMedication.system, 'SNOMED');
+      assert.deepStrictEqual(storedMedication.code, 'Unknown');
+      assert.deepStrictEqual(storedMedication.altNames, '');
+    });
+
+    it('should return existing medication if already registered', async () => {
+      const existingMedicationData = {
+        name: 'acetaminophen / ibuprofen',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/medications/register')
+        .headers(headers)
+        .payload(existingMedicationData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const responseBody = JSON.parse(reply.payload);
+      assert.deepStrictEqual(responseBody.name, existingMedicationData.name);
+    });
+
+    it('should return BAD_REQUEST if name is empty or just spaces', async () => {
+      const invalidMedicationData = {
+        name: '   ',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/medications/register')
+        .headers(headers)
+        .payload(invalidMedicationData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(JSON.parse(reply.payload).message, 'Name cannot be empty or just spaces.');
+    });
+  });
 });

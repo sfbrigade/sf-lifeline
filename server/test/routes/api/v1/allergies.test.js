@@ -128,4 +128,71 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload), []);
     });
   });
+
+  describe('POST /register', () => {
+    it('should register a new allergy and store it in the database', async () => {
+      const newAllergyData = {
+        name: 'New Test Allergy',
+        type: 'OTHER',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/allergies/register')
+        .headers(headers)
+        .payload(newAllergyData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
+      const responseBody = JSON.parse(reply.payload);
+      assert.ok(responseBody.id);
+      assert.deepStrictEqual(responseBody.name, newAllergyData.name);
+      assert.deepStrictEqual(responseBody.type, newAllergyData.type);
+      assert.deepStrictEqual(responseBody.system, 'SNOMED');
+      assert.deepStrictEqual(responseBody.code, 'Unknown');
+
+      const storedAllergy = await app.prisma.allergy.findUnique({
+        where: { id: responseBody.id },
+      });
+
+      assert.ok(storedAllergy);
+      assert.deepStrictEqual(storedAllergy.name, newAllergyData.name);
+      assert.deepStrictEqual(storedAllergy.type, newAllergyData.type);
+      assert.deepStrictEqual(storedAllergy.system, 'SNOMED');
+      assert.deepStrictEqual(storedAllergy.code, 'Unknown');
+    });
+
+    it('should return existing allergy if already registered', async () => {
+      const existingAllergyData = {
+        name: 'Grass Pollen',
+        type: 'OTHER',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/allergies/register')
+        .headers(headers)
+        .payload(existingAllergyData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const responseBody = JSON.parse(reply.payload);
+      assert.deepStrictEqual(responseBody.name, existingAllergyData.name);
+      assert.deepStrictEqual(responseBody.type, existingAllergyData.type);
+    });
+
+    it('should return BAD_REQUEST if name is empty or just spaces', async () => {
+      const invalidAllergyData = {
+        name: '   ',
+        type: 'DRUG',
+      };
+
+      const reply = await app
+        .inject()
+        .post('/api/v1/allergies/register')
+        .headers(headers)
+        .payload(invalidAllergyData);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(JSON.parse(reply.payload).message, 'Name cannot be empty or just spaces.');
+    });
+  });
 });
