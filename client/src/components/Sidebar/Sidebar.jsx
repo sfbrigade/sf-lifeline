@@ -6,6 +6,7 @@ import {
   // TbMessageReport,
   // TbNotebook,
   // TbSettings,
+  TbBuildingHospital,
   TbStethoscope,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
@@ -56,6 +57,11 @@ const allNavigationItems = {
         icon: <TbStethoscope className={classes.navbar__icon} />,
         minRole: 'STAFF',
       },
+      {
+        label: 'Hospitals',
+        href: '/hospitals',
+        icon: <TbBuildingHospital className={classes.navbar__icon} />,
+      },
     ],
   },
   // {
@@ -104,13 +110,13 @@ export function Sidebar ({ toggleSidebar }) {
   const filteredSections = [
     {
       ...allNavigationItems.adminPanel,
-      links: allNavigationItems.adminPanel.links.filter(link => 
+      links: allNavigationItems.adminPanel.links.filter(link =>
         hasPermission(link.minRole)
       ),
     },
     {
       ...allNavigationItems.management,
-      links: allNavigationItems.management.links.filter(link => 
+      links: allNavigationItems.management.links.filter(link =>
         hasPermission(link.minRole)
       ),
     },

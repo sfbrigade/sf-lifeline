@@ -4,28 +4,28 @@ import LifelineAPI from '../../LifelineAPI';
 /**
  *
  * @returns {{
- *  mutate: (physicanId: string) => Promise<void>
+ *  mutate: (hospitalId: string) => Promise<void>
  *  isPending: boolean
  * }}
  */
-export function useDeletePhysician () {
+export function useDeleteHopsital () {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['deletePhysican'],
-    mutationFn: async (physicanId) => {
-      const res = await LifelineAPI.deletePhysician(physicanId);
-      if (res.status > 200) {
-        throw new Error('Failed to delete patient.');
+    mutationKey: ['deleteHospital'],
+    mutationFn: async (hosptialId) => {
+      const res = await LifelineAPI.deleteHospital(hosptialId);
+      if (!res.status) {
+        throw new Error('Failed to delete hospital.');
       }
       return res.json();
     },
     onSuccess: () => {
       // Invalidate and refetch the physicians list
-      queryClient.invalidateQueries({ queryKey: ['physicians'] });
+      queryClient.invalidateQueries({ queryKey: ['hospitals'] });
     },
     onError: (error) => {
-      console.error('Failed to delete physician:', error);
+      console.error('Failed to delete hospital:', error);
     },
   });
 

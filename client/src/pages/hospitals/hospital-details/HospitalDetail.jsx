@@ -3,32 +3,29 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
 
 import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
 import LifelineAPI from '../../../LifelineAPI.js';
-
-import PhysicanPatients from './Components/PatientComponent/PhysicanPatients.jsx';
-import Hospital from './Components/HospitalComponent/Hospital.jsx';
+import PhysiciansTable from './Components/PhysiciansComponent/Physicians.jsx';
+import Patients from './Components/PatientsComponent/Patients.jsx';
 
 /**
  *
- * Physician page component
+ * Hospital Detail page component
  */
-export default function PhysicianDetail () {
-  const { physicianId } = useParams();
+export default function HospitalDetail () {
+  const { hospitalId } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { user } = useAuthorization();
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['physician', physicianId],
+    queryKey: ['hospital', hospitalId],
     queryFn: async () => {
-      const res = await LifelineAPI.getPhysician(physicianId);
+      const res = await LifelineAPI.getHospital(hospitalId);
       if (res.status === StatusCodes.OK) {
         return await res.json();
       } else {
-        throw new Error('Failed to fetch physician.');
+        throw new Error('Failed to fetch hospital.');
       }
     },
     retry: false,
@@ -36,12 +33,12 @@ export default function PhysicianDetail () {
 
   useEffect(() => {
     if (isError) {
-      navigate(`/physicans/${physicianId}/edit`, {
+      navigate(`/hospitals/${hospitalId}/edit`, {
         replace: true,
         state: { existingPatient: false },
       });
     }
-  }, [isError, navigate, physicianId]);
+  }, [isError, navigate, hospitalId]);
 
   if (isLoading || isError) {
     return <Loader />;
@@ -53,29 +50,28 @@ export default function PhysicianDetail () {
     <Container component='main'>
       <Group>
         <Title order={2} my='sm'>
-          {data?.firstName} {data?.middleName} {data?.lastName}
+          {data?.name}
         </Title>
         {canEdit && <Button component={Link} to='edit'>Edit</Button>}
       </Group>
       <Grid mb='md'>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Paper shadow='xs' p='md' radius='md' withBorder>
-            {data?.phone &&
-              <>
-                <Title order={5}>Phone</Title>
-                <Text mb='xs'>{data?.phone}</Text>
-              </>}
+            <Title order={5}>Phone</Title>
+            <Text mb='xs'>{data?.phone}</Text>
             <Title order={5}>Email</Title>
-            <Text>{data?.email && t(`${data?.email}`)}</Text>
+            <Text>{data?.email}</Text>
+            <Title order={5}>Address</Title>
+            <Text>{data?.address}</Text>
           </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
-          <Title order={2} my='sm'> Hospitals</Title>
-          <Hospital physicansId={physicianId} />
+          <Title order={2} my='sm'> Physicians</Title>
+          <PhysiciansTable hospitalId={hospitalId} />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Title order={2} my='sm'> Patients</Title>
-          <PhysicanPatients physicansId={physicianId} />
+          <Patients hospitalId={hospitalId} />
         </Grid.Col>
       </Grid>
     </Container>

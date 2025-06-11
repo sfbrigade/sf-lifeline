@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../../../../../LifelineAPI.js';
+import LifelineAPI from '../../LifelineAPI';
 
-const PHYSICIANS_TABLE_HEADERS = [
+const HOSPITALS_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
+  { key: 'email', text: 'Email' },
+  { key: 'phone', text: 'Phone' },
+  { key: 'address', text: 'Address' },
   { key: 'more', text: '' },
 ];
 
 /**
- * Patient data
- * @typedef {object} Hospital
- * @property {string} id - Hospital id
- * @property {string} name - Hospital name
- * @property {string} address - Hospital address
- * @property {string} phone - Hospital phone
- * @property {string} email - Hospital email
+ * Hospitals data
+ * @typedef {object} Hospitals
+ * @property {string} id - Hospitals ID
+ * @property {string} address - Hospitals first name, middle name and last name
+ * @property {string} email - Hospitals email
+ * @property {string} phone - Hospitals phone
+ * @
  */
 
 /**
@@ -27,7 +30,7 @@ const PHYSICIANS_TABLE_HEADERS = [
 /**
  *
  * @returns {{
- *  Hospitals: Array<Hospital>,
+ *  Hospitals: Array<Hospitals>,
  *  headers: Array<TableHeader>,
  *  search: string,
  *  setSearch: (search: string) => void,
@@ -37,15 +40,16 @@ const PHYSICIANS_TABLE_HEADERS = [
  *  isFetching: boolean,
  * }}
  */
-export function useHospitals (physicianId) {
+export function useHospitals () {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
-    queryKey: ['hospital', search, page],
+    queryKey: ['hospitals', search, page],
     queryFn: async () => {
-      const res = await LifelineAPI.getHospitals(search, physicianId, page);
+      const res = await LifelineAPI.getHospitals(search, '', page);
+
       if (res.status !== 200) {
-        throw new Error('Failed to fetch patients.');
+        throw new Error('Failed to fetch Hospitals.');
       }
 
       const data = await res.json();
@@ -59,6 +63,7 @@ export function useHospitals (physicianId) {
           id: hospital.id,
           name: hospital.name,
           email: hospital.email,
+          address: hospital.address,
           phone: hospital.phone,
 
         };
@@ -67,9 +72,10 @@ export function useHospitals (physicianId) {
 
     }),
   });
+
   return {
     hospitals: data?.hospitals,
-    headers: PHYSICIANS_TABLE_HEADERS,
+    headers: HOSPITALS_TABLE_HEADERS,
     search,
     setSearch,
     page,

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAppContext } from '../../../../../AppContext.jsx';
-import LifelineAPI from '../../../LifelineAPI.js';
+import LifelineAPI from '../../../../../LifelineAPI.js';
 
 const PATIENTS_TABLE_HEADERS_PHI = [
   { key: 'name', text: 'Name' },

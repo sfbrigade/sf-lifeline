@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useDeletePhysician } from './useDeletePhysician';
 import { notifications } from '@mantine/notifications';
 
 import { useAppContext } from '../../AppContext';
+import HospitalsTableRow from './HospitalsTableRow';
 import DataTable from '../../components/DataTable/DataTable';
-import PhysiciansTableRow from './PhysiciansTableRow';
+import { useDeleteHopsital } from './useDeleteHospital';
 
-const physiciansTableProps = {
+const hospitalsTableProps = {
   headers: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
@@ -28,55 +28,55 @@ const physiciansTableProps = {
 };
 
 /**
- * Patients table component
- * @param {PropTypes.InferProps<typeof physiciansTableProps>} props
+ * Hospitals table component
+ * @param {PropTypes.InferProps<typeof hospitalsTableProps>} props
  */
-export default function PhysiciansTable ({ headers, data }) {
+export default function HospitalsTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const [physician, setSelectedPhysician] = useState(null);
-  const { mutateAsync: deletePhysican, isPending } = useDeletePhysician();
+  const [hospital, setSelectedHospital] = useState(null);
+  const { mutateAsync: deleteHospital, isPending } = useDeleteHopsital();
   const { user } = useAppContext();
 
   const showDeleteConfirmation = useCallback(
-    (physicians) => {
-      setSelectedPhysician(physicians);
+    (hospitals) => {
+      setSelectedHospital(hospitals);
       open();
     },
     [open]
   );
 
-  const confirmPhysicianDeletion = async () => {
+  const confirmHospitalDeletion = async () => {
     try {
-      await deletePhysican(physician.id);
+      await deleteHospital(hospital.id);
       notifications.show({
         title: 'Success',
-        message: 'Physician deleted successfully.',
+        message: 'Hospital deleted successfully.',
         color: 'green',
       });
     } catch (error) {
-      console.error('Failed to delete physician:', error);
+      console.error('Failed to delete Hospital:', error);
       notifications.show({
         title: 'Error',
-        message: 'Failed to delete physician.',
+        message: 'Failed to delete Hospital.',
         color: 'red',
       });
     }
     if (!isPending) {
-      setSelectedPhysician(null);
+      setSelectedHospital(null);
       close();
     }
   };
 
-  const cancelPhysiciantDeletion = () => {
-    setSelectedPhysician(null);
+  const cancelHospitalDeletion = () => {
+    setSelectedHospital(null);
     close();
   };
 
   const renderRow = useCallback(
-    (physician) => (
-      <PhysiciansTableRow
-        key={physician.id}
-        physician={physician}
+    (hospitals) => (
+      <HospitalsTableRow
+        key={hospitals.id}
+        hospitals={hospitals}
         headers={headers}
         onDelete={showDeleteConfirmation}
         showDeleteMenu={user?.role === 'ADMIN'}
@@ -91,20 +91,20 @@ export default function PhysiciansTable ({ headers, data }) {
         headers={headers}
         data={data}
         renderRow={renderRow}
-        emptyStateMessage='No patients found.'
+        emptyStateMessage='No hospitals found.'
       />
       <Modal
         opened={opened}
         onClose={close}
-        title='Delete Patient'
+        title='Delete Hospital'
       >
         <Text fw={600}>
-          Are you sure you want to delete this physician record?
+          Are you sure you want to delete this hospital {hospital?.name}?
         </Text>
         <Button
           color='red'
           fullWidth
-          onClick={confirmPhysicianDeletion}
+          onClick={confirmHospitalDeletion}
           loading={isPending}
         >
           Yes
@@ -112,7 +112,7 @@ export default function PhysiciansTable ({ headers, data }) {
         <Button
           color='blue'
           fullWidth
-          onClick={cancelPhysiciantDeletion}
+          onClick={cancelHospitalDeletion}
           disabled={isPending}
         >
           No
@@ -122,4 +122,4 @@ export default function PhysiciansTable ({ headers, data }) {
   );
 }
 
-PhysiciansTable.propTypes = physiciansTableProps;
+HospitalsTable.propTypes = hospitalsTableProps;

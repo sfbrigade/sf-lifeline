@@ -20,3 +20,9 @@ items:
     lastName: Smith
     phone: 123 456-9998
     email: physician3@test.com
+  physician4:
+    id: 3bd1904b-1ef1-4aa3-bb29-48083aa530b3
+    firstName: Beer
+    lastName: James
+    phone: 555 456-1234
+    email: physician4@test.com

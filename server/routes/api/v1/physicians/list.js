@@ -12,6 +12,7 @@ export default async function (fastify) {
             page: { type: 'integer' },
             limit: { type: 'integer' },
             physician: { type: 'string' },
+            hosptialId: { type: 'string' }
           },
         },
         response: {
@@ -26,16 +27,6 @@ export default async function (fastify) {
                 phone: { type: 'string' },
                 firstName: { type: 'string' },
                 lastName: { type: 'string' },
-                hospitals: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      id: { type: 'string' },
-                      name: { type: 'string' },
-                    },
-                  },
-                },
               },
             },
           },
@@ -44,25 +35,12 @@ export default async function (fastify) {
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { page = '1', perPage = '25', physician } = request.query;
+      const { page = '1', perPage = '25', physician = '', hospitalId } = request.query;
 
-      if (!physician) {
-        const { records, total } =
-          await fastify.prisma.physician.paginate({
-            page,
-            perPage,
-            orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
-            include: {
-              hospitals: true
-            },
-          });
-        reply.setPaginationHeaders(page, perPage, total).send(records);
-        return;
-      }
+      let whereClause = {};
 
       const splitQuery = physician.trim().split(' ');
 
-      let whereClause = {};
       if (splitQuery.length > 1) {
         whereClause = {
           AND: [
@@ -98,6 +76,15 @@ export default async function (fastify) {
           ],
         };
       }
+
+      if (hospitalId) {
+        whereClause.hospitals = {
+          some: {
+            id: hospitalId
+          }
+        };
+      }
+
       const options = {
         page,
         perPage,
