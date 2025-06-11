@@ -48,25 +48,37 @@ describe('/api/v1/conditions', () => {
     });
 
     it('should return existing condition if already registered', async () => {
-      const existingConditionData = {
-        name: 'Asthma',
-        category: 'Respiratory',
-        system: 'ICD10',
-        code: 'J45.909',
+      const uniqueConditionName = `Test Condition ${Date.now()}`;
+      const newConditionData = {
+        name: uniqueConditionName,
+        category: 'Test Category',
+        system: 'TEST',
+        code: 'TEST_CODE',
       };
 
-      const reply = await app
+      // First, register the new condition
+      const createReply = await app
         .inject()
         .post('/api/v1/conditions/register')
         .headers(headers)
-        .payload(existingConditionData);
+        .payload(newConditionData);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const responseBody = JSON.parse(reply.payload);
-      assert.deepStrictEqual(responseBody.name, existingConditionData.name);
-      assert.deepStrictEqual(responseBody.category, existingConditionData.category);
-      assert.deepStrictEqual(responseBody.system, existingConditionData.system);
-      assert.deepStrictEqual(responseBody.code, existingConditionData.code);
+      assert.deepStrictEqual(createReply.statusCode, StatusCodes.CREATED);
+      const createdCondition = JSON.parse(createReply.payload);
+      assert.ok(createdCondition.id);
+      assert.deepStrictEqual(createdCondition.name, uniqueConditionName);
+
+      // Then, attempt to register the same condition again
+      const existingReply = await app
+        .inject()
+        .post('/api/v1/conditions/register')
+        .headers(headers)
+        .payload(newConditionData);
+
+      assert.deepStrictEqual(existingReply.statusCode, StatusCodes.OK);
+      const responseBody = JSON.parse(existingReply.payload);
+      assert.deepStrictEqual(responseBody.name, uniqueConditionName);
+      assert.deepStrictEqual(responseBody.id, createdCondition.id);
     });
 
     it('should return BAD_REQUEST if name is empty or just spaces', async () => {
