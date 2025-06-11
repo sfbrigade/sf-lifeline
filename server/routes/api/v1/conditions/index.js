@@ -33,6 +33,11 @@ export default async function (fastify) {
     async (request, reply) => {
       const { name, category, system, code } = request.body;
 
+      if (name.trim().length === 0) {
+        reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
+        return;
+      }
+
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
           name: name.trim(),

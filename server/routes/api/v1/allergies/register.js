@@ -30,6 +30,11 @@ export default async function (fastify) {
     async (request, reply) => {
       const { name, type } = request.body;
 
+      if (name.trim().length === 0) {
+        reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
+        return;
+      }
+
       const existingAllergy = await fastify.prisma.allergy.findFirst({
         where: {
           name: name.trim(),
