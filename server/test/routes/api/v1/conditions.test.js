@@ -1,3 +1,7 @@
+import * as assert from 'node:assert';
+import { build } from '../../../helper.js';
+import { StatusCodes } from 'http-status-codes';
+
 describe('/api/v1/conditions', () => {
   describe('POST /register', () => {
     it('should register a new condition and store it in the database', async (t) => {
