@@ -1,20 +1,9 @@
-import { beforeEach, describe, it } from 'node:test';
-import * as assert from 'node:assert';
-import { build } from '../../../helper.js';
-import { StatusCodes } from 'http-status-codes';
-
 describe('/api/v1/conditions', () => {
-  let app;
-  let headers;
-
-  beforeEach(async (t) => {
-    app = await build(t);
-    await t.loadFixtures();
-    headers = await t.authenticate('admin.user@test.com', 'test');
-  });
-
   describe('POST /register', () => {
-    it('should register a new condition and store it in the database', async () => {
+    it('should register a new condition and store it in the database', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const newConditionData = {
         name: 'New Test Condition',
         category: 'Unknown',
@@ -47,7 +36,10 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(storedCondition.code, newConditionData.code);
     });
 
-    it('should return existing condition if already registered', async () => {
+    it('should return existing condition if already registered', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const uniqueConditionName = `Test Condition ${Date.now()}`;
       const newConditionData = {
         name: uniqueConditionName,
@@ -81,7 +73,10 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(responseBody.id, createdCondition.id);
     });
 
-    it('should return BAD_REQUEST if name is empty or just spaces', async () => {
+    it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const invalidConditionData = {
         name: '   ',
         category: 'Unknown',
@@ -101,7 +96,10 @@ describe('/api/v1/conditions', () => {
   });
 
   describe('GET /', () => {
-    it('should return valid results for admin user', async () => {
+    it('should return valid results for admin user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/conditions?condition=a&perPage=1')
@@ -124,6 +122,8 @@ describe('/api/v1/conditions', () => {
     });
 
     it('should return valid results for staff user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const staffHeaders = await t.authenticate('staff.user@test.com', 'test');
 
       const reply = await app
@@ -148,6 +148,8 @@ describe('/api/v1/conditions', () => {
     });
 
     it('should return valid results for volunteer user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const volunteerHeaders = await t.authenticate(
         'volunteer.user@test.com',
         'test'
@@ -174,7 +176,9 @@ describe('/api/v1/conditions', () => {
       ]);
     });
 
-    it('require a user to be admin/staff/volunteer to make requests', async () => {
+    it('require a user to be admin/staff/volunteer to make requests', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const reply = await app
         .inject()
         .get('/api/v1/conditions?condition=a&perPage=1');
@@ -182,7 +186,10 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return paginated results of all conditions when no query provided', async () => {
+    it('should return paginated results of all conditions when no query provided', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/conditions?condition=&perPage=1')
@@ -204,7 +211,10 @@ describe('/api/v1/conditions', () => {
       ]);
     });
 
-    it('should return no results from database for an unknown condition', async () => {
+    it('should return no results from database for an unknown condition', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/conditions?condition=newcondition&perPage=1')

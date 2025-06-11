@@ -4,17 +4,11 @@ import { build } from '../../../helper.js';
 import { StatusCodes } from 'http-status-codes';
 
 describe('/api/v1/allergies', () => {
-  let app;
-  let headers;
-
-  beforeEach(async (t) => {
-    app = await build(t);
-    await t.loadFixtures();
-    headers = await t.authenticate('admin.user@test.com', 'test');
-  });
-
   describe('GET /', () => {
-    it('should return valid results for admin user', async () => {
+    it('should return valid results for admin user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/allergies?allergy=p&perPage=1')
@@ -37,6 +31,8 @@ describe('/api/v1/allergies', () => {
     });
 
     it('should return valid results for staff user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const staffHeaders = await t.authenticate('staff.user@test.com', 'test');
 
       const reply = await app
@@ -61,6 +57,8 @@ describe('/api/v1/allergies', () => {
     });
 
     it('should return valid results for volunteer user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const volunteerHeaders = await t.authenticate(
         'volunteer.user@test.com',
         'test'
@@ -87,7 +85,9 @@ describe('/api/v1/allergies', () => {
       ]);
     });
 
-    it('require a user to be admin/staff/volunteer to make requests', async () => {
+    it('require a user to be admin/staff/volunteer to make requests', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const reply = await app
         .inject()
         .get('/api/v1/allergies?allergy=p&perPage=1');
@@ -95,7 +95,10 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return paginated results of all allergies when no query provided', async () => {
+    it('should return paginated results of all allergies when no query provided', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/allergies?allergy=&perPage=1')
@@ -117,7 +120,10 @@ describe('/api/v1/allergies', () => {
       ]);
     });
 
-    it('should return no results from database an unknown allergy', async () => {
+    it('should return no results from database an unknown allergy', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/allergies?allergy=newallergy&perPage=1')
@@ -130,7 +136,10 @@ describe('/api/v1/allergies', () => {
   });
 
   describe('POST /register', () => {
-    it('should register a new allergy and store it in the database', async () => {
+    it('should register a new allergy and store it in the database', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const newAllergyData = {
         name: 'New Test Allergy',
         type: 'OTHER',
@@ -161,7 +170,10 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(storedAllergy.code, 'Unknown');
     });
 
-    it('should return existing allergy if already registered', async () => {
+    it('should return existing allergy if already registered', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const existingAllergyData = {
         name: 'Grass Pollen',
         type: 'OTHER',
@@ -179,7 +191,10 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(responseBody.type, existingAllergyData.type);
     });
 
-    it('should return BAD_REQUEST if name is empty or just spaces', async () => {
+    it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const invalidAllergyData = {
         name: '   ',
         type: 'DRUG',

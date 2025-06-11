@@ -1,20 +1,9 @@
-import { beforeEach, describe, it } from 'node:test';
-import * as assert from 'node:assert';
-import { build } from '../../../helper.js';
-import { StatusCodes } from 'http-status-codes';
-
 describe('/api/v1/medications', () => {
-  let app;
-  let headers;
-
-  beforeEach(async (t) => {
-    app = await build(t);
-    await t.loadFixtures();
-    headers = await t.authenticate('admin.user@test.com', 'test');
-  });
-
   describe('GET /', () => {
-    it('should return valid results for admin user', async () => {
+    it('should return valid results for admin user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/medications?medication=ibuprofen&perPage=1')
@@ -37,6 +26,8 @@ describe('/api/v1/medications', () => {
     });
 
     it('should return valid results for staff user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const staffHeaders = await t.authenticate('staff.user@test.com', 'test');
 
       const reply = await app
@@ -61,6 +52,8 @@ describe('/api/v1/medications', () => {
     });
 
     it('should return valid results for volunteer user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const volunteerHeaders = await t.authenticate(
         'volunteer.user@test.com',
         'test'
@@ -87,7 +80,9 @@ describe('/api/v1/medications', () => {
       ]);
     });
 
-    it('require a user to be admin/staff/volunteer to make requests', async () => {
+    it('require a user to be admin/staff/volunteer to make requests', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
       const reply = await app
         .inject()
         .get('/api/v1/medications?medication=ibuprofen&perPage=1');
@@ -95,7 +90,10 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
-    it('should return paginated results of all medications when no query provided', async () => {
+    it('should return paginated results of all medications when no query provided', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/medications?medication=&perPage=1')
@@ -117,7 +115,10 @@ describe('/api/v1/medications', () => {
       ]);
     });
 
-    it('should return no results from database for an unknown medication', async () => {
+    it('should return no results from database for an unknown medication', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
         .get('/api/v1/medications?medication=newmedication&perPage=1')
@@ -130,9 +131,13 @@ describe('/api/v1/medications', () => {
   });
 
   describe('POST /register', () => {
-    it('should register a new medication and store it in the database', async () => {
+    it('should register a new medication and store it in the database', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const newMedicationData = {
         name: 'New Test Medication',
+        altNames: '',
       };
 
       const reply = await app
@@ -160,7 +165,10 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(storedMedication.altNames, '');
     });
 
-    it('should return existing medication if already registered', async () => {
+    it('should return existing medication if already registered', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const existingMedicationData = {
         name: 'acetaminophen / ibuprofen',
       };
@@ -176,7 +184,10 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(responseBody.name, existingMedicationData.name);
     });
 
-    it('should return BAD_REQUEST if name is empty or just spaces', async () => {
+    it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
       const invalidMedicationData = {
         name: '   ',
       };
