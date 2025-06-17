@@ -5,9 +5,9 @@ import { Modal, Button, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
-import { useAppContext } from '../../AppContext';
+import { useAppContext } from '#app/AppContext';
 import HospitalsTableRow from './HospitalsTableRow';
-import DataTable from '../../components/DataTable/DataTable';
+import DataTable from '#components/DataTable/DataTable';
 import { useDeleteHopsital } from './useDeleteHospital';
 
 const hospitalsTableProps = {

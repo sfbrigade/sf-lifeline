@@ -8,9 +8,9 @@
     "test": "test"
   },
   "imports": {
-    "#helpers/*.js": "./helpers/*.js",
-    "#models/*.js": "./models/*.js",
-    "#test/*.js": "./test/*.js"
+    "#helpers/*": "./helpers/*",
+    "#models/*": "./models/*",
+    "#test/*": "./test/*"
   },
   "prisma": {
     "seed": "node prisma/seed"

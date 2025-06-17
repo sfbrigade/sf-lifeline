@@ -5,7 +5,7 @@ import { IMaskInput } from 'react-imask';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 
-import LifelineAPI from '../../../../LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 export default function HospitalForm ({ onSuccess, onError }) {
   const { hospitalId } = useParams();

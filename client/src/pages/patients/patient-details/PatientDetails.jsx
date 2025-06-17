@@ -6,7 +6,7 @@ import { QRCode } from 'react-qrcode-logo';
 import { Box, Button, Center, Container, Grid, Group, Loader, Paper, Pill, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { useAppContext } from '../../../AppContext.jsx';
+import { useAppContext } from '#app/AppContext.jsx';
 import LifelineAPI from '../LifelineAPI.js';
 
 /**

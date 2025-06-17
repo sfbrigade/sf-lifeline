@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from '../../LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 const PHYSICIANS_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },

@@ -7,7 +7,6 @@ import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
 import RegisterPhysician from './RegisterPhysician';
-
 import LifelineAPI from '../../LifelineAPI.js';
 
 const healthcareChoicesSearchProps = {

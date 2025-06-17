@@ -11,7 +11,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 
 import classes from './header.module.css';
-import { Sidebar } from '../../components/Sidebar/Sidebar';
+import { Sidebar } from '#components/Sidebar/Sidebar';
 
 /**
  * Buttons for logged out buttons

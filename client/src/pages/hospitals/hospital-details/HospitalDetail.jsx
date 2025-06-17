@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@mantine/core';
 
-import { useAuthorization } from '../../../hooks/useAuthorization.jsx';
-import LifelineAPI from '../../../LifelineAPI.js';
+import { useAuthorization } from '#hooks/useAuthorization.jsx';
+import LifelineAPI from '#app/LifelineAPI.js';
 import PhysiciansTable from './Components/PhysiciansComponent/Physicians.jsx';
 import Patients from './Components/PatientsComponent/Patients.jsx';
 

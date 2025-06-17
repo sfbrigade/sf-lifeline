@@ -13,9 +13,9 @@ import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import PropTypes from 'prop-types';
 
-import classes from './Sidebar.module.css';
-import { useAuthorization } from '../../hooks/useAuthorization';
-import { ROLES } from '../../routes';
+import classes from '#components/Sidebar/Sidebar.module.css';
+import { useAuthorization } from '#hooks/useAuthorization';
+import { ROLES } from '#app/routes';
 
 const allNavigationItems = {
   adminPanel: {

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { useCallback } from 'react';
 import HospitalTableRow from './HospitalTableRow';
-import DataTable from '../../../../../components/DataTable/DataTable.jsx';
+import DataTable from '#components/DataTable/DataTable.jsx';
 
 const hospitalTableProps = {
   headers: PropTypes.arrayOf(

@@ -7,7 +7,7 @@ import { useForm, isNotEmpty } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useQuery } from '@tanstack/react-query';
 
-import { useAppContext } from '../../../AppContext.jsx';
+import { useAppContext } from '#app/AppContext.jsx';
 import LifelineAPI from '../LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
