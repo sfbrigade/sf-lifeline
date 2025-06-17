@@ -1,4 +1,4 @@
-import { User, Role } from '../../models/user.js';
+import { User, Role } from '#models/user.js';
 import prisma from '../client.js';
 
 export async function seedAdminUser () {

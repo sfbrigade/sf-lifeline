@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 
-import User, { Role } from '../models/user.js';
+import User, { Role } from '#models/user.js';
 
 export default fp(async function (fastify) {
   // set up secure encrypted cookie-based sessions

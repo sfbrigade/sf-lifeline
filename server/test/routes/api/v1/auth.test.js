@@ -3,7 +3,7 @@ import * as assert from 'node:assert';
 import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 
-import { build, nodemailerMock } from '../../../helper.js';
+import { build, nodemailerMock } from '#test/helper.js';
 
 describe('/api/v1/auth', () => {
   describe('POST /login', () => {

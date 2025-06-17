@@ -7,6 +7,11 @@
   "directories": {
     "test": "test"
   },
+  "imports": {
+    "#helpers/*.js": "./helpers/*.js",
+    "#models/*.js": "./models/*.js",
+    "#test/*.js": "./test/*.js"
+  },
   "prisma": {
     "seed": "node prisma/seed"
   },

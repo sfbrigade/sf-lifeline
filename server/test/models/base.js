@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 
-import Base from '../../models/base.js';
+import Base from '#models/base.js';
 
 class Test extends Base {
   constructor (data) {

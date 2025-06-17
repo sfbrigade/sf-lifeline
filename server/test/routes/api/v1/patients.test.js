@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import { StatusCodes } from 'http-status-codes';
 
-import { build } from '../../../helper.js';
+import { build } from '#test/helper.js';
 
 describe('/api/v1/patients', () => {
   describe('GET /', () => {

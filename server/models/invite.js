@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import Base from './base.js';
-import mailer from '../helpers/email/mailer.js';
+import mailer from '#helpers/email/mailer.js';
 
 class Invite extends Base {
   constructor (data) {

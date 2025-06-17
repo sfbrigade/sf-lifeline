@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import User from '../../../../models/user.js';
+import User from '#models/user.js';
 
 export default async function (fastify, _opts) {
   // add a login route that handles the actual login

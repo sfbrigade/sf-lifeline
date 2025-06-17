@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import {
   EMS_VERIFICATION_WEBSITE_BASE_URL,
   EMS_VERIFICATION_WEBSITE_PATH,
-} from '../../../helpers/license/verifyLicense.js';
+} from '#helpers/license/verifyLicense.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
