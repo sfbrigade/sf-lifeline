@@ -194,11 +194,17 @@ describe('/api/v1/physicians', () => {
         })
         .headers(headers);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
-      assert.deepStrictEqual(JSON.parse(reply.payload).firstName, 'Jane');
-      assert.deepStrictEqual(JSON.parse(reply.payload).lastName, 'Doe');
-      assert.deepStrictEqual(JSON.parse(reply.payload).phone, '(415) 555-5555');
+      const response = JSON.parse(reply.payload);
+      const physician = await t.prisma.physician.findUnique({
+        where: {
+          id: response.id
+        }
+      });
+      assert.deepStrictEqual(physician.firstName, 'Jane');
+      assert.deepStrictEqual(physician.lastName, 'Doe');
+      assert.deepStrictEqual(physician.phone, '(415) 555-5555');
       assert.deepStrictEqual(
-        JSON.parse(reply.payload).email,
+        physician.email,
         'jane.doe@test.com'
       );
     });
