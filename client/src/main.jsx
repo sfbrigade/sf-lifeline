@@ -6,8 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import routes from './routes';
 import theme from './theme';
-
-import { AppContextProvider } from './AppContext.jsx';
+import { AppContextProvider } from '#app/AppContext.jsx';
 
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';

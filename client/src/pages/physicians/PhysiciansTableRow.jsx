@@ -5,7 +5,7 @@ import {
   TbUser as IconUser,
   TbTrash as IconTrash,
 } from 'react-icons/tb';
-import TableMenu from '../../components/DataTable/TableMenu';
+import TableMenu from '#components/DataTable/TableMenu';
 
 const physiciansTableRowProps = {
   headers: PropTypes.arrayOf(

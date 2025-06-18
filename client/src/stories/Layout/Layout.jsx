@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router';
 
 import { Header } from '../Header/Header';
-import { Sidebar } from '../../components/Sidebar/Sidebar.jsx';
+import { Sidebar } from '#components/Sidebar/Sidebar.jsx';
 
-import { useAuthorization } from '../../hooks/useAuthorization';
+import { useAuthorization } from '#hooks/useAuthorization';
 
 import classes from './Layout.module.css';
 

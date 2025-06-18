@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
-import { useAppContext } from '../AppContext';
+import { useAppContext } from '#app/AppContext';
 
 /**
  * Global user and login/logout logic

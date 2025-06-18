@@ -6,7 +6,7 @@ import {
   TbUser as IconUser,
 } from 'react-icons/tb';
 
-import TableMenu from '../../../components/DataTable/TableMenu';
+import TableMenu from '#components/DataTable/TableMenu';
 
 const userDataTableProps = {
   id: PropTypes.string.isRequired,

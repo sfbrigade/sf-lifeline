@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { useEffect } from 'react';
 
-import { useAppContext } from '../AppContext';
+import { useAppContext } from '#app/AppContext';
 
 /**
  * Home page component.

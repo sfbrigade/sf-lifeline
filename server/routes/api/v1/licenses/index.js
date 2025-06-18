@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import verifyLicense from '../../../../helpers/license/verifyLicense.js';
+import verifyLicense from '#helpers/license/verifyLicense.js';
 
 export default async function (fastify) {
   fastify.get(

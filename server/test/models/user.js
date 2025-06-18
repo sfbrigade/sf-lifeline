@@ -2,8 +2,8 @@ import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import bcrypt from 'bcrypt';
 
-import { build } from '../helper.js';
-import User from '../../models/user.js';
+import { build } from '#test/helper.js';
+import User from '#models/user.js';
 
 describe('User', () => {
   describe('isApproved', () => {

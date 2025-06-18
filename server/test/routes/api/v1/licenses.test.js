@@ -2,9 +2,9 @@ import { beforeEach, describe, it } from 'node:test';
 import * as assert from 'node:assert';
 import nock from 'nock';
 
-import { build } from '../../../helper.js';
-import nockLicenseVerificationWebsite from '../../../fixtures/network/nockLicenseVerificationWebsite.js';
-import { EMS_VERIFICATION_WEBSITE } from '../../../../helpers/license/verifyLicense.js';
+import { build } from '#test/helper.js';
+import nockLicenseVerificationWebsite from '#test/fixtures/network/nockLicenseVerificationWebsite.js';
+import { EMS_VERIFICATION_WEBSITE } from '#helpers/license/verifyLicense.js';
 
 describe('/api/v1/licenses', () => {
   describe('GET /', () => {

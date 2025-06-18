@@ -1,6 +1,6 @@
 import { Group, Button } from '@mantine/core';
 
-import { useAuthorization } from '../../hooks/useAuthorization';
+import { useAuthorization } from '#hooks/useAuthorization';
 
 import classes from './footer.module.css';
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
-import { useAppContext } from '../../AppContext';
+import { useAppContext } from '#app/AppContext';
 import LifelineAPI from './LifelineAPI';
 
 const PATIENT_TABLE_HEADERS = [

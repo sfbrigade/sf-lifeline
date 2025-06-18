@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
 
-import { useAuthorization } from '../../../hooks/useAuthorization';
+import { useAuthorization } from '#hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
 
 import classes from '../form.module.css';
-import { useAppContext } from '../../../AppContext';
+import { useAppContext } from '#app/AppContext';
 
 /**
  * Login page component.
@@ -39,10 +39,10 @@ function Login () {
     if (error && error.status !== StatusCodes.OK) {
       switch (error.status) {
         case StatusCodes.NOT_FOUND:
-          setEmailError('The email you entered isn’t connected to an account.');
+          setEmailError("The email you entered isn't connected to an account.");
           break;
         case StatusCodes.UNAUTHORIZED:
-          setPasswordError('The password you’ve entered is incorrect.');
+          setPasswordError("The password you've entered is incorrect.");
           break;
         case StatusCodes.FORBIDDEN:
           setEmailError(error.message);

@@ -6,8 +6,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useDeletePhysician } from './useDeletePhysician';
 import { notifications } from '@mantine/notifications';
 
-import { useAppContext } from '../../AppContext';
-import DataTable from '../../components/DataTable/DataTable';
+import { useAppContext } from '#app/AppContext';
+import DataTable from '#components/DataTable/DataTable';
 import PhysiciansTableRow from './PhysiciansTableRow';
 
 const physiciansTableProps = {
