@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import DataTable from '../../../components/DataTable/DataTable';
+import DataTable from '#components/DataTable/DataTable';
 import { UserDataTableCell } from './UserDataTableCell';
 import { Table } from '@mantine/core';
 

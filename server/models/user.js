@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { z } from 'zod';
 
 import Base from './base.js';
-import mailer from '../helpers/email/mailer.js';
+import mailer from '#helpers/email/mailer.js';
 
 const UserAttributesSchema = z.object({
   firstName: z

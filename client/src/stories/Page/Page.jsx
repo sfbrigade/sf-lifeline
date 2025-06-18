@@ -1,6 +1,6 @@
 import { Header } from '../Header/Header.jsx';
 import './page.css';
-import { useAuthorization } from '../../hooks/useAuthorization.jsx';
+import { useAuthorization } from '#hooks/useAuthorization.jsx';
 
 /**
  * Storybook demo page component.

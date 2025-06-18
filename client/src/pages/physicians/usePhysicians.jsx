@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 const PHYSICIANS_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
@@ -14,16 +14,8 @@ const formatName = (entry) => {
   return formattedName.trim() ? formattedName : '-';
 };
 
-// const formatDate = (date) => {
-//   return new Date(date).toLocaleDateString(undefined, {
-//     month: 'long',
-//     day: 'numeric',
-//     year: 'numeric',
-//   });
-// };
-
 /**
- * Patient data
+ * Physicians data
  * @typedef {object} Physicians
  * @property {string} id - Physicians ID
  * @property {string} name - Physicians first name, middle name and last name
@@ -51,13 +43,13 @@ const formatName = (entry) => {
  *  isFetching: boolean,
  * }}
  */
-export function usePhysicians () {
+export function usePhysicians (hospitalId) {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
     queryKey: ['physicians', search, page],
     queryFn: async () => {
-      const res = await LifelineAPI.getPhysicians(search, page);
+      const res = await LifelineAPI.getPhysicians(search, hospitalId, page);
 
       if (res.status !== 200) {
         throw new Error('Failed to fetch patients.');

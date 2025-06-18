@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "imports": {
+    "#app/*": "./src/*",
+    "#components/*": "./src/components/*",
+    "#hooks/*": "./src/hooks/*"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

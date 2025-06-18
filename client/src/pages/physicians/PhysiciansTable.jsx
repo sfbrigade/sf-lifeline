@@ -6,8 +6,8 @@ import { useDisclosure } from '@mantine/hooks';
 import { useDeletePhysician } from './useDeletePhysician';
 import { notifications } from '@mantine/notifications';
 
-import { useAppContext } from '../../AppContext';
-import DataTable from '../../components/DataTable/DataTable';
+import { useAppContext } from '#app/AppContext';
+import DataTable from '#components/DataTable/DataTable';
 import PhysiciansTableRow from './PhysiciansTableRow';
 
 const physiciansTableProps = {
@@ -45,7 +45,7 @@ export default function PhysiciansTable ({ headers, data }) {
     [open]
   );
 
-  const confirmPatientDeletion = async () => {
+  const confirmPhysicianDeletion = async () => {
     try {
       await deletePhysican(physician.id);
       notifications.show({
@@ -67,7 +67,7 @@ export default function PhysiciansTable ({ headers, data }) {
     }
   };
 
-  const cancelPatientDeletion = () => {
+  const cancelPhysiciantDeletion = () => {
     setSelectedPhysician(null);
     close();
   };
@@ -104,7 +104,7 @@ export default function PhysiciansTable ({ headers, data }) {
         <Button
           color='red'
           fullWidth
-          onClick={confirmPatientDeletion}
+          onClick={confirmPhysicianDeletion}
           loading={isPending}
         >
           Yes
@@ -112,7 +112,7 @@ export default function PhysiciansTable ({ headers, data }) {
         <Button
           color='blue'
           fullWidth
-          onClick={cancelPatientDeletion}
+          onClick={cancelPhysiciantDeletion}
           disabled={isPending}
         >
           No

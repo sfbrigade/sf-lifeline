@@ -1,4 +1,4 @@
-import { Role } from '../../../../models/user.js';
+import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
 import register from './register.js';

@@ -6,7 +6,7 @@ import { IMaskInput } from 'react-imask';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
-import { useAppContext } from '../../../AppContext';
+import { useAppContext } from '#app/AppContext';
 
 import MedicalDataSearch from './inputs/MedicalDataSearch';
 import HealthcareChoicesSearch from './inputs/HealthcareChoicesSearch';

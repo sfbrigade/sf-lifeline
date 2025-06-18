@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useCallback } from 'react';
-import DataTable from '../../../../../components/DataTable/DataTable.jsx';
+import DataTable from '#components/DataTable/DataTable.jsx';
 import PhysicanPatientsTableRow from './PhysicanPatientsTableRow.jsx';
 
 const physicanPatientTable = {

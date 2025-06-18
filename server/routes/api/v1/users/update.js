@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
-import User from '../../../../models/user.js';
-import verifyLicense from '../../../../helpers/license/verifyLicense.js';
+import User from '#models/user.js';
+import verifyLicense from '#helpers/license/verifyLicense.js';
 
 export default async function (fastify, _opts) {
   fastify.patch(

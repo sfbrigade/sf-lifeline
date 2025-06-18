@@ -6,7 +6,7 @@ import {
   TbQrcode as IconQrcode,
   TbTrash as IconTrash,
 } from 'react-icons/tb';
-import TableMenu from '../../components/DataTable/TableMenu';
+import TableMenu from '#components/DataTable/TableMenu';
 
 const patientTableRowProps = {
   headers: PropTypes.arrayOf(

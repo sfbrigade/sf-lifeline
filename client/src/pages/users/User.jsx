@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 import dayjs from 'dayjs';
 
-import { useAppContext } from '../../AppContext';
+import { useAppContext } from '#app/AppContext';
 import LifelineAPI from '../patients/LifelineAPI';
 
 function User () {

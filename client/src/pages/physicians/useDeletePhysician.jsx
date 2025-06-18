@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import LifelineAPI from './LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 /**
  *
@@ -12,10 +12,10 @@ export function useDeletePhysician () {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['deletePhysicans'],
+    mutationKey: ['deletePhysican'],
     mutationFn: async (physicanId) => {
       const res = await LifelineAPI.deletePhysician(physicanId);
-      if (!res.status) {
+      if (res.status > 200) {
         throw new Error('Failed to delete patient.');
       }
       return res.json();

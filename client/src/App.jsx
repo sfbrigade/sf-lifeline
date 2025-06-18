@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { Center, Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
-import { useAppContext } from './AppContext';
-import { useAuthorization } from './hooks/useAuthorization';
+import { useAppContext } from '#app/AppContext';
+import { useAuthorization } from '#hooks/useAuthorization';
 
 import './i18n';
 import './App.css';

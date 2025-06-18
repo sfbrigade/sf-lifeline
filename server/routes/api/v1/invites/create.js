@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
 import { StatusCodes } from 'http-status-codes';
 
-import { Role } from '../../../../models/user.js';
-import Invite from '../../../../models/invite.js';
+import { Role } from '#models/user.js';
+import Invite from '#models/invite.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
