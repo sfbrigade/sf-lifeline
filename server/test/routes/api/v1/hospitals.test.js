@@ -148,7 +148,12 @@ describe('/api/v1/hospitals', () => {
         })
         .headers(headers);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
-      const hospital = JSON.parse(reply.payload);
+      const response = JSON.parse(reply.payload);
+      const hospital = await t.prisma.hospital.findUnique({
+        where: {
+          id: response.id
+        }
+      });
       assert.deepStrictEqual(hospital.name, 'New Hospital');
       assert.deepStrictEqual(hospital.address, '123 Main St');
       assert.deepStrictEqual(hospital.phone, '(415) 555-1234');
