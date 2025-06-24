@@ -52,9 +52,9 @@ export default async function (fastify) {
       const newCondition = await fastify.prisma.condition.create({
         data: {
           name: name.trim(),
-          category: category || "Unknown",
-          system: system || "SNOMED",
-          code: code || "Unknown",
+          category: category || 'Unknown',
+          system: system || 'SNOMED',
+          code: code || 'Unknown',
         },
       });
 

@@ -6,6 +6,7 @@ import {
   Alert,
   Transition,
   Select,
+  Stack,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -14,7 +15,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '../../LifelineAPI';
 
-export default function RegisterCondition({
+export default function RegisterCondition ({
   registerConditionOpened,
   closeRegisterCondition,
   setCondition,
@@ -50,7 +51,7 @@ export default function RegisterCondition({
     },
   });
 
-  async function handleSubmit(values) {
+  async function handleSubmit (values) {
     try {
       const { data: condition, status } = await mutateAsync(values);
 
@@ -88,19 +89,19 @@ export default function RegisterCondition({
     <Modal
       opened={registerConditionOpened}
       onClose={closeRegisterCondition}
-      title="Register New Condition"
+      title='Register New Condition'
     >
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Stack component='form' onSubmit={form.onSubmit(handleSubmit)}>
         <Transition
           mounted={error}
-          transition="slide-right"
+          transition='slide-right'
           duration={400}
-          timingFunction="ease"
+          timingFunction='ease'
         >
           {(transitionStyle) => (
             <Alert
-              title="Failed to register condition."
-              color="red"
+              title='Failed to register condition.'
+              color='red'
               style={{ ...transitionStyle }}
             >
               {error?.message}
@@ -109,27 +110,27 @@ export default function RegisterCondition({
         </Transition>
         <TextInput
           withAsterisk
-          label="Name"
-          placeholder="Condition Name"
+          label='Name'
+          placeholder='Condition Name'
           {...form.getInputProps('name')}
         />
         <Select
           withAsterisk
-          label="System"
-          placeholder="Select system"
+          label='System'
+          placeholder='Select system'
           data={['SNOMED', 'RXNORM', 'ICD10']}
           {...form.getInputProps('system')}
         />
 
-        <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={closeRegisterCondition}>
+        <Group justify='flex-end' mt='md'>
+          <Button variant='default' onClick={closeRegisterCondition}>
             Cancel
           </Button>
-          <Button type="submit" loading={isLoading}>
+          <Button type='submit' loading={isLoading}>
             Register
           </Button>
         </Group>
-      </form>
+      </Stack>
     </Modal>
   );
 }

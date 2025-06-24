@@ -5,6 +5,7 @@ import {
   Button,
   Alert,
   Transition,
+  Stack,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -13,7 +14,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '../../LifelineAPI';
 
-export default function RegisterMedication({
+export default function RegisterMedication ({
   registerMedicationOpened,
   closeRegisterMedication,
   setMedication,
@@ -47,7 +48,7 @@ export default function RegisterMedication({
     },
   });
 
-  async function handleSubmit(values) {
+  async function handleSubmit (values) {
     try {
       const { data: medication, status } = await mutateAsync(values);
 
@@ -85,19 +86,19 @@ export default function RegisterMedication({
     <Modal
       opened={registerMedicationOpened}
       onClose={closeRegisterMedication}
-      title="Register New Medication"
+      title='Register New Medication'
     >
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Stack component='form' onSubmit={form.onSubmit(handleSubmit)}>
         <Transition
           mounted={error}
-          transition="slide-right"
+          transition='slide-right'
           duration={400}
-          timingFunction="ease"
+          timingFunction='ease'
         >
           {(transitionStyle) => (
             <Alert
-              title="Failed to register medication."
-              color="red"
+              title='Failed to register medication.'
+              color='red'
               style={{ ...transitionStyle }}
             >
               {error?.message}
@@ -106,20 +107,20 @@ export default function RegisterMedication({
         </Transition>
         <TextInput
           withAsterisk
-          label="Name"
-          placeholder="Medication Name"
+          label='Name'
+          placeholder='Medication Name'
           {...form.getInputProps('name')}
         />
 
-        <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={closeRegisterMedication}>
+        <Group justify='flex-end' mt='md'>
+          <Button variant='default' onClick={closeRegisterMedication}>
             Cancel
           </Button>
-          <Button type="submit" loading={isLoading}>
+          <Button type='submit' loading={isLoading}>
             Register
           </Button>
         </Group>
-      </form>
+      </Stack>
     </Modal>
   );
 }

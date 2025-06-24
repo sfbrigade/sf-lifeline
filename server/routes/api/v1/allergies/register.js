@@ -51,8 +51,8 @@ export default async function (fastify) {
         data: {
           name: name.trim(),
           type,
-          system: "SNOMED",
-          code: "Unknown",
+          system: 'SNOMED',
+          code: 'Unknown',
         },
       });
 

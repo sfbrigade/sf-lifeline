@@ -88,7 +88,7 @@ export default function MedicalDataSearch ({
   });
 
   const handleSelectValue = (id, key) => {
-    if (id === "$register") {
+    if (id === '$register') {
       if (category === 'allergies') {
         openRegisterAllergy();
       } else if (category === 'medications') {
@@ -97,7 +97,7 @@ export default function MedicalDataSearch ({
         openRegisterCondition();
       }
       combobox.closeDropdown();
-      setSearch("");
+      setSearch('');
     } else {
       const name = key.children;
       setValue((current) =>
@@ -111,7 +111,7 @@ export default function MedicalDataSearch ({
         id,
       ]);
       combobox.closeDropdown();
-      setSearch("");
+      setSearch('');
     }
   };
 
@@ -152,10 +152,10 @@ export default function MedicalDataSearch ({
    *
    * Conditional rendering of combobox content
    */
-  function renderComboxContent() {
+  function renderComboxContent () {
     const registerOption = (
-      <Combobox.Option value="$register">
-        <Text fw={700} size="sm">
+      <Combobox.Option value='$register'>
+        <Text fw={700} size='sm'>
           + Register new {category}
         </Text>
       </Combobox.Option>
@@ -180,7 +180,7 @@ export default function MedicalDataSearch ({
     }
 
     return (
-      <ScrollArea.Autosize type="scroll" mah={200}>
+      <ScrollArea.Autosize type='scroll' mah={200}>
         {options}
         {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
       </ScrollArea.Autosize>
@@ -200,7 +200,7 @@ export default function MedicalDataSearch ({
         comboboxOptions={renderComboxContent}
         handleSearch={setSearch}
       >
-        <Pill.Group style={{ marginTop: "6px" }}>{values}</Pill.Group>
+        <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
       </SearchDatabaseInputField>
       <RegisterAllergy
         setAllergy={handleSelectValue}

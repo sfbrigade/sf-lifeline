@@ -6,6 +6,7 @@ import {
   Alert,
   Transition,
   Select,
+  Stack,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -14,7 +15,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '../../LifelineAPI';
 
-export default function RegisterAllergy({
+export default function RegisterAllergy ({
   registerAllergyOpened,
   closeRegisterAllergy,
   setAllergy,
@@ -50,7 +51,7 @@ export default function RegisterAllergy({
     },
   });
 
-  async function handleSubmit(values) {
+  async function handleSubmit (values) {
     try {
       const { data: allergy, status } = await mutateAsync(values);
 
@@ -88,19 +89,19 @@ export default function RegisterAllergy({
     <Modal
       opened={registerAllergyOpened}
       onClose={closeRegisterAllergy}
-      title="Register New Allergy"
+      title='Register New Allergy'
     >
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Stack component='form' onSubmit={form.onSubmit(handleSubmit)}>
         <Transition
           mounted={error}
-          transition="slide-right"
+          transition='slide-right'
           duration={400}
-          timingFunction="ease"
+          timingFunction='ease'
         >
           {(transitionStyle) => (
             <Alert
-              title="Failed to register allergy."
-              color="red"
+              title='Failed to register allergy.'
+              color='red'
               style={{ ...transitionStyle }}
             >
               {error?.message}
@@ -109,27 +110,27 @@ export default function RegisterAllergy({
         </Transition>
         <TextInput
           withAsterisk
-          label="Name"
-          placeholder="Allergy Name"
+          label='Name'
+          placeholder='Allergy Name'
           {...form.getInputProps('name')}
         />
         <Select
           withAsterisk
-          label="Type"
-          placeholder="Select type"
+          label='Type'
+          placeholder='Select type'
           data={['DRUG', 'OTHER']}
           {...form.getInputProps('type')}
         />
 
-        <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={closeRegisterAllergy}>
+        <Group justify='flex-end' mt='md'>
+          <Button variant='default' onClick={closeRegisterAllergy}>
             Cancel
           </Button>
-          <Button type="submit" loading={isLoading}>
+          <Button type='submit' loading={isLoading}>
             Register
           </Button>
         </Group>
-      </form>
+      </Stack>
     </Modal>
   );
 }

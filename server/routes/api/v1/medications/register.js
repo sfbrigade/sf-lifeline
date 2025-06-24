@@ -48,9 +48,9 @@ export default async function (fastify) {
       const newMedication = await fastify.prisma.medication.create({
         data: {
           name: name.trim(),
-          system: "SNOMED",
-          code: "Unknown",
-          altNames: "",
+          system: 'SNOMED',
+          code: 'Unknown',
+          altNames: '',
         },
       });
 
