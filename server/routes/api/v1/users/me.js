@@ -1,37 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { User } from '#models/user.js';
+
 export default async function (fastify, _opts) {
   fastify.get(
     '/me',
     {
       schema: {
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string' },
-              emailVerifiedAt: { type: 'string' },
-              licenseNumber: { type: 'string' },
-              licenseData: { type: 'object' },
-              role: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-              rejectedAt: { type: 'string' },
-              rejectedById: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: User.ResponseSchema,
         },
       },
       onRequest: fastify.requireUser(),
     },
     async (request, reply) => {
-      reply.send(request.user);
+      reply.send(request.user._data);
     }
   );
 }

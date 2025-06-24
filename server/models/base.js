@@ -3,6 +3,7 @@ class Base {
     if (!data) {
       return null;
     }
+    this._data = data;
     return new Proxy(this, {
       get (target, property, receiver) {
         // if the property is in the schema, return it from the data object

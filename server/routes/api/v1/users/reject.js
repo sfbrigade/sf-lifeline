@@ -13,25 +13,7 @@ export default async function (fastify, _opts) {
           },
         },
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              role: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-              rejectedAt: { type: 'string' },
-              rejectedById: { type: 'string' },
-              disabledAt: { type: 'string' },
-              disabledById: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: User.ResponseSchema,
           [StatusCodes.NOT_FOUND]: {
             type: 'null',
           },

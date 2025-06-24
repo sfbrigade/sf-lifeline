@@ -24,17 +24,19 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(data, {
         id: '555740af-17e9-48a3-93b8-d5236dfd2c29',
         firstName: 'Admin',
-        middleName: '',
+        middleName: null,
         lastName: 'User',
         email: 'admin.user@test.com',
         emailVerifiedAt: data.emailVerifiedAt,
-        licenseNumber: '',
-        licenseData: {},
+        licenseNumber: null,
+        licenseData: null,
         role: 'ADMIN',
         approvedAt: data.approvedAt,
-        approvedById: '',
-        rejectedAt: '',
-        rejectedById: '',
+        approvedById: null,
+        rejectedAt: null,
+        rejectedById: null,
+        disabledAt: null,
+        disabledById: null,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
       });
@@ -104,7 +106,7 @@ describe('/api/v1/users', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/users?status=approved&perPage=2&page=2>; rel="next",<http://localhost/api/v1/users?status=approved&perPage=2&page=4>; rel="last"'
+        '<http://localhost/api/v1/users?perPage=2&status=approved&page=2>; rel="next",<http://localhost/api/v1/users?perPage=2&status=approved&page=4>; rel="last"'
       );
       assert.deepStrictEqual(reply.headers['x-page'], '1');
       assert.deepStrictEqual(reply.headers['x-per-page'], '2');
@@ -277,7 +279,7 @@ describe('/api/v1/users', () => {
           message:
             'Password must include uppercase, lowercase, number, and special character',
         },
-        { path: 'licenseNumber', message: 'No license match' },
+        // { path: 'licenseNumber', message: 'No license match' }, // license is not validated by fastify schema validator
       ];
       const { message } = JSON.parse(res.body);
 

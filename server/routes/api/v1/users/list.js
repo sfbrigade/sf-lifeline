@@ -1,48 +1,20 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { User, Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
   fastify.get(
     '/',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            perPage: { type: 'integer' },
-            status: {
-              type: 'string',
-              enum: ['unapproved', 'approved', 'rejected', 'disabled'],
-            },
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().int().optional(),
+          perPage: z.coerce.number().int().optional(),
+          status: z.enum(['unapproved', 'approved', 'rejected', 'disabled']).optional(),
+        }).optional(),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                emailVerifiedAt: { type: 'string' },
-                licenseNumber: { type: 'string' },
-                licenseData: { type: 'object' },
-                role: { type: 'string' },
-                createdAt: { type: 'string' },
-                updatedAt: { type: 'string' },
-                approvedAt: { type: 'string' },
-                approvedById: { type: 'string' },
-                rejectedAt: { type: 'string' },
-                rejectedById: { type: 'string' },
-                disabledAt: { type: 'string' },
-                disabledById: { type: 'string' },
-              },
-            },
-          },
+          [StatusCodes.OK]: z.array(User.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF]),
