@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import { useAppContext } from '#app/AppContext';
-import LifelineAPI from './LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 const PATIENT_TABLE_HEADERS = [
   { key: 'createdBy', text: 'Created by' },

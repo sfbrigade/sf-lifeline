@@ -8,7 +8,7 @@ import { notifications } from '@mantine/notifications';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAppContext } from '#app/AppContext.jsx';
-import LifelineAPI from '../LifelineAPI.js';
+import LifelineAPI from '#app/LifelineAPI.js';
 import PatientRegistrationAccordion from './PatientRegistrationAccordion';
 
 const FORM_TABS = {
