@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   Modal,
+  Stack,
   Transition,
   Text,
 } from '@mantine/core';
@@ -118,7 +119,7 @@ export default function RegisterPhysician ({
         onClose={confirmClose}
         title='Register a new physician'
       >
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Stack component='form' onSubmit={form.onSubmit(handleSubmit)}>
           <Transition
             mounted={error}
             transition='slide-right'
@@ -179,7 +180,7 @@ export default function RegisterPhysician ({
           >
             Register Physician
           </Button>
-        </form>
+        </Stack>
       </Modal>
       <Modal
         opened={confirmationModalOpened}
