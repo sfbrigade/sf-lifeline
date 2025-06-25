@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { Container, Button, Grid, Group, TextInput } from '@mantine/core';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
+import { IMaskInput } from 'react-imask';
 
 import LifelineAPI from '#app/LifelineAPI';
 
@@ -78,6 +79,9 @@ export default function PhysicianForm () {
             />
             <TextInput
               label='Phone'
+              component={IMaskInput}
+              mask='(000) 000-0000'
+              placeholder='(000) 000-0000'
               key={form.key('phone')}
               {...form.getInputProps('phone')}
               mb='sm'

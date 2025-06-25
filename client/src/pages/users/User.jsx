@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import dayjs from 'dayjs';
 
 import { useAppContext } from '#app/AppContext';
-import LifelineAPI from '../patients/LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 function User () {
   const { user } = useAppContext();
