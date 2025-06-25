@@ -5,7 +5,7 @@ import { useNavigate, useParams, Link } from 'react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 
-import LifelineAPI from '../patients/LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 function EditUser () {
   const navigate = useNavigate();
