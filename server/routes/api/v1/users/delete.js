@@ -1,23 +1,18 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 export default async function (fastify, _opts) {
   fastify.delete(
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'number' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },

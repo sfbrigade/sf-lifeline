@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import User from '#models/user.js';
 import verifyLicense from '#helpers/license/verifyLicense.js';
@@ -8,12 +9,9 @@ export default async function (fastify, _opts) {
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid(),
+        }),
         body: User.UpdateSchema,
         response: {
           [StatusCodes.OK]: User.ResponseSchema,

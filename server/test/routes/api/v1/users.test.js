@@ -665,8 +665,8 @@ describe('/api/v1/users', () => {
         .headers(headers);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const data = JSON.parse(reply.body);
-      assert.deepStrictEqual(data.disabledById, '');
-      assert.deepStrictEqual(data.disabledAt, '');
+      assert.deepStrictEqual(data.disabledById, null);
+      assert.deepStrictEqual(data.disabledAt, null);
 
       const user = await t.prisma.user.findUnique({
         where: { id: 'df1e3040-ae06-4a4f-a15b-be2bf0bd0b39' },
@@ -687,8 +687,8 @@ describe('/api/v1/users', () => {
         .headers(headers);
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const data = JSON.parse(reply.body);
-      assert.deepStrictEqual(data.disabledById, '');
-      assert.deepStrictEqual(data.disabledAt, '');
+      assert.deepStrictEqual(data.disabledById, null);
+      assert.deepStrictEqual(data.disabledAt, null);
 
       const user = await t.prisma.user.findUnique({
         where: { id: 'df1e3040-ae06-4a4f-a15b-be2bf0bd0b39' },

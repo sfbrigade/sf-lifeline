@@ -17,7 +17,7 @@ export default fp(async (fastify) => {
   fastify.setErrorHandler(function (error, request, reply) {
     if (error.validation) {
       return reply.status(StatusCodes.UNPROCESSABLE_ENTITY).send({
-        error: "Unprocessable Entity",
+        error: 'Unprocessable Entity',
         message: error.validation.map(({ params: { issue: { path, message } } }) => ({ path: path[0], message })),
       });
     }
