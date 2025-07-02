@@ -27,6 +27,7 @@ export default async function (fastify) {
             properties: {
               id: { type: 'string' },
               name: { type: 'string' },
+              altNames: { type: 'string' },
               system: { type: 'string' },
               code: { type: 'string' },
             },

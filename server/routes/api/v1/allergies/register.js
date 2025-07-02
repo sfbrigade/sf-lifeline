@@ -11,6 +11,8 @@ export default async function (fastify) {
           properties: {
             name: { type: 'string' },
             type: { type: 'string', enum: ['DRUG', 'OTHER'] },
+            system: { type: 'string', nullable: true },
+            code: { type: 'string', nullable: true },
           },
         },
         response: {
@@ -20,7 +22,7 @@ export default async function (fastify) {
               id: { type: 'string' },
               name: { type: 'string' },
               type: { type: 'string' },
-              system: { type: 'string' },
+              system: { type: 'string'},
               code: { type: 'string' },
             },
           },
@@ -28,7 +30,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { name, type } = request.body;
+      const { name, type} = request.body;
 
       if (name.trim().length === 0) {
         reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
@@ -51,8 +53,6 @@ export default async function (fastify) {
         data: {
           name: name.trim(),
           type,
-          system: 'SNOMED',
-          code: 'Unknown',
         },
       });
 

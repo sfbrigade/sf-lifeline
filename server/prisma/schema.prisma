@@ -109,7 +109,7 @@ model Allergy {
   id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   type     AllergyType
-  system   CodingSystem
+  system   CodingSystem?
   code     String?
   patients PatientAllergy[]
 }

@@ -11,9 +11,9 @@ export default async function (fastify) {
           required: ['name'],
           properties: {
             name: { type: 'string' },
-            category: { type: 'string' },
+            category: { type: 'string', nullable: true },
             system: { type: 'string' },
-            code: { type: 'string' },
+            code: { type: 'string', nullable: true },
           },
         },
         response: {
@@ -22,9 +22,9 @@ export default async function (fastify) {
             properties: {
               id: { type: 'string' },
               name: { type: 'string' },
-              category: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
+              category: { type: 'string'},
+              system: { type: 'string'},
+              code: { type: 'string'},
             },
           },
         },
