@@ -23,7 +23,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -47,7 +47,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -74,7 +74,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/allergies?allergy=p&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -104,7 +104,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/allergies?allergy=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/allergies?allergy=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/allergies?perPage=1&allergy=&page=2>; rel="next",<http://localhost/api/v1/allergies?perPage=1&allergy=&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
