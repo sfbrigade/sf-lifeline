@@ -169,6 +169,55 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 4);
     });
+
+    it('should return a patient by full UUID and match all DB fields', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      // Use a known UUID from your fixtures
+      const uuid = '27963f68-ebc1-408a-8bb5-8fbe54671064';
+      const reply = await app
+        .inject()
+        .get(`/api/v1/patients?patient=${uuid}`)
+        .headers(headers);
+
+      // Fetch the patient record from the database, including relations
+      const record = await t.prisma.patient.findUnique({
+        where: { id: uuid },
+        include: {
+          createdBy: true,
+          updatedBy: true,
+        },
+      });
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const results = JSON.parse(reply.payload);
+      assert.deepStrictEqual(results.length, 1);
+      const apiPatient = results[0];
+      // Compare all relevant fields
+      assert.deepStrictEqual(apiPatient.id, record.id);
+      // Compare createdBy and updatedBy objects
+      assert.deepStrictEqual(apiPatient.createdBy.id, record.createdBy.id);
+      assert.deepStrictEqual(apiPatient.updatedBy.id, record.updatedBy.id);
+    });
+
+    it('should return patients by partial UUID (prefix match)', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      // Use a known UUID prefix from your fixtures
+      const uuidPrefix = '27963f68';
+      const reply = await app
+        .inject()
+        .get(`/api/v1/patients?patient=${uuidPrefix}`)
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const results = JSON.parse(reply.payload);
+      assert.ok(results.length >= 1);
+      assert.ok(results[0].id.startsWith(uuidPrefix));
+      assert.ok(results[0].createdBy);
+      assert.ok(results[0].updatedBy);
+    });
   });
 
   describe('GET /generate', () => {

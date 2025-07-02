@@ -61,70 +61,78 @@ export default async function (fastify) {
     async (request, reply) => {
       const { page = '1', perPage = '25', patient = '', physicianId, hospitalId } = request.query;
 
-      const splitQuery = patient.trim().split(' ');
+      const whereClause = {};
 
-      let whereClause = {};
+      // Check if patient parameter looks like a partial or complete UUID
+      // This regex checks if the patient string contains only hex digits and dashes (UUID format)
+      const isPartialUUID = /^[0-9a-f-]+$/i.test(patient.trim());
 
-      if (splitQuery.length > 1) {
-        whereClause = {
-          AND: [
-            {
-              OR: [
-                {
-                  firstName: {
-                    contains: splitQuery[0].trim(),
-                    mode: 'insensitive',
-                  },
+      if (patient.trim()) {
+        if (isPartialUUID) {
+          // Calculate offset and limit for pagination
+          // offset: how many records to skip (e.g., page 2 with 25 per page skips 25 records)
+          // limit: how many records to return per page
+          const offset = (parseInt(page) - 1) * parseInt(perPage);
+          const limit = parseInt(perPage);
+
+          // Prepare the value for ILIKE search (partial UUID match)
+          const likeValue = patient.trim() + '%';
+
+          // Use Prisma's tagged template syntax for raw SQL queries
+          const [records, totalResult] = await Promise.all([
+            fastify.prisma.$queryRaw`
+              SELECT
+                p.*,
+                to_jsonb(cb) AS "createdBy",
+                to_jsonb(ub) AS "updatedBy"
+              FROM "Patient" p
+              LEFT JOIN "User" cb ON p."createdById" = cb.id
+              LEFT JOIN "User" ub ON p."updatedById" = ub.id
+              WHERE p."id"::TEXT ILIKE ${likeValue}
+              ORDER BY p."updatedAt" DESC
+              LIMIT ${limit} OFFSET ${offset}
+            `,
+            fastify.prisma.$queryRaw`
+              SELECT COUNT(*) as total FROM "Patient"
+              WHERE "id"::TEXT ILIKE ${likeValue}
+            `
+          ]);
+
+          // Parse the total count from the result
+          const total = parseInt(totalResult[0].total);
+
+          // Set pagination headers in the response and send the records
+          reply.setPaginationHeaders(page, perPage, total).send(records);
+          return;
+        } else {
+          // Handle name search (if not a UUID)
+          // Split the patient string by spaces to support full name searches
+          const splitQuery = patient.trim().split(' ').filter(part => part.length > 0);
+
+          if (splitQuery.length > 1) {
+            // Full name search: e.g., "John Smith" - look for first name containing "John" AND last name containing "Smith"
+            whereClause.AND = [
+              {
+                firstName: {
+                  contains: splitQuery[0],
+                  mode: 'insensitive',
                 },
-                { firstName: null },
-              ],
-            },
-            {
-              OR: [
-                {
-                  lastName: {
-                    contains: splitQuery[1].trim(),
-                    mode: 'insensitive',
-                  },
+              },
+              {
+                lastName: {
+                  contains: splitQuery[splitQuery.length - 1],
+                  mode: 'insensitive',
                 },
-                { lastName: null },
-              ],
-            },
-          ],
-        };
-      } else {
-        whereClause = {
-          OR: [
-            { firstName: { contains: patient.trim(), mode: 'insensitive' } },
-            { lastName: { contains: patient.trim(), mode: 'insensitive' } },
-            {
-              AND: [
-                {
-                  OR: [
-                    {
-                      firstName: {
-                        contains: patient.trim(),
-                        mode: 'insensitive',
-                      },
-                    },
-                    { firstName: null },
-                  ],
-                },
-                {
-                  OR: [
-                    {
-                      lastName: {
-                        contains: patient.trim(),
-                        mode: 'insensitive',
-                      },
-                    },
-                    { lastName: null },
-                  ],
-                },
-              ],
-            },
-          ],
-        };
+              },
+            ];
+          } else {
+            // Single name search: e.g., "John" or "Smith" - look in both first and last names
+            whereClause.OR = [
+              { firstName: { contains: patient.trim(), mode: 'insensitive' } },
+              { lastName: { contains: patient.trim(), mode: 'insensitive' } },
+            ];
+          }
+        }
       }
 
       if (physicianId) {
