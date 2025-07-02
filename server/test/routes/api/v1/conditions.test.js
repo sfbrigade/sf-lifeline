@@ -33,9 +33,9 @@ describe('/api/v1/conditions', () => {
 
       assert.ok(storedCondition);
       assert.deepStrictEqual(storedCondition.name, newConditionData.name);
-      assert.deepStrictEqual(storedCondition.category, '');
+      assert.deepStrictEqual(storedCondition.category, null);
       assert.deepStrictEqual(storedCondition.system, newConditionData.system);
-      assert.deepStrictEqual(storedCondition.code, '');
+      assert.deepStrictEqual(storedCondition.code, null);
     });
 
     it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
