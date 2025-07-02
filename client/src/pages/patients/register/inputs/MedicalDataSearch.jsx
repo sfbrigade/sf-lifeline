@@ -9,7 +9,7 @@ import SearchDatabaseInputField from './SearchDatabaseInputField';
 import RegisterAllergy from './RegisterAllergy';
 import RegisterMedication from './RegisterMedication';
 import RegisterCondition from './RegisterCondition';
-import LifelineAPI from '../../LifelineAPI';
+import LifelineAPI from '#app/LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',

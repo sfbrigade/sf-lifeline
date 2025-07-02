@@ -7,7 +7,7 @@ import { Box, Button, Center, Container, Grid, Group, Loader, Paper, Pill, Text,
 import { useTranslation } from 'react-i18next';
 
 import { useAppContext } from '#app/AppContext.jsx';
-import LifelineAPI from '../LifelineAPI.js';
+import LifelineAPI from '#app/LifelineAPI.js';
 
 /**
  *

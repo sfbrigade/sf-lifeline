@@ -15,7 +15,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 import { IMaskInput } from 'react-imask';
 import { useMutation } from '@tanstack/react-query';
-import LifelineAPI from '../../LifelineAPI.js';
+import LifelineAPI from '#app/LifelineAPI.js';
 import { StatusCodes } from 'http-status-codes';
 
 import classes from './RegisterPhysician.module.css';
