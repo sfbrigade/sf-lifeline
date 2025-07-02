@@ -1,7 +1,20 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { recognizeMedication } from '#helpers/bedrock/recognizeMedication.js';
 
 export default async function (fastify) {
+  fastify.post(
+    '/recognize',
+    {
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
+    },
+    async (request, reply) => {
+      const image = request.body.image;
+      const { name } = await recognizeMedication(image);
+      return { name };
+    }
+  );
+
   fastify.get(
     '',
     {

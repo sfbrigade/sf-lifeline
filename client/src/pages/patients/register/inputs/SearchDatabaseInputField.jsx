@@ -13,6 +13,7 @@ const searchDatabaseInputFieldProps = {
   comboboxOptions: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   children: PropTypes.object,
+  rightSection: PropTypes.object,
 };
 
 /**
@@ -30,6 +31,7 @@ export default function SearchDatabaseInputField ({
   comboboxOptions,
   handleSearch,
   children = undefined,
+  rightSection = undefined,
 }) {
   return (
     <Combobox
@@ -57,7 +59,7 @@ export default function SearchDatabaseInputField ({
               combobox.updateSelectedOptionIndex();
               combobox.openDropdown();
             }}
-            rightSection={loading ? <Loader size='xs' /> : null}
+            rightSection={loading ? <Loader size='xs' /> : rightSection}
           />
         </Combobox.EventsTarget>
       </Combobox.DropdownTarget>

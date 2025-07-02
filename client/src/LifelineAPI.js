@@ -232,4 +232,16 @@ export default class LifelineAPI {
     const data = await response.json();
     return data;
   }
+
+  static async recognizeMedication (image) {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const response = await fetch(`${SERVER_BASE_URL}/medications/recognize`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+    return response.json();
+  }
 }
