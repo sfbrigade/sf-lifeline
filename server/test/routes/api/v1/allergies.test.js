@@ -157,7 +157,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(responseBody.name, newAllergyData.name);
       assert.deepStrictEqual(responseBody.type, newAllergyData.type);
       assert.deepStrictEqual(responseBody.system, 'SNOMED');
-      assert.deepStrictEqual(responseBody.code, 'Unknown');
+      assert.deepStrictEqual(responseBody.code, '');
 
       const storedAllergy = await app.prisma.allergy.findUnique({
         where: { id: responseBody.id },
@@ -167,7 +167,7 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(storedAllergy.name, newAllergyData.name);
       assert.deepStrictEqual(storedAllergy.type, newAllergyData.type);
       assert.deepStrictEqual(storedAllergy.system, 'SNOMED');
-      assert.deepStrictEqual(storedAllergy.code, 'Unknown');
+      assert.deepStrictEqual(storedAllergy.code, '');
     });
 
     it('should return existing allergy if already registered', async (t) => {

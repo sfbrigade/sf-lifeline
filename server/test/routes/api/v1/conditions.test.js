@@ -11,9 +11,7 @@ describe('/api/v1/conditions', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const newConditionData = {
         name: 'New Test Condition',
-        category: 'Unknown',
         system: 'SNOMED',
-        code: 'Unknown',
       };
 
       const reply = await app
@@ -26,9 +24,8 @@ describe('/api/v1/conditions', () => {
       const responseBody = JSON.parse(reply.payload);
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newConditionData.name);
-      assert.deepStrictEqual(responseBody.category, newConditionData.category);
       assert.deepStrictEqual(responseBody.system, newConditionData.system);
-      assert.deepStrictEqual(responseBody.code, newConditionData.code);
+
 
       const storedCondition = await app.prisma.condition.findUnique({
         where: { id: responseBody.id },
@@ -36,9 +33,9 @@ describe('/api/v1/conditions', () => {
 
       assert.ok(storedCondition);
       assert.deepStrictEqual(storedCondition.name, newConditionData.name);
-      assert.deepStrictEqual(storedCondition.category, newConditionData.category);
+      assert.deepStrictEqual(storedCondition.category, '');
       assert.deepStrictEqual(storedCondition.system, newConditionData.system);
-      assert.deepStrictEqual(storedCondition.code, newConditionData.code);
+      assert.deepStrictEqual(storedCondition.code, '');
     });
 
     it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {

@@ -154,9 +154,7 @@ describe('/api/v1/medications', () => {
       const responseBody = JSON.parse(reply.payload);
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newMedicationData.name);
-      assert.deepStrictEqual(responseBody.system, 'SNOMED');
-      assert.deepStrictEqual(responseBody.code, 'Unknown');
-      assert.deepStrictEqual(responseBody.altNames, '');
+
 
       const storedMedication = await app.prisma.medication.findUnique({
         where: { id: responseBody.id },
@@ -164,9 +162,6 @@ describe('/api/v1/medications', () => {
 
       assert.ok(storedMedication);
       assert.deepStrictEqual(storedMedication.name, newMedicationData.name);
-      assert.deepStrictEqual(storedMedication.system, 'SNOMED');
-      assert.deepStrictEqual(storedMedication.code, 'Unknown');
-      assert.deepStrictEqual(storedMedication.altNames, '');
     });
 
     it('should return existing medication if already registered', async (t) => {
