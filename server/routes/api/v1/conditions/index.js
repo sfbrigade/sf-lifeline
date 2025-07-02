@@ -54,7 +54,7 @@ export default async function (fastify) {
           name: name.trim(),
           category: category || 'Unknown',
           system: system || 'SNOMED',
-          code: code || 'Unknown',
+          code: code || null,
         },
       });
 

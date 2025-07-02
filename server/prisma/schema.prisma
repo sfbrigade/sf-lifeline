@@ -110,25 +110,25 @@ model Allergy {
   name     String
   type     AllergyType
   system   CodingSystem
-  code     String
+  code     String?
   patients PatientAllergy[]
 }
 
 model Medication {
   id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
-  altNames String
-  system   CodingSystem
-  code     String
+  altNames String?
+  system   CodingSystem?
+  code     String?
   patients PatientMedication[]
 }
 
 model Condition {
   id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
-  category String
+  category String?
   system   CodingSystem
-  code     String
+  code     String?
   patients PatientCondition[]
 }
 

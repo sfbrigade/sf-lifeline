@@ -5,12 +5,12 @@ export default async function (fastify) {
       schema: {
         body: {
           type: 'object',
-          required: ['name', 'category', 'system', 'code'],
+          required: ['name', 'system'],
           properties: {
             name: { type: 'string' },
-            category: { type: 'string' },
+            category: { type: 'string', nullable: true },
             system: { type: 'string' },
-            code: { type: 'string' },
+            code: { type: 'string', nullable: true },
           },
         },
         response: {
@@ -28,7 +28,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { name, category, system, code } = request.body;
+      const { name, category, system, code } = request.body; 
 
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
@@ -44,13 +44,19 @@ export default async function (fastify) {
         return;
       }
 
+      const createData = {
+        name: name.trim(),
+        system,
+        category: null,
+        code: null,
+      };
+
+      if (code) {
+        createData.code = code;
+      }
+
       const newCondition = await fastify.prisma.condition.create({
-        data: {
-          name: name.trim(),
-          category,
-          system,
-          code,
-        },
+        data: createData,
       });
 
       reply.code(201).send(newCondition);
