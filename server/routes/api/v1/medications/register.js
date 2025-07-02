@@ -30,7 +30,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { name, code } = request.body;
+      const { name } = request.body;
 
       if (name.trim().length === 0) {
         reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
@@ -51,10 +51,6 @@ export default async function (fastify) {
       const createData = { 
         name: name.trim(),
       };
-
-      if (code) { 
-        createData.code = code;
-      }
 
       const newMedication = await fastify.prisma.medication.create({
         data: createData,

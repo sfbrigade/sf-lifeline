@@ -47,10 +47,6 @@ export default async function (fastify) {
         system,
       };
 
-      if (code) {
-        createData.code = code;
-      }
-
       const newCondition = await fastify.prisma.condition.create({
         data: createData,
       });
