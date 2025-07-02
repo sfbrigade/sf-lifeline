@@ -28,14 +28,12 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { name, category, system, code } = request.body; 
+      const { name, system } = request.body; 
 
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
           name: name.trim(),
-          category,
           system,
-          code,
         },
       });
 
@@ -47,8 +45,6 @@ export default async function (fastify) {
       const createData = {
         name: name.trim(),
         system,
-        category: null,
-        code: null,
       };
 
       if (code) {
