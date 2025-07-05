@@ -57,14 +57,3 @@
     gap: 12px;
   }
 }
-
-.searchContainer{
-  flex-wrap: wrap;
-}
-
-.membersTitle{
-  @media screen and (max-width: 48em) {
-    width: 100%;
-    text-align: center;
-  }
-}

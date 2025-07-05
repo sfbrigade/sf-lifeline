@@ -42,11 +42,16 @@ function Users () {
   return (
     <Container>
       <InviteModal opened={opened} close={close} />
-      <Group justify='space-between' my='sm' className={classes.searchContainer}>
-        <Title order={2} mr='md' className={classes.membersTitle} >
+      <Group justify='space-between' my='sm'>
+        <Title
+          order={2}
+          mr='md'
+          ta={{ base: 'center', md: 'left' }}
+          w={{ base: '100%', md: 'auto' }}
+        >
           Members
         </Title>
-        <Group justify = "center">
+        <Group justify='center'>
           <TextInput
             leftSectionPointerEvents='none'
             leftSection={<IconSearch />}
