@@ -13,7 +13,6 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { useUsers } from './useUsers';
-import classes from './Users.module.css';
 import { UserDataTable } from './UsersDataTable/UsersDataTable';
 import { InviteModal } from './InviteModal';
 
