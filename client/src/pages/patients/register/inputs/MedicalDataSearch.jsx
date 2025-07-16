@@ -75,6 +75,8 @@ export default function MedicalDataSearch ({
     try {
       const { name } = await LifelineAPI.recognizeMedication(file);
       setSearch(name);
+      fetchOptions(name);
+      combobox.openDropdown();
     } catch (error) {
       console.error(error);
       notifications.show({
@@ -92,6 +94,12 @@ export default function MedicalDataSearch ({
       setValue(initialMedicalData);
     }
   }, [initialMedicalData]);
+
+  useEffect(() => {
+    if (search) {
+      fetchOptions(search);
+    }
+  }, [search]);
 
   const fetchOptions = useDebouncedCallback(async (query) => {
     abortController.current?.abort();
