@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Medication" ALTER COLUMN "altNames" DROP NOT NULL,
+ALTER COLUMN "system" DROP NOT NULL;

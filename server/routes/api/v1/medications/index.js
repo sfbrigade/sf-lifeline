@@ -1,7 +1,11 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 
+import register from './register.js';
+
 export default async function (fastify) {
+  fastify.register(register);
+
   fastify.get(
     '',
     {
@@ -42,8 +46,7 @@ export default async function (fastify) {
         where: { name: { contains: medication.trim(), mode: 'insensitive' } },
       };
 
-      const { records, total } =
-        await fastify.prisma.medication.paginate(options);
+      const { records, total } = await fastify.prisma.medication.paginate(options);
       reply.setPaginationHeaders(page, perPage, total).send(records);
     }
   );
