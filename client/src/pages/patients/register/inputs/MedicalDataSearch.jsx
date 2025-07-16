@@ -12,13 +12,16 @@ import {
   Modal,
   Button,
   Group,
+  Text
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconCamera } from '@tabler/icons-react';
-import { useDebouncedCallback } from '@mantine/hooks';
+import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
 import SearchDatabaseInputField from './SearchDatabaseInputField';
+import RegisterAllergy from './RegisterAllergy';
+import RegisterMedication from './RegisterMedication';
+import RegisterCondition from './RegisterCondition';
 import LifelineAPI from '#app/LifelineAPI';
 
 const API_PATHS = {
@@ -45,8 +48,19 @@ export default function MedicalDataSearch ({
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [value, setValue] = useState(initialMedicalData);
-  const [empty, setEmpty] = useState(false);
   const [search, setSearch] = useState('');
+  const [
+    registerAllergyOpened,
+    { open: openRegisterAllergy, close: closeRegisterAllergy },
+  ] = useDisclosure(false);
+  const [
+    registerMedicationOpened,
+    { open: openRegisterMedication, close: closeRegisterMedication },
+  ] = useDisclosure(false);
+  const [
+    registerConditionOpened,
+    { open: openRegisterCondition, close: closeRegisterCondition },
+  ] = useDisclosure(false);
   const abortController = useRef();
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
@@ -92,7 +106,6 @@ export default function MedicalDataSearch ({
       );
       setData(result);
       setLoading(false);
-      setEmpty(result.length === 0);
       abortController.current = undefined;
     } catch (error) {
       console.error(error);
@@ -112,19 +125,31 @@ export default function MedicalDataSearch ({
   });
 
   const handleSelectValue = (id, key) => {
-    const name = key.children;
-    setValue((current) =>
-      current.includes(id)
-        ? current.filter((v) => v.id !== id)
-        : [...current, { id, name }]
-    );
+    if (id === '$register') {
+      if (category === 'allergies') {
+        openRegisterAllergy();
+      } else if (category === 'medications') {
+        openRegisterMedication();
+      } else if (category === 'conditions') {
+        openRegisterCondition();
+      }
+      combobox.closeDropdown();
+      setSearch('');
+    } else {
+      const name = key.children;
+      setValue((current) =>
+        current.includes(id)
+          ? current.filter((v) => v.id !== id)
+          : [...current, { id, name }]
+      );
 
-    form.setFieldValue(`medicalData.${category}`, (current) => [
-      ...current,
-      id,
-    ]);
-    combobox.closeDropdown();
-    setSearch('');
+      form.setFieldValue(`medicalData.${category}`, (current) => [
+        ...current,
+        id,
+      ]);
+      combobox.closeDropdown();
+      setSearch('');
+    }
   };
 
   const handleValueRemove = (val) => {
@@ -165,21 +190,36 @@ export default function MedicalDataSearch ({
    * Conditional rendering of combobox content
    */
   function renderComboxContent () {
-    if (empty) {
-      return <Combobox.Empty>No results found</Combobox.Empty>;
-    }
+    const registerOption = (
+      <Combobox.Option value='$register'>
+        <Text fw={700} size='sm'>
+          + Register new {category}
+        </Text>
+      </Combobox.Option>
+    );
 
-    if (data.length === 0) {
-      return <Combobox.Empty>Start typing to search</Combobox.Empty>;
+    if (data.length === 0 && search.length === 0) {
+      return (
+        <>
+          <Combobox.Empty>Start typing to search</Combobox.Empty>
+          {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
+        </>
+      );
     }
 
     if (options.length === 0) {
-      return <Combobox.Empty>All options selected</Combobox.Empty>;
+      return (
+        <>
+          <Combobox.Empty>No results found</Combobox.Empty>
+          {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
+        </>
+      );
     }
 
     return (
       <ScrollArea.Autosize type='scroll' mah={200}>
         {options}
+        {(category === 'allergies' || category === 'medications' || category === 'conditions') && registerOption}
       </ScrollArea.Autosize>
     );
   }
@@ -233,6 +273,24 @@ export default function MedicalDataSearch ({
           </Button>
         </Group>
       </Modal>
+      <RegisterAllergy
+        setAllergy={handleSelectValue}
+        registerAllergyOpened={registerAllergyOpened}
+        closeRegisterAllergy={closeRegisterAllergy}
+        fetchOptions={fetchOptions}
+      />
+      <RegisterMedication
+        setMedication={handleSelectValue}
+        registerMedicationOpened={registerMedicationOpened}
+        closeRegisterMedication={closeRegisterMedication}
+        fetchOptions={fetchOptions}
+      />
+      <RegisterCondition
+        setCondition={handleSelectValue}
+        registerConditionOpened={registerConditionOpened}
+        closeRegisterCondition={closeRegisterCondition}
+        fetchOptions={fetchOptions}
+      />
     </Box>
   );
 }

@@ -13,7 +13,6 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { useUsers } from './useUsers';
-
 import { UserDataTable } from './UsersDataTable/UsersDataTable';
 import { InviteModal } from './InviteModal';
 
@@ -42,11 +41,16 @@ function Users () {
   return (
     <Container>
       <InviteModal opened={opened} close={close} />
-      <Group justify='space-between' wrap='nowrap' my='sm'>
-        <Title order={3} mr='md'>
+      <Group justify='space-between' my='sm'>
+        <Title
+          order={2}
+          mr='md'
+          ta={{ base: 'center', md: 'left' }}
+          w={{ base: '100%', md: 'auto' }}
+        >
           Members
         </Title>
-        <Group>
+        <Group justify='center'>
           <TextInput
             leftSectionPointerEvents='none'
             leftSection={<IconSearch />}
