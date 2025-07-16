@@ -13,8 +13,6 @@
     "lint": "npm run lint --workspaces"
   },
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.840.0",
-    "@fastify/multipart": "^9.0.3",
     "foreman": "^3.0.1"
   }
 }
