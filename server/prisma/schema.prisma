@@ -46,6 +46,8 @@ model User {
   updatedAllergies       Allergy[] @relation("AllergyUpdatedBy")
   createdConditions      Condition[] @relation("ConditionCreatedBy")
   updatedConditions      Condition[] @relation("ConditionUpdatedBy")
+  createdHospitals       Hospital[] @relation("HospitalCreatedBy")
+  updatedHospitals       Hospital[] @relation("HospitalUpdatedBy")
 }
 
 model Invite {
@@ -190,13 +192,19 @@ model Physician {
 }
 
 model Hospital {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String?
-  address    String?
-  phone      String?
-  email      String?
-  patients   Patient[]
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                   String
+  address                String?
+  phone                  String?
+  email                  String?
+  patients               Patient[]
   physicians Physician[] @relation("HospitalToPhysician")
+  updatedAt              DateTime            @updatedAt
+  updatedById            String?             @db.Uuid
+  updatedBy              User?               @relation("HospitalUpdatedBy", fields: [updatedById], references: [id])
+  createdAt              DateTime            @default(now())
+  createdById            String?             @db.Uuid
+  createdBy              User?               @relation("HospitalCreatedBy", fields: [createdById], references: [id])
 }
 
 enum Role {

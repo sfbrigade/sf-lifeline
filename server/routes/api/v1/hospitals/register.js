@@ -1,30 +1,16 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
-import { z } from 'zod';
+
+import { Hospital } from '#models/hospital.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
-  const phoneRegex = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
-
   fastify.post(
     '/',
     {
       schema: {
-        body: z.object({
-          name: z.string().min(1, 'Name is required'),
-          email: z.string().email('Invalid email address'),
-          address: z.string().min(1, 'Address is required'),
-          phone: z.string()
-            .min(1, 'Phone number is required')
-            .regex(phoneRegex, 'Phone number must be in format (###) ###-####'),
-        }),
+        body: Hospital.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: z.object({
-            id: z.string(),
-            name: z.string(),
-            email: z.string().email(),
-            address: z.string(),
-            phone: z.string(),
-          }),
+          [StatusCodes.CREATED]: Hospital.ResponseSchema,
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -33,7 +19,7 @@ export default async function (fastify) {
       const { name, address, phone, email } = request.body;
 
       try {
-        // Check if the physician already exists
+        // Check if the hospital already exists
         const exists = await fastify.prisma.hospital.findFirst({
           where: {
             OR: [{ phone }, { email }, { name }, { address }],
@@ -62,7 +48,9 @@ export default async function (fastify) {
 
         const newHospital = await fastify.prisma.hospital.create({
           data: {
-            ...request.body
+            ...request.body,
+            createdById: request.user.id,
+            updatedById: request.user.id,
           },
         });
 

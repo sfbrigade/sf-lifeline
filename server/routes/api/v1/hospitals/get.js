@@ -1,6 +1,8 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
+
+import { Hospital } from '#models/hospital.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.get(
@@ -11,13 +13,7 @@ export default async function (fastify) {
           id: z.string().min(1, 'Hospital ID is required'),
         }),
         response: {
-          [StatusCodes.OK]: z.object({
-            id: z.string(),
-            name: z.string(),
-            address: z.string(),
-            phone: z.string(),
-            email: z.string().email(),
-          }),
+          [StatusCodes.OK]: Hospital.ResponseSchema,
           [StatusCodes.NOT_FOUND]: z.object({
             message: z.string(),
           }),

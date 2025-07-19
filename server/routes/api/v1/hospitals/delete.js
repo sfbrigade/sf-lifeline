@@ -1,6 +1,7 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
+
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.delete(
