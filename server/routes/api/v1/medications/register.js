@@ -48,7 +48,7 @@ export default async function (fastify) {
         return;
       }
 
-      const createData = { 
+      const createData = {
         name: name.trim(),
       };
 

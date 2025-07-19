@@ -23,9 +23,9 @@ export default async function (fastify) {
             properties: {
               id: { type: 'string' },
               name: { type: 'string' },
-              category: { type: 'string'},
-              system: { type: 'string'},
-              code: { type: 'string'},
+              category: { type: 'string' },
+              system: { type: 'string' },
+              code: { type: 'string' },
             },
           },
         },
@@ -53,7 +53,7 @@ export default async function (fastify) {
       const newCondition = await fastify.prisma.condition.create({
         data: {
           name: name.trim(),
-          system: system,
+          system,
         },
       });
 

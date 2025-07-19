@@ -155,7 +155,6 @@ describe('/api/v1/medications', () => {
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newMedicationData.name);
 
-
       const storedMedication = await app.prisma.medication.findUnique({
         where: { id: responseBody.id },
       });

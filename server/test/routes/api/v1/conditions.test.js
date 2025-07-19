@@ -26,7 +26,6 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(responseBody.name, newConditionData.name);
       assert.deepStrictEqual(responseBody.system, newConditionData.system);
 
-
       const storedCondition = await app.prisma.condition.findUnique({
         where: { id: responseBody.id },
       });

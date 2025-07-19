@@ -28,7 +28,7 @@ export default async function (fastify) {
       },
     },
     async (request, reply) => {
-      const { name, system } = request.body; 
+      const { name, system } = request.body;
 
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
