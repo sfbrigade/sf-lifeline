@@ -1,3 +1,4 @@
+import { Allergy } from '#models/allergy.js';
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
@@ -14,13 +15,7 @@ export default async function (fastify) {
         }),
       },
       response: {
-        [StatusCodes.OK]: z.array(z.object({
-          id: z.string(),
-          name: z.string(),
-          type: z.string(),
-          system: z.string(),
-          code: z.string(),
-        })),
+        [StatusCodes.OK]: z.array(Allergy.ResponseSchema),
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },

@@ -19,13 +19,19 @@ describe('/api/v1/allergies', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
           name: 'Grass Pollen',
           type: 'OTHER',
           system: 'SNOMED',
           code: '418689008',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -45,13 +51,18 @@ describe('/api/v1/allergies', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
           name: 'Grass Pollen',
           type: 'OTHER',
           system: 'SNOMED',
           code: '418689008',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -74,13 +85,18 @@ describe('/api/v1/allergies', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/allergies?perPage=1&allergy=p&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
           name: 'Grass Pollen',
           type: 'OTHER',
           system: 'SNOMED',
           code: '418689008',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -109,13 +125,18 @@ describe('/api/v1/allergies', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/allergies?perPage=1&allergy=&page=2>; rel="next",<http://localhost/api/v1/allergies?perPage=1&allergy=&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: 'ceb1cd02-d5a7-46ef-915f-766cee886d0d',
           name: 'Grass Pollen',
           type: 'OTHER',
           system: 'SNOMED',
           code: '418689008',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -156,6 +177,10 @@ describe('/api/v1/allergies', () => {
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newAllergyData.name);
       assert.deepStrictEqual(responseBody.type, newAllergyData.type);
+      assert.deepStrictEqual(responseBody.system, null);
+      assert.deepStrictEqual(responseBody.code, null);
+      assert.deepStrictEqual(responseBody.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(responseBody.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
 
       const storedAllergy = await app.prisma.allergy.findUnique({
         where: { id: responseBody.id },
@@ -166,6 +191,8 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(storedAllergy.type, newAllergyData.type);
       assert.deepStrictEqual(storedAllergy.system, null);
       assert.deepStrictEqual(storedAllergy.code, null);
+      assert.deepStrictEqual(storedAllergy.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(storedAllergy.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should return existing allergy if already registered', async (t) => {
