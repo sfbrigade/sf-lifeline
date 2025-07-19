@@ -1,31 +1,35 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name'],
-          properties: {
-            name: { type: 'string' },
-            altNames: { type: 'string', nullable: true },
-            system: { type: 'string', nullable: true },
-            code: { type: 'string', nullable: true },
-          },
-        },
+        body: z.object({
+          name: z.string().min(1, 'Name is required'),
+          altNames: z.string().nullable().optional(),
+          system: z.string().nullable().optional(),
+          code: z.string().nullable().optional(),
+        }),
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
-              altNames: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            altNames: z.string().nullable(),
+            system: z.string().nullable(),
+            code: z.string().nullable(),
+          }),
+          [StatusCodes.OK]: z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            altNames: z.string().nullable(),
+            system: z.string().nullable(),
+            code: z.string().nullable(),
+          }),
+          [StatusCodes.BAD_REQUEST]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },

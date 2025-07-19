@@ -1,37 +1,27 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
-import register from './register.js';
+const MedicationResponseSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  altNames: z.string().nullable(),
+  system: z.string(),
+  code: z.string(),
+});
 
 export default async function (fastify) {
-  fastify.register(register);
-
   fastify.get(
     '',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            perPage: { type: 'integer' },
-            medication: { type: 'string' },
-          },
-        },
-      },
-      response: {
-        [StatusCodes.OK]: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              altNames: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
-            },
-          },
+        querystring: z.object({
+          page: z.coerce.number().int().positive().default(1).optional(),
+          perPage: z.coerce.number().int().positive().default(25).optional(),
+          medication: z.string().default('').optional(),
+        }),
+        response: {
+          [StatusCodes.OK]: z.array(MedicationResponseSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),

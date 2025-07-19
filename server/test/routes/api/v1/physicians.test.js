@@ -18,7 +18,7 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/physicians?physician=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/physicians?physician=&perPage=1&page=4>; rel="last"'
+        '<http://localhost/api/v1/physicians?perPage=1&physician=&page=2>; rel="next",<http://localhost/api/v1/physicians?perPage=1&physician=&page=4>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -224,7 +224,7 @@ describe('/api/v1/physicians', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
 
       reply = await app
         .inject()
@@ -232,12 +232,12 @@ describe('/api/v1/physicians', () => {
         .payload({
           firstName: 'Jane',
           lastName: 'Doe',
-          phone: '(555) 555-5555',
+          phone: '555 555-5555',
           email: 'jane.doe@',
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
     });
 
     it('should error if physician already exists without registering new duplicate', async (t) => {

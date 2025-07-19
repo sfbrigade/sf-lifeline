@@ -17,7 +17,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/medications?medication=ibuprofen&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -43,7 +43,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/medications?medication=ibuprofen&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -72,7 +72,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/medications?medication=ibuprofen&perPage=1&page=2>; rel="next"'
+        '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -107,7 +107,7 @@ describe('/api/v1/medications', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/medications?medication=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/medications?medication=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/medications?perPage=1&medication=&page=2>; rel="next",<http://localhost/api/v1/medications?perPage=1&medication=&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -126,7 +126,7 @@ describe('/api/v1/medications', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const reply = await app
         .inject()
-        .get('/api/v1/medications?medication=newmedication&perPage=1')
+        .get('/api/v1/medications?perPage=1&medication=newmedication')
         .headers(headers);
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
