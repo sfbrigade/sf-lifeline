@@ -59,6 +59,8 @@ export default async function (fastify) {
         const newPhysician = await fastify.prisma.physician.create({
           data: {
             ...newPhysicianData,
+            createdById: request.user.id,
+            updatedById: request.user.id,
           },
         });
 

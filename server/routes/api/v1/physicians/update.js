@@ -41,7 +41,10 @@ export default async function (fastify, _opts) {
 
         const updatedPhysician = await fastify.prisma.physician.update({
           where: { id },
-          data: body,
+          data: {
+            ...body,
+            updatedById: request.user.id,
+          },
         });
 
         return reply.code(StatusCodes.OK).send(updatedPhysician);

@@ -207,6 +207,8 @@ describe('/api/v1/physicians', () => {
         physician.email,
         'jane.doe@test.com'
       );
+      assert.deepStrictEqual(physician.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(physician.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should error for incorrect phone or email format', async (t) => {
@@ -307,13 +309,7 @@ describe('/api/v1/physicians', () => {
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
 
-      // First get a physician ID from the list
-      const listReply = await app
-        .inject()
-        .get('/api/v1/physicians?physician=smith')
-        .headers(headers);
-
-      const physicianId = JSON.parse(listReply.payload)[0].id;
+      const physicianId = '1ef50c4c-92cb-4298-ab0a-ce7644513bfb';
 
       const reply = await app
         .inject()
@@ -332,6 +328,16 @@ describe('/api/v1/physicians', () => {
       assert.deepStrictEqual(physician.lastName, 'Smith');
       assert.deepStrictEqual(physician.phone, '(555) 555-1234');
       assert.deepStrictEqual(physician.email, 'robert.smith@test.com');
+      assert.deepStrictEqual(physician.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+
+      const updatedPhysician = await t.prisma.physician.findUnique({
+        where: { id: physicianId }
+      });
+      assert.deepStrictEqual(updatedPhysician.firstName, 'Robert');
+      assert.deepStrictEqual(updatedPhysician.lastName, 'Smith');
+      assert.deepStrictEqual(updatedPhysician.phone, '(555) 555-1234');
+      assert.deepStrictEqual(updatedPhysician.email, 'robert.smith@test.com');
+      assert.deepStrictEqual(updatedPhysician.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should return 404 for updating non-existent physician', async (t) => {
