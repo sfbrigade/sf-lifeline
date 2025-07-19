@@ -18,7 +18,7 @@ describe('/api/v1/hospitals', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=4>; rel="last"'
+        '<http://localhost/api/v1/hospitals?page=2&perPage=1&hospital=>; rel="next",<http://localhost/api/v1/hospitals?page=4&perPage=1&hospital=>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -175,7 +175,7 @@ describe('/api/v1/hospitals', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
 
       reply = await app
         .inject()
@@ -188,7 +188,7 @@ describe('/api/v1/hospitals', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
     });
 
     it('should error if hospital already exists', async (t) => {
@@ -205,7 +205,7 @@ describe('/api/v1/hospitals', () => {
           email: 'kaiser.sf@test.com'
         })
         .headers(headers);
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
         'Hospital with name Kaiser SF and address Kaiser SF and phone (123) 456-9999 and email kaiser.sf@test.com already exists.'

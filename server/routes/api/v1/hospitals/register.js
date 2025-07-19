@@ -1,37 +1,30 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 export default async function (fastify) {
+  const phoneRegex = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
+
   fastify.post(
     '/',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name', 'email', 'phone', 'address'],
-          properties: {
-            name: { type: 'string' },
-            email: { type: 'string' },
-            address: {
-              type: 'string',
-            },
-            phone: {
-              type: 'string',
-              pattern: '^(\\([0-9]{3}\\)) [0-9]{3}-[0-9]{4}$',
-            },
-          },
-        },
+        body: z.object({
+          name: z.string().min(1, 'Name is required'),
+          email: z.string().email('Invalid email address'),
+          address: z.string().min(1, 'Address is required'),
+          phone: z.string()
+            .min(1, 'Phone number is required')
+            .regex(phoneRegex, 'Phone number must be in format (###) ###-####'),
+        }),
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              email: { type: 'string' },
-              address: { type: 'string' },
-              phone: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: z.object({
+            id: z.string(),
+            name: z.string(),
+            email: z.string().email(),
+            address: z.string(),
+            phone: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -76,7 +69,7 @@ export default async function (fastify) {
         reply.code(StatusCodes.CREATED).send(newHospital);
       } catch (error) {
         if (error.message.includes('already exists')) {
-          return reply.status(StatusCodes.BAD_REQUEST).send({
+          return reply.status(StatusCodes.UNPROCESSABLE_ENTITY).send({
             message: error.message,
           });
         }
