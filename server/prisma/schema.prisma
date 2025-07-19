@@ -50,6 +50,8 @@ model User {
   updatedHospitals       Hospital[] @relation("HospitalUpdatedBy")
   createdMedications     Medication[] @relation("MedicationCreatedBy")
   updatedMedications     Medication[] @relation("MedicationUpdatedBy")
+  createdPhysicians      Physician[] @relation("PhysicianCreatedBy")
+  updatedPhysicians      Physician[] @relation("PhysicianUpdatedBy")
 }
 
 model Invite {
@@ -189,14 +191,20 @@ model PatientCondition {
 }
 
 model Physician {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName  String?
-  middleName String?
-  lastName   String?
-  phone      String?
-  email      String?
-  patients   Patient[]
-  hospitals  Hospital[] @relation("HospitalToPhysician")
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName              String?
+  middleName             String?
+  lastName               String?
+  phone                  String?
+  email                  String?
+  patients               Patient[]
+  hospitals              Hospital[]          @relation("HospitalToPhysician")
+  updatedAt              DateTime            @updatedAt
+  updatedById            String?             @db.Uuid
+  updatedBy              User?               @relation("PhysicianUpdatedBy", fields: [updatedById], references: [id])
+  createdAt              DateTime            @default(now())
+  createdById            String?             @db.Uuid
+  createdBy              User?               @relation("PhysicianCreatedBy", fields: [createdById], references: [id])
 }
 
 model Hospital {
@@ -206,7 +214,7 @@ model Hospital {
   phone                  String?
   email                  String?
   patients               Patient[]
-  physicians Physician[] @relation("HospitalToPhysician")
+  physicians             Physician[]         @relation("HospitalToPhysician")
   updatedAt              DateTime            @updatedAt
   updatedById            String?             @db.Uuid
   updatedBy              User?               @relation("HospitalUpdatedBy", fields: [updatedById], references: [id])

@@ -3,13 +3,11 @@ import { z } from 'zod';
 
 import Base from './base.js';
 
-const phoneRegex = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
-
 export class Hospital extends Base {
   static AttributesSchema = z.object({
     name: z.string(),
     address: z.string().nullable().optional(),
-    phone: z.string().regex(phoneRegex, 'Phone number must be in format (###) ###-####').nullable().optional(),
+    phone: Base.PhoneSchema,
     email: z.string().nullable().optional(),
   });
 
