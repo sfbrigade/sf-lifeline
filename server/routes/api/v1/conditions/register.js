@@ -1,34 +1,35 @@
+import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name', 'system'],
-          properties: {
-            name: { type: 'string' },
-            category: { type: 'string', nullable: true },
-            system: { type: 'string' },
-            code: { type: 'string', nullable: true },
-          },
-        },
+        body: z.object({
+          name: z.string().min(1, 'Name cannot be empty'),
+          category: z.string().nullable().optional(),
+          system: z.string().min(1, 'System cannot be empty'),
+          code: z.string().nullable().optional(),
+        }),
         response: {
-          201: {
-            type: 'object',
-            properties: {
-              id: { type: 'string', format: 'uuid' },
-              name: { type: 'string' },
-              category: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            category: z.string().nullable(),
+            system: z.string(),
+            code: z.string().nullable(),
+          }),
         },
       },
     },
     async (request, reply) => {
       const { name, system } = request.body;
+
+      if (name.trim().length === 0) {
+        reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
+        return;
+      }
 
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
@@ -38,7 +39,7 @@ export default async function (fastify) {
       });
 
       if (existingCondition) {
-        reply.code(200).send(existingCondition);
+        reply.code(StatusCodes.OK).send(existingCondition);
         return;
       }
 
@@ -51,7 +52,7 @@ export default async function (fastify) {
         data: createData,
       });
 
-      reply.code(201).send(newCondition);
+      reply.code(StatusCodes.CREATED).send(newCondition);
     }
   );
 }

@@ -72,7 +72,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -98,7 +98,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -127,7 +127,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
@@ -162,7 +162,7 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload), [
         {
