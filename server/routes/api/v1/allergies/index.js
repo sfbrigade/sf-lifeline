@@ -2,7 +2,11 @@ import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
+import register from './register.js';
+
 export default async function (fastify) {
+  fastify.register(register);
+
   fastify.get(
     '',
     {

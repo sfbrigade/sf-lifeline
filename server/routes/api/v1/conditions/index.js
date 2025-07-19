@@ -3,6 +3,64 @@ import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
 export default async function (fastify) {
+  fastify.post(
+    '/register',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['name'],
+          properties: {
+            name: { type: 'string' },
+            category: { type: 'string', nullable: true },
+            system: { type: 'string' },
+            code: { type: 'string', nullable: true },
+          },
+        },
+        response: {
+          [StatusCodes.CREATED]: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              category: { type: 'string'},
+              system: { type: 'string'},
+              code: { type: 'string'},
+            },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const { name, system } = request.body;
+
+      if (name.trim().length === 0) {
+        reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
+        return;
+      }
+
+      const existingCondition = await fastify.prisma.condition.findFirst({
+        where: {
+          name: name.trim(),
+        },
+      });
+
+      if (existingCondition) {
+        reply.code(StatusCodes.OK).send(existingCondition);
+        return;
+      }
+
+      const newCondition = await fastify.prisma.condition.create({
+        data: {
+          name: name.trim(),
+          system: system,
+        },
+      });
+
+      reply.code(StatusCodes.CREATED).send(newCondition);
+    }
+  );
+
   fastify.get(
     '',
     {
