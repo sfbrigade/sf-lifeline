@@ -1,71 +1,60 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+const GenderEnum = z.enum([
+  'FEMALE',
+  'MALE',
+  'TRANS_MALE',
+  'TRANS_FEMALE',
+  'OTHER',
+  'UNKNOWN',
+]);
+
+const LanguageEnum = z.enum([
+  'CANTONESE',
+  'ENGLISH',
+  'MANDARIN',
+  'RUSSIAN',
+  'SPANISH',
+  'TAGALOG',
+]);
 
 export default async function (fastify, _opts) {
+  const basePatientSchema = z.object({
+    id: z.string().uuid('Invalid patient ID format'),
+    firstName: z.string().min(1, 'First name is required').nullable(),
+    middleName: z.string().nullable().optional(),
+    lastName: z.string().min(1, 'Last name is required').nullable(),
+    gender: GenderEnum,
+    language: LanguageEnum,
+    dateOfBirth: z.string().date('Invalid date format'),
+  });
+
+  const patientSchema = process.env.VITE_FEATURE_COLLECT_PHI
+    ? basePatientSchema
+    : basePatientSchema.partial();
+
   fastify.post(
     '/',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: process.env.VITE_FEATURE_COLLECT_PHI
-            ? [
-                'id',
-                'firstName',
-                'lastName',
-                'gender',
-                'language',
-                'dateOfBirth',
-              ]
-            : [],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            gender: {
-              type: 'string',
-              enum: [
-                'FEMALE',
-                'MALE',
-                'TRANS_MALE',
-                'TRANS_FEMALE',
-                'OTHER',
-                'UNKNOWN',
-              ],
-            },
-            language: {
-              type: 'string',
-              enum: [
-                'CANTONESE',
-                'ENGLISH',
-                'MANDARIN',
-                'RUSSIAN',
-                'SPANISH',
-                'TAGALOG',
-              ],
-            },
-            dateOfBirth: {
-              oneOf: [
-                { type: 'string', format: 'date' },
-                { type: 'string', minLength: 0, maxLength: 0 },
-              ]
-            }
-          },
-        },
+        body: patientSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              gender: { type: 'string' },
-              language: { type: 'string' },
-              dateOfBirth: { type: 'string', format: 'date' },
-            },
-          },
+          [StatusCodes.CREATED]: z.object({
+            id: z.string().uuid(),
+            firstName: z.string().nullable(),
+            middleName: z.string().nullable(),
+            lastName: z.string().nullable(),
+            gender: GenderEnum,
+            language: LanguageEnum,
+            dateOfBirth: z.coerce.string().date().nullable(),
+            createdAt: z.coerce.date(),
+            updatedAt: z.coerce.date(),
+          }),
+          [StatusCodes.BAD_REQUEST]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -110,6 +99,8 @@ export default async function (fastify, _opts) {
 
           return patient;
         });
+
+        newPatient.dateOfBirth = newPatient.dateOfBirth?.toISOString().split('T')[0];
 
         reply.code(StatusCodes.CREATED).send(newPatient);
       } catch (error) {

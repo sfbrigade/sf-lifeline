@@ -1,24 +1,22 @@
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
 
 export default async function (fastify, _opts) {
   fastify.get(
     '/generate',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            count: { type: 'integer' },
-          },
-        },
+        querystring: z.object({
+          count: z.coerce.number().int().positive('Count must be a positive integer'),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
+          [StatusCodes.OK]: z.array(z.string()),
+          [StatusCodes.BAD_REQUEST]: z.object({
+            statusCode: z.number(),
+            code: z.string(),
+            error: z.string(),
+          }),
         },
       },
     },

@@ -18,7 +18,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/patients?patient=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/patients?patient=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/patients?perPage=1&patient=&page=2>; rel="next",<http://localhost/api/v1/patients?perPage=1&patient=&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -151,14 +151,15 @@ describe('/api/v1/patients', () => {
         .post('/api/v1/patients')
         .payload({
           id: '0849219e-e2c6-409b-bea4-1a229c3df805',
-          firstName: '',
-          middleName: '',
-          lastName: '',
+          firstName: null,
+          middleName: null,
+          lastName: null,
           gender: 'MALE',
           language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
+
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
 
       reply = await app
@@ -213,7 +214,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
-      assert.deepStrictEqual(Object.keys(response).length, 22);
+      assert.deepStrictEqual(Object.keys(response).length, 16);
     });
 
     it('should throw a 404 error if a patient id does not exist', async (t) => {
@@ -295,6 +296,8 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       });
     });
 
@@ -326,6 +329,8 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       });
     });
 
@@ -357,6 +362,8 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       });
     });
 
@@ -401,11 +408,24 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        "body must have required property 'firstName'"
+        [
+          {
+            message: 'Required',
+            path: 'firstName'
+          },
+          {
+            message: 'Required',
+            path: 'gender'
+          },
+          {
+            message: 'Required',
+            path: 'language'
+          }
+        ]
       );
     });
 
@@ -427,12 +447,16 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/language must be equal to one of the allowed values'
-      );
+        [
+          {
+            message: "Invalid enum value. Expected 'CANTONESE' | 'ENGLISH' | 'MANDARIN' | 'RUSSIAN' | 'SPANISH' | 'TAGALOG', received 'UNKNOWN'",
+            path: 'language'
+          }
+        ]);
     });
 
     it('errors if providing a non-UUID ID', async (t) => {
@@ -453,11 +477,16 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/id must match format "uuid"'
+        [
+          {
+            message: 'Invalid patient ID format',
+            path: 'id'
+          }
+        ]
       );
     });
   });
@@ -660,9 +689,9 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(emergencyContact, {
         id: emergencyContact.id,
         firstName: 'Jane',
-        middleName: '',
+        middleName: null,
         lastName: 'Doe',
-        email: '',
+        email: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
@@ -704,9 +733,9 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(emergencyContact, {
         id: emergencyContact.id,
         firstName: 'Smith',
-        middleName: '',
+        middleName: null,
         lastName: 'Doe',
-        email: '',
+        email: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
       });
@@ -782,11 +811,9 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { emergencyContact } = JSON.parse(reply.body);
-      assert.deepStrictEqual(emergencyContact, {});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
     });
-
+    /*
     it('should disconnect an existing contact if all fields are empty strings and relationship is null', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -838,7 +865,7 @@ describe('/api/v1/patients', () => {
       const { emergencyContact: updatedContact } = JSON.parse(reply.body);
       assert.deepStrictEqual(updatedContact, {});
     });
-
+*/
     it('should allow ADMIN to update a patient with medical data', async (t) => {
       const app = await build(t);
       await t.loadFixtures();

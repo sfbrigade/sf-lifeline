@@ -1,59 +1,43 @@
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+const UserResponseSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string(),
+  middleName: z.string().nullable(),
+  lastName: z.string(),
+  role: z.string(),
+});
+
+const PatientListItemSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string().nullable(),
+  middleName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  dateOfBirth: z.coerce.date().nullable(),
+  gender: z.enum(['FEMALE', 'MALE', 'TRANS_MALE', 'TRANS_FEMALE', 'OTHER', 'UNKNOWN']),
+  language: z.enum(['CANTONESE', 'ENGLISH', 'MANDARIN', 'RUSSIAN', 'SPANISH', 'TAGALOG']),
+  createdBy: UserResponseSchema,
+  updatedBy: UserResponseSchema,
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+});
 
 export default async function (fastify) {
   fastify.get(
     '/',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            limit: { type: 'integer' },
-            patient: { type: 'string' },
-            physicianId: { type: 'string' },
-            hospitalId: { type: 'string' }
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().int().positive().default(1).optional(),
+          perPage: z.coerce.number().int().positive().default(25).optional(),
+          patient: z.string().default('').optional(),
+          physicianId: z.string().uuid().optional(),
+          hospitalId: z.string().uuid().optional(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                dateOfBirth: { type: 'string' },
-                gender: { type: 'string' },
-                language: { type: 'string' },
-                createdBy: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                    role: { type: 'string' },
-                  },
-                },
-                updatedBy: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                    role: { type: 'string' },
-                  },
-                },
-                createdAt: { type: 'string' },
-                updatedAt: { type: 'string' },
-              },
-            },
-          },
+          [StatusCodes.OK]: z.array(PatientListItemSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
