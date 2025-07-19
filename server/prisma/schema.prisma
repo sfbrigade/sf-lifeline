@@ -44,6 +44,8 @@ model User {
   rejectedUsers          User[]    @relation("UserRejectedBy")
   createdAllergies       Allergy[] @relation("AllergyCreatedBy")
   updatedAllergies       Allergy[] @relation("AllergyUpdatedBy")
+  createdConditions      Condition[] @relation("ConditionCreatedBy")
+  updatedConditions      Condition[] @relation("ConditionUpdatedBy")
 }
 
 model Invite {
@@ -123,7 +125,7 @@ model Allergy {
 }
 
 model Medication {
-  id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   altNames String?
   system   CodingSystem?
@@ -132,12 +134,18 @@ model Medication {
 }
 
 model Condition {
-  id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  category String?
-  system   CodingSystem
-  code     String?
-  patients PatientCondition[]
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                   String
+  category               String?
+  system                 CodingSystem?
+  code                   String?
+  patients               PatientCondition[]
+  updatedAt              DateTime            @updatedAt
+  updatedById            String?             @db.Uuid
+  updatedBy              User?               @relation("ConditionUpdatedBy", fields: [updatedById], references: [id])
+  createdAt              DateTime            @default(now())
+  createdById            String?             @db.Uuid
+  createdBy              User?               @relation("ConditionCreatedBy", fields: [createdById], references: [id])
 }
 
 model PatientAllergy {

@@ -1,30 +1,22 @@
 import { StatusCodes } from 'http-status-codes';
-import { z } from 'zod';
+
+import { Condition } from '#models/condition.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: z.object({
-          name: z.string().min(1, 'Name cannot be empty'),
-          category: z.string().nullable().optional(),
-          system: z.string().min(1, 'System cannot be empty'),
-          code: z.string().nullable().optional(),
-        }),
+        body: Condition.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: z.object({
-            id: z.string().uuid(),
-            name: z.string(),
-            category: z.string().nullable(),
-            system: z.string(),
-            code: z.string().nullable(),
-          }),
+          [StatusCodes.CREATED]: Condition.ResponseSchema,
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { name, system } = request.body;
+      const { name, category, system, code } = request.body;
 
       if (name.trim().length === 0) {
         reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
@@ -34,7 +26,6 @@ export default async function (fastify) {
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
           name: name.trim(),
-          system,
         },
       });
 
@@ -45,7 +36,11 @@ export default async function (fastify) {
 
       const createData = {
         name: name.trim(),
+        category,
         system,
+        code,
+        createdById: request.user.id,
+        updatedById: request.user.id,
       };
 
       const newCondition = await fastify.prisma.condition.create({

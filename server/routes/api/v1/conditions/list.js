@@ -1,6 +1,8 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
+
+import { Role } from '#models/user.js';
+import { Condition } from '#models/condition.js';
 
 export default async function (fastify) {
   fastify.get(
@@ -13,13 +15,7 @@ export default async function (fastify) {
           condition: z.string().optional(),
         }),
         response: {
-          [StatusCodes.OK]: z.array(z.object({
-            id: z.string(),
-            name: z.string(),
-            category: z.string(),
-            system: z.string(),
-            code: z.string(),
-          })),
+          [StatusCodes.OK]: z.array(Condition.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
