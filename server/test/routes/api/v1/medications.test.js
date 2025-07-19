@@ -19,13 +19,19 @@ describe('/api/v1/medications', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.payload);
+      assert.deepStrictEqual(payload, [
         {
           id: '583c7775-9466-4dab-8a4d-edf1056f097f',
           name: 'acetaminophen / ibuprofen',
           altNames: '',
           system: 'RXNORM',
           code: '818102',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -45,13 +51,19 @@ describe('/api/v1/medications', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.payload);
+      assert.deepStrictEqual(payload, [
         {
           id: '583c7775-9466-4dab-8a4d-edf1056f097f',
           name: 'acetaminophen / ibuprofen',
           altNames: '',
           system: 'RXNORM',
           code: '818102',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -74,13 +86,19 @@ describe('/api/v1/medications', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/medications?perPage=1&medication=ibuprofen&page=2>; rel="next"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.payload);
+      assert.deepStrictEqual(payload, [
         {
           id: '583c7775-9466-4dab-8a4d-edf1056f097f',
           name: 'acetaminophen / ibuprofen',
           altNames: '',
           system: 'RXNORM',
           code: '818102',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -109,13 +127,19 @@ describe('/api/v1/medications', () => {
         reply.headers['link'],
         '<http://localhost/api/v1/medications?perPage=1&medication=&page=2>; rel="next",<http://localhost/api/v1/medications?perPage=1&medication=&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.payload);
+      assert.deepStrictEqual(payload, [
         {
           id: '583c7775-9466-4dab-8a4d-edf1056f097f',
           name: 'acetaminophen / ibuprofen',
           altNames: '',
           system: 'RXNORM',
           code: '818102',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -154,6 +178,11 @@ describe('/api/v1/medications', () => {
       const responseBody = JSON.parse(reply.payload);
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newMedicationData.name);
+      assert.deepStrictEqual(responseBody.altNames, null);
+      assert.deepStrictEqual(responseBody.system, null);
+      assert.deepStrictEqual(responseBody.code, null);
+      assert.deepStrictEqual(responseBody.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(responseBody.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
 
       const storedMedication = await app.prisma.medication.findUnique({
         where: { id: responseBody.id },
@@ -161,6 +190,11 @@ describe('/api/v1/medications', () => {
 
       assert.ok(storedMedication);
       assert.deepStrictEqual(storedMedication.name, newMedicationData.name);
+      assert.deepStrictEqual(storedMedication.altNames, null);
+      assert.deepStrictEqual(storedMedication.system, null);
+      assert.deepStrictEqual(storedMedication.code, null);
+      assert.deepStrictEqual(storedMedication.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(storedMedication.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should return existing medication if already registered', async (t) => {

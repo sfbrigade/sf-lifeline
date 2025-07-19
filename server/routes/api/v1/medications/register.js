@@ -1,40 +1,27 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
+import { Medication } from '#models/medication.js';
+import { Role } from '#models/user.js';
+
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: z.object({
-          name: z.string().min(1, 'Name is required'),
-          altNames: z.string().nullable().optional(),
-          system: z.string().nullable().optional(),
-          code: z.string().nullable().optional(),
-        }),
+        body: Medication.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: z.object({
-            id: z.string().uuid(),
-            name: z.string(),
-            altNames: z.string().nullable(),
-            system: z.string().nullable(),
-            code: z.string().nullable(),
-          }),
-          [StatusCodes.OK]: z.object({
-            id: z.string().uuid(),
-            name: z.string(),
-            altNames: z.string().nullable(),
-            system: z.string().nullable(),
-            code: z.string().nullable(),
-          }),
+          [StatusCodes.CREATED]: Medication.ResponseSchema,
+          [StatusCodes.OK]: Medication.ResponseSchema,
           [StatusCodes.BAD_REQUEST]: z.object({
             message: z.string(),
           }),
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { name } = request.body;
+      const { name, altNames, system, code } = request.body;
 
       if (name.trim().length === 0) {
         reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
@@ -54,6 +41,11 @@ export default async function (fastify) {
 
       const createData = {
         name: name.trim(),
+        altNames,
+        system,
+        code,
+        createdById: request.user.id,
+        updatedById: request.user.id,
       };
 
       const newMedication = await fastify.prisma.medication.create({
