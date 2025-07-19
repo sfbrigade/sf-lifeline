@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import { Role } from '#models/user.js';
 import Invite from '#models/invite.js';
@@ -9,37 +10,27 @@ export default async function (fastify, _opts) {
     '',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['recipients', 'role'],
-          properties: {
-            recipients: { type: 'string' },
-            role: { type: 'string' },
-          },
-        },
+        body: z.object({
+          recipients: z.string().min(1, 'Recipients are required'),
+          role: z.string().min(1, 'Role is required'),
+        }),
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string', format: 'uuid' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string' },
-                expiresAt: { type: 'string', format: 'date-time' },
-                invitedById: { type: 'string', format: 'uuid' },
-                acceptedAt: { type: 'string', format: 'date-time' },
-                acceptedById: { type: 'string', format: 'uuid' },
-                revokedAt: { type: 'string', format: 'date-time' },
-                revokedById: { type: 'string', format: 'uuid' },
-                updatedAt: { type: 'string', format: 'date-time' },
-                createdAt: { type: 'string', format: 'date-time' },
-              },
-            },
-          },
+          [StatusCodes.CREATED]: z.array(z.object({
+            id: z.string().uuid(),
+            firstName: z.string().nullable(),
+            middleName: z.string().nullable(),
+            lastName: z.string().nullable(),
+            email: z.string().email(),
+            role: z.string(),
+            expiresAt: z.coerce.date(),
+            invitedById: z.string().uuid(),
+            acceptedAt: z.coerce.date().nullable(),
+            acceptedById: z.string().uuid().nullable(),
+            revokedAt: z.coerce.date().nullable(),
+            revokedById: z.string().uuid().nullable(),
+            updatedAt: z.coerce.date(),
+            createdAt: z.coerce.date(),
+          })),
         },
       },
       onRequest: fastify.requireUser(Role.ADMIN),

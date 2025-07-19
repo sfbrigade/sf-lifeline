@@ -1,42 +1,36 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import { Role } from '#models/user.js';
+
+const InviteResponseSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string().nullable(),
+  middleName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  email: z.string().email(),
+  role: z.string(),
+  expiresAt: z.coerce.date(),
+  invitedById: z.string().uuid(),
+  acceptedAt: z.coerce.date().nullable(),
+  acceptedById: z.string().uuid().nullable(),
+  revokedAt: z.coerce.date().nullable(),
+  revokedById: z.string().uuid().nullable(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+});
 
 export default async function (fastify, _opts) {
   fastify.get(
     '',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            perPage: { type: 'integer' },
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().int().positive().default(1).optional(),
+          perPage: z.coerce.number().int().positive().default(25).optional(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string', format: 'uuid' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string' },
-                expiresAt: { type: 'string', format: 'date-time' },
-                invitedById: { type: 'string', format: 'uuid' },
-                acceptedAt: { type: 'string', format: 'date-time' },
-                acceptedById: { type: 'string', format: 'uuid' },
-                revokedAt: { type: 'string', format: 'date-time' },
-                revokedById: { type: 'string', format: 'uuid' },
-                updatedAt: { type: 'string', format: 'date-time' },
-                createdAt: { type: 'string', format: 'date-time' },
-              },
-            },
-          },
+          [StatusCodes.OK]: z.array(InviteResponseSchema),
         },
       },
       onRequest: fastify.requireUser(Role.ADMIN),
