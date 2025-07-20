@@ -38,6 +38,9 @@ jobs:
         run: cd server; cp example.env .env; npm run test:db:reset
         env:
           DATABASE_URL: postgresql://postgres@db/app
+      - name: Push in-development db changes in draft ONLY
+        if: github.event.pull_request.draft == true
+        run: cd server; npm run test:db:push
       - name: Run Tests
         run: npm test
         env:

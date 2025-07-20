@@ -16,7 +16,8 @@
     "seed": "node prisma/seed"
   },
   "scripts": {
-    "db:preview": "npx prisma studio",
+    "db:preview": "prisma studio",
+    "db:push": "prisma db push",
     "db:reset": "prisma migrate reset --force",
     "dev": "prisma migrate dev && fastify start -w -l info -P app.js",
     "lint": "eslint --fix",
