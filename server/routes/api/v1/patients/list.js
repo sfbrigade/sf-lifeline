@@ -1,28 +1,8 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
-const UserResponseSchema = z.object({
-  id: z.string().uuid(),
-  firstName: z.string(),
-  middleName: z.string().nullable(),
-  lastName: z.string(),
-  role: z.string(),
-});
-
-const PatientListItemSchema = z.object({
-  id: z.string().uuid(),
-  firstName: z.string().nullable(),
-  middleName: z.string().nullable(),
-  lastName: z.string().nullable(),
-  dateOfBirth: z.coerce.date().nullable(),
-  gender: z.enum(['FEMALE', 'MALE', 'TRANS_MALE', 'TRANS_FEMALE', 'OTHER', 'UNKNOWN']),
-  language: z.enum(['CANTONESE', 'ENGLISH', 'MANDARIN', 'RUSSIAN', 'SPANISH', 'TAGALOG']),
-  createdBy: UserResponseSchema,
-  updatedBy: UserResponseSchema,
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-});
+import { Patient } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.get(
@@ -37,7 +17,7 @@ export default async function (fastify) {
           hospitalId: z.string().uuid().optional(),
         }),
         response: {
-          [StatusCodes.OK]: z.array(PatientListItemSchema),
+          [StatusCodes.OK]: z.array(Patient.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -131,6 +111,9 @@ export default async function (fastify) {
       };
 
       const { records, total } = await fastify.prisma.patient.paginate(options);
+      records.forEach((record) => {
+        record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
+      });
       reply.setPaginationHeaders(page, perPage, total).send(records);
     }
   );

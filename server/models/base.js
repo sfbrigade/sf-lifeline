@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-class Base {
+export class Base {
   static PhoneSchema = z.string().regex(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/, 'Phone number must be in format (###) ###-####').nullable().optional();
 
   constructor (fields, data) {
@@ -54,4 +54,5 @@ class Base {
     });
   }
 }
+
 export default Base;

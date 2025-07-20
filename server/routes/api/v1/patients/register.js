@@ -1,57 +1,25 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
-const GenderEnum = z.enum([
-  'FEMALE',
-  'MALE',
-  'TRANS_MALE',
-  'TRANS_FEMALE',
-  'OTHER',
-  'UNKNOWN',
-]);
-
-const LanguageEnum = z.enum([
-  'CANTONESE',
-  'ENGLISH',
-  'MANDARIN',
-  'RUSSIAN',
-  'SPANISH',
-  'TAGALOG',
-]);
+import { Patient } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
-  const basePatientSchema = z.object({
-    id: z.string().uuid('Invalid patient ID format'),
-    firstName: z.string().min(1, 'First name is required').nullable(),
-    middleName: z.string().nullable().optional(),
-    lastName: z.string().min(1, 'Last name is required').nullable(),
-    gender: GenderEnum,
-    language: LanguageEnum,
-    dateOfBirth: z.string().date('Invalid date format'),
-  });
-
-  const patientSchema = process.env.VITE_FEATURE_COLLECT_PHI
-    ? basePatientSchema
-    : basePatientSchema.partial();
-
   fastify.post(
     '/',
     {
       schema: {
-        body: patientSchema,
+        body: process.env.VITE_FEATURE_COLLECT_PHI
+          ? Patient.RegisterSchema.required({
+            firstName: true,
+            lastName: true,
+            dateOfBirth: true,
+            gender: true,
+            language: true,
+          })
+          : Patient.RegisterSchema,
         response: {
-          [StatusCodes.CREATED]: z.object({
-            id: z.string().uuid(),
-            firstName: z.string().nullable(),
-            middleName: z.string().nullable(),
-            lastName: z.string().nullable(),
-            gender: GenderEnum,
-            language: LanguageEnum,
-            dateOfBirth: z.coerce.string().date().nullable(),
-            createdAt: z.coerce.date(),
-            updatedAt: z.coerce.date(),
-          }),
+          [StatusCodes.CREATED]: Patient.ResponseSchema,
           [StatusCodes.BAD_REQUEST]: z.object({
             message: z.string(),
           }),

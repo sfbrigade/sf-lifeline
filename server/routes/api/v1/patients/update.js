@@ -1,40 +1,9 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
-const GenderEnum = z.enum(['FEMALE', 'MALE', 'TRANS_MALE', 'TRANS_FEMALE', 'OTHER', 'UNKNOWN']);
-const LanguageEnum = z.enum(['CANTONESE', 'ENGLISH', 'MANDARIN', 'RUSSIAN', 'SPANISH', 'TAGALOG']);
-const RelationshipEnum = z.enum(['SPOUSE', 'PARENT', 'CHILD', 'SIBLING', 'OTHER', 'UNKNOWN']).nullable();
-const CodeStatusEnum = z.enum(['COMFORT', 'DNR', 'DNI', 'DNR_DNI', 'FULL']).nullable();
-
-const PatientDataSchema = z.object({
-  firstName: z.string().min(1, 'First name is required').optional(),
-  middleName: z.string().nullable().optional(),
-  lastName: z.string().min(1, 'Last name is required').optional(),
-  gender: GenderEnum.optional(),
-  language: LanguageEnum.optional(),
-  dateOfBirth: z.union([z.string().date('Invalid date format'), z.literal('')])
-    .transform(val => val || null)
-    .optional(),
-  codeStatus: CodeStatusEnum.optional(),
-}).refine(data => Object.keys(data).length > 0, {
-  message: 'At least one patient field must be provided',
-  path: ['patientData']
-});
-
-const ContactDataSchema = z.object({
-  firstName: z.string().min(1, 'First name is required').optional(),
-  middleName: z.string().nullable().optional(),
-  lastName: z.string().min(1, 'Last name is required').optional(),
-  email: z.string().email('Invalid email format').or(z.literal('')).optional(),
-  phone: z.string()
-    .regex(/^(\([0-9]{3}\) [0-9]{3}-[0-9]{4})?$/, 'Phone must be in format (###) ###-####')
-    .optional(),
-  relationship: RelationshipEnum.optional(),
-}).refine(data => Object.keys(data).length > 0, {
-  message: 'At least one contact field must be provided',
-  path: ['contactData']
-});
+import { Contact } from '#models/contact.js';
+import { Patient, CodeStatus } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 const MedicalDataSchema = z.object({
   allergies: z.array(z.string().uuid('Invalid allergy ID format')).optional(),
@@ -53,6 +22,8 @@ const HealthcareChoicesSchema = z.object({
   path: ['healthcareChoices']
 });
 
+const CodeStatusEnum = z.enum(Object.values(CodeStatus));
+
 export default async function (fastify, _opts) {
   fastify.patch(
     '/:id',
@@ -62,8 +33,8 @@ export default async function (fastify, _opts) {
           id: z.string(),
         }),
         body: z.object({
-          patientData: PatientDataSchema.optional(),
-          contactData: ContactDataSchema.optional(),
+          patientData: Patient.UpdateSchema.partial().optional(),
+          contactData: Contact.AttributesSchema.optional(),
           medicalData: MedicalDataSchema.optional(),
           healthcareChoices: HealthcareChoicesSchema.optional(),
           codeStatus: CodeStatusEnum.optional(),
@@ -79,55 +50,9 @@ export default async function (fastify, _opts) {
         }
         ),
         response: {
-          [StatusCodes.OK]: z.object({
-            id: z.string().uuid(),
-            firstName: z.string().nullable(),
-            middleName: z.string().nullable(),
-            lastName: z.string().nullable(),
-            gender: z.string(),
-            language: z.string(),
-            dateOfBirth: z.coerce.string().date().nullable(),
-            codeStatus: z.string().nullable(),
-            emergencyContact: z.object({
-              id: z.string().uuid(),
-              firstName: z.string(),
-              middleName: z.string().nullable(),
-              lastName: z.string(),
-              email: z.string().email().nullable(),
-              phone: z.string().nullable(),
-              relationship: z.string(),
-            }).nullable(),
-            allergies: z.array(z.object({
-              allergy: z.object({
-                id: z.string().uuid()
-              })
-            })),
-            conditions: z.array(z.object({
-              condition: z.object({
-                id: z.string().uuid()
-              })
-            })),
-            medications: z.array(z.object({
-              medication: z.object({
-                id: z.string().uuid()
-              })
-            })),
-            hospital: z.object({
-              id: z.string().uuid(),
-              name: z.string(),
-              address: z.string(),
-              phone: z.string(),
-              email: z.string(),
-            }).nullable(),
-            physician: z.object({
-              id: z.string().uuid(),
-              firstName: z.string(),
-              middleName: z.string().nullable(),
-              lastName: z.string(),
-              phone: z.string(),
-              email: z.string(),
-            }).nullable(),
-            updatedById: z.string(),
+          [StatusCodes.OK]: Patient.ResponseSchema,
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
           }),
         },
       },

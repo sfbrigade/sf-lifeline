@@ -122,7 +122,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].language, 'ENGLISH');
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].dateOfBirth,
-        '2000-10-05T00:00:00.000Z'
+        '2000-10-05'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].createdBy.id,
@@ -214,7 +214,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(middleName, 'A');
       assert.deepStrictEqual(lastName, 'Doe');
       assert.deepStrictEqual(dateOfBirth, '2000-10-05');
-      assert.deepStrictEqual(Object.keys(response).length, 16);
+      assert.deepStrictEqual(Object.keys(response).length, 22);
     });
 
     it('should throw a 404 error if a patient id does not exist', async (t) => {
@@ -296,8 +296,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
         createdAt: result.createdAt,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
         updatedAt: result.updatedAt,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 
@@ -329,8 +336,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
         createdAt: result.createdAt,
+        createdById: 'b6310669-1400-4346-ae61-7f872dfdedd3',
         updatedAt: result.updatedAt,
+        updatedById: 'b6310669-1400-4346-ae61-7f872dfdedd3',
       });
     });
 
@@ -362,8 +376,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
         createdAt: result.createdAt,
+        createdById: '2e96234a-671d-45a2-9d20-f647d891e7ee',
         updatedAt: result.updatedAt,
+        updatedById: '2e96234a-671d-45a2-9d20-f647d891e7ee',
       });
     });
 
@@ -483,7 +504,7 @@ describe('/api/v1/patients', () => {
         result.message,
         [
           {
-            message: 'Invalid patient ID format',
+            message: 'Invalid uuid',
             path: 'id'
           }
         ]
@@ -692,8 +713,13 @@ describe('/api/v1/patients', () => {
         middleName: null,
         lastName: 'Doe',
         email: null,
+        address: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
+        createdAt: emergencyContact.createdAt,
+        createdById: null,
+        updatedAt: emergencyContact.updatedAt,
+        updatedById: null,
       });
     });
 
@@ -736,8 +762,13 @@ describe('/api/v1/patients', () => {
         middleName: null,
         lastName: 'Doe',
         email: null,
+        address: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
+        createdAt: emergencyContact.createdAt,
+        createdById: null,
+        updatedAt: emergencyContact.updatedAt,
+        updatedById: null,
       });
     });
 
