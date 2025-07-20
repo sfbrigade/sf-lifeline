@@ -717,9 +717,9 @@ describe('/api/v1/patients', () => {
         phone: '(123) 456-7890',
         relationship: 'PARENT',
         createdAt: emergencyContact.createdAt,
-        createdById: null,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
         updatedAt: emergencyContact.updatedAt,
-        updatedById: null,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 
@@ -766,9 +766,9 @@ describe('/api/v1/patients', () => {
         phone: '(123) 456-7890',
         relationship: 'PARENT',
         createdAt: emergencyContact.createdAt,
-        createdById: null,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
         updatedAt: emergencyContact.updatedAt,
-        updatedById: null,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 

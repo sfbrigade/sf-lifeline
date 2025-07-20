@@ -136,7 +136,10 @@ export default async function (fastify, _opts) {
             if (nullFields.length !== Object.keys(newContactData).length) {
               await tx.contact.update({
                 where: { id: existingContact.emergencyContact.id },
-                data: newContactData,
+                data: {
+                  ...newContactData,
+                  updatedById: userId,
+                }
               });
             } else {
               await tx.patient.update({
@@ -154,7 +157,11 @@ export default async function (fastify, _opts) {
           } else {
             if (nullFields.length !== Object.keys(newContactData).length) {
               const contact = await tx.contact.create({
-                data: newContactData,
+                data: {
+                  ...newContactData,
+                  updatedById: userId,
+                  createdById: userId,
+                },
               });
 
               await tx.patient.update({

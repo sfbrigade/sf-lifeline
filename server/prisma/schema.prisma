@@ -119,11 +119,11 @@ model Contact {
   address      String?
   relationship String?
   updatedAt    DateTime   @updatedAt
-  updatedById  String?    @db.Uuid
-  updatedBy    User?      @relation("ContactUpdatedBy", fields: [updatedById], references: [id])
+  updatedById  String     @db.Uuid
+  updatedBy    User       @relation("ContactUpdatedBy", fields: [updatedById], references: [id])
   createdAt    DateTime   @default(now())
-  createdById  String?    @db.Uuid
-  createdBy    User?      @relation("ContactCreatedBy", fields: [createdById], references: [id])
+  createdById  String     @db.Uuid
+  createdBy    User       @relation("ContactCreatedBy", fields: [createdById], references: [id])
   patient      Patient?
 }
 
