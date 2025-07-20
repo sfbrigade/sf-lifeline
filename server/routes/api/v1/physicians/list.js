@@ -13,7 +13,7 @@ export default async function (fastify) {
           page: z.coerce.number().int().positive().default(1).optional(),
           perPage: z.coerce.number().int().positive().default(25).optional(),
           physician: z.string().default('').optional(),
-          hospitalId: z.string().uuid().optional(),
+          hospitalId: z.string().optional(),
         }),
         response: {
           [StatusCodes.OK]: z.array(Physician.ResponseSchema),
