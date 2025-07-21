@@ -1,5 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
+import { Invite } from '#models/invite.js';
 import { Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
@@ -7,36 +9,12 @@ export default async function (fastify, _opts) {
     '',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            perPage: { type: 'integer' },
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().int().positive().default(1).optional(),
+          perPage: z.coerce.number().int().positive().default(25).optional(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string', format: 'uuid' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string' },
-                expiresAt: { type: 'string', format: 'date-time' },
-                invitedById: { type: 'string', format: 'uuid' },
-                acceptedAt: { type: 'string', format: 'date-time' },
-                acceptedById: { type: 'string', format: 'uuid' },
-                revokedAt: { type: 'string', format: 'date-time' },
-                revokedById: { type: 'string', format: 'uuid' },
-                updatedAt: { type: 'string', format: 'date-time' },
-                createdAt: { type: 'string', format: 'date-time' },
-              },
-            },
-          },
+          [StatusCodes.OK]: z.array(Invite.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser(Role.ADMIN),

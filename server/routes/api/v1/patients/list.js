@@ -1,59 +1,23 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Patient } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.get(
     '/',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            limit: { type: 'integer' },
-            patient: { type: 'string' },
-            physicianId: { type: 'string' },
-            hospitalId: { type: 'string' }
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().int().positive().default(1).optional(),
+          perPage: z.coerce.number().int().positive().default(25).optional(),
+          patient: z.string().default('').optional(),
+          physicianId: z.string().uuid().optional(),
+          hospitalId: z.string().uuid().optional(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                dateOfBirth: { type: 'string' },
-                gender: { type: 'string' },
-                language: { type: 'string' },
-                createdBy: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                    role: { type: 'string' },
-                  },
-                },
-                updatedBy: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    firstName: { type: 'string' },
-                    middleName: { type: 'string' },
-                    lastName: { type: 'string' },
-                    role: { type: 'string' },
-                  },
-                },
-                createdAt: { type: 'string' },
-                updatedAt: { type: 'string' },
-              },
-            },
-          },
+          [StatusCodes.OK]: z.array(Patient.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -147,6 +111,9 @@ export default async function (fastify) {
       };
 
       const { records, total } = await fastify.prisma.patient.paginate(options);
+      records.forEach((record) => {
+        record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
+      });
       reply.setPaginationHeaders(page, perPage, total).send(records);
     }
   );

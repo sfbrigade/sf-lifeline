@@ -18,7 +18,7 @@ describe('/api/v1/hospitals', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/hospitals?hospital=&perPage=1&page=4>; rel="last"'
+        '<http://localhost/api/v1/hospitals?page=2&perPage=1&hospital=>; rel="next",<http://localhost/api/v1/hospitals?page=4&perPage=1&hospital=>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -158,6 +158,8 @@ describe('/api/v1/hospitals', () => {
       assert.deepStrictEqual(hospital.address, '123 Main St');
       assert.deepStrictEqual(hospital.phone, '(415) 555-1234');
       assert.deepStrictEqual(hospital.email, 'contact@newhospital.com');
+      assert.deepStrictEqual(hospital.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(hospital.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should error for incorrect phone or email format', async (t) => {
@@ -175,7 +177,7 @@ describe('/api/v1/hospitals', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
 
       reply = await app
         .inject()
@@ -188,7 +190,7 @@ describe('/api/v1/hospitals', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
     });
 
     it('should error if hospital already exists', async (t) => {
@@ -205,7 +207,7 @@ describe('/api/v1/hospitals', () => {
           email: 'kaiser.sf@test.com'
         })
         .headers(headers);
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       assert.deepStrictEqual(
         JSON.parse(reply.payload).message,
         'Hospital with name Kaiser SF and address Kaiser SF and phone (123) 456-9999 and email kaiser.sf@test.com already exists.'
@@ -219,13 +221,7 @@ describe('/api/v1/hospitals', () => {
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
 
-      // First get a hospital ID from the list
-      const listReply = await app
-        .inject()
-        .get('/api/v1/hospitals?hospital=SF')
-        .headers(headers);
-
-      const hospitalId = JSON.parse(listReply.payload)[0].id;
+      const hospitalId = 'b50538cd-1e10-42a3-8d6b-f9ae1e48a025';
       const reply = await app
         .inject()
         .patch(`/api/v1/hospitals/${hospitalId}`)
@@ -236,12 +232,14 @@ describe('/api/v1/hospitals', () => {
           email: 'newcontact@kaiser.com'
         })
         .headers(headers);
+
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       const hospital = JSON.parse(reply.payload);
       assert.deepStrictEqual(hospital.name, 'Kaiser SF Updated');
       assert.deepStrictEqual(hospital.address, '456 New St');
       assert.deepStrictEqual(hospital.phone, '(415) 555-1234');
       assert.deepStrictEqual(hospital.email, 'newcontact@kaiser.com');
+      assert.deepStrictEqual(hospital.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should return 404 for updating non-existent hospital', async (t) => {
@@ -270,26 +268,20 @@ describe('/api/v1/hospitals', () => {
       await t.loadFixtures();
       const headers = await t.authenticate('admin.user@test.com', 'test');
 
-      // First get a hospital ID from the list
-      const listReply = await app
-        .inject()
-        .get('/api/v1/hospitals?hospital=Bob')
-        .headers(headers);
-
-      const hospitalId = JSON.parse(listReply.payload)[0].id;
-
+      const hospitalId = '3443778e-a590-47ad-ba87-42fbfbc48d48';
       const reply = await app
         .inject()
         .delete(`/api/v1/hospitals/${hospitalId}`)
         .headers(headers);
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      // Verify the hospital is deleted
-      const getReply = await app
-        .inject()
-        .get(`/api/v1/hospitals/${hospitalId}`)
-        .headers(headers);
 
-      assert.deepStrictEqual(getReply.statusCode, StatusCodes.NOT_FOUND);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const deletedHospital = await t.prisma.hospital.findUnique({
+        where: {
+          id: hospitalId
+        }
+      });
+      assert.deepStrictEqual(deletedHospital, null);
     });
 
     it('should return 404 for deleting non-existent hospital', async (t) => {

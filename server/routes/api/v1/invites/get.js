@@ -1,36 +1,21 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Invite } from '#models/invite.js';
 
 export default async function (fastify, _opts) {
   fastify.get(
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid('Invalid invite ID format'),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string', format: 'uuid' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              role: { type: 'string' },
-              expiresAt: { type: 'string', format: 'date-time' },
-              invitedById: { type: 'string', format: 'uuid' },
-              acceptedAt: { type: 'string', format: 'date-time' },
-              acceptedById: { type: 'string', format: 'uuid' },
-              revokedAt: { type: 'string', format: 'date-time' },
-              revokedById: { type: 'string', format: 'uuid' },
-              updatedAt: { type: 'string', format: 'date-time' },
-              createdAt: { type: 'string', format: 'date-time' },
-            },
-          },
+          [StatusCodes.OK]: Invite.ResponseSchema,
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },

@@ -6,23 +6,23 @@ items:
     firstName: Jane
     middleName: A
     lastName: Doe
-    phone: 123 456-7890
+    phone: (123) 456-7890
     email: physician1@test.com
   physician2:
     id: bbbf7f99-36cc-40b5-a26c-cd95daae04b5
     firstName: John
     lastName: Smith
-    phone: 123 456-9999
+    phone: (123) 456-9999
     email: physician2@test.com
   physician3:
     id: 4f177289-f23a-47df-aa16-d9e54108daae
     firstName: Bob
     lastName: Smith
-    phone: 123 456-9998
+    phone: (123) 456-9998
     email: physician3@test.com
   physician4:
     id: 3bd1904b-1ef1-4aa3-bb29-48083aa530b3
     firstName: Beer
     lastName: James
-    phone: 555 456-1234
+    phone: (555) 456-1234
     email: physician4@test.com

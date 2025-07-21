@@ -1,57 +1,53 @@
+import { StatusCodes } from 'http-status-codes';
+
+import { Condition } from '#models/condition.js';
+import { Role } from '#models/user.js';
+
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name', 'system'],
-          properties: {
-            name: { type: 'string' },
-            category: { type: 'string', nullable: true },
-            system: { type: 'string' },
-            code: { type: 'string', nullable: true },
-          },
-        },
+        body: Condition.AttributesSchema,
         response: {
-          201: {
-            type: 'object',
-            properties: {
-              id: { type: 'string', format: 'uuid' },
-              name: { type: 'string' },
-              category: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: Condition.ResponseSchema,
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { name, system } = request.body; 
+      const { name, category, system, code } = request.body;
+
+      if (name.trim().length === 0) {
+        reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
+        return;
+      }
 
       const existingCondition = await fastify.prisma.condition.findFirst({
         where: {
           name: name.trim(),
-          system,
         },
       });
 
       if (existingCondition) {
-        reply.code(200).send(existingCondition);
+        reply.code(StatusCodes.OK).send(existingCondition);
         return;
       }
 
       const createData = {
         name: name.trim(),
+        category,
         system,
+        code,
+        createdById: request.user.id,
+        updatedById: request.user.id,
       };
 
       const newCondition = await fastify.prisma.condition.create({
         data: createData,
       });
 
-      reply.code(201).send(newCondition);
+      reply.code(StatusCodes.CREATED).send(newCondition);
     }
   );
 }

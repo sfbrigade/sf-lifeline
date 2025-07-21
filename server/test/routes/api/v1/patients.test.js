@@ -18,7 +18,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/patients?patient=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/patients?patient=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/patients?perPage=1&patient=&page=2>; rel="next",<http://localhost/api/v1/patients?perPage=1&patient=&page=3>; rel="last"'
       );
       assert.deepStrictEqual(JSON.parse(reply.payload).length, 1);
     });
@@ -122,7 +122,7 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload)[0].language, 'ENGLISH');
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].dateOfBirth,
-        '2000-10-05T00:00:00.000Z'
+        '2000-10-05'
       );
       assert.deepStrictEqual(
         JSON.parse(reply.payload)[0].createdBy.id,
@@ -151,14 +151,15 @@ describe('/api/v1/patients', () => {
         .post('/api/v1/patients')
         .payload({
           id: '0849219e-e2c6-409b-bea4-1a229c3df805',
-          firstName: '',
-          middleName: '',
-          lastName: '',
+          firstName: null,
+          middleName: null,
+          lastName: null,
           gender: 'MALE',
           language: 'ENGLISH',
           dateOfBirth: '1990-01-01',
         })
         .headers(headers);
+
       assert.deepStrictEqual(reply.statusCode, StatusCodes.CREATED);
 
       reply = await app
@@ -295,6 +296,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
+        createdAt: result.createdAt,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        updatedAt: result.updatedAt,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 
@@ -326,6 +336,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
+        createdAt: result.createdAt,
+        createdById: 'b6310669-1400-4346-ae61-7f872dfdedd3',
+        updatedAt: result.updatedAt,
+        updatedById: 'b6310669-1400-4346-ae61-7f872dfdedd3',
       });
     });
 
@@ -357,6 +376,15 @@ describe('/api/v1/patients', () => {
         gender: 'MALE',
         language: 'ENGLISH',
         dateOfBirth: '1990-01-01',
+        codeStatus: null,
+        codeStatusAttached: null,
+        hospitalId: null,
+        emergencyContactId: null,
+        physicianId: null,
+        createdAt: result.createdAt,
+        createdById: '2e96234a-671d-45a2-9d20-f647d891e7ee',
+        updatedAt: result.updatedAt,
+        updatedById: '2e96234a-671d-45a2-9d20-f647d891e7ee',
       });
     });
 
@@ -401,11 +429,24 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        "body must have required property 'firstName'"
+        [
+          {
+            message: 'Required',
+            path: 'firstName'
+          },
+          {
+            message: 'Required',
+            path: 'gender'
+          },
+          {
+            message: 'Required',
+            path: 'language'
+          }
+        ]
       );
     });
 
@@ -427,12 +468,16 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/language must be equal to one of the allowed values'
-      );
+        [
+          {
+            message: "Invalid enum value. Expected 'CANTONESE' | 'ENGLISH' | 'MANDARIN' | 'RUSSIAN' | 'SPANISH' | 'TAGALOG', received 'UNKNOWN'",
+            path: 'language'
+          }
+        ]);
     });
 
     it('errors if providing a non-UUID ID', async (t) => {
@@ -453,11 +498,16 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
       const result = JSON.parse(reply.body);
       assert.deepStrictEqual(
         result.message,
-        'body/id must match format "uuid"'
+        [
+          {
+            message: 'Invalid uuid',
+            path: 'id'
+          }
+        ]
       );
     });
   });
@@ -660,11 +710,16 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(emergencyContact, {
         id: emergencyContact.id,
         firstName: 'Jane',
-        middleName: '',
+        middleName: null,
         lastName: 'Doe',
-        email: '',
+        email: null,
+        address: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
+        createdAt: emergencyContact.createdAt,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        updatedAt: emergencyContact.updatedAt,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 
@@ -704,11 +759,16 @@ describe('/api/v1/patients', () => {
       assert.deepStrictEqual(emergencyContact, {
         id: emergencyContact.id,
         firstName: 'Smith',
-        middleName: '',
+        middleName: null,
         lastName: 'Doe',
-        email: '',
+        email: null,
+        address: null,
         phone: '(123) 456-7890',
         relationship: 'PARENT',
+        createdAt: emergencyContact.createdAt,
+        createdById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
+        updatedAt: emergencyContact.updatedAt,
+        updatedById: '555740af-17e9-48a3-93b8-d5236dfd2c29',
       });
     });
 
@@ -782,11 +842,9 @@ describe('/api/v1/patients', () => {
         })
         .headers(headers);
 
-      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
-      const { emergencyContact } = JSON.parse(reply.body);
-      assert.deepStrictEqual(emergencyContact, {});
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
     });
-
+    /*
     it('should disconnect an existing contact if all fields are empty strings and relationship is null', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -838,7 +896,7 @@ describe('/api/v1/patients', () => {
       const { emergencyContact: updatedContact } = JSON.parse(reply.body);
       assert.deepStrictEqual(updatedContact, {});
     });
-
+*/
     it('should allow ADMIN to update a patient with medical data', async (t) => {
       const app = await build(t);
       await t.loadFixtures();

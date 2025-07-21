@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import User from '#models/user.js';
 import verifyLicense from '#helpers/license/verifyLicense.js';
@@ -8,41 +9,12 @@ export default async function (fastify, _opts) {
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-          },
-        },
-        body: {
-          type: 'object',
-          properties: {
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            email: { type: 'string', format: 'email' },
-            password: { type: 'string' },
-            role: { type: 'string' },
-            licenseNumber: { type: 'string' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid(),
+        }),
+        body: User.UpdateSchema,
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              licenseNumber: { type: 'string' },
-              role: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: User.ResponseSchema,
         },
       },
       onRequest: fastify.requireUser([User.Role.ADMIN]),

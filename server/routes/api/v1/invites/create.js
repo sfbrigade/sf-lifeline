@@ -1,45 +1,21 @@
 import { DateTime } from 'luxon';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import { Role } from '#models/user.js';
-import Invite from '#models/invite.js';
+import { Invite } from '#models/invite.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
     '',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['recipients', 'role'],
-          properties: {
-            recipients: { type: 'string' },
-            role: { type: 'string' },
-          },
-        },
+        body: z.object({
+          recipients: z.string().min(1, 'Recipients are required'),
+          role: z.enum(Object.values(Role)),
+        }),
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                id: { type: 'string', format: 'uuid' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string' },
-                expiresAt: { type: 'string', format: 'date-time' },
-                invitedById: { type: 'string', format: 'uuid' },
-                acceptedAt: { type: 'string', format: 'date-time' },
-                acceptedById: { type: 'string', format: 'uuid' },
-                revokedAt: { type: 'string', format: 'date-time' },
-                revokedById: { type: 'string', format: 'uuid' },
-                updatedAt: { type: 'string', format: 'date-time' },
-                createdAt: { type: 'string', format: 'date-time' },
-              },
-            },
-          },
+          [StatusCodes.CREATED]: z.array(Invite.ResponseSchema),
         },
       },
       onRequest: fastify.requireUser(Role.ADMIN),

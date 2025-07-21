@@ -1,8 +1,13 @@
-class Base {
+import { z } from 'zod';
+
+export class Base {
+  static PhoneSchema = z.string().regex(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/, 'Phone number must be in format (###) ###-####').nullable().optional();
+
   constructor (fields, data) {
     if (!data) {
       return null;
     }
+    this._data = data;
     return new Proxy(this, {
       get (target, property, receiver) {
         // if the property is in the schema, return it from the data object
@@ -49,4 +54,5 @@ class Base {
     });
   }
 }
+
 export default Base;
