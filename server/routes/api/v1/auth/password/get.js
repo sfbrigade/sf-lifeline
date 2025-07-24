@@ -1,27 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '#models/user.js';
+import { z } from 'zod';
 
 export default async function (fastify, _opts) {
   fastify.get(
     '/:token',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            token: { type: 'string' },
-          },
-        },
+        params: z.object({
+          token: z.string(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'null',
-          },
-          [StatusCodes.UNAUTHORIZED]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: z.null(),
+          [StatusCodes.UNAUTHORIZED]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },

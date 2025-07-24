@@ -1,40 +1,23 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Physician } from '#models/physician.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.post(
     '/',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['firstName', 'lastName', 'phone'],
-          properties: {
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            email: {
-              type: 'string',
-              anyOf: [{ format: 'email' }, { pattern: '^$' }],
-            },
-            phone: {
-              type: 'string',
-              pattern: '^(\\([0-9]{3}\\)) [0-9]{3}-[0-9]{4}$',
-            },
-          },
-        },
+        body: Physician.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string' },
-              phone: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: Physician.ResponseSchema,
+          [StatusCodes.BAD_REQUEST]: z.object({
+            message: z.string(),
+          }),
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -76,6 +59,8 @@ export default async function (fastify) {
         const newPhysician = await fastify.prisma.physician.create({
           data: {
             ...newPhysicianData,
+            createdById: request.user.id,
+            updatedById: request.user.id,
           },
         });
 

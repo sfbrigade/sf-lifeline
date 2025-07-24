@@ -15,6 +15,7 @@ const UserAttributesSchema = z.object({
   middleName: z
     .string()
     .max(30, 'Middle name must be at most 30 characters long')
+    .nullable()
     .optional(),
 
   lastName: z
@@ -24,7 +25,7 @@ const UserAttributesSchema = z.object({
 
   email: z.string().email('Invalid email format'),
 
-  licenseNumber: z.string().optional(),
+  licenseNumber: z.string().nullable().optional(),
 });
 
 const UserPasswordSchema = z
@@ -40,6 +41,21 @@ const UserRegisterSchema = UserAttributesSchema.extend({
   inviteId: z.string().uuid().optional(),
 });
 
+const UserResponseSchema = UserAttributesSchema.extend({
+  id: z.string().uuid(),
+  emailVerifiedAt: z.coerce.date().nullable(),
+  licenseData: z.object({}).nullable(),
+  role: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  approvedAt: z.coerce.date().nullable(),
+  approvedById: z.string().uuid().nullable(),
+  rejectedAt: z.coerce.date().nullable(),
+  rejectedById: z.string().uuid().nullable(),
+  disabledAt: z.coerce.date().nullable(),
+  disabledById: z.string().uuid().nullable(),
+});
+
 const UserUpdateSchema = UserAttributesSchema.extend({
   password: UserPasswordSchema.or(z.literal('')),
   role: z.string(),
@@ -51,6 +67,7 @@ class User extends Base {
 
   static PasswordSchema = UserPasswordSchema;
   static RegisterSchema = UserRegisterSchema;
+  static ResponseSchema = UserResponseSchema;
   static UpdateSchema = UserUpdateSchema;
 
   constructor (data) {

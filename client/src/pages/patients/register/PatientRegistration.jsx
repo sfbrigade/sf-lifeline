@@ -76,19 +76,19 @@ export default function PatientRegistration () {
     mode: 'uncontrolled',
     initialValues: {
       patientData: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        gender: 'UNKNOWN',
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        gender: null,
         language: 'ENGLISH',
-        dateOfBirth: '',
+        dateOfBirth: null,
       },
       contactData: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        phone: '',
-        email: '',
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        phone: null,
+        email: null,
         relationship: 'UNKNOWN',
       },
       medicalData: {
@@ -97,8 +97,8 @@ export default function PatientRegistration () {
         conditions: [],
       },
       healthcareChoices: {
-        hospitalId: '',
-        physicianId: '',
+        hospitalId: null,
+        physicianId: null,
       },
       codeStatus: 'FULL',
     },
@@ -151,7 +151,7 @@ export default function PatientRegistration () {
       const { emergencyContact } = data;
       const { allergies, medications, conditions } = data;
       const { hospital, physician } = data;
-      const codeStatus = data?.codeStatus;
+      const codeStatus = data?.codeStatus || 'FULL';
 
       setInitialMedicalData({
         allergies: allergies.map((entry) => {
@@ -186,12 +186,12 @@ export default function PatientRegistration () {
         dateOfBirth,
       };
       const contactData = {
-        firstName: emergencyContact?.firstName || '',
-        middleName: emergencyContact?.middleName || '',
-        lastName: emergencyContact?.lastName || '',
-        email: emergencyContact?.email || '',
+        firstName: emergencyContact?.firstName || null,
+        middleName: emergencyContact?.middleName || null,
+        lastName: emergencyContact?.lastName || null,
+        email: emergencyContact?.email || null,
         relationship: emergencyContact?.relationship || null,
-        phone: emergencyContact?.phone || '',
+        phone: emergencyContact?.phone || null,
       };
       const medicalData = {
         allergies: allergies.map((entry) => entry.allergy.id),
@@ -199,8 +199,8 @@ export default function PatientRegistration () {
         conditions: conditions.map((entry) => entry.condition.id),
       };
       const healthcareChoices = {
-        hospitalId: hospital ? hospital.id : '',
-        physicianId: physician ? physician.id : '',
+        hospitalId: hospital ? hospital.id : null,
+        physicianId: physician ? physician.id : null,
       };
       const codeStatusData = codeStatus;
       form.initialize({

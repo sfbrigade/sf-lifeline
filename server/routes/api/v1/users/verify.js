@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
 import User from '#models/user.js';
 
 export default async function (fastify, _opts) {
@@ -6,20 +8,12 @@ export default async function (fastify, _opts) {
     '/verify',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['emailVerificationToken'],
-          properties: {
-            emailVerificationToken: { type: 'string' },
-          },
-        },
+        body: z.object({
+          emailVerificationToken: z.string(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'null',
-          },
-          [StatusCodes.NOT_FOUND]: {
-            type: 'null',
-          },
+          [StatusCodes.OK]: z.null(),
+          [StatusCodes.NOT_FOUND]: z.null(),
         },
       },
     },
@@ -31,10 +25,10 @@ export default async function (fastify, _opts) {
           where: { emailVerificationToken },
         });
       } catch (error) {
-        return reply.notFound();
+        return reply.code(StatusCodes.NOT_FOUND).send();
       }
       if (!data) {
-        return reply.notFound();
+        return reply.code(StatusCodes.NOT_FOUND).send();
       }
       const user = new User(data);
 
@@ -47,7 +41,7 @@ export default async function (fastify, _opts) {
           },
         });
       }
-      reply.code(StatusCodes.OK);
+      reply.code(StatusCodes.OK).send();
     }
   );
 }

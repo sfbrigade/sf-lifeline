@@ -1,86 +1,22 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Patient } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
   fastify.get(
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-          },
-        },
-      },
-      response: {
-        [StatusCodes.OK]: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            gender: { type: 'string' },
-            language: { type: 'string' },
-            dateOfBirth: { type: 'string', format: 'date' },
-            codeStatus: { type: 'string' },
-            emergencyContact: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                phone: { type: 'string' },
-                relationship: { type: 'string' },
-              },
-            },
-            allergies: { type: 'array' },
-            conditions: { type: 'array' },
-            medications: { type: 'array' },
-            hospital: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                name: { type: 'string' },
-                address: { type: 'string' },
-                phone: { type: 'string' },
-                email: { type: 'string' },
-              },
-            },
-            physician: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                firstName: { type: 'string' },
-                middleName: { type: 'string' },
-                lastName: { type: 'string' },
-                phone: { type: 'string' },
-                email: { type: 'string' },
-                hospitals: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      id: { type: 'string' },
-                      name: { type: 'string' },
-                      address: { type: 'string' },
-                      phone: { type: 'string' },
-                      email: { type: 'string' },
-                    },
-                  },
-                },
-              },
-            },
-            updatedById: { type: 'string' },
-          },
-        },
-        [StatusCodes.NOT_FOUND]: {
-          type: 'object',
-          properties: {
-            message: { type: 'string' },
-          },
+        params: z.object({
+          id: z.string().uuid('Invalid patient ID format'),
+        }),
+        response: {
+          [StatusCodes.OK]: Patient.ResponseSchema,
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([

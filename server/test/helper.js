@@ -75,6 +75,7 @@ async function build (t, options = { trace: false }) {
     prisma.invite.deleteMany(),
     prisma.user.deleteMany(),
   ]);
+  app.prisma = prisma; // Attach prisma to the app object
   t.prisma = prisma;
 
   // set up fixture loader

@@ -1,71 +1,28 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Patient } from '#models/patient.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
   fastify.post(
     '/',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: process.env.VITE_FEATURE_COLLECT_PHI
-            ? [
-                'id',
-                'firstName',
-                'lastName',
-                'gender',
-                'language',
-                'dateOfBirth',
-              ]
-            : [],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            gender: {
-              type: 'string',
-              enum: [
-                'FEMALE',
-                'MALE',
-                'TRANS_MALE',
-                'TRANS_FEMALE',
-                'OTHER',
-                'UNKNOWN',
-              ],
-            },
-            language: {
-              type: 'string',
-              enum: [
-                'CANTONESE',
-                'ENGLISH',
-                'MANDARIN',
-                'RUSSIAN',
-                'SPANISH',
-                'TAGALOG',
-              ],
-            },
-            dateOfBirth: {
-              oneOf: [
-                { type: 'string', format: 'date' },
-                { type: 'string', minLength: 0, maxLength: 0 },
-              ]
-            }
-          },
-        },
+        body: process.env.VITE_FEATURE_COLLECT_PHI
+          ? Patient.RegisterSchema.required({
+            firstName: true,
+            lastName: true,
+            dateOfBirth: true,
+            gender: true,
+            language: true,
+          })
+          : Patient.RegisterSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              gender: { type: 'string' },
-              language: { type: 'string' },
-              dateOfBirth: { type: 'string', format: 'date' },
-            },
-          },
+          [StatusCodes.CREATED]: Patient.ResponseSchema,
+          [StatusCodes.BAD_REQUEST]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -110,6 +67,8 @@ export default async function (fastify, _opts) {
 
           return patient;
         });
+
+        newPatient.dateOfBirth = newPatient.dateOfBirth?.toISOString().split('T')[0];
 
         reply.code(StatusCodes.CREATED).send(newPatient);
       } catch (error) {

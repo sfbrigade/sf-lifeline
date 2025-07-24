@@ -17,8 +17,8 @@ const physiciansTableRowProps = {
   physician: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
+    email: PropTypes.string,
+    phone: PropTypes.string,
   }),
 
   onDelete: PropTypes.func.isRequired,

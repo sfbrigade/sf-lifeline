@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
 import { User, Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
@@ -6,35 +8,12 @@ export default async function (fastify, _opts) {
     '/:id/enable',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              role: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-              rejectedAt: { type: 'string' },
-              rejectedById: { type: 'string' },
-              disabledAt: { type: 'string' },
-              disabledById: { type: 'string' },
-            },
-          },
-          [StatusCodes.NOT_FOUND]: {
-            type: 'null',
-          },
+          [StatusCodes.OK]: User.ResponseSchema,
+          [StatusCodes.NOT_FOUND]: z.null(),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF]),

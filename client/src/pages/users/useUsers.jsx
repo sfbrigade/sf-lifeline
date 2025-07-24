@@ -36,9 +36,9 @@ export function useUsers () {
         ...user,
         name: user.firstName + ' ' + user.lastName,
         status:
-          user.rejectedAt.length > 0
+          user.rejectedAt
             ? 'Rejected'
-            : user.approvedAt.length > 0
+            : user.approvedAt
               ? 'Active'
               : 'Pending',
       }));
