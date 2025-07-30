@@ -31,6 +31,9 @@ export default async function (fastify) {
 
       if (uuidSearch) {
         const { records, total } = await fastify.prisma.patient.uuidSearch(patient, page, perPage);
+        records.forEach((record) => {
+          record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
+        });
         reply.setPaginationHeaders(page, perPage, total).send(records);
         return;
       } else {
@@ -83,11 +86,11 @@ export default async function (fastify) {
       };
 
       const { records, total } = await fastify.prisma.patient.paginate(options);
-      
+
       records.forEach((record) => {
         record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
       });
-      
+
       reply.setPaginationHeaders(page, perPage, total).send(records);
     }
   );
