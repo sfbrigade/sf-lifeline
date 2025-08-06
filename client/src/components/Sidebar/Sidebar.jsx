@@ -8,6 +8,7 @@ import {
   // TbSettings,
   TbBuildingHospital,
   TbStethoscope,
+  TbPlant2Off,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -62,6 +63,11 @@ const allNavigationItems = {
         href: '/hospitals',
         icon: <TbBuildingHospital className={classes.navbar__icon} />,
       },
+      {
+        label: 'Allergies',
+        href: '/allergies',
+        icon: <TbPlant2Off className={classes.navbar__icon} />,
+      }
     ],
   },
   // {

@@ -216,6 +216,20 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async getAllergies(query, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies?allergy=${query}&page=${page}`
+    );
+    return response;
+  }
+
+  static async getAllergy(id) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${id}`
+    );
+    return response;
+  }
+
   // --- MISCELLANEOUS ---
   static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {
