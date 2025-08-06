@@ -51,12 +51,12 @@ export default function AllergyDetail() {
 					<Paper shadow='xs' p='md' radius='md' withBorder>
 						<Title order={5}>Name</Title>
 						<Text mb='xs'>{data?.name}</Text>
-						<Title order={5}>Code</Title>
-						<Text mb='xs'>{data?.code}</Text>
 						<Title order={5}>Type</Title>
 						<Text mb='xs'>{data?.type}</Text>
 						<Title order={5}>System</Title>
 						<Text mb='xs'>{data?.system}</Text>
+						<Title order={5}>Code</Title>
+						<Text mb='xs'>{data?.code}</Text>
 					</Paper>
 				</Grid.Col>
 			</Grid>

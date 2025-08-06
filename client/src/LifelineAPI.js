@@ -230,6 +230,17 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async createAllergy(data) {
+    const response = await fetch(`${SERVER_BASE_URL}/allergies/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  }
+
   // --- MISCELLANEOUS ---
   static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {

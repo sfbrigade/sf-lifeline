@@ -16,6 +16,7 @@ import { useState } from 'react';
 
 import AllergiesTable from './AllergiesTable';
 import { useAllergies } from './useAllergies';
+import AllergyModal from './AllergyModal';
 
 export default function Allergies () {
     const [inputValue, setInputValue] = useState('');
@@ -26,6 +27,7 @@ export default function Allergies () {
     }, 500);
     return (
       <Container>
+        <AllergyModal opened={opened} close={close} />
         <Group justify='space-between' wrap='nowrap' my='sm'>
           <Title order={3} mr='md'>
             Allergies
