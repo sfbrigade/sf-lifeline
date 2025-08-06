@@ -156,6 +156,29 @@ describe('/api/v1/allergies', () => {
     });
   });
 
+  describe('GET /:id', () => {
+    it('should return a single allergy with valid ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app.inject().get('/api/v1/allergies/ceb1cd02-d5a7-46ef-915f-766cee886d0d');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const responseBody = JSON.parse(reply.payload);
+      assert.deepStrictEqual(responseBody.name, 'Grass Pollen');
+      assert.deepStrictEqual(responseBody.type, 'OTHER');
+      assert.deepStrictEqual(responseBody.system, 'SNOMED');
+      assert.deepStrictEqual(responseBody.code, '418689008');
+    });
+
+    it('should return code 422 for invalid ID', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app.inject().get('/api/v1/allergies/invalid1-d5a7-46ef-915f-766cee886d0d');
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
+    })
+  })
+
   describe('POST /register', () => {
     it('should register a new allergy and store it in the database', async (t) => {
       const app = await build(t);
@@ -235,4 +258,122 @@ describe('/api/v1/allergies', () => {
       assert.deepStrictEqual(JSON.parse(reply.payload).message, 'Name cannot be empty or just spaces.');
     });
   });
+
+  describe('PATCH /:id', () => {
+    it('should update an allergy for ADMIN, STAFF', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const allergyId = 'ceb1cd02-d5a7-46ef-915f-766cee886d0d';
+
+      const allergy = await t.prisma.allergy.findUnique({
+        where: {
+          id: allergyId
+        }
+      });
+      const reply = await app
+        .inject()
+        .patch(`/api/v1/allergies/${allergyId}`)
+        .payload({
+          name: 'Updated Test Allergy',
+          type: 'OTHER',
+          system: allergy.system,
+          code: allergy.code
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const updatedAllergy = JSON.parse(reply.payload);
+      assert.deepStrictEqual(updatedAllergy.name, 'Updated Test Allergy');
+      assert.deepStrictEqual(updatedAllergy.type, 'OTHER');
+      assert.deepStrictEqual(updatedAllergy.system, allergy.system);
+      assert.deepStrictEqual(updatedAllergy.code, allergy.code);
+      assert.deepStrictEqual(updatedAllergy.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+
+      const headers2 = await t.authenticate('staff.user@test.com', 'test');
+      const reply2 = await app
+      .inject()
+      .patch(`/api/v1/allergies/${allergyId}`)
+      .payload({
+        name: 'Updated Test Allergy for STAFF',
+        type: 'OTHER',
+        system: allergy.system,
+        code: allergy.code
+      })
+      .headers(headers2);
+
+      assert.deepStrictEqual(reply2.statusCode, StatusCodes.OK);
+      const updatedAllergy2 = JSON.parse(reply2.payload);
+      assert.deepStrictEqual(updatedAllergy2.name, 'Updated Test Allergy for STAFF');
+      assert.deepStrictEqual(updatedAllergy2.type, 'OTHER');
+      assert.deepStrictEqual(updatedAllergy2.system, allergy.system);
+      assert.deepStrictEqual(updatedAllergy2.code, allergy.code);
+      assert.deepStrictEqual(updatedAllergy2.updatedById, 'b6310669-1400-4346-ae61-7f872dfdedd3');
+    });
+
+    it('should return 404 for updating non-existent allergy', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/allergies/b05a61d3-670e-4a49-b485-b225a7c3d6a9')
+        .payload({
+          name: 'Updated Test Allergy',
+          type: 'OTHER',
+          system: 'SNOMED',
+          code: 'test code'
+        })
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+    });
+  })
+
+  describe(('DELETE /:id'), () => {
+    it('should delete an allergy for ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+
+      const allergyId = 'ceb1cd02-d5a7-46ef-915f-766cee886d0d';
+      const reply = await app
+        .inject()
+        .delete(`/api/v1/allergies/${allergyId}`)
+        .headers(headers);
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+
+      const deletedAllergy = await t.prisma.allergy.findUnique({
+        where: {
+          id: allergyId
+        }
+      });
+      assert.deepStrictEqual(deletedAllergy, null)
+    });
+
+    it('should return 404 for deleting non-existent allergy', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .delete('/api/v1/allergies/8dac39e4-21dd-4b68-9f0a-d46676bc5a20')
+        .headers(headers);
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
+    });
+
+    it('should return an error if not ADMIN user', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app
+        .inject()
+        .delete('/api/v1/allergies/8dac39e4-21dd-4b68-9f0a-d46676bc5a20')
+      
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+    })
+  })
 });

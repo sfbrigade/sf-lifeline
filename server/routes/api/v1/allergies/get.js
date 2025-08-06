@@ -17,17 +17,17 @@ export default async function (fastify, _opts) {
 				},
 			},
 		},
-    async (request, reply) => {
-      const { id } = request.params;
-      const data = await fastify.prisma.allergy.findUnique({
-        where: { id },
-      });
+		async (request, reply) => {
+			const { id } = request.params;
+			const data = await fastify.prisma.allergy.findUnique({
+				where: { id },
+			});
 
-      if (!data) {
-        return reply.notFound();
-      }
+			if (!data) {
+				return reply.notFound();
+			}
 
-      reply.send(data);
-    }
+			reply.send(data);
+		}
 	)
 }
