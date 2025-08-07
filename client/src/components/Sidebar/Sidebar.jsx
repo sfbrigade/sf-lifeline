@@ -8,7 +8,7 @@ import {
   // TbSettings,
   TbBuildingHospital,
   TbStethoscope,
-  TbPlant2Off,
+  TbMoodSick,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -66,8 +66,8 @@ const allNavigationItems = {
       {
         label: 'Allergies',
         href: '/allergies',
-        icon: <TbPlant2Off className={classes.navbar__icon} />,
-      }
+        icon: <TbMoodSick className={classes.navbar__icon} />,
+      },
     ],
   },
   // {
@@ -97,13 +97,13 @@ const SidebarProps = {
  * Collapsible sidebar
  * @param {PropTypes.InferProps<typeof SidebarProps>} props
  */
-export function Sidebar ({ toggleSidebar }) {
+export function Sidebar({ toggleSidebar }) {
   const { user, handleLogout } = useAuthorization();
 
   /**
    * @param {Event} event
    */
-  async function onLogout (event) {
+  async function onLogout(event) {
     event.preventDefault();
     await handleLogout();
   }
@@ -116,40 +116,40 @@ export function Sidebar ({ toggleSidebar }) {
   const filteredSections = [
     {
       ...allNavigationItems.adminPanel,
-      links: allNavigationItems.adminPanel.links.filter(link =>
+      links: allNavigationItems.adminPanel.links.filter((link) =>
         hasPermission(link.minRole)
       ),
     },
     {
       ...allNavigationItems.management,
-      links: allNavigationItems.management.links.filter(link =>
+      links: allNavigationItems.management.links.filter((link) =>
         hasPermission(link.minRole)
       ),
     },
-  ].filter(section => section.links.length > 0);
+  ].filter((section) => section.links.length > 0);
 
   return (
     <Stack
       className={classes.navbar}
-      justify='space-between'
-      px='md'
-      py='xl'
-      w='100%'
-      h='100%'
+      justify="space-between"
+      px="md"
+      py="xl"
+      w="100%"
+      h="100%"
     >
       <Box>
-        <Group align='center' gap='sm' mb='lg'>
+        <Group align="center" gap="sm" mb="lg">
           <img
-            src='/assets/logo.svg'
-            alt='SF Lifeline Logo'
-            width='32rem'
-            height='32rem'
+            src="/assets/logo.svg"
+            alt="SF Lifeline Logo"
+            width="32rem"
+            height="32rem"
           />
           <Title order={4}>SF Life Line</Title>
         </Group>
         {filteredSections.map((section) => (
-          <Box key={section.label} mb='lg'>
-            <Title fw='normal' pl='sm' order={6}>
+          <Box key={section.label} mb="lg">
+            <Title fw="normal" pl="sm" order={6}>
               {section.label}
             </Title>
             {section.links?.map((link) => (
@@ -158,10 +158,10 @@ export function Sidebar ({ toggleSidebar }) {
                 component={RouterNavLink}
                 to={link.href}
                 label={
-                  <Text fz='md' fw='600'>
+                  <Text fz="md" fw="600">
                     {link.label}
                   </Text>
-                  }
+                }
                 leftSection={link.icon}
                 target={link.target}
                 onClick={toggleSidebar}
@@ -172,23 +172,19 @@ export function Sidebar ({ toggleSidebar }) {
       </Box>
       <Group
         className={classes.footer}
-        justify='space-between'
-        align='top'
-        wrap='nowrap'
+        justify="space-between"
+        align="top"
+        wrap="nowrap"
       >
-        <Box fz='sm'>
+        <Box fz="sm">
           {user && (
             <>
-              <Box fw='600'>{`${user?.firstName} ${user?.lastName}`}</Box>
-              <Box c='gray.7'>{user?.email}</Box>
+              <Box fw="600">{`${user?.firstName} ${user?.lastName}`}</Box>
+              <Box c="gray.7">{user?.email}</Box>
             </>
           )}
         </Box>
-        <a
-          className={classes.footer__logout}
-          href='/logout'
-          onClick={onLogout}
-        >
+        <a className={classes.footer__logout} href="/logout" onClick={onLogout}>
           <FiLogOut />
         </a>
       </Group>
