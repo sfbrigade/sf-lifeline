@@ -35,8 +35,6 @@ export default function AllergyDetail() {
 		return <Loader />;
 	}
 
-	console.log(data)
-
 	const canEdit = user?.role === 'VOLUNTEER' || user?.role === 'STAFF' || user?.role === 'ADMIN';
 	return (
 		<Container component='main'>
