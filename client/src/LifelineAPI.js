@@ -230,16 +230,6 @@ export default class LifelineAPI {
     return response;
   }
 
-  static async deleteAllergy (allergyId) {
-    const response = await fetch(
-      `${SERVER_BASE_URL}/allergies/${allergyId}`,
-      {
-        method: 'DELETE',
-      }
-    );
-    return response;
-  }
-
   static async createAllergy(data) {
     const response = await fetch(`${SERVER_BASE_URL}/allergies/register`, {
       method: 'POST',
@@ -248,6 +238,30 @@ export default class LifelineAPI {
       },
       body: JSON.stringify(data),
     });
+    return response;
+  }
+
+  static async updateAllergy (data, allergyId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${allergyId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    return response;
+  }
+
+  static async deleteAllergy (allergyId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${allergyId}`,
+      {
+        method: 'DELETE',
+      }
+    );
     return response;
   }
 

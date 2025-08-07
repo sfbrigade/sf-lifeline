@@ -52,7 +52,7 @@ export default function AllergyForm({ onSuccess, onError }) {
     mutationFn: async (values) => {
       let response;
       if (allergyId) {
-        // response = await LifelineAPI.updateHospital(values, hospitalId);
+        response = await LifelineAPI.updateAllergy(values, allergyId);
       } else {
         response = await LifelineAPI.createAllergy(values);
       }
