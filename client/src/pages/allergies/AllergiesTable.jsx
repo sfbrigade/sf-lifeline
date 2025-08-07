@@ -30,7 +30,7 @@ const allergiesTableProps = {
  * Allergies table component
  * @param {PropTypes.InferProps<typeof allergiesTableProps>} props
  */
-export default function AllergiesTable({ headers, data }) {
+export default function AllergiesTable ({ headers, data }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [allergy, setSelectedAllergy] = useState(null);
   const { mutateAsync: deleteAllergy, isPending } = useDeleteAllergy();

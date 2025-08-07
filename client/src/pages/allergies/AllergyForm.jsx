@@ -1,13 +1,12 @@
 import { useForm } from '@mantine/form';
 import { Button, TextInput, Select } from '@mantine/core';
 import { useParams } from 'react-router';
-import { IMaskInput } from 'react-imask';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '#app/LifelineAPI';
 
-export default function AllergyForm({ onSuccess, onError }) {
+export default function AllergyForm ({ onSuccess, onError }) {
   const { allergyId } = useParams();
 
   const form = useForm({
@@ -22,11 +21,11 @@ export default function AllergyForm({ onSuccess, onError }) {
       name: (value) =>
         /[^\s]{1,30}$/.test(value)
           ? null
-          : "Name must be between 1 and 30 characters long.",
+          : 'Name must be between 1 and 30 characters long.',
       code: (value) =>
         /^[\d+]{1,10}$/.test(value)
           ? null
-          : "Code must be between 1 and 10 numbers long.",
+          : 'Code must be between 1 and 10 numbers long.',
 
     },
   });

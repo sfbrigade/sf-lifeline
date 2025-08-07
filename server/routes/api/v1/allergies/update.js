@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 
-import Allergy from '#models/allergy.js'
+import Allergy from '#models/allergy.js';
 import { Role } from '#models/user.js';
 
 export default async function (fastify) {

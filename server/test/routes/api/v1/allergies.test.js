@@ -176,8 +176,8 @@ describe('/api/v1/allergies', () => {
 
       const reply = await app.inject().get('/api/v1/allergies/invalid1-d5a7-46ef-915f-766cee886d0d');
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNPROCESSABLE_ENTITY);
-    })
-  })
+    });
+  });
 
   describe('POST /register', () => {
     it('should register a new allergy and store it in the database', async (t) => {
@@ -293,15 +293,15 @@ describe('/api/v1/allergies', () => {
 
       const headers2 = await t.authenticate('staff.user@test.com', 'test');
       const reply2 = await app
-      .inject()
-      .patch(`/api/v1/allergies/${allergyId}`)
-      .payload({
-        name: 'Updated Test Allergy for STAFF',
-        type: 'OTHER',
-        system: allergy.system,
-        code: allergy.code
-      })
-      .headers(headers2);
+        .inject()
+        .patch(`/api/v1/allergies/${allergyId}`)
+        .payload({
+          name: 'Updated Test Allergy for STAFF',
+          type: 'OTHER',
+          system: allergy.system,
+          code: allergy.code
+        })
+        .headers(headers2);
 
       assert.deepStrictEqual(reply2.statusCode, StatusCodes.OK);
       const updatedAllergy2 = JSON.parse(reply2.payload);
@@ -330,7 +330,7 @@ describe('/api/v1/allergies', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
     });
-  })
+  });
 
   describe(('DELETE /:id'), () => {
     it('should delete an allergy for ADMIN user', async (t) => {
@@ -351,7 +351,7 @@ describe('/api/v1/allergies', () => {
           id: allergyId
         }
       });
-      assert.deepStrictEqual(deletedAllergy, null)
+      assert.deepStrictEqual(deletedAllergy, null);
     });
 
     it('should return 404 for deleting non-existent allergy', async (t) => {
@@ -371,9 +371,9 @@ describe('/api/v1/allergies', () => {
 
       const reply = await app
         .inject()
-        .delete('/api/v1/allergies/8dac39e4-21dd-4b68-9f0a-d46676bc5a20')
-      
+        .delete('/api/v1/allergies/8dac39e4-21dd-4b68-9f0a-d46676bc5a20');
+
       assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
-    })
-  })
+    });
+  });
 });
