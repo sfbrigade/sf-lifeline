@@ -31,6 +31,9 @@ import PhysicianForm from './pages/physicians/physican-details/Components/Physic
 import Hospitals from './pages/hospitals/Hospitals';
 import HospitalDetail from './pages/hospitals/hospital-details/HospitalDetail';
 import EditHospital from './pages/hospitals/EditHospital';
+import Allergies from './pages/allergies/Allergies';
+import AllergyDetail from './pages/allergies/allergy-details/AllergyDetails';
+import EditAllergy from './pages/allergies/EditAllergy';
 
 // roles in order of least to most privileged
 export const ROLES = ['FIRST_RESPONDER', 'VOLUNTEER', 'STAFF', 'ADMIN'];
@@ -188,6 +191,23 @@ export default [
                 element: <EditHospital />,
               },
             ],
+          },
+          {
+            path: 'allergies',
+            children: [
+              {
+                index: true,
+                element: <Allergies />,
+              },
+              {
+                path: ':allergyId',
+                element: <AllergyDetail />,
+              },
+              {
+                path: ':allergyId/edit',
+                element: <EditAllergy />,
+              }
+            ]
           },
           {
             path: 'users',

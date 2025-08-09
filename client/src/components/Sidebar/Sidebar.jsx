@@ -8,6 +8,7 @@ import {
   // TbSettings,
   TbBuildingHospital,
   TbStethoscope,
+  TbMoodSick,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -61,6 +62,13 @@ const allNavigationItems = {
         label: 'Hospitals',
         href: '/hospitals',
         icon: <TbBuildingHospital className={classes.navbar__icon} />,
+        minRole: 'STAFF',
+      },
+      {
+        label: 'Allergies',
+        href: '/allergies',
+        icon: <TbMoodSick className={classes.navbar__icon} />,
+        minRole: 'STAFF',
       },
     ],
   },
@@ -110,17 +118,17 @@ export function Sidebar ({ toggleSidebar }) {
   const filteredSections = [
     {
       ...allNavigationItems.adminPanel,
-      links: allNavigationItems.adminPanel.links.filter(link =>
+      links: allNavigationItems.adminPanel.links.filter((link) =>
         hasPermission(link.minRole)
       ),
     },
     {
       ...allNavigationItems.management,
-      links: allNavigationItems.management.links.filter(link =>
+      links: allNavigationItems.management.links.filter((link) =>
         hasPermission(link.minRole)
       ),
     },
-  ].filter(section => section.links.length > 0);
+  ].filter((section) => section.links.length > 0);
 
   return (
     <Stack
@@ -155,7 +163,7 @@ export function Sidebar ({ toggleSidebar }) {
                   <Text fz='md' fw='600'>
                     {link.label}
                   </Text>
-                  }
+                }
                 leftSection={link.icon}
                 target={link.target}
                 onClick={toggleSidebar}
@@ -178,11 +186,7 @@ export function Sidebar ({ toggleSidebar }) {
             </>
           )}
         </Box>
-        <a
-          className={classes.footer__logout}
-          href='/logout'
-          onClick={onLogout}
-        >
+        <a className={classes.footer__logout} href='/logout' onClick={onLogout}>
           <FiLogOut />
         </a>
       </Group>

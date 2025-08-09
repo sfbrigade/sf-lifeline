@@ -2,21 +2,17 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import LifelineAPI from '#app/LifelineAPI';
 
-const HOSPITALS_TABLE_HEADERS = [
+const ALLERGIES_TABLE_HEADERS = [
   { key: 'name', text: 'Name' },
-  { key: 'email', text: 'Email' },
-  { key: 'phone', text: 'Phone' },
-  { key: 'address', text: 'Address' },
-  { key: 'more', text: '' },
+  { key: 'type', text: 'Type' },
 ];
 
 /**
- * Hospitals data
- * @typedef {object} Hospitals
- * @property {string} id - Hospitals ID
- * @property {string} address - Hospitals first name, middle name and last name
- * @property {string} email - Hospitals email
- * @property {string} phone - Hospitals phone
+ * Allergies data
+ * @typedef {object} Allergies
+ * @property {string} id - Allergies ID
+ * @property {string} name - Allergies name
+ * @property {string} type - Allergies type
  * @
  */
 
@@ -30,7 +26,7 @@ const HOSPITALS_TABLE_HEADERS = [
 /**
  *
  * @returns {{
- *  Hospitals: Array<Hospitals>,
+ *  Allergies: Array<Allergies>,
  *  headers: Array<TableHeader>,
  *  search: string,
  *  setSearch: (search: string) => void,
@@ -40,34 +36,27 @@ const HOSPITALS_TABLE_HEADERS = [
  *  isFetching: boolean,
  * }}
  */
-export function useHospitals () {
+export function useAllergies () {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
-    queryKey: ['hospitals', search, page],
+    queryKey: ['allergies', search, page],
     queryFn: async () => {
-      const res = await LifelineAPI.getHospitals(search, '', page);
-
+      const res = await LifelineAPI.getAllergies(search, page);
       if (res.status !== 200) {
-        throw new Error('Failed to fetch Hospitals.');
+        throw new Error('Failed to fetch Allergies.');
       }
-
-      console.log(res);
 
       const data = await res.json();
       const pages = +res.headers.get('X-Total-Pages');
-
       return { data, pages };
     },
     select: (res) => ({
-      hospitals: res.data.map((hospital) => {
+      allergies: res.data.map((allergy) => {
         return {
-          id: hospital.id,
-          name: hospital.name,
-          email: hospital.email,
-          address: hospital.address,
-          phone: hospital.phone,
-
+          id: allergy.id,
+          name: allergy.name,
+          type: allergy.type,
         };
       }),
       pages: res.pages
@@ -76,8 +65,8 @@ export function useHospitals () {
   });
 
   return {
-    hospitals: data?.hospitals,
-    headers: HOSPITALS_TABLE_HEADERS,
+    allergies: data?.allergies,
+    headers: ALLERGIES_TABLE_HEADERS,
     search,
     setSearch,
     page,
