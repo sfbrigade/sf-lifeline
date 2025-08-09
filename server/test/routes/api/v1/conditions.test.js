@@ -11,7 +11,6 @@ describe('/api/v1/conditions', () => {
       const headers = await t.authenticate('admin.user@test.com', 'test');
       const newConditionData = {
         name: 'New Test Condition',
-        system: 'SNOMED',
       };
 
       const reply = await app
@@ -24,8 +23,11 @@ describe('/api/v1/conditions', () => {
       const responseBody = JSON.parse(reply.payload);
       assert.ok(responseBody.id);
       assert.deepStrictEqual(responseBody.name, newConditionData.name);
-      assert.deepStrictEqual(responseBody.system, newConditionData.system);
-
+      assert.deepStrictEqual(responseBody.category, null);
+      assert.deepStrictEqual(responseBody.system, null);
+      assert.deepStrictEqual(responseBody.code, null);
+      assert.deepStrictEqual(responseBody.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(responseBody.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
 
       const storedCondition = await app.prisma.condition.findUnique({
         where: { id: responseBody.id },
@@ -34,8 +36,10 @@ describe('/api/v1/conditions', () => {
       assert.ok(storedCondition);
       assert.deepStrictEqual(storedCondition.name, newConditionData.name);
       assert.deepStrictEqual(storedCondition.category, null);
-      assert.deepStrictEqual(storedCondition.system, newConditionData.system);
+      assert.deepStrictEqual(storedCondition.system, null);
       assert.deepStrictEqual(storedCondition.code, null);
+      assert.deepStrictEqual(storedCondition.updatedById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
+      assert.deepStrictEqual(storedCondition.createdById, '555740af-17e9-48a3-93b8-d5236dfd2c29');
     });
 
     it('should return BAD_REQUEST if name is empty or just spaces', async (t) => {
@@ -73,15 +77,21 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: '061047c4-00b2-4793-a58b-12f93a509d23',
           name: 'Deaf',
           category: 'EENT',
           system: 'ICD10',
           code: 'H91.3',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -99,15 +109,21 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: '061047c4-00b2-4793-a58b-12f93a509d23',
           name: 'Deaf',
           category: 'EENT',
           system: 'ICD10',
           code: 'H91.3',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -128,15 +144,21 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=a&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=a&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=a&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=a&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: '061047c4-00b2-4793-a58b-12f93a509d23',
           name: 'Deaf',
           category: 'EENT',
           system: 'ICD10',
           code: 'H91.3',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });
@@ -163,15 +185,21 @@ describe('/api/v1/conditions', () => {
       assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
       assert.deepStrictEqual(
         reply.headers['link'],
-        '<http://localhost/api/v1/conditions?condition=&perPage=1&page=2>; rel="next",<http://localhost/api/v1/conditions?condition=&perPage=1&page=3>; rel="last"'
+        '<http://localhost/api/v1/conditions?perPage=1&condition=&page=2>; rel="next",<http://localhost/api/v1/conditions?perPage=1&condition=&page=3>; rel="last"'
       );
-      assert.deepStrictEqual(JSON.parse(reply.payload), [
+
+      const payload = JSON.parse(reply.body);
+      assert.deepStrictEqual(payload, [
         {
           id: '061047c4-00b2-4793-a58b-12f93a509d23',
           name: 'Deaf',
           category: 'EENT',
           system: 'ICD10',
           code: 'H91.3',
+          updatedAt: payload[0].updatedAt,
+          updatedById: null,
+          createdAt: payload[0].createdAt,
+          createdById: null,
         },
       ]);
     });

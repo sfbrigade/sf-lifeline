@@ -1,9 +1,30 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
+import { z } from 'zod';
 
 import Base from './base.js';
 import mailer from '#helpers/email/mailer.js';
 
-class Invite extends Base {
+export class Invite extends Base {
+  static AttributesSchema = z.object({
+    firstName: z.string().nullable(),
+    middleName: z.string().nullable(),
+    lastName: z.string().nullable(),
+    email: z.string().email(),
+    role: z.enum(Object.values(Role)),
+  });
+
+  static ResponseSchema = Invite.AttributesSchema.extend({
+    id: z.string().uuid(),
+    expiresAt: z.coerce.date(),
+    invitedById: z.string().uuid(),
+    acceptedAt: z.coerce.date().nullable(),
+    acceptedById: z.string().uuid().nullable(),
+    revokedAt: z.coerce.date().nullable(),
+    revokedById: z.string().uuid().nullable(),
+    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date(),
+  });
+
   constructor (data) {
     super(Prisma.InviteScalarFieldEnum, data);
   }
@@ -45,7 +66,5 @@ class Invite extends Base {
     });
   }
 }
-
-export { Invite };
 
 export default Invite;

@@ -1,37 +1,16 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+
+import { Hospital } from '#models/hospital.js';
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.post(
     '/',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name', 'email', 'phone', 'address'],
-          properties: {
-            name: { type: 'string' },
-            email: { type: 'string' },
-            address: {
-              type: 'string',
-            },
-            phone: {
-              type: 'string',
-              pattern: '^(\\([0-9]{3}\\)) [0-9]{3}-[0-9]{4}$',
-            },
-          },
-        },
+        body: Hospital.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              email: { type: 'string' },
-              address: { type: 'string' },
-              phone: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: Hospital.ResponseSchema,
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
@@ -40,7 +19,7 @@ export default async function (fastify) {
       const { name, address, phone, email } = request.body;
 
       try {
-        // Check if the physician already exists
+        // Check if the hospital already exists
         const exists = await fastify.prisma.hospital.findFirst({
           where: {
             OR: [{ phone }, { email }, { name }, { address }],
@@ -69,14 +48,16 @@ export default async function (fastify) {
 
         const newHospital = await fastify.prisma.hospital.create({
           data: {
-            ...request.body
+            ...request.body,
+            createdById: request.user.id,
+            updatedById: request.user.id,
           },
         });
 
         reply.code(StatusCodes.CREATED).send(newHospital);
       } catch (error) {
         if (error.message.includes('already exists')) {
-          return reply.status(StatusCodes.BAD_REQUEST).send({
+          return reply.status(StatusCodes.UNPROCESSABLE_ENTITY).send({
             message: error.message,
           });
         }

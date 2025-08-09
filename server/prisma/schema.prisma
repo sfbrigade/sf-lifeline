@@ -10,58 +10,74 @@ datasource db {
 }
 
 model User {
-  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                     String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName              String
   middleName             String?
   lastName               String
-  email                  String    @unique @db.Citext
-  emailVerificationToken String?   @unique @db.Uuid
+  email                  String         @unique @db.Citext
+  emailVerificationToken String?        @unique @db.Uuid
   emailVerifiedAt        DateTime?
-  passwordResetToken     String?   @unique @db.Uuid
+  passwordResetToken     String?        @unique @db.Uuid
   passwordResetExpires   DateTime?
   role                   Role
   hashedPassword         String
-  licenseNumber          String?   @unique
+  licenseNumber          String?        @unique
   licenseData            Json?
   approvedAt             DateTime?
-  approvedById           String?   @db.Uuid
+  approvedById           String?        @db.Uuid
   rejectedAt             DateTime?
-  rejectedById           String?   @db.Uuid
+  rejectedById           String?        @db.Uuid
   disabledAt             DateTime?
-  disabledById           String?   @db.Uuid
-  updatedAt              DateTime  @updatedAt
-  createdAt              DateTime  @default(now())
-  acceptedInvites        Invite[]  @relation("UserAcceptedBy")
-  invitedUsers           Invite[]  @relation("UserInvitedBy")
-  revokedInvites         Invite[]  @relation("UserRevokedBy")
-  createdPatients        Patient[] @relation("UserCreatedBy")
-  updatedPatients        Patient[] @relation("UserUpdatedBy")
-  approvedBy             User?     @relation("UserApprovedBy", fields: [approvedById], references: [id])
-  approvedUsers          User[]    @relation("UserApprovedBy")
-  disabledBy             User?     @relation("UserDisabledBy", fields: [disabledById], references: [id])
-  disabledUsers          User[]    @relation("UserDisabledBy")
-  rejectedBy             User?     @relation("UserRejectedBy", fields: [rejectedById], references: [id])
-  rejectedUsers          User[]    @relation("UserRejectedBy")
+  disabledById           String?        @db.Uuid
+  updatedAt              DateTime       @updatedAt
+  createdAt              DateTime       @default(now())
+  
+  // Relations
+  acceptedInvites        Invite[]       @relation("InviteAcceptedBy")
+  invitedUsers           Invite[]       @relation("InviteInvitedBy")
+  revokedInvites         Invite[]       @relation("InviteRevokedBy")
+  createdPatients        Patient[]      @relation("PatientCreatedBy")
+  updatedPatients        Patient[]      @relation("PatientUpdatedBy")
+  approvedBy             User?          @relation("UserApprovedBy", fields: [approvedById], references: [id])
+  approvedUsers          User[]         @relation("UserApprovedBy")
+  disabledBy             User?          @relation("UserDisabledBy", fields: [disabledById], references: [id])
+  disabledUsers          User[]         @relation("UserDisabledBy")
+  rejectedBy             User?          @relation("UserRejectedBy", fields: [rejectedById], references: [id])
+  rejectedUsers          User[]         @relation("UserRejectedBy")
+  createdAllergies       Allergy[]      @relation("AllergyCreatedBy")
+  updatedAllergies       Allergy[]      @relation("AllergyUpdatedBy")
+  createdConditions      Condition[]    @relation("ConditionCreatedBy")
+  updatedConditions      Condition[]    @relation("ConditionUpdatedBy")
+  createdHospitals       Hospital[]     @relation("HospitalCreatedBy")
+  updatedHospitals       Hospital[]     @relation("HospitalUpdatedBy")
+  createdMedications     Medication[]   @relation("MedicationCreatedBy")
+  updatedMedications     Medication[]   @relation("MedicationUpdatedBy")
+  createdPhysicians      Physician[]    @relation("PhysicianCreatedBy")
+  updatedPhysicians      Physician[]    @relation("PhysicianUpdatedBy")
+  createdContacts        Contact[]      @relation("ContactCreatedBy")
+  updatedContacts        Contact[]      @relation("ContactUpdatedBy")
 }
 
 model Invite {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName    String?
-  middleName   String?
-  lastName     String?
-  email        String
-  role         Role
-  expiresAt    DateTime
-  invitedById  String    @db.Uuid
-  acceptedById String?   @db.Uuid
-  acceptedAt   DateTime?
-  revokedAt    DateTime?
-  revokedById  String?   @db.Uuid
-  updatedAt    DateTime  @updatedAt
-  createdAt    DateTime  @default(now())
-  acceptedBy   User?     @relation("UserAcceptedBy", fields: [acceptedById], references: [id])
-  invitedBy    User      @relation("UserInvitedBy", fields: [invitedById], references: [id])
-  revokedBy    User?     @relation("UserRevokedBy", fields: [revokedById], references: [id])
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName        String?
+  middleName       String?
+  lastName         String?
+  email            String
+  role             Role
+  expiresAt        DateTime
+  invitedById      String     @db.Uuid
+  acceptedById     String?    @db.Uuid
+  acceptedAt       DateTime?
+  revokedAt        DateTime?
+  revokedById      String?    @db.Uuid
+  updatedAt        DateTime   @updatedAt
+  createdAt        DateTime   @default(now())
+  
+  // Relations
+  acceptedBy       User?      @relation("InviteAcceptedBy", fields: [acceptedById], references: [id])
+  invitedBy        User       @relation("InviteInvitedBy", fields: [invitedById], references: [id])
+  revokedBy        User?      @relation("InviteRevokedBy", fields: [revokedById], references: [id])
 }
 
 model Patient {
@@ -81,18 +97,20 @@ model Patient {
   updatedById        String              @db.Uuid
   updatedAt          DateTime            @updatedAt
   createdAt          DateTime            @default(now())
-  createdBy          User                @relation("UserCreatedBy", fields: [createdById], references: [id])
+  
+  // Relations
+  createdBy          User                @relation("PatientCreatedBy", fields: [createdById], references: [id])
   emergencyContact   Contact?            @relation(fields: [emergencyContactId], references: [id])
   hospital           Hospital?           @relation(fields: [hospitalId], references: [id])
   physician          Physician?          @relation(fields: [physicianId], references: [id])
-  updatedBy          User                @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedBy          User                @relation("PatientUpdatedBy", fields: [updatedById], references: [id])
   allergies          PatientAllergy[]
   conditions         PatientCondition[]
   medications        PatientMedication[]
 }
 
 model Contact {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstName    String?
   middleName   String?
   lastName     String?
@@ -100,44 +118,68 @@ model Contact {
   email        String?
   address      String?
   relationship String?
-  updatedAt    DateTime @updatedAt
-  createdAt    DateTime @default(now())
+  updatedAt    DateTime   @updatedAt
+  updatedById  String     @db.Uuid
+  updatedBy    User       @relation("ContactUpdatedBy", fields: [updatedById], references: [id])
+  createdAt    DateTime   @default(now())
+  createdById  String     @db.Uuid
+  createdBy    User       @relation("ContactCreatedBy", fields: [createdById], references: [id])
   patient      Patient?
 }
 
 model Allergy {
-  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  type     AllergyType
-  system   CodingSystem?
-  code     String?
-  patients PatientAllergy[]
+  id           String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  type         AllergyType
+  system       CodingSystem?
+  code         String?
+  patients     PatientAllergy[]
+  updatedAt    DateTime          @updatedAt
+  updatedById  String?           @db.Uuid
+  updatedBy    User?             @relation("AllergyUpdatedBy", fields: [updatedById], references: [id])
+  createdAt    DateTime          @default(now())
+  createdById  String?           @db.Uuid
+  createdBy    User?             @relation("AllergyCreatedBy", fields: [createdById], references: [id])
 }
 
 model Medication {
-  id       String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  altNames String?
-  system   CodingSystem?
-  code     String?
-  patients PatientMedication[]
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  altNames     String?
+  system       CodingSystem?
+  code         String?
+  patients     PatientMedication[]
+  updatedAt    DateTime            @updatedAt
+  updatedById  String?             @db.Uuid
+  updatedBy    User?               @relation("MedicationUpdatedBy", fields: [updatedById], references: [id])
+  createdAt    DateTime            @default(now())
+  createdById  String?             @db.Uuid
+  createdBy    User?               @relation("MedicationCreatedBy", fields: [createdById], references: [id])
 }
 
 model Condition {
-  id       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  category String?
-  system   CodingSystem
-  code     String?
-  patients PatientCondition[]
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  category     String?
+  system       CodingSystem?
+  code         String?
+  patients     PatientCondition[]
+  updatedAt    DateTime            @updatedAt
+  updatedById  String?             @db.Uuid
+  updatedBy    User?               @relation("ConditionUpdatedBy", fields: [updatedById], references: [id])
+  createdAt    DateTime            @default(now())
+  createdById  String?             @db.Uuid
+  createdBy    User?               @relation("ConditionCreatedBy", fields: [createdById], references: [id])
 }
 
 model PatientAllergy {
-  patientId String  @db.Uuid
-  allergyId String  @db.Uuid
-  sortOrder Int
-  allergy   Allergy @relation(fields: [allergyId], references: [id], onDelete: Cascade)
-  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId  String  @db.Uuid
+  allergyId  String  @db.Uuid
+  sortOrder  Int
+  
+  // Relations
+  allergy    Allergy @relation(fields: [allergyId], references: [id], onDelete: Cascade)
+  patient    Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   @@id([patientId, allergyId])
 }
@@ -146,6 +188,8 @@ model PatientMedication {
   patientId    String     @db.Uuid
   medicationId String     @db.Uuid
   sortOrder    Int
+  
+  // Relations
   medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
   patient      Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
@@ -156,6 +200,8 @@ model PatientCondition {
   patientId   String    @db.Uuid
   conditionId String    @db.Uuid
   sortOrder   Int
+  
+  // Relations
   condition   Condition @relation(fields: [conditionId], references: [id], onDelete: Cascade)
   patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
@@ -163,24 +209,36 @@ model PatientCondition {
 }
 
 model Physician {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName  String?
-  middleName String?
-  lastName   String?
-  phone      String?
-  email      String?
-  patients   Patient[]
-  hospitals  Hospital[] @relation("HospitalToPhysician")
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName              String?
+  middleName             String?
+  lastName               String?
+  phone                  String?
+  email                  String?
+  patients               Patient[]
+  hospitals              Hospital[]          @relation("HospitalToPhysician")
+  updatedAt              DateTime            @updatedAt
+  updatedById            String?             @db.Uuid
+  updatedBy              User?               @relation("PhysicianUpdatedBy", fields: [updatedById], references: [id])
+  createdAt              DateTime            @default(now())
+  createdById            String?             @db.Uuid
+  createdBy              User?               @relation("PhysicianCreatedBy", fields: [createdById], references: [id])
 }
 
 model Hospital {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String?
-  address    String?
-  phone      String?
-  email      String?
-  patients   Patient[]
-  physicians Physician[] @relation("HospitalToPhysician")
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                   String
+  address                String?
+  phone                  String?
+  email                  String?
+  patients               Patient[]
+  physicians             Physician[]         @relation("HospitalToPhysician")
+  updatedAt              DateTime            @updatedAt
+  updatedById            String?             @db.Uuid
+  updatedBy              User?               @relation("HospitalUpdatedBy", fields: [updatedById], references: [id])
+  createdAt              DateTime            @default(now())
+  createdById            String?             @db.Uuid
+  createdBy              User?               @relation("HospitalCreatedBy", fields: [createdById], references: [id])
 }
 
 enum Role {

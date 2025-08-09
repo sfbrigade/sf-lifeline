@@ -9,36 +9,9 @@ export default async function (fastify, _opts) {
     '/register',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['firstName', 'lastName', 'email', 'password'],
-          properties: {
-            firstName: { type: 'string' },
-            middleName: { type: 'string' },
-            lastName: { type: 'string' },
-            email: { type: 'string' },
-            password: { type: 'string' },
-            licenseNumber: { type: 'string' },
-            inviteId: { type: 'string' },
-          },
-        },
+        body: User.RegisterSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string', format: 'email' },
-              licenseNumber: { type: 'string' },
-              role: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: User.ResponseSchema,
         },
       },
     },

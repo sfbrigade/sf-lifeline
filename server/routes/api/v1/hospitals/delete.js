@@ -1,24 +1,29 @@
-import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
+import { Role } from '#models/user.js';
 
 export default async function (fastify) {
   fastify.delete(
     '/:id',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-          },
-        },
+        params: z.object({
+          id: z.string().min(1, 'Hospital ID is required'),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: z.object({
+            message: z.string(),
+          }),
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
+          [StatusCodes.BAD_REQUEST]: z.object({
+            message: z.string(),
+          }),
+          [StatusCodes.INTERNAL_SERVER_ERROR]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF]),

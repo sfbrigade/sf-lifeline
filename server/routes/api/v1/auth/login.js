@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
+
 import User from '#models/user.js';
 
 export default async function (fastify, _opts) {
@@ -8,16 +10,12 @@ export default async function (fastify, _opts) {
     {
       // schema template for fastify-swagger
       schema: {
-        body: {
-          type: 'object',
-          required: ['email', 'password'],
-          properties: {
-            email: { type: 'string' },
-            password: { type: 'string' },
-          },
-        },
+        body: z.object({
+          email: z.string().email(),
+          password: z.string(),
+        }),
         response: {
-          [StatusCodes.OK]: {
+          [StatusCodes.OK]: User.ResponseSchema.openapi({
             description:
               'Successfully authenticated. The response sets a cookie named `session` that should be sent in subsequent requests for authentication. This cookie will NOT appear in the web-based API tester infterface because it is an HttpOnly cookie that cannot be accessed by JavaScript.',
             headers: {
@@ -27,25 +25,7 @@ export default async function (fastify, _opts) {
                 },
               },
             },
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              firstName: { type: 'string' },
-              middleName: { type: 'string' },
-              lastName: { type: 'string' },
-              email: { type: 'string' },
-              emailVerifiedAt: { type: 'string' },
-              licenseNumber: { type: 'string' },
-              licenseData: { type: 'object' },
-              role: { type: 'string' },
-              approvedAt: { type: 'string' },
-              approvedById: { type: 'string' },
-              rejectedAt: { type: 'string' },
-              rejectedById: { type: 'string' },
-              createdAt: { type: 'string' },
-              updatedAt: { type: 'string' },
-            },
-          },
+          }),
         },
       },
     },

@@ -1,35 +1,21 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '#models/user.js';
+import { z } from 'zod';
 
 export default async function (fastify, _opts) {
   fastify.patch(
     '',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['passwordResetToken', 'password'],
-          properties: {
-            passwordResetToken: { type: 'string' },
-            password: { type: 'string' },
-          },
-        },
+        body: z.object({
+          passwordResetToken: z.string(),
+          password: User.PasswordSchema,
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'null',
-          },
-          [StatusCodes.UNAUTHORIZED]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
-          [StatusCodes.UNPROCESSABLE_ENTITY]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: z.null(),
+          [StatusCodes.UNAUTHORIZED]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },
@@ -44,21 +30,6 @@ export default async function (fastify, _opts) {
         return reply.unauthorized(
           'Password Reset Link is expired or not valid'
         );
-      }
-
-      try {
-        User.PasswordSchema.parse(password);
-      } catch (error) {
-        let message = '';
-        error.errors.forEach((e) => {
-          if (message.length > 0) {
-            message += `. ${e.message}`;
-          } else {
-            message = e.message;
-          }
-        });
-
-        return reply.unprocessableEntity(message);
       }
 
       const user = new User(data);

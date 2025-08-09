@@ -1,28 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '#models/user.js';
+import { z } from 'zod';
 
 export default async function (fastify, _opts) {
   fastify.post(
     '',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['email'],
-          properties: {
-            email: { type: 'string' },
-          },
-        },
+        body: z.object({
+          email: z.string().email(),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'null',
-          },
-          [StatusCodes.NOT_FOUND]: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
+          [StatusCodes.OK]: z.null(),
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
         },
       },
     },

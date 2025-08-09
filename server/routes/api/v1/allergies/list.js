@@ -1,38 +1,21 @@
+import { Allergy } from '#models/allergy.js';
 import { Role } from '#models/user.js';
 import { StatusCodes } from 'http-status-codes';
-
-import register from './register.js';
+import { z } from 'zod';
 
 export default async function (fastify) {
-  fastify.register(register);
-
   fastify.get(
     '',
     {
       schema: {
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer' },
-            perPage: { type: 'integer' },
-            allergy: { type: 'string' },
-          },
-        },
+        querystring: z.object({
+          page: z.coerce.number().optional(),
+          perPage: z.coerce.number().optional(),
+          allergy: z.string().optional(),
+        }),
       },
       response: {
-        [StatusCodes.OK]: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              type: { type: 'string' },
-              system: { type: 'string' },
-              code: { type: 'string' },
-            },
-          },
-        },
+        [StatusCodes.OK]: z.array(Allergy.ResponseSchema),
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },

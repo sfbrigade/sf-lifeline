@@ -1,36 +1,22 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { Allergy } from '#models/allergy.js';
+import { Role } from '#models/user.js';
+
 export default async function (fastify) {
   fastify.post(
     '/register',
     {
       schema: {
-        body: {
-          type: 'object',
-          required: ['name', 'type'],
-          properties: {
-            name: { type: 'string' },
-            type: { type: 'string', enum: ['DRUG', 'OTHER'] },
-            system: { type: 'string', nullable: true },
-            code: { type: 'string', nullable: true },
-          },
-        },
+        body: Allergy.AttributesSchema,
         response: {
-          [StatusCodes.CREATED]: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              name: { type: 'string' },
-              type: { type: 'string' },
-              system: { type: 'string'},
-              code: { type: 'string' },
-            },
-          },
+          [StatusCodes.CREATED]: Allergy.ResponseSchema,
         },
       },
+      onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
     async (request, reply) => {
-      const { name, type} = request.body;
+      const { name, type, system, code } = request.body;
 
       if (name.trim().length === 0) {
         reply.code(StatusCodes.BAD_REQUEST).send({ message: 'Name cannot be empty or just spaces.' });
@@ -53,6 +39,10 @@ export default async function (fastify) {
         data: {
           name: name.trim(),
           type,
+          system,
+          code,
+          createdById: request.user.id,
+          updatedById: request.user.id,
         },
       });
 

@@ -182,12 +182,12 @@ export default function MedicalDataSearch ({
   });
 
   const options = (data || [])
-    .filter((item) => !value.some((v) => v.id === item.id))
+    .filter((item) => !value?.some((v) => v.id === item.id))
     .map((item) => (
       <Combobox.Option
         value={item.id}
         key={item.id}
-        active={value.includes(item.name)}
+        active={value?.includes(item.name)}
       >
         {item.name}
       </Combobox.Option>

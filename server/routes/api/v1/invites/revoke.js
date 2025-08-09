@@ -1,5 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
+import { Invite } from '#models/invite.js';
 import { Role } from '#models/user.js';
 
 export default async function (fastify, _opts) {
@@ -7,16 +9,14 @@ export default async function (fastify, _opts) {
     '/:id',
     {
       schema: {
-        params: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-          },
-        },
+        params: z.object({
+          id: z.string().uuid('Invalid invite ID format'),
+        }),
         response: {
-          [StatusCodes.OK]: {
-            type: 'null',
-          },
+          [StatusCodes.OK]: Invite.ResponseSchema,
+          [StatusCodes.NOT_FOUND]: z.object({
+            message: z.string(),
+          }),
         },
       },
       onRequest: fastify.requireUser(Role.ADMIN),

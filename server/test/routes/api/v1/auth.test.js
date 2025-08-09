@@ -107,17 +107,19 @@ describe('/api/v1/auth', () => {
       assert.deepStrictEqual(data, {
         id: '555740af-17e9-48a3-93b8-d5236dfd2c29',
         firstName: 'Admin',
-        middleName: '',
+        middleName: null,
         lastName: 'User',
         email: 'admin.user@test.com',
         emailVerifiedAt: data.emailVerifiedAt,
-        licenseNumber: '',
-        licenseData: {},
+        licenseNumber: null,
+        licenseData: null,
         role: 'ADMIN',
         approvedAt: data.approvedAt,
-        approvedById: '',
-        rejectedAt: '',
-        rejectedById: '',
+        approvedById: null,
+        rejectedAt: null,
+        rejectedById: null,
+        disabledAt: null,
+        disabledById: null,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
       });
@@ -256,7 +258,7 @@ describe('/api/v1/auth', () => {
         );
       });
 
-      it('should return status OK if bad password format', async (t) => {
+      it('should return unprocessable entityif bad password format', async (t) => {
         const app = await build(t);
         await t.loadFixtures();
 
@@ -272,7 +274,7 @@ describe('/api/v1/auth', () => {
         const { message } = JSON.parse(res.body);
         assert.deepStrictEqual(
           message,
-          'Password must be at least 8 characters long. Password must include uppercase, lowercase, number, and special character'
+          [{ path: 'password', message: 'Password must be at least 8 characters long' }, { path: 'password', message: 'Password must include uppercase, lowercase, number, and special character' }]
         );
       });
 

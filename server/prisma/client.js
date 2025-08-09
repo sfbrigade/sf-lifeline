@@ -20,6 +20,34 @@ const prisma = new PrismaClient({
         return { records, total };
       },
     },
+    patient: {
+      async uuidSearch (uuid, page = 1, perPage = 25) {
+        const offset = (parseInt(page) - 1) * parseInt(perPage);
+        const limit = parseInt(perPage);
+        const likeValue = uuid.trim() + '%';
+        // Use the Prisma client directly for raw queries
+        const [records, totalResult] = await Promise.all([
+          prisma.$queryRaw`
+            SELECT
+              p.*,
+              to_jsonb(cb) AS "createdBy",
+              to_jsonb(ub) AS "updatedBy"
+            FROM "Patient" p
+            LEFT JOIN "User" cb ON p."createdById" = cb.id
+            LEFT JOIN "User" ub ON p."updatedById" = ub.id
+            WHERE p."id"::TEXT ILIKE ${likeValue}
+            ORDER BY p."updatedAt" DESC
+            LIMIT ${limit} OFFSET ${offset}
+          `,
+          prisma.$queryRaw`
+            SELECT COUNT(*) as total FROM "Patient"
+            WHERE "id"::TEXT ILIKE ${likeValue}
+          `
+        ]);
+        const total = parseInt(totalResult[0].total);
+        return { records, total };
+      }
+    }
   },
 });
 

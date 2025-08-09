@@ -216,7 +216,59 @@ export default class LifelineAPI {
     return response;
   }
 
+  // --- ALLERGIES ---
+
+  static async getAllergies (query, page) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies?allergy=${query}&page=${page}`
+    );
+    return response;
+  }
+
+  static async getAllergy (id) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${id}`
+    );
+    return response;
+  }
+
+  static async createAllergy (data) {
+    const response = await fetch(`${SERVER_BASE_URL}/allergies/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  }
+
+  static async updateAllergy (id, data) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    return response;
+  }
+
+  static async deleteAllergy (allergyId) {
+    const response = await fetch(
+      `${SERVER_BASE_URL}/allergies/${allergyId}`,
+      {
+        method: 'DELETE',
+      }
+    );
+    return response;
+  }
+
   // --- MISCELLANEOUS ---
+
   static async getHealthcareChoices (route, query) {
     if (route === 'hospital') {
       return this.getHospitals(query);

@@ -84,7 +84,8 @@ function PasswordReset () {
         setFormState(2);
       })
       .catch((error) => {
-        error.json().then(({ message }) => {
+        error.json().then((payload) => {
+          const message = payload.message.filter((item) => item.path === 'password').map((item) => item.message).join(', ');
           setErrors({ password: message });
         });
       })
