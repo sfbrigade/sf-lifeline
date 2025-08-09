@@ -22,11 +22,11 @@ export default function AllergyForm ({ onSuccess, onError }) {
         /[^\s]{1,30}$/.test(value)
           ? null
           : 'Name must be between 1 and 30 characters long.',
-      code: (value) =>
-        /^[\d+]{1,10}$/.test(value)
-          ? null
-          : 'Code must be between 1 and 10 numbers long.',
-
+      code: (value, values) => values.system
+        ? (/^[\s+]{1,10}$/.test(value)
+            ? null
+            : 'Code must be between 1 and 10 characters long.')
+        : null,
     },
   });
 
@@ -51,7 +51,7 @@ export default function AllergyForm ({ onSuccess, onError }) {
     mutationFn: async (values) => {
       let response;
       if (allergyId) {
-        response = await LifelineAPI.updateAllergy(values, allergyId);
+        response = await LifelineAPI.updateAllergy(allergyId, values);
       } else {
         response = await LifelineAPI.createAllergy(values);
       }
