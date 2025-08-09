@@ -25,70 +25,45 @@ export default async function (fastify) {
     async (request, reply) => {
       const { page = '1', perPage = '25', patient = '', physicianId, hospitalId } = request.query;
 
-      const splitQuery = patient.trim().split(' ');
+      const whereClause = {};
 
-      let whereClause = {};
+      const uuidSearch = process.env.VITE_FEATURE_COLLECT_PHI === 'false';
 
-      if (splitQuery.length > 1) {
-        whereClause = {
-          AND: [
-            {
-              OR: [
-                {
-                  firstName: {
-                    contains: splitQuery[0].trim(),
-                    mode: 'insensitive',
-                  },
-                },
-                { firstName: null },
-              ],
-            },
-            {
-              OR: [
-                {
-                  lastName: {
-                    contains: splitQuery[1].trim(),
-                    mode: 'insensitive',
-                  },
-                },
-                { lastName: null },
-              ],
-            },
-          ],
-        };
+      if (uuidSearch) {
+        const { records, total } = await fastify.prisma.patient.uuidSearch(patient, page, perPage);
+        records.forEach((record) => {
+          record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
+        });
+        reply.setPaginationHeaders(page, perPage, total).send(records);
+        return;
       } else {
-        whereClause = {
-          OR: [
+        // Handle name search (if not a UUID)
+        // Split the patient string by spaces to support full name searches
+        const splitQuery = patient.trim().split(' ').filter(part => part.length > 0);
+
+        if (splitQuery.length > 1) {
+          // Full name search: e.g., "John Smith" - look for first name containing "John" AND last name containing "Smith"
+          whereClause.AND = [
+            {
+              firstName: {
+                contains: splitQuery[0],
+                mode: 'insensitive',
+              },
+            },
+            {
+              lastName: {
+                contains: splitQuery[splitQuery.length - 1],
+                mode: 'insensitive',
+              },
+            },
+          ];
+        } else {
+          // Single name search: e.g., "John" or "Smith" - look in both first and last names
+          whereClause.OR = [
             { firstName: { contains: patient.trim(), mode: 'insensitive' } },
             { lastName: { contains: patient.trim(), mode: 'insensitive' } },
-            {
-              AND: [
-                {
-                  OR: [
-                    {
-                      firstName: {
-                        contains: patient.trim(),
-                        mode: 'insensitive',
-                      },
-                    },
-                    { firstName: null },
-                  ],
-                },
-                {
-                  OR: [
-                    {
-                      lastName: {
-                        contains: patient.trim(),
-                        mode: 'insensitive',
-                      },
-                    },
-                    { lastName: null },
-                  ],
-                },
-              ],
-            },
-          ],
-        };
+          ];
+        }
       }
 
       if (physicianId) {
@@ -111,9 +86,11 @@ export default async function (fastify) {
       };
 
       const { records, total } = await fastify.prisma.patient.paginate(options);
+
       records.forEach((record) => {
         record.dateOfBirth = record.dateOfBirth?.toISOString().split('T')[0];
       });
+
       reply.setPaginationHeaders(page, perPage, total).send(records);
     }
   );
