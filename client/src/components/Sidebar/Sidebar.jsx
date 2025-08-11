@@ -1,5 +1,5 @@
 import { NavLink as RouterNavLink } from 'react-router';
-import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
+import { Box, Group, NavLink, Stack, Text, Title, useMantineColorScheme, Switch } from '@mantine/core';
 import {
   // TbHealthRecognition,
   TbHeartHandshake,
@@ -9,6 +9,8 @@ import {
   TbBuildingHospital,
   TbStethoscope,
   TbMoodSick,
+  TbSun,
+  TbMoonStars,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -101,6 +103,7 @@ const SidebarProps = {
  */
 export function Sidebar ({ toggleSidebar }) {
   const { user, handleLogout } = useAuthorization();
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
 
   /**
    * @param {Event} event
@@ -172,6 +175,16 @@ export function Sidebar ({ toggleSidebar }) {
           </Box>
         ))}
       </Box>
+      <Switch
+        checked={colorScheme === 'dark'}
+        onChange={(e) => {
+          setColorScheme(e.currentTarget.checked ? 'dark' : 'light');
+        }}
+        offLabel={<TbSun size={16} color='var(--mantine-color-yellow-4)' />}
+        onLabel={<TbMoonStars size={16} color='var(--mantine-color-blue-6)' />}
+        size='md'
+        color='dark.4'
+      />
       <Group
         className={classes.footer}
         justify='space-between'
