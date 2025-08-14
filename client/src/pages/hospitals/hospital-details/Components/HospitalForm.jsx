@@ -15,7 +15,7 @@ export default function HospitalForm ({ onSuccess, onError }) {
 
   const form = useForm({
     mode: 'uncontrolled',
-    initalValues: {
+    initialValues: {
       name: '',
       address: '',
       phone: '',
@@ -70,7 +70,10 @@ export default function HospitalForm ({ onSuccess, onError }) {
 
   return (
     <>
-      <form onSubmit={form.onSubmit(mutateAsync)}>
+      <form onSubmit={form.onSubmit(async (values) => {
+        await mutateAsync(values);
+      })}
+      >
         <TextInput
           label='Name'
           key={form.key('name')}
