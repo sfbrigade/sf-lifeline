@@ -22,9 +22,6 @@ export default function EditHospital () {
         <Grid.Col span={{ base: 12, md: 6 }}>
           <HospitalForm onSuccess={onSuccess} onError={onError} />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <NpiSearch />
-        </Grid.Col>
       </Grid>
     </Container>
   );

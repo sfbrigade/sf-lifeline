@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextInput, Button, Table, Anchor, Group, Loader, Alert } from '@mantine/core';
 
-export default function NpiSearch () {
-  const [name, setName] = useState('');
+export default function NpiSearch ({ initialName = '', onSelect }) {
+  const [name, setName] = useState(initialName);
   const [state, setState] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searched, setSearched] = useState(false);
+
+  useEffect(() => {
+    setName(initialName);
+  }, [initialName]);
 
   async function handleSubmit (event) {
     event.preventDefault();
@@ -72,7 +76,9 @@ export default function NpiSearch () {
             {results.map(row => (
               <Table.Tr key={row.npi}>
                 <Table.Td>{row.name}</Table.Td>
-                <Table.Td>{row.address}</Table.Td>
+                <Table.Td>
+                  <Anchor onClick={() => onSelect?.(row.address)}>{row.address}</Anchor>
+                </Table.Td>
                 <Table.Td>{row.phone}</Table.Td>
                 <Table.Td>{row.npi}</Table.Td>
                 <Table.Td>
