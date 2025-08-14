@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router';
 import { Container, Grid } from '@mantine/core';
 
 import HospitalForm from './hospital-details/Components/HospitalForm';
-import NpiSearch from './NpiSearch';
 
 export default function EditHospital () {
   const navigate = useNavigate();
