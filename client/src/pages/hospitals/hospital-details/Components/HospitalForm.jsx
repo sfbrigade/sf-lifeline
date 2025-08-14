@@ -93,8 +93,11 @@ export default function HospitalForm ({ onSuccess, onError }) {
       >
         <NpiSearch
           initialName={form.getValues().name}
-          onSelect={address => {
-            form.setFieldValue('address', address);
+          onSelect={selection => {
+            form.setFieldValue('address', selection.address);
+            if (selection.phone) {
+              form.setFieldValue('phone', selection.phone);
+            }
             setNpiOpen(false);
           }}
         />

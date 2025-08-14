@@ -13,6 +13,12 @@ export default function NpiSearch ({ initialName = '', onSelect }) {
     setName(initialName);
   }, [initialName]);
 
+  function formatPhone (phone) {
+    return phone.length === 10
+      ? `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6)}`
+      : phone;
+  }
+
   async function handleSubmit (event) {
     event.preventDefault();
     if (!name || state.length !== 2) return;
@@ -28,7 +34,11 @@ export default function NpiSearch ({ initialName = '', onSelect }) {
         throw new Error('Failed to fetch');
       }
       const data = await response.json();
-      setResults(data);
+      const mapped = data.map(row => ({
+        ...row,
+        phone: row.phone === 'N/A' ? '' : row.phone.replace(/\D/g, '')
+      }));
+      setResults(mapped);
     } catch (err) {
       setError(err.message || 'Error fetching data');
     } finally {
@@ -77,9 +87,13 @@ export default function NpiSearch ({ initialName = '', onSelect }) {
               <Table.Tr key={row.npi}>
                 <Table.Td>{row.name}</Table.Td>
                 <Table.Td>
-                  <Anchor onClick={() => onSelect?.(row.address)}>{row.address}</Anchor>
+                  <Anchor onClick={() => onSelect?.(row)}>{row.address}</Anchor>
                 </Table.Td>
-                <Table.Td>{row.phone}</Table.Td>
+                <Table.Td>
+                  <Anchor onClick={() => onSelect?.(row)}>
+                    {row.phone ? formatPhone(row.phone) : 'N/A'}
+                  </Anchor>
+                </Table.Td>
                 <Table.Td>{row.npi}</Table.Td>
                 <Table.Td>
                   <Anchor
