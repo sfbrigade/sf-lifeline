@@ -1,0 +1,81 @@
+.npi-hospital-search {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.npi-hospital-search form {
+  margin-bottom: 20px;
+}
+
+.npi-hospital-search div {
+  margin-bottom: 10px;
+}
+
+.npi-hospital-search label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.npi-hospital-search input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Important for width to include padding */
+}
+
+.npi-hospital-search button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.npi-hospital-search button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.loading-message {
+  margin-bottom: 10px;
+}
+
+.no-results-message {
+  margin-bottom: 10px;
+}
+
+.npi-hospital-search table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.npi-hospital-search th,
+.npi-hospital-search td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.npi-hospital-search th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.npi-hospital-search a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.npi-hospital-search a:hover {
+  text-decoration: underline;
+}

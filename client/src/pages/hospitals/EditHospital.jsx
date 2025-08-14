@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { Container, Grid } from '@mantine/core';
-
+import NpiSearch from './NpiSearch';
 import HospitalForm from './hospital-details/Components/HospitalForm';
 
 export default function EditHospital () {
@@ -20,6 +20,9 @@ export default function EditHospital () {
       <Grid>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <HospitalForm onSuccess={onSuccess} onError={onError} />
+        </Grid.Col>
+         <Grid.Col span={{ base: 12, md: 6 }}>
+          <NpiSearch />
         </Grid.Col>
       </Grid>
     </Container>
