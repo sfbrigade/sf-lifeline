@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { Container } from '@mantine/core';
+import { Container, Grid } from '@mantine/core';
 
 import HospitalForm from './hospital-details/Components/HospitalForm';
 
@@ -17,7 +17,11 @@ export default function EditHospital () {
   return (
     <Container component='main'>
       <h1>Edit Hospital</h1>
-      <HospitalForm onSuccess={onSuccess} onError={onError} />
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <HospitalForm onSuccess={onSuccess} onError={onError} />
+        </Grid.Col>
+      </Grid>
     </Container>
   );
 }
