@@ -118,7 +118,8 @@ export default function HospitalForm ({ onSuccess, onError }) {
           onSelect={selection => {
             form.setFieldValue('address', selection.address);
             if (selection.phone) {
-              form.setFieldValue('phone', selection.phone);
+              const formatted = selection.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+              form.setFieldValue('phone', formatted);
             }
             setNpiOpen(false);
           }}
