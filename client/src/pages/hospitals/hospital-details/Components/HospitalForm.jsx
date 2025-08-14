@@ -69,22 +69,41 @@ export default function HospitalForm ({ onSuccess, onError }) {
   });
 
   return (
-    <form onSubmit={form.onSubmit(mutateAsync)}>
-      <TextInput
-        label='Name'
-        key={form.key('name')}
-        {...form.getInputProps('name')}
-        mb='sm'
-      />
-      <Group align='flex-end' mb='sm'>
+    <>
+      <form onSubmit={form.onSubmit(mutateAsync)}>
         <TextInput
-          label='Address'
-          style={{ flex: 1 }}
-          key={form.key('address')}
-          {...form.getInputProps('address')}
+          label='Name'
+          key={form.key('name')}
+          {...form.getInputProps('name')}
+          mb='sm'
         />
-        <Button onClick={() => setNpiOpen(true)}>Search NPI</Button>
-      </Group>
+        <Group align='flex-end' mb='sm'>
+          <TextInput
+            label='Address'
+            style={{ flex: 1 }}
+            key={form.key('address')}
+            {...form.getInputProps('address')}
+          />
+          <Button type='button' onClick={() => setNpiOpen(true)}>Search NPI</Button>
+        </Group>
+        <TextInput
+          label='Phone'
+          component={IMaskInput}
+          mask='(000) 000-0000'
+          placeholder='(000) 000-0000'
+          key={form.key('phone')}
+          {...form.getInputProps('phone')}
+          mb='sm'
+        />
+        <TextInput
+          label='Email'
+          type='email'
+          key={form.key('email')}
+          {...form.getInputProps('email')}
+          mb='sm'
+        />
+        <Button type='submit'>Submit</Button>
+      </form>
       <Modal
         opened={npiOpen}
         onClose={() => setNpiOpen(false)}
@@ -102,23 +121,6 @@ export default function HospitalForm ({ onSuccess, onError }) {
           }}
         />
       </Modal>
-      <TextInput
-        label='Phone'
-        component={IMaskInput}
-        mask='(000) 000-0000'
-        placeholder='(000) 000-0000'
-        key={form.key('phone')}
-        {...form.getInputProps('phone')}
-        mb='sm'
-      />
-      <TextInput
-        label='Email'
-        type='email'
-        key={form.key('email')}
-        {...form.getInputProps('email')}
-        mb='sm'
-      />
-      <Button type='submit'>Submit</Button>
-    </form>
+    </>
   );
 }
