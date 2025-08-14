@@ -1,14 +1,17 @@
 import { useForm } from '@mantine/form';
-import { Button, TextInput } from '@mantine/core';
+import { useState } from 'react';
+import { Button, TextInput, Group, Modal } from '@mantine/core';
 import { useParams } from 'react-router';
 import { IMaskInput } from 'react-imask';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '#app/LifelineAPI';
+import NpiSearch from '../../NpiSearch';
 
 export default function HospitalForm ({ onSuccess, onError }) {
   const { hospitalId } = useParams();
+  const [npiOpen, setNpiOpen] = useState(false);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -73,12 +76,29 @@ export default function HospitalForm ({ onSuccess, onError }) {
         {...form.getInputProps('name')}
         mb='sm'
       />
-      <TextInput
-        label='Address'
-        key={form.key('address')}
-        {...form.getInputProps('address')}
-        mb='sm'
-      />
+      <Group align='flex-end' mb='sm'>
+        <TextInput
+          label='Address'
+          style={{ flex: 1 }}
+          key={form.key('address')}
+          {...form.getInputProps('address')}
+        />
+        <Button onClick={() => setNpiOpen(true)}>Search NPI</Button>
+      </Group>
+      <Modal
+        opened={npiOpen}
+        onClose={() => setNpiOpen(false)}
+        title='Search NPI'
+        size='lg'
+      >
+        <NpiSearch
+          initialName={form.getValues().name}
+          onSelect={address => {
+            form.setFieldValue('address', address);
+            setNpiOpen(false);
+          }}
+        />
+      </Modal>
       <TextInput
         label='Phone'
         component={IMaskInput}
