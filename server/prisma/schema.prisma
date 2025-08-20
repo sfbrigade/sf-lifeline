@@ -148,6 +148,7 @@ model Medication {
   altNames     String?
   system       CodingSystem?
   code         String?
+  isBloodThinner  Boolean @default(false)
   patients     PatientMedication[]
   updatedAt    DateTime            @updatedAt
   updatedById  String?             @db.Uuid
