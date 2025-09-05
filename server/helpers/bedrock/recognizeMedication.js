@@ -32,7 +32,7 @@ export async function recognizeMedication(image) {
           },
           {
             type: 'text',
-            text: 'Identify the medication name in the image. Your response must be only the medication name, formatted as a single word with no spaces. For example, "The NorthBridge Group" must be returned as "TheNorthBridgeGroup". Do not include any other words, explanations, or punctuation.',
+            text: 'Identify the medication name in the image. Your response must be only the medication name. Do not include any other words, explanations, or punctuation.',
           },
         ],
       },
