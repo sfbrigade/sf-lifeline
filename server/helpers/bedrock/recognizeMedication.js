@@ -11,27 +11,27 @@ const bedrock = new BedrockRuntimeClient({
   },
 });
 
-export async function recognizeMedication(image) {
+export async function recognizeMedication (image) {
   const imageBuffer = await image.toBuffer();
   const imageBase64 = imageBuffer.toString('base64');
-
+  let format = image.mimetype;
+  if (format.startsWith('image/')) {
+    format = format.slice(6);
+  }
   const payload = {
-    anthropic_version: 'bedrock-2023-05-31',
-    max_tokens: 1024,
     messages: [
       {
         role: 'user',
         content: [
           {
-            type: 'image',
-            source: {
-              type: 'base64',
-              media_type: image.mimetype,
-              data: imageBase64,
-            },
+            image: {
+              format,
+              source: {
+                bytes: imageBase64,
+              },
+            }
           },
           {
-            type: 'text',
             text: 'Identify the medication name in the image. Your response must be only the medication name. Do not include any other words, explanations, or punctuation.',
           },
         ],
@@ -41,7 +41,7 @@ export async function recognizeMedication(image) {
 
   const command = new InvokeModelCommand({
     body: JSON.stringify(payload),
-    modelId: 'anthropic.claude-3-sonnet-20240229-v1:0',
+    modelId: 'us.amazon.nova-lite-v1:0',
     accept: 'application/json',
     contentType: 'application/json',
   });
@@ -49,7 +49,7 @@ export async function recognizeMedication(image) {
   try {
     const response = await bedrock.send(command);
     const result = JSON.parse(response.body.transformToString());
-    const medicationName = result.content[0].text;
+    const medicationName = result.output?.message?.content?.[0]?.text;
     return { name: medicationName };
   } catch (error) {
     console.error('Error recognizing medication:', error);
