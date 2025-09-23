@@ -1,0 +1,38 @@
+<%- include('../_header.html.ejs') %>
+
+<p>The following patients have been updated today:</p>
+
+<% if (patients && patients.length > 0) { %>
+  <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; margin: 16px 0;">
+    <% patients.forEach(function(patient, index) { %>
+      <div style="padding: 12px; border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 12px;">
+        <h3 style="margin: 0 0 8px 0; color: #495057; font-size: 18px;">
+          <% if (process.env.VITE_FEATURE_COLLECT_PHI === 'true') { %>
+            <% if (patient.firstName || patient.lastName) { %>
+              <%= [patient.firstName, patient.lastName].filter(Boolean).join(' ') %>
+            <% } else { %>
+              Patient ID: <%= patient.id %>
+            <% } %>
+          <% } else { %>
+            Patient ID: <%= patient.id %>
+          <% } %>
+        </h3>
+        
+        <div style="color: #6c757d; font-size: 14px; margin-bottom: 8px;">
+          <strong>Updated:</strong> <%= new Date(patient.updatedAt).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }) %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <p style="color: #6c757d; font-style: italic;">No patients were updated today.</p>
+<% } %>
+
+<p>Please log in to the SF Life Line system to view complete patient information and any additional details.</p>
+
+<%- include('../_button.html.ejs', { label: 'View Patients', url: process.env.BASE_URL + '/patients' }) %>
+
+<p>Sincerely,<br />
+The SF Life Line Team</p>
+
+<%- include('../_footer.html.ejs') %>
