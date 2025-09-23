@@ -28,6 +28,24 @@ export default class LifelineAPI {
     });
   }
 
+  // --- NOTIFICATIONS ---
+  static async getNotificationPreferences () {
+    return fetch(`${SERVER_BASE_URL}/users/notification`, {
+      credentials: 'include',
+    });
+  }
+
+  static async updateNotificationPreferences (data) {
+    return fetch(`${SERVER_BASE_URL}/users/notification`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+  }
+
   // --- PHYSICIANS ---
   static async getPhysicians (query, hospitalId, page) {
     if (typeof hospitalId === 'undefined' && typeof page === 'undefined') {
