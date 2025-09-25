@@ -9,9 +9,6 @@ import {
   ScrollArea,
   ActionIcon,
   Tooltip,
-  Modal,
-  Button,
-  Group,
   Text
 } from '@mantine/core';
 import { IconCamera } from '@tabler/icons-react';
@@ -23,6 +20,7 @@ import RegisterAllergy from './RegisterAllergy';
 import RegisterMedication from './RegisterMedication';
 import RegisterCondition from './RegisterCondition';
 import LifelineAPI from '#app/LifelineAPI';
+import PatientsLifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',
@@ -62,21 +60,54 @@ export default function MedicalDataSearch ({
     { open: openRegisterCondition, close: closeRegisterCondition },
   ] = useDisclosure(false);
   const abortController = useRef();
-  const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
-  const [opened, { open, close }] = useDisclosure(false);
+  // Removed modal; trigger camera directly from icon
 
   const handleRecognizeMedication = async (event) => {
-    close();
-    const file = event.target.files[0];
-    if (!file) return;
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
 
     setLoading(true);
     try {
-      const { name } = await LifelineAPI.recognizeMedication(file);
-      setSearch(name);
-      fetchOptions(name);
-      combobox.openDropdown();
+      // Process sequentially
+      for (const file of files) {
+        const { name } = await LifelineAPI.recognizeMedication(file);
+        if (!name) continue;
+
+        // Try to find an existing medication by name
+        const results = await LifelineAPI.getMedicalData(
+          'medications',
+          API_PATHS.medications,
+          name
+        );
+
+        let picked = null;
+        if (Array.isArray(results) && results.length > 0) {
+          picked =
+            results.find(
+              (r) => r.name?.toLowerCase().trim() === name.toLowerCase().trim()
+            ) || results[0];
+        }
+
+        if (picked) {
+          if (!value?.some((v) => v.id === picked.id)) {
+            handleSelectValue(picked.id, { children: picked.name });
+          }
+        } else {
+          // Auto-register if not found
+          try {
+            const res = await PatientsLifelineAPI.registerMedication({ name });
+            if (res.ok) {
+              const med = await res.json();
+              if (!value?.some((v) => v.id === med.id)) {
+                handleSelectValue(med.id, { children: med.name });
+              }
+            }
+          } catch (e) {
+            console.error('Failed to auto-register medication', e);
+          }
+        }
+      }
     } catch (error) {
       console.error(error);
       notifications.show({
@@ -86,6 +117,8 @@ export default function MedicalDataSearch ({
       });
     } finally {
       setLoading(false);
+      // Reset input so the same capture can retrigger
+      event.target.value = null;
     }
   };
 
@@ -243,7 +276,16 @@ export default function MedicalDataSearch ({
         rightSection={
           category === 'medications' && (
             <Tooltip label='Recognize Medication'>
-              <ActionIcon onClick={open} loading={loading}>
+              <ActionIcon
+                component='button'
+                type='button'
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  cameraInputRef.current?.click();
+                }}
+                loading={loading}
+              >
                 <IconCamera />
               </ActionIcon>
             </Tooltip>
@@ -259,28 +301,13 @@ export default function MedicalDataSearch ({
       <input
         type='file'
         accept='image/*'
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleRecognizeMedication}
-      />
-      <input
-        type='file'
-        accept='image/*'
-        capture='user'
+        capture='environment'
+        name='image'
         ref={cameraInputRef}
         style={{ display: 'none' }}
+        multiple
         onChange={handleRecognizeMedication}
       />
-      <Modal opened={opened} onClose={close} title='Recognize Medication'>
-        <Group grow>
-          <Button onClick={() => fileInputRef.current.click()}>
-            Upload from Library
-          </Button>
-          <Button onClick={() => cameraInputRef.current.click()}>
-            Take Picture
-          </Button>
-        </Group>
-      </Modal>
       <RegisterAllergy
         setAllergy={handleSelectValue}
         registerAllergyOpened={registerAllergyOpened}

@@ -49,7 +49,7 @@ export async function recognizeMedication (image) {
   try {
     const response = await bedrock.send(command);
     const result = JSON.parse(response.body.transformToString());
-    const medicationName = result?.content?.[0]?.text;
+    const medicationName = result?.content?.[0]?.text?.trim();
     return { name: medicationName };
   } catch (error) {
     console.error('Error recognizing medication:', error);
