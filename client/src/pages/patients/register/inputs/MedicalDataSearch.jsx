@@ -20,7 +20,6 @@ import RegisterAllergy from './RegisterAllergy';
 import RegisterMedication from './RegisterMedication';
 import RegisterCondition from './RegisterCondition';
 import LifelineAPI from '#app/LifelineAPI';
-import PatientsLifelineAPI from '../../LifelineAPI';
 
 const API_PATHS = {
   allergies: 'allergy',
@@ -69,44 +68,13 @@ export default function MedicalDataSearch ({
 
     setLoading(true);
     try {
-      // Process sequentially
+      // Process sequentially: set search and open dropdown for each
       for (const file of files) {
         const { name } = await LifelineAPI.recognizeMedication(file);
         if (!name) continue;
-
-        // Try to find an existing medication by name
-        const results = await LifelineAPI.getMedicalData(
-          'medications',
-          API_PATHS.medications,
-          name
-        );
-
-        let picked = null;
-        if (Array.isArray(results) && results.length > 0) {
-          picked =
-            results.find(
-              (r) => r.name?.toLowerCase().trim() === name.toLowerCase().trim()
-            ) || results[0];
-        }
-
-        if (picked) {
-          if (!value?.some((v) => v.id === picked.id)) {
-            handleSelectValue(picked.id, { children: picked.name });
-          }
-        } else {
-          // Auto-register if not found
-          try {
-            const res = await PatientsLifelineAPI.registerMedication({ name });
-            if (res.ok) {
-              const med = await res.json();
-              if (!value?.some((v) => v.id === med.id)) {
-                handleSelectValue(med.id, { children: med.name });
-              }
-            }
-          } catch (e) {
-            console.error('Failed to auto-register medication', e);
-          }
-        }
+        setSearch(name);
+        fetchOptions(name);
+        combobox.openDropdown();
       }
     } catch (error) {
       console.error(error);
