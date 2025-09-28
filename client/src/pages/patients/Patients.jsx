@@ -37,28 +37,33 @@ export default function Patients () {
   async function handleCreatePatient () {
     try {
       setCreating(true);
-      // Ask server for a guaranteed-unique patient URL, extract the UUID
-      const genRes = await fetch(`/api/v1/patients/generate?count=1`);
-      if (!genRes.ok) throw new Error('Failed to generate patient ID');
-      const [url] = await genRes.json();
-      const id = url.split('/').pop();
+      // Keep trying until we successfully create a patient
+      // Collisions are retried transparently.
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        // Ask server for a guaranteed-unique patient URL, extract the UUID
+        const genRes = await fetch(`/api/v1/patients/generate?count=1`);
+        if (!genRes.ok) throw new Error('Failed to generate patient ID');
+        const [url] = await genRes.json();
+        const id = url.split('/').pop();
 
-      // Create the new patient with the generated ID
-      const res = await LifelineAPI.registerPatient({}, id);
-      if (res.status === StatusCodes.CREATED) {
-        navigate(`/patients/${id}/edit`);
-        return;
+        // Create the new patient with the generated ID
+        const res = await LifelineAPI.registerPatient({}, id);
+        if (res.status === StatusCodes.CREATED) {
+          navigate(`/patients/${id}/edit`);
+          return;
+        }
+        // If by chance the ID already exists, try again with a new one
+        if (res.status === StatusCodes.CONFLICT) {
+          continue;
+        }
+        if (res.status === StatusCodes.BAD_REQUEST) {
+          // Try again in case of transient issues around ID validation
+          continue;
+        }
+        // Any other status is unexpected
+        throw new Error('Failed to create patient.');
       }
-
-      if (res.status === StatusCodes.CONFLICT) {
-        throw new Error('Generated ID already exists. Please try again.');
-      }
-
-      if (res.status === StatusCodes.BAD_REQUEST) {
-        throw new Error('Invalid patient ID. Please try again.');
-      }
-
-      throw new Error('Failed to create patient.');
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
