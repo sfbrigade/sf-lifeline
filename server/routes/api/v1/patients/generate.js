@@ -45,8 +45,7 @@ export default async function (fastify, _opts) {
         if (records.length === 0) {
           break;
         }
-        // Remove any IDs that already exist, and continue loop to top-up
-        results = results.filter((id) => !records.find((r) => r.id === id));
+        results.filter((id) => !records.find((r) => r.id === id));
       }
       // generate fully qualified URLs
       results = results.map((id) => `${process.env.BASE_URL}/patients/${id}`);

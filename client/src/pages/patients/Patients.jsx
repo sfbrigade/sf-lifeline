@@ -58,11 +58,11 @@ export default function Patients () {
           continue;
         }
         if (res.status === StatusCodes.BAD_REQUEST) {
-          // Try again in case of transient issues around ID validation
-          continue;
+          // Treat BAD_REQUEST as a hard error
+          throw new Error('Invalid patient ID. Please try again.');
         }
-        // Any other status is unexpected
-        throw new Error('Failed to create patient.');
+        // For any other status, retry creating with a new ID
+        continue;
       }
     } catch (err) {
       // eslint-disable-next-line no-console
