@@ -61,7 +61,7 @@ const UserUpdateSchema = UserAttributesSchema.extend({
   password: UserPasswordSchema.or(z.literal('')),
   role: z.string(),
   deactivatedAt: z.coerce.date().nullable(),
-  patientNotification: z.boolean(),
+  patientNotification: z.boolean()
 }).partial();
 
 class User extends Base {
