@@ -1,7 +1,17 @@
 import PropTypes from 'prop-types';
 
 import { useState, useRef, useEffect } from 'react';
-import { Box, Combobox, useCombobox, Pill, ScrollArea, Text } from '@mantine/core';
+import {
+  Box,
+  Combobox,
+  useCombobox,
+  Pill,
+  ScrollArea,
+  ActionIcon,
+  Tooltip,
+  Text
+} from '@mantine/core';
+import { IconCamera } from '@tabler/icons-react';
 import { useDebouncedCallback, useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
@@ -49,12 +59,48 @@ export default function MedicalDataSearch ({
     { open: openRegisterCondition, close: closeRegisterCondition },
   ] = useDisclosure(false);
   const abortController = useRef();
+  const cameraInputRef = useRef(null);
+  // Removed modal; trigger camera directly from icon
+
+  const handleRecognizeMedication = async (event) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    setLoading(true);
+    try {
+      // Process sequentially: set search and open dropdown for each
+      for (const file of files) {
+        const { name } = await LifelineAPI.recognizeMedication(file);
+        if (!name) continue;
+        setSearch(name);
+        fetchOptions(name);
+        combobox.openDropdown();
+      }
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: 'Error',
+        message: 'Issue with recognizing medication from image',
+        color: 'red',
+      });
+    } finally {
+      setLoading(false);
+      // Reset input so the same capture can retrigger
+      event.target.value = null;
+    }
+  };
 
   useEffect(() => {
     if (initialMedicalData !== undefined) {
       setValue(initialMedicalData);
     }
   }, [initialMedicalData]);
+
+  useEffect(() => {
+    if (search) {
+      fetchOptions(search);
+    }
+  }, [search]);
 
   const fetchOptions = useDebouncedCallback(async (query) => {
     abortController.current?.abort();
@@ -195,6 +241,24 @@ export default function MedicalDataSearch ({
         combobox={combobox}
         label={category.charAt(0).toUpperCase() + category.slice(1)}
         searchQuery={search}
+        rightSection={
+          category === 'medications' && (
+            <Tooltip label='Recognize Medication'>
+              <ActionIcon
+                component='button'
+                type='button'
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  cameraInputRef.current?.click();
+                }}
+                loading={loading}
+              >
+                <IconCamera />
+              </ActionIcon>
+            </Tooltip>
+          )
+        }
         handleSelectValue={handleSelectValue}
         fetchOptions={fetchOptions}
         comboboxOptions={renderComboxContent}
@@ -202,6 +266,16 @@ export default function MedicalDataSearch ({
       >
         <Pill.Group style={{ marginTop: '6px' }}>{values}</Pill.Group>
       </SearchDatabaseInputField>
+      <input
+        type='file'
+        accept='image/*'
+        capture='environment'
+        name='image'
+        ref={cameraInputRef}
+        style={{ display: 'none' }}
+        multiple
+        onChange={handleRecognizeMedication}
+      />
       <RegisterAllergy
         setAllergy={handleSelectValue}
         registerAllergyOpened={registerAllergyOpened}

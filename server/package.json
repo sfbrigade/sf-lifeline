@@ -31,8 +31,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.840.0",
     "@fastify/autoload": "^6.0.2",
     "@fastify/cookie": "^11.0.1",
+    "@fastify/multipart": "^9.0.3",
     "@fastify/secure-session": "^8.1.0",
     "@fastify/sensible": "^6.0.1",
     "@fastify/static": "^8.0.3",
