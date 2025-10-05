@@ -9,14 +9,22 @@ import { EMS_VERIFICATION_WEBSITE } from '#helpers/license/verifyLicense.js';
 describe('/api/v1/licenses', () => {
   describe('GET /', () => {
     beforeEach(async () => {
-      // check if the website is up, if so, test against live website, otherwise mock
-      let isLive;
+      // In CI, always mock to avoid flakiness hitting the live site.
+      // Locally, opt-in to live testing by setting USE_LIVE_LICENSE_TEST=1.
+      const forceMock = process.env.CI || process.env.USE_LIVE_LICENSE_TEST !== '1';
+      if (forceMock) {
+        console.log(`Mocking ${EMS_VERIFICATION_WEBSITE}`);
+        nock.cleanAll();
+        nockLicenseVerificationWebsite();
+        return;
+      }
+
+      // Otherwise, check if the website appears up and use live; fallback to mock.
+      let isLive = false;
       try {
         const res = await fetch(EMS_VERIFICATION_WEBSITE);
         isLive = res.status === 200;
-      } catch {
-        isLive = false;
-      }
+      } catch {}
       if (isLive) {
         console.log(`TESTING AGAINST LIVE ${EMS_VERIFICATION_WEBSITE}`);
       } else {
