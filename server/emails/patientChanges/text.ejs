@@ -1,0 +1,29 @@
+The following patients have been updated today:
+
+<% if (patients && patients.length > 0) { %>
+<% patients.forEach(function(patient) { %>
+----------------------------------------
+<% if (process.env.VITE_FEATURE_COLLECT_PHI === 'true') { %>
+<% if (patient.firstName || patient.lastName) { %>
+Name: <%= [patient.firstName, patient.lastName].filter(Boolean).join(' ') %>
+<% } else { %>
+Patient ID: <%= patient.id %>
+<% } %>
+<% } else { %>
+Patient ID: <%= patient.id %>
+<% } %>
+
+Updated: <%= new Date(patient.updatedAt).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }) %>
+
+<% }); %>
+----------------------------------------
+<% } else { %>
+No patients were updated today.
+<% } %>
+
+Please log in to the SF Life Line system to view complete patient information and any additional details.
+
+<%= process.env.BASE_URL %>/patients
+
+Sincerely,
+The SF Life Line Team

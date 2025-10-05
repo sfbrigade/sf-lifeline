@@ -31,6 +31,7 @@ describe('/api/v1/users', () => {
         licenseNumber: null,
         licenseData: null,
         role: 'ADMIN',
+        patientNotification: true,
         approvedAt: data.approvedAt,
         approvedById: null,
         rejectedAt: null,
@@ -735,6 +736,110 @@ describe('/api/v1/users', () => {
 
       assert.deepStrictEqual(reply.statusCode, StatusCodes.NOT_FOUND);
       assert.deepStrictEqual(reply.statusMessage, 'Not Found');
+    });
+  });
+
+  describe('PATCH /:id (notification update)', () => {
+    it('should return an unauthorized error if not logged in', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/2e96234a-671d-45a2-9d20-f647d891e7ee')
+        .payload({
+          firstName: 'Volunteer',
+          lastName: 'User',
+          email: 'volunteer.user@test.com',
+          role: 'VOLUNTEER',
+          patientNotification: true,
+        });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.UNAUTHORIZED);
+    });
+
+    it('should return forbidden error if non-admin user tries to update another user notification', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      // First responder trying to update volunteer user's notification
+      const headers = await t.authenticate('first.responder@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/2e96234a-671d-45a2-9d20-f647d891e7ee')
+        .headers(headers)
+        .payload({
+          firstName: 'Volunteer',
+          lastName: 'User',
+          email: 'volunteer.user@test.com',
+          role: 'VOLUNTEER',
+          patientNotification: true,
+        });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.FORBIDDEN);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.error, 'Forbidden');
+      assert.deepStrictEqual(data.message, 'You can only update your own account');
+    });
+
+    it('should allow user to update their own notification', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      // Volunteer user updating their own notification
+      const headers = await t.authenticate('volunteer.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/2e96234a-671d-45a2-9d20-f647d891e7ee')
+        .headers(headers)
+        .payload({
+          firstName: 'Volunteer',
+          lastName: 'User',
+          email: 'volunteer.user@test.com',
+          role: 'VOLUNTEER',
+          patientNotification: true,
+        });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.patientNotification, true);
+
+      // Verify the change was persisted in the database
+      const user = await t.prisma.user.findUnique({
+        where: { id: '2e96234a-671d-45a2-9d20-f647d891e7ee' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.patientNotification, true);
+    });
+
+    it('should allow admin to update any user notification', async (t) => {
+      const app = await build(t);
+      await t.loadFixtures();
+
+      // Admin updating volunteer user's notification
+      const headers = await t.authenticate('admin.user@test.com', 'test');
+      const reply = await app
+        .inject()
+        .patch('/api/v1/users/2e96234a-671d-45a2-9d20-f647d891e7ee')
+        .headers(headers)
+        .payload({
+          firstName: 'Volunteer',
+          lastName: 'User',
+          email: 'volunteer.user@test.com',
+          role: 'VOLUNTEER',
+          patientNotification: false,
+        });
+
+      assert.deepStrictEqual(reply.statusCode, StatusCodes.OK);
+      const data = JSON.parse(reply.body);
+      assert.deepStrictEqual(data.patientNotification, false);
+
+      // Verify the change was persisted in the database
+      const user = await t.prisma.user.findUnique({
+        where: { id: '2e96234a-671d-45a2-9d20-f647d891e7ee' },
+      });
+      assert.ok(user);
+      assert.deepStrictEqual(user.patientNotification, false);
     });
   });
 });

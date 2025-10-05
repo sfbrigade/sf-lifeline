@@ -242,22 +242,24 @@ export default function MedicalDataSearch ({
         label={category.charAt(0).toUpperCase() + category.slice(1)}
         searchQuery={search}
         rightSection={
-          category === 'medications' && (
-            <Tooltip label='Recognize Medication'>
-              <ActionIcon
-                component='button'
-                type='button'
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  cameraInputRef.current?.click();
-                }}
-                loading={loading}
-              >
-                <IconCamera />
-              </ActionIcon>
-            </Tooltip>
-          )
+          category === 'medications'
+            ? (
+              <Tooltip label='Recognize Medication'>
+                <ActionIcon
+                  component='button'
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cameraInputRef.current?.click();
+                  }}
+                  loading={loading}
+                >
+                  <IconCamera />
+                </ActionIcon>
+              </Tooltip>
+              )
+            : undefined
         }
         handleSelectValue={handleSelectValue}
         fetchOptions={fetchOptions}
