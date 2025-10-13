@@ -1,11 +1,8 @@
 import { Link } from 'react-router';
-<<<<<<< Updated upstream
-=======
 import { useAppContext } from '#app/AppContext';
 import { useState } from 'react';
 import LifelineAPI from '#app/LifelineAPI';
 import PasskeyRegister from '#components/PassKey/PasskeyRegister';
->>>>>>> Stashed changes
 import {
   Box,
   Button,
@@ -14,13 +11,25 @@ import {
   Group,
   Paper,
   Title,
+  Switch,
+  Text,
 } from '@mantine/core';
-import { BsQrCode } from 'react-icons/bs';
+import { BsQrCode, BsBell } from 'react-icons/bs';
 
 /**
  * Authenticated Dashboard.
  */
 function Dashboard () {
+  const { user } = useAppContext();
+
+  const [notificationsEnabled, setNotificationsEnabled] = useState(user?.patientNotification);
+
+  const handleNotificationsChange = async () => {
+    user.patientNotification = !notificationsEnabled;
+    setNotificationsEnabled(!notificationsEnabled);
+    await LifelineAPI.updateUser(user.id, user);
+  };
+
   return (
     <Container fluid mt='xl'>
       <Title mb='xl'>Dashboard</Title>
@@ -44,8 +53,6 @@ function Dashboard () {
             </Group>
           </Paper>
         </Grid.Col>
-<<<<<<< Updated upstream
-=======
         <Grid.Col span={{ sm: 6, lg: 4 }}>
           <Paper shadow='xs' p='md'>
             <Group gap='md' align='top'>
@@ -78,7 +85,6 @@ function Dashboard () {
             </Group>
           </Paper>
         </Grid.Col>
->>>>>>> Stashed changes
       </Grid>
     </Container>
   );
