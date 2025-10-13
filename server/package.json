@@ -42,6 +42,7 @@
     "@getbigger-io/prisma-fixtures-cli": "^2.0.1",
     "@prisma/client": "^6.3.0",
     "@scalar/fastify-api-reference": "^1.25.76",
+    "@simplewebauthn/server": "^13.2.2",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",

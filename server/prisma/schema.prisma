@@ -31,6 +31,11 @@ model User {
   disabledById           String?        @db.Uuid
   updatedAt              DateTime       @updatedAt
   createdAt              DateTime       @default(now())
+<<<<<<< Updated upstream
+=======
+  patientNotification    Boolean        @default(false)
+  passkeys               Passkey[]      @relation("PasskeyUser")
+>>>>>>> Stashed changes
   
   // Relations
   acceptedInvites        Invite[]       @relation("InviteAcceptedBy")
@@ -56,6 +61,25 @@ model User {
   updatedPhysicians      Physician[]    @relation("PhysicianUpdatedBy")
   createdContacts        Contact[]      @relation("ContactCreatedBy")
   updatedContacts        Contact[]      @relation("ContactUpdatedBy")
+}
+
+model Passkey {
+  id               String     @id @db.Text
+  credPublicKey    Bytes      @db.ByteA
+  internalUserId   String     @db.Uuid
+  webauthnUserId   String     @unique @db.Text
+  counter          Int
+  backupEligible   Boolean
+  backupStatus     Boolean
+  transports       String?    @db.Text
+  createdAt        DateTime   @default(now())
+  lastUsed         DateTime?
+  user             User       @relation("PasskeyUser", fields: [internalUserId], references: [id])
+
+  @@unique([internalUserId, webauthnUserId])
+  @@index([internalUserId, id])
+  @@index([webauthnUserId, id])
+  @@index([id])
 }
 
 model Invite {
