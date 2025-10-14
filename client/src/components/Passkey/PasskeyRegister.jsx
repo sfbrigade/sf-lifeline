@@ -11,7 +11,7 @@ export default function PasskeyRegister(){
         console.log(option);
         let processPasskey = null;
         try {
-            processPasskey = await startRegistration({optionsJSON: option });
+            processPasskey = await startRegistration(option);
         } catch (error) {
             if (error.name === 'InvalidStateError') {
                 notifications.show({

@@ -57,19 +57,21 @@ export default async function (fastify, _opts) {
             return reply.notFound();
         }
         
+        
         const rpName = "SF Lifeline";
-        const rpID = "epeirogenic-audria-advantageously.ngrok-free.dev";
-
+        const rpID = "localhost";
+        
         const options = await generateRegistrationOptions({
             rpName,
             rpID,
             userName: user.email, // Use email as username since User model doesn't have username
             userDisplayName: `${user.firstName} ${user.lastName}`,
             attestationType: 'none',
-            excludeCredentials: user.passkeys.map(passkey => ({
-              id: passkey.id,
-              transports: passkey.transports ? passkey.transports.split(',') : undefined,
-            })),
+            excludeCredentials: []
+              .map(passkey => ({
+                id: passkey.id,
+                transports: passkey.transports ? passkey.transports.split(',') : undefined,
+              })),
             authenticatorSelection: {
               residentKey: 'preferred',
               userVerification: 'preferred',
@@ -125,7 +127,7 @@ export default async function (fastify, _opts) {
           },
           expectedChallenge: options.challenge,
           expectedOrigin: process.env.BASE_URL || 'http://localhost:3000',
-          expectedRPID: 'epeirogenic-audria-advantageously.ngrok-free.dev',
+          expectedRPID: 'localhost',
         });
 
         if (verification.verified) {

@@ -31,11 +31,8 @@ model User {
   disabledById           String?        @db.Uuid
   updatedAt              DateTime       @updatedAt
   createdAt              DateTime       @default(now())
-<<<<<<< Updated upstream
-=======
   patientNotification    Boolean        @default(false)
   passkeys               Passkey[]      @relation("PasskeyUser")
->>>>>>> Stashed changes
   
   // Relations
   acceptedInvites        Invite[]       @relation("InviteAcceptedBy")

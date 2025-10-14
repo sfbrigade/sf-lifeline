@@ -23,6 +23,7 @@
     "lint": "eslint --fix",
     "prisma:generate": "prisma generate",
     "start": "fastify start -l info app.js",
+    "notification": "node bin/notification/emailNotification.js",
     "test": "node --test-concurrency 1 --test $(find test -name '*.test.js')",
     "test:db:push": "DATABASE_URL=${DATABASE_URL}_test prisma db push",
     "test:db:reset": "DATABASE_URL=${DATABASE_URL}_test prisma migrate reset --force"

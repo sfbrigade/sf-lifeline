@@ -17,11 +17,11 @@ export default async function (fastify, _opts) {
           [StatusCodes.OK]: User.ResponseSchema,
         },
       },
-      onRequest: fastify.requireUser([User.Role.ADMIN]),
+      onRequest: fastify.requireUser(),
     },
     async (request, reply) => {
       const { id } = request.params;
-      const { firstName, middleName, lastName, email, password, role, licenseNumber } = request.body;
+      const { firstName, middleName, lastName, email, password, role, licenseNumber, patientNotification } = request.body;
 
       const errorList = [];
 
@@ -32,6 +32,18 @@ export default async function (fastify, _opts) {
         error.errors.forEach((e) =>
           errorList.push({ path: e.path[0], message: e.message })
         );
+      }
+
+      // Check if user is updating their own account or is an admin
+      const currentUser = request.user;
+      const isOwnAccount = currentUser.id === id;
+      const isAdmin = currentUser.role === User.Role.ADMIN;
+
+      if (!isAdmin && !isOwnAccount) {
+        return reply.code(StatusCodes.FORBIDDEN).send({
+          error: 'Forbidden',
+          message: 'You can only update your own account',
+        });
       }
 
       // Check email is not duplicated
@@ -93,7 +105,9 @@ export default async function (fastify, _opts) {
         role,
         licenseNumber: licenseNumber || null,
         licenseData,
+        patientNotification,
       };
+
       const user = new User(data);
 
       if (password) {
