@@ -143,14 +143,26 @@ export function Sidebar ({ toggleSidebar }) {
       h='100%'
     >
       <Box>
-        <Group align='center' gap='sm' mb='lg'>
-          <img
-            src='/assets/logo.svg'
-            alt='SF Lifeline Logo'
-            width='32rem'
-            height='32rem'
+        <Group align='center' justify='space-between' mb='lg'>
+          <Group align='center' gap='sm'>
+            <img
+              src='/assets/logo.svg'
+              alt='SF Lifeline Logo'
+              width='32rem'
+              height='32rem'
+            />
+            <Title order={4}>SF Life Line</Title>
+          </Group>
+          <Switch
+            checked={colorScheme === 'dark'}
+            onChange={(e) => {
+              setColorScheme(e.currentTarget.checked ? 'dark' : 'light');
+            }}
+            offLabel={<TbMoonStars size={16} color='var(--mantine-color-blue-6)' />}
+            onLabel={<TbSun size={16} color='var(--mantine-color-yellow-4)' />}
+            size='md'
+            color='dark.4'
           />
-          <Title order={4}>SF Life Line</Title>
         </Group>
         {filteredSections.map((section) => (
           <Box key={section.label} mb='lg'>
@@ -175,16 +187,6 @@ export function Sidebar ({ toggleSidebar }) {
           </Box>
         ))}
       </Box>
-      <Switch
-        checked={colorScheme === 'dark'}
-        onChange={(e) => {
-          setColorScheme(e.currentTarget.checked ? 'dark' : 'light');
-        }}
-        offLabel={<TbSun size={16} color='var(--mantine-color-yellow-4)' />}
-        onLabel={<TbMoonStars size={16} color='var(--mantine-color-blue-6)' />}
-        size='md'
-        color='dark.4'
-      />
       <Group
         className={classes.footer}
         justify='space-between'
