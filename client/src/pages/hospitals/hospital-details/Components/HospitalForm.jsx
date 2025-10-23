@@ -1,18 +1,21 @@
 import { useForm } from '@mantine/form';
-import { Button, TextInput } from '@mantine/core';
+import { useState } from 'react';
+import { Button, TextInput, Group, Modal } from '@mantine/core';
 import { useParams } from 'react-router';
 import { IMaskInput } from 'react-imask';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { StatusCodes } from 'http-status-codes';
 
 import LifelineAPI from '#app/LifelineAPI';
+import NpiSearch from '../../NpiSearch';
 
 export default function HospitalForm ({ onSuccess, onError }) {
   const { hospitalId } = useParams();
+  const [npiOpen, setNpiOpen] = useState(false);
 
   const form = useForm({
     mode: 'uncontrolled',
-    initalValues: {
+    initialValues: {
       name: '',
       address: '',
       phone: '',
@@ -66,36 +69,62 @@ export default function HospitalForm ({ onSuccess, onError }) {
   });
 
   return (
-    <form onSubmit={form.onSubmit(mutateAsync)}>
-      <TextInput
-        label='Name'
-        key={form.key('name')}
-        {...form.getInputProps('name')}
-        mb='sm'
-      />
-      <TextInput
-        label='Address'
-        key={form.key('address')}
-        {...form.getInputProps('address')}
-        mb='sm'
-      />
-      <TextInput
-        label='Phone'
-        component={IMaskInput}
-        mask='(000) 000-0000'
-        placeholder='(000) 000-0000'
-        key={form.key('phone')}
-        {...form.getInputProps('phone')}
-        mb='sm'
-      />
-      <TextInput
-        label='Email'
-        type='email'
-        key={form.key('email')}
-        {...form.getInputProps('email')}
-        mb='sm'
-      />
-      <Button type='submit'>Submit</Button>
-    </form>
+    <>
+      <form onSubmit={form.onSubmit(async (values) => {
+        await mutateAsync(values);
+      })}
+      >
+        <TextInput
+          label='Name'
+          key={form.key('name')}
+          {...form.getInputProps('name')}
+          mb='sm'
+        />
+        <Group align='flex-end' mb='sm'>
+          <TextInput
+            label='Address'
+            style={{ flex: 1 }}
+            key={form.key('address')}
+            {...form.getInputProps('address')}
+          />
+          <Button type='button' onClick={() => setNpiOpen(true)}>Search NPI</Button>
+        </Group>
+        <TextInput
+          label='Phone'
+          component={IMaskInput}
+          mask='(000) 000-0000'
+          placeholder='(000) 000-0000'
+          key={form.key('phone')}
+          {...form.getInputProps('phone')}
+          mb='sm'
+        />
+        <TextInput
+          label='Email'
+          type='email'
+          key={form.key('email')}
+          {...form.getInputProps('email')}
+          mb='sm'
+        />
+        <Button type='submit'>Submit</Button>
+      </form>
+      <Modal
+        opened={npiOpen}
+        onClose={() => setNpiOpen(false)}
+        title='Search NPI'
+        size='lg'
+      >
+        <NpiSearch
+          initialName={form.getValues().name}
+          onSelect={selection => {
+            form.setFieldValue('address', selection.address);
+            if (selection.phone) {
+              const formatted = selection.phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+              form.setFieldValue('phone', formatted);
+            }
+            setNpiOpen(false);
+          }}
+        />
+      </Modal>
+    </>
   );
 }
