@@ -13,7 +13,6 @@ const PasskeyAttributesSchema = z.object({
   transports: z.string().nullable().optional()
 });
 
-
 const PasskeyResponseSchema = {
   id: z.string(),
   credentialId: z.string(),
@@ -25,45 +24,41 @@ const PasskeyResponseSchema = {
   transports: z.string().nullable().optional()
 };
 
-
 class Passkey extends Base {
-    
   static PasskeyScheme = PasskeyAttributesSchema;
   static ResponseSchema = PasskeyResponseSchema;
-
 
   constructor (data) {
     super(Prisma.UserScalarFieldEnum, data);
   }
-  
-  getTransports() {
+
+  getTransports () {
     return this.transports;
   }
 
-  getCredentialId() {
+  getCredentialId () {
     return this.credentialId;
   }
-  
-  getPublicKey() {
+
+  getPublicKey () {
     return this.publicKey;
   }
-  
-  getAttestationData() {
+
+  getAttestationData () {
     return this.attestationData;
   }
-  
-  getClientDataJSON() {
+
+  getClientDataJSON () {
     return this.clientDataJSON;
   }
-  
-  getAuthenticatorData() {
+
+  getAuthenticatorData () {
     return this.authenticatorData;
   }
-  
-  getUserId() {
+
+  getUserId () {
     return this.userId;
   }
-  
 }
 
 export { Passkey };

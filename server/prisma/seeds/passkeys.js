@@ -1,9 +1,9 @@
 import prisma from '../client.js';
 
-export async function seedPasskeys() {
+export async function seedPasskeys () {
   // Get the first user to associate passkeys with
   const user = await prisma.user.findFirst();
-  
+
   if (!user) {
     console.log('No users found. Skipping passkey seeding.');
     return;
@@ -50,7 +50,7 @@ export async function seedPasskeys() {
  * @param {string} userId - The user ID to associate the passkey with
  * @param {object} passkeyData - The passkey data
  */
-export async function seedPasskey(userId, passkeyData) {
+export async function seedPasskey (userId, passkeyData) {
   const data = {
     id: passkeyData.id,
     credPublicKey: Buffer.from(passkeyData.credPublicKey, 'utf8'),

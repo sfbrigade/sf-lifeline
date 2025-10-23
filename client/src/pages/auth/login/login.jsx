@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { StatusCodes } from 'http-status-codes';
+import PasskeyLogin from '#components/PassKey/PasskeyLogin';
 
 import { useAuthorization } from '#hooks/useAuthorization';
 import { LoginForm } from './LoginForm';
@@ -72,6 +73,7 @@ function Login () {
         passwordError={passwordError}
         onLogin={login}
       />
+      <PasskeyLogin />
     </div>
   );
 }
