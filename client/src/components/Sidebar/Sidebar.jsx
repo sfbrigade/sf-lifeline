@@ -1,5 +1,5 @@
 import { NavLink as RouterNavLink } from 'react-router';
-import { Box, Group, NavLink, Stack, Text, Title } from '@mantine/core';
+import { Box, Group, NavLink, Stack, Text, Title, useMantineColorScheme, Switch } from '@mantine/core';
 import {
   // TbHealthRecognition,
   TbHeartHandshake,
@@ -9,6 +9,8 @@ import {
   TbBuildingHospital,
   TbStethoscope,
   TbMoodSick,
+  TbSun,
+  TbMoonStars,
 } from 'react-icons/tb';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -101,6 +103,7 @@ const SidebarProps = {
  */
 export function Sidebar ({ toggleSidebar }) {
   const { user, handleLogout } = useAuthorization();
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
 
   /**
    * @param {Event} event
@@ -140,14 +143,26 @@ export function Sidebar ({ toggleSidebar }) {
       h='100%'
     >
       <Box>
-        <Group align='center' gap='sm' mb='lg'>
-          <img
-            src='/assets/logo.svg'
-            alt='SF Lifeline Logo'
-            width='32rem'
-            height='32rem'
+        <Group align='center' justify='space-between' mb='lg'>
+          <Group align='center' gap='sm'>
+            <img
+              src='/assets/logo.svg'
+              alt='SF Lifeline Logo'
+              width='32rem'
+              height='32rem'
+            />
+            <Title order={4}>SF Life Line</Title>
+          </Group>
+          <Switch
+            checked={colorScheme === 'dark'}
+            onChange={(e) => {
+              setColorScheme(e.currentTarget.checked ? 'dark' : 'light');
+            }}
+            offLabel={<TbMoonStars size={16} color='var(--mantine-color-blue-6)' />}
+            onLabel={<TbSun size={16} color='var(--mantine-color-yellow-4)' />}
+            size='md'
+            color='dark.4'
           />
-          <Title order={4}>SF Life Line</Title>
         </Group>
         {filteredSections.map((section) => (
           <Box key={section.label} mb='lg'>
