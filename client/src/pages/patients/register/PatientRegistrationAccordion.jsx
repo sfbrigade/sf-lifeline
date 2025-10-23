@@ -201,7 +201,7 @@ export default function PatientRegistrationAccordion ({
                 <MedicalDataSearch
                   category={category}
                   form={form}
-                  initialMedicalData={initialMedicalData[category]}
+                  initialMedicalData={initialMedicalData[category] || []}
                   key={category}
                 />
               );
