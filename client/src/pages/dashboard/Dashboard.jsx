@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { useAppContext } from '#app/AppContext';
 import { useState } from 'react';
 import LifelineAPI from '#app/LifelineAPI';
-import PasskeyRegister from '#components/PassKey/PasskeyRegister';
+import PasskeyRegister from '#components/Passkey/PasskeyRegister';
 import {
   Box,
   Button,
