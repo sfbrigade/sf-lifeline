@@ -9,7 +9,7 @@ const PHYSICIANS_TABLE_HEADERS = [
   { key: 'more', text: '' },
 ];
 
-const formatName = (entry) => {
+export const formatPhysicianName = (entry) => {
   const formattedName = `${entry.firstName}${entry.middleName ? ` ${entry.middleName}` : ''} ${entry.lastName}`;
   return formattedName.trim() ? formattedName : '-';
 };
@@ -47,7 +47,7 @@ export function usePhysicians (hospitalId) {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { data, isFetching } = useQuery({
-    queryKey: ['physicians', search, page],
+    queryKey: ['physicians', search, page, hospitalId ?? 'all'],
     queryFn: async () => {
       const res = await LifelineAPI.getPhysicians(search, hospitalId, page);
 
@@ -64,9 +64,9 @@ export function usePhysicians (hospitalId) {
       physicians: res.data.map((physicians) => {
         return {
           id: physicians.id,
-          name: formatName(physicians),
-          email: physicians.email,
-          phone: physicians.phone,
+          name: formatPhysicianName(physicians),
+          email: physicians.email ?? '-',
+          phone: physicians.phone ?? '-',
 
         };
       }),

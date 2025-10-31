@@ -206,6 +206,16 @@ export default class LifelineAPI {
     return response;
   }
 
+  static async linkPhysiciansToHospital (hospitalId, physicianIds) {
+    return fetch(`${SERVER_BASE_URL}/hospitals/${hospitalId}/physicians`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ physicianIds }),
+    });
+  }
+
   static async deleteHospital (hospitalId) {
     const response = await fetch(
       `${SERVER_BASE_URL}/hospitals/${hospitalId}`,
