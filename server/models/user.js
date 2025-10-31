@@ -46,6 +46,7 @@ const UserResponseSchema = UserAttributesSchema.extend({
   emailVerifiedAt: z.coerce.date().nullable(),
   licenseData: z.object({}).nullable(),
   role: z.string(),
+  patientNotification: z.boolean(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   approvedAt: z.coerce.date().nullable(),
@@ -60,6 +61,7 @@ const UserUpdateSchema = UserAttributesSchema.extend({
   password: UserPasswordSchema.or(z.literal('')),
   role: z.string(),
   deactivatedAt: z.coerce.date().nullable(),
+  patientNotification: z.boolean()
 }).partial();
 
 class User extends Base {

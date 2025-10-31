@@ -114,6 +114,7 @@ describe('/api/v1/auth', () => {
         licenseNumber: null,
         licenseData: null,
         role: 'ADMIN',
+        patientNotification: true,
         approvedAt: data.approvedAt,
         approvedById: null,
         rejectedAt: null,
