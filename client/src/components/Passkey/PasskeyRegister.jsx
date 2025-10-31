@@ -15,7 +15,7 @@ export default function PasskeyRegister () {
       if (error.name === 'InvalidStateError') {
         notifications.show({
           title: 'Error',
-          message: 'Invalid state error',
+          message: error.message,
           color: 'red',
         });
       } else {

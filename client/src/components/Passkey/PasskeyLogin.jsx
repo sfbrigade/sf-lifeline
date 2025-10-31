@@ -7,6 +7,7 @@ import { useAppContext } from '#app/AppContext';
 export default function PasskeyLogin () {
   const [options, setOptions] = useState(null);
   const { setUser } = useAppContext();
+  
   useEffect(() => {
     const getOptions = async () => {
       const res = await fetch('/api/v1/auth/passkey/authOptions');

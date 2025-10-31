@@ -24,6 +24,10 @@ const AppPath = path.join(__dirname, '..', 'app.js');
 // Environment variable overrides/additions for testing
 process.env.NODE_ENV = 'test';
 process.env.DATABASE_URL = `${process.env.DATABASE_URL}_test`;
+// Set WebAuthn environment variables for tests
+process.env.WEB_AUTHN_RP_NAME = 'SF Lifeline';
+process.env.WEB_AUTHN_RP_ID = 'localhost';
+process.env.BASE_URL = 'http://localhost:5000';
 
 const prisma = new PrismaClient({
   datasourceUrl: process.env.DATABASE_URL,
@@ -73,6 +77,9 @@ async function build (t, options = { trace: false }) {
     prisma.contact.deleteMany(),
     prisma.patient.deleteMany(),
     prisma.invite.deleteMany(),
+    prisma.passkey.deleteMany(),
+    prisma.registrationOption.deleteMany(),
+    prisma.authenticationOption.deleteMany(),
     prisma.user.deleteMany(),
   ]);
   app.prisma = prisma; // Attach prisma to the app object

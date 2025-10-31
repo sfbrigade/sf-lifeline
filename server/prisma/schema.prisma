@@ -64,7 +64,6 @@ model Passkey {
   id               String     @id @db.Text
   credPublicKey    Bytes      @db.ByteA
   internalUserId   String     @db.Uuid
-  webauthnUserId   String     @unique @db.Text
   counter          Int
   backupEligible   Boolean
   backupStatus     Boolean
@@ -73,10 +72,28 @@ model Passkey {
   lastUsed         DateTime?
   user             User       @relation("PasskeyUser", fields: [internalUserId], references: [id])
 
-  @@unique([internalUserId, webauthnUserId])
   @@index([internalUserId, id])
-  @@index([webauthnUserId, id])
   @@index([id])
+}
+
+model RegistrationOption {
+  id        String   @id @db.Uuid
+  options   Json     @db.JsonB
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([id, expiresAt])
+  @@index([expiresAt])
+}
+
+model AuthenticationOption {
+  challenge String   @id @db.Text
+  options   Json     @db.JsonB
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([challenge, expiresAt])
+  @@index([expiresAt])
 }
 
 model Invite {
