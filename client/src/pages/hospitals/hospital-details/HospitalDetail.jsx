@@ -6,7 +6,7 @@ import { Container, Grid, Loader, Text, Title, Group, Button, Paper } from '@man
 
 import { useAuthorization } from '#hooks/useAuthorization.jsx';
 import LifelineAPI from '#app/LifelineAPI.js';
-import PhysiciansTable from './Components/PhysiciansComponent/Physicians.jsx';
+import Physicians from './Components/PhysiciansComponent/Physicians.jsx';
 import Patients from './Components/PatientsComponent/Patients.jsx';
 
 /**
@@ -66,8 +66,7 @@ export default function HospitalDetail () {
           </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
-          <Title order={2} my='sm'> Physicians</Title>
-          <PhysiciansTable hospitalId={hospitalId} />
+          <Physicians hospitalId={hospitalId} canEdit={canEdit} />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Title order={2} my='sm'> Patients</Title>
