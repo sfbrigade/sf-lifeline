@@ -12,20 +12,26 @@ export default function PasskeyRegister () {
     try {
       processPasskey = await startRegistration({ optionsJSON: option });
     } catch (error) {
-      if (error.name === 'InvalidStateError') {
+      if (error.name === 'NotAllowedError') {
         notifications.show({
           title: 'Error',
-          message: error.message,
+          message: 'Passkey registration was cancelled or failed',
+          color: 'red',
+        });
+      } else if (error.name === 'InvalidStateError') {
+        notifications.show({
+          title: 'Error',
+          message: 'Passkey already registered',
           color: 'red',
         });
       } else {
         notifications.show({
           title: 'Error',
-          message: 'Error registering passkey',
+          message: 'Error registering passkey. Please try again.',
           color: 'red',
         });
       }
-      throw error;
+      return;
     }
 
     const verificationResp = await fetch('/api/v1/auth/passkey/verify-registration/' + user.id, {
