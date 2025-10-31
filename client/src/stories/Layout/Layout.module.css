@@ -14,7 +14,6 @@
   grid-area: head;
   position: fixed;
   width: 100%;
-  background-color: white;
 }
 
 .layout__content {
