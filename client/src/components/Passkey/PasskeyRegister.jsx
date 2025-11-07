@@ -6,7 +6,7 @@ export default function PasskeyRegister () {
   const { user } = useAppContext();
 
   const register = async () => {
-    const res = await fetch('/api/v1/auth/passkey/options?id=' + user.id);
+    const res = await fetch('/api/v1/auth/passkey/register?id=' + user.id);
     const option = await res.json();
     let processPasskey = null;
     try {
@@ -18,7 +18,7 @@ export default function PasskeyRegister () {
           message: 'Passkey registration was cancelled or failed',
           color: 'red',
         });
-      } else if (error.name === 'InvalidStateError') {
+      } else if (error.name === 'InvalidStateError' || error.name == 'TypeError' ) {
         notifications.show({
           title: 'Error',
           message: 'Passkey already registered',
@@ -27,14 +27,14 @@ export default function PasskeyRegister () {
       } else {
         notifications.show({
           title: 'Error',
-          message: 'Error registering passkey. Please try again.',
+          message: error.name,
           color: 'red',
         });
       }
       return;
     }
 
-    const verificationResp = await fetch('/api/v1/auth/passkey/verify-registration/' + user.id, {
+    const verificationResp = await fetch('/api/v1/auth/passkey/register/' + user.id, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

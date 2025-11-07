@@ -1,44 +1,33 @@
 import { startAuthentication } from '@simplewebauthn/browser';
 import { Button, Divider } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppContext } from '#app/AppContext';
 
 export default function PasskeyLogin () {
-  const [options, setOptions] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { setUser } = useAppContext();
 
-  useEffect(() => {
-    const getOptions = async () => {
-      try {
-        const res = await fetch('/api/v1/auth/passkey/authOptions');
-        if (!res.ok) {
-          return;
-        }
-        const options = await res.json();
-        setOptions(options);
-      } catch (error) {
-        notifications.show({
-          title: 'Error',
-          message: 'Error getting passkey options',
-          color: 'red',
-        });
-      }
-    };
-    getOptions();
-  }, []);
-
   const login = async () => {
-    if (!options) {
-      return;
-    }
     setIsLoading(true);
     try {
+      // Fetch authentication options
+      const res = await fetch('/api/v1/auth/passkey/login');
+      if (!res.ok) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to get passkey options',
+          color: 'red',
+        });
+        setIsLoading(false);
+        return;
+      }
+      const options = await res.json();
+
       const processPasskey = await startAuthentication({ optionsJSON: options });
       processPasskey.challenge = options.challenge;
 
-      const verificationResp = await fetch('/api/v1/auth/passkey/authVerify', {
+      const verificationResp = await fetch('/api/v1/auth/passkey/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,11 +75,6 @@ export default function PasskeyLogin () {
       setIsLoading(false);
     }
   };
-
-  // Don't show button if options aren't available
-  if (!options) {
-    return null;
-  }
 
   return (
     <>
