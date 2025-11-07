@@ -12,7 +12,7 @@ export default async function (fastify, _opts) {
           page: z.coerce.number().int().optional(),
           perPage: z.coerce.number().int().optional(),
           status: z.enum(['unapproved', 'approved', 'rejected', 'disabled']).optional(),
-        }).optional(),
+        }),
         response: {
           [StatusCodes.OK]: z.array(User.ResponseSchema),
         },

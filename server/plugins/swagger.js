@@ -1,4 +1,4 @@
-import 'zod-openapi/extend';
+import 'zod-openapi';
 import fp from 'fastify-plugin';
 import swagger from '@fastify/swagger';
 import scalar from '@scalar/fastify-api-reference';
