@@ -1,22 +1,16 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
-import {
-  generateRegistrationOptions,
-  generateAuthenticationOptions,
-} from '@simplewebauthn/server';
-import {
-  RegistrationOptionsResponseSchema,
-  AuthenticationOptionsResponseSchema,
-} from '#models/passkey.js';
+import { generateRegistrationOptions } from '@simplewebauthn/server';
+import { RegistrationOptionsResponseSchema } from '#models/passkey.js';
 
 const rpName = process.env.WEB_AUTHN_RP_NAME;
 const rpID = process.env.WEB_AUTHN_RP_ID;
 const OPTIONS_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 
 export default async function (fastify, _opts) {
-  // GET /options - Generate registration options
+  // GET /register - Generate registration options
   fastify.get(
-    '/options',
+    '/register',
     {
       schema: {
         query: z.object({
@@ -54,7 +48,8 @@ export default async function (fastify, _opts) {
         })),
         authenticatorSelection: {
           residentKey: 'preferred',
-          userVerification: 'preferred',
+          userVerification: 'required',
+          authenticatorAttachment: 'platform'
         },
       });
 
@@ -72,47 +67,9 @@ export default async function (fastify, _opts) {
           expiresAt,
         },
       });
-
-      return reply.send(options);
-    }
-  );
-
-  // GET /authOptions - Generate authentication options
-  fastify.get(
-    '/authOptions',
-    {
-      schema: {
-        response: {
-          [StatusCodes.OK]: AuthenticationOptionsResponseSchema,
-        },
-      },
-    },
-    async (_request, reply) => {
-      const options = await generateAuthenticationOptions({
-        rpName,
-        rpID,
-        authenticatorSelection: {
-          residentKey: 'preferred',
-          userVerification: 'preferred',
-        },
-      });
-
-      // Store options in database with expiration
-      const expiresAt = new Date(Date.now() + OPTIONS_EXPIRY_MS);
-      await fastify.prisma.authenticationOption.upsert({
-        where: { challenge: options.challenge },
-        create: {
-          challenge: options.challenge,
-          options,
-          expiresAt,
-        },
-        update: {
-          options,
-          expiresAt,
-        },
-      });
-
+      console.log('options', options);
       return reply.send(options);
     }
   );
 }
+

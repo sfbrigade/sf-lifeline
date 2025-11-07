@@ -5,12 +5,12 @@ import { StatusCodes } from 'http-status-codes';
 import { build } from '#test/helper.js';
 
 describe('/api/v1/auth/passkey', () => {
-  describe('GET /options', () => {
+  describe('GET /register', () => {
     it('should return not found for user that does not exist', async (t) => {
       const app = await build(t);
       const response = await app
         .inject()
-        .get('/api/v1/auth/passkey/options')
+        .get('/api/v1/auth/passkey/register')
         .query({ id: '00000000-0000-0000-0000-000000000000' });
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.NOT_FOUND);
@@ -26,7 +26,7 @@ describe('/api/v1/auth/passkey', () => {
 
       const response = await app
         .inject()
-        .get('/api/v1/auth/passkey/options')
+        .get('/api/v1/auth/passkey/register')
         .query({ id: user.id });
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
@@ -62,7 +62,7 @@ describe('/api/v1/auth/passkey', () => {
 
       const response = await app
         .inject()
-        .get('/api/v1/auth/passkey/options')
+        .get('/api/v1/auth/passkey/register')
         .query({ id: user.id });
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
@@ -72,13 +72,13 @@ describe('/api/v1/auth/passkey', () => {
     });
   });
 
-  describe('GET /authOptions', () => {
+  describe('GET /login', () => {
     it('should return authentication options', async (t) => {
       const app = await build(t);
 
       const response = await app
         .inject()
-        .get('/api/v1/auth/passkey/authOptions');
+        .get('/api/v1/auth/passkey/login');
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
 
@@ -96,7 +96,7 @@ describe('/api/v1/auth/passkey', () => {
     });
   });
 
-  describe('POST /verify-registration/:id', () => {
+  describe('POST /register/:id', () => {
     it('should return bad request when registration options not found', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
@@ -107,7 +107,7 @@ describe('/api/v1/auth/passkey', () => {
 
       const response = await app
         .inject()
-        .post(`/api/v1/auth/passkey/verify-registration/${user.id}`)
+        .post(`/api/v1/auth/passkey/register/${user.id}`)
         .payload({
           id: 'test-id',
           rawId: 'test-raw-id',
@@ -146,7 +146,7 @@ describe('/api/v1/auth/passkey', () => {
 
       const response = await app
         .inject()
-        .post(`/api/v1/auth/passkey/verify-registration/${user.id}`)
+        .post(`/api/v1/auth/passkey/register/${user.id}`)
         .payload({
           id: 'test-id',
           rawId: 'test-raw-id',
@@ -189,7 +189,7 @@ describe('/api/v1/auth/passkey', () => {
 
       const response = await app
         .inject()
-        .post(`/api/v1/auth/passkey/verify-registration/${user.id}`)
+        .post(`/api/v1/auth/passkey/register/${user.id}`)
         .payload({
           id: 'test-id',
           rawId: 'test-raw-id',
@@ -208,12 +208,12 @@ describe('/api/v1/auth/passkey', () => {
     });
   });
 
-  describe('POST /authVerify', () => {
+  describe('POST /login', () => {
     it('should return bad request when authentication options not found', async (t) => {
       const app = await build(t);
       await t.loadFixtures();
 
-      const response = await app.inject().post('/api/v1/auth/passkey/authVerify').payload({
+      const response = await app.inject().post('/api/v1/auth/passkey/login').payload({
         challenge: 'non-existent-challenge',
         id: 'test-passkey-id-1',
         rawId: 'test-raw-id',
@@ -250,7 +250,7 @@ describe('/api/v1/auth/passkey', () => {
         },
       });
 
-      const response = await app.inject().post('/api/v1/auth/passkey/authVerify').payload({
+      const response = await app.inject().post('/api/v1/auth/passkey/login').payload({
         challenge: 'test-challenge-456',
         id: 'non-existent-passkey-id',
         rawId: 'test-raw-id',
@@ -284,7 +284,7 @@ describe('/api/v1/auth/passkey', () => {
         },
       });
 
-      const response = await app.inject().post('/api/v1/auth/passkey/authVerify').payload({
+      const response = await app.inject().post('/api/v1/auth/passkey/login').payload({
         challenge: 'expired-challenge',
         id: 'test-passkey-id-1',
         rawId: 'test-raw-id',
@@ -321,7 +321,7 @@ describe('/api/v1/auth/passkey', () => {
         },
       });
 
-      const response = await app.inject().post('/api/v1/auth/passkey/authVerify').payload({
+      const response = await app.inject().post('/api/v1/auth/passkey/login').payload({
         challenge: 'valid-challenge',
         id: 'test-passkey-id-1',
         rawId: 'test-raw-id',

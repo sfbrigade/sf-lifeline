@@ -21,6 +21,7 @@ export const RegistrationOptionsResponseSchema = z.object({
   authenticatorSelection: z.object({
     residentKey: z.string(),
     userVerification: z.string(),
+    authenticatorAttachment: z.string(),
   }),
 });
 
