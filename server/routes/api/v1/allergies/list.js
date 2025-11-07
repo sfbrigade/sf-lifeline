@@ -13,9 +13,9 @@ export default async function (fastify) {
           perPage: z.coerce.number().optional(),
           allergy: z.string().optional(),
         }),
-      },
-      response: {
-        [StatusCodes.OK]: z.array(Allergy.ResponseSchema),
+        response: {
+          [StatusCodes.OK]: z.array(Allergy.ResponseSchema),
+        },
       },
       onRequest: fastify.requireUser([Role.ADMIN, Role.STAFF, Role.VOLUNTEER]),
     },
