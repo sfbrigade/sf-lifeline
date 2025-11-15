@@ -18,7 +18,7 @@ export default function PasskeyRegister () {
           message: 'Passkey registration was cancelled or failed',
           color: 'red',
         });
-      } else if (error.name === 'InvalidStateError' || error.name == 'TypeError' ) {
+      } else if (error.name === 'InvalidStateError' || error.name === 'TypeError') {
         notifications.show({
           title: 'Error',
           message: 'Passkey already registered',
