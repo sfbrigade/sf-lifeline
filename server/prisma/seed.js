@@ -5,7 +5,6 @@ import { seedEnvFoodAllergies, seedMedicationAllergies } from './seeds/allergies
 import { seedConditions } from './seeds/conditions.js';
 import { seedHospitals } from './seeds/hospitals.js';
 import { seedMedications } from './seeds/medications.js';
-import { seedPasskeys } from './seeds/passkeys.js';
 import { seedPhysicians } from './seeds/physicians.js';
 import { seedUsers } from './seeds/users.js';
 
@@ -18,7 +17,6 @@ async function main () {
   await seedHospitals();
   await seedPhysicians();
   await seedUsers();
-  await seedPasskeys();
 }
 
 main()

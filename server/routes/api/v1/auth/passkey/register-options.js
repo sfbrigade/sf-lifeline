@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
 import { generateRegistrationOptions } from '@simplewebauthn/server';
-import { RegistrationOptionsResponseSchema } from '#models/passkey.js';
 
 const rpName = process.env.WEB_AUTHN_RP_NAME;
 const rpID = process.env.WEB_AUTHN_RP_ID;
@@ -17,7 +16,7 @@ export default async function (fastify, _opts) {
           id: z.string().uuid(),
         }),
         response: {
-          [StatusCodes.OK]: RegistrationOptionsResponseSchema,
+          [StatusCodes.OK]: z.any(),
           [StatusCodes.NOT_FOUND]: z.object({
             message: z.string(),
           }),
@@ -46,10 +45,10 @@ export default async function (fastify, _opts) {
           id: passkey.id,
           transports: passkey.transports ? [passkey.transports] : undefined,
         })),
+        preferredAuthenticatorType: 'localDevice',
         authenticatorSelection: {
-          residentKey: 'preferred',
           userVerification: 'required',
-          authenticatorAttachment: 'platform'
+          residentKey: 'required'
         },
       });
 
@@ -67,7 +66,6 @@ export default async function (fastify, _opts) {
           expiresAt,
         },
       });
-      console.log('options', options);
       return reply.send(options);
     }
   );
