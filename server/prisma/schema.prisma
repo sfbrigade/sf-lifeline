@@ -31,6 +31,8 @@ model User {
   disabledById           String?        @db.Uuid
   updatedAt              DateTime       @updatedAt
   createdAt              DateTime       @default(now())
+  patientNotification    Boolean        @default(false)
+  passkeys               Passkey[]      @relation("PasskeyUser")
   
   // Relations
   acceptedInvites        Invite[]       @relation("InviteAcceptedBy")
@@ -56,6 +58,42 @@ model User {
   updatedPhysicians      Physician[]    @relation("PhysicianUpdatedBy")
   createdContacts        Contact[]      @relation("ContactCreatedBy")
   updatedContacts        Contact[]      @relation("ContactUpdatedBy")
+}
+
+model Passkey {
+  id               String     @id @db.Text
+  credPublicKey    Bytes      @db.ByteA
+  internalUserId   String     @db.Uuid
+  counter          Int
+  backupEligible   Boolean
+  backupStatus     Boolean
+  transports       String?    @db.Text
+  createdAt        DateTime   @default(now())
+  lastUsed         DateTime?
+  user             User       @relation("PasskeyUser", fields: [internalUserId], references: [id])
+
+  @@index([internalUserId, id])
+  @@index([id])
+}
+
+model RegistrationOption {
+  id        String   @id @db.Uuid
+  options   Json     @db.JsonB
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([id, expiresAt])
+  @@index([expiresAt])
+}
+
+model AuthenticationOption {
+  challenge String   @id @db.Text
+  options   Json     @db.JsonB
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([challenge, expiresAt])
+  @@index([expiresAt])
 }
 
 model Invite {

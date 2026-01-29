@@ -1,0 +1,5 @@
+<% if (patients && patients.length > 0) { %>
+Patient Updates - <%= patients.length %> patient<%= patients.length === 1 ? '' : 's' %> updated today
+<% } else { %>
+Patient Updates - No changes today
+<% } %>

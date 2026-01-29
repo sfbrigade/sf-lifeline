@@ -39,10 +39,10 @@ export default function Patients () {
       setCreating(true);
       // Keep trying until we successfully create a patient
       // Collisions are retried transparently.
-      // eslint-disable-next-line no-constant-condition
+
       while (true) {
         // Ask server for a guaranteed-unique patient URL, extract the UUID
-        const genRes = await fetch(`/api/v1/patients/generate?count=1`);
+        const genRes = await fetch('/api/v1/patients/generate?count=1');
         if (!genRes.ok) throw new Error('Failed to generate patient ID');
         const [url] = await genRes.json();
         const id = url.split('/').pop();
@@ -65,7 +65,6 @@ export default function Patients () {
         continue;
       }
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
       // Basic alert for now; can be replaced with notifications UI
       alert(err.message || 'Unable to create patient');

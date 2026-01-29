@@ -52,8 +52,6 @@ export function useHospitals () {
         throw new Error('Failed to fetch Hospitals.');
       }
 
-      console.log(res);
-
       const data = await res.json();
       const pages = +res.headers.get('X-Total-Pages');
 

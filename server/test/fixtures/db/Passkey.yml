@@ -1,0 +1,22 @@
+entity: passkey
+connectedFields: ['user']
+items:
+  passkey1:
+    id: test-passkey-id-1
+    credPublicKey: <%= Buffer.from('test-public-key-data-1-for-testing-purposes-only').toString('base64') %>
+    counter: 0
+    backupEligible: false
+    backupStatus: false
+    transports: internal
+    createdAt: <%= new Date().toISOString() %>
+    user: '@user1'
+  passkey2:
+    id: test-passkey-id-2
+    credPublicKey: <%= Buffer.from('test-public-key-data-2-for-testing-purposes-only').toString('base64') %>
+    counter: 5
+    backupEligible: true
+    backupStatus: true
+    transports: usb
+    createdAt: <%= new Date().toISOString() %>
+    user: '@user4'
+

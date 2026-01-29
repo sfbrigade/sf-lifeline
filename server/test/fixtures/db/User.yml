@@ -8,6 +8,7 @@ items:
     email: admin.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: ADMIN
+    patientNotification: true
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
   user2:
@@ -16,6 +17,7 @@ items:
     lastName: Email
     email: unverified.email@test.com
     role: FIRST_RESPONDER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     emailVerificationToken: be63f7ca-64c5-4eea-a1c0-4c81e7161fa4
   user3:
@@ -25,6 +27,7 @@ items:
     email: unapproved.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     licenseNumber: E148420
   user4:
@@ -34,6 +37,7 @@ items:
     email: volunteer.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: VOLUNTEER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
     approvedBy: '@user1'
@@ -44,6 +48,7 @@ items:
     email: staff.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: STAFF
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
     approvedBy: '@user1'
@@ -54,6 +59,7 @@ items:
     email: first.responder@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
     approvedBy: '@user1'
@@ -64,6 +70,7 @@ items:
     email: rejected.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: FIRST_RESPONDER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     rejectedAt: <%= new Date().toISOString() %>
     rejectedBy: '@user1'
@@ -74,6 +81,7 @@ items:
     email: disabled.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: VOLUNTEER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     approvedAt: <%= new Date().toISOString() %>
     approvedBy: '@user1'
@@ -86,6 +94,7 @@ items:
     email: validreset.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: VOLUNTEER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     passwordResetToken: 4ae4a190-005e-4222-aac3-7dd5ff2c477f
     passwordResetExpires: <%= new Date(new Date().getTime() + 30 * 60000).toISOString() %>
@@ -98,6 +107,7 @@ items:
     email: expiredreset.user@test.com
     emailVerifiedAt: <%= new Date().toISOString() %>
     role: VOLUNTEER
+    patientNotification: false
     hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
     passwordResetToken: 9a616ebe-f68a-440a-9c4f-fca7f32c88cb
     passwordResetExpires: <%= new Date(new Date().getTime() - 30 * 60000).toISOString() %>
